@@ -1,0 +1,30 @@
+# Secretos — NUNCA commitear
+.env
+.env.local
+.env*.local
+
+# Dependencias / build
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+
+# Tests
+coverage/
+playwright-report/
+test-results/
+/blob-report/
+.playwright/
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Sistema / editor
+.DS_Store
+.vercel
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
