@@ -18,7 +18,8 @@ persona, no el agente. Es el paso §5.0 y bloquea todo lo demás: sin node no ha
 
 ### 3. Cuentas 🔑 (§5.1) — ninguna existe
 Ninguna la puede crear el agente (crear cuentas, teclear contraseñas y aceptar términos son
-pasos de la persona). Orden y dependencias:
+pasos de la persona). **Runbook paso a paso: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).**
+Orden y dependencias:
 
 | # | Cuenta | Costo | Desbloquea |
 |---|---|---|---|
