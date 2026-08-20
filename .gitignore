@@ -28,3 +28,16 @@ supabase/.temp
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Next.js / pnpm (añadido por create-next-app)
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+/build
+*.pem
+.pnpm-debug.log*
+next-env.d.ts

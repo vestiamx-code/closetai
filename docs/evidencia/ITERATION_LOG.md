@@ -25,3 +25,18 @@ buckets privados de Storage (§4.3 los exige).
 índice único en `credit_ledger.ref` para idempotencia, y los tres buckets privados con políticas
 por carpeta `user_id`.
 **Efecto:** pendiente — se verifica al aplicar las migraciones contra el proyecto Supabase real.
+
+## [2026-08-19] — Scripts de instalación bloqueados en vez de aprobados
+**Observado:** con el scaffold recién creado, `pnpm lint`, `pnpm typecheck`, `pnpm test:unit` y
+`pnpm build` fallaban todos con `ERR_PNPM_IGNORED_BUILDS` por `@google/genai` y `protobufjs`.
+pnpm 11 corre una verificación de dependencias antes de cada script y se niega a seguir mientras
+haya scripts de instalación sin decidir.
+**Diagnóstico:** no es un error, es una barrera de cadena de suministro. pnpm obliga a decidir
+explícitamente qué paquete puede ejecutar código durante la instalación.
+**Cambio:** en vez de aprobar a ciegas, se revisó qué ejecuta cada uno: `@google/genai` publica
+su `dist/` ya compilado y sus lifecycle scripts son no-ops; el postinstall de `protobufjs` solo
+imprime advertencias de versión. Ninguno hace falta → ambos quedan en `false` en
+`pnpm-workspace.yaml`, con el porqué anotado en el archivo.
+**Efecto:** pipeline verde sin conceder ejecución de código en instalación a ninguna dependencia.
+Si alguno resulta necesario, se cambia con una nota del motivo.
+

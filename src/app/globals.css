@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Paleta Vestia — cálida, sobria, mucha foto y poco texto (Apéndice C).
+   Light por defecto, dark desde el día 1. */
+:root {
+  --bg: #faf7f4;
+  --surface: #ffffff;
+  --surface-2: #f2ece6;
+  --border: #e3d9d0;
+  --text: #1a1517;
+  --text-muted: #6d635e;
+  --accent: #b4532a;
+  --accent-contrast: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0a0c;
+    --surface: #151317;
+    --surface-2: #1e1b20;
+    --border: #2e2930;
+    --text: #f5f0ec;
+    --text-muted: #a39a96;
+    --accent: #e8a87c;
+    --accent-contrast: #1a1517;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}

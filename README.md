@@ -8,17 +8,31 @@ Todo lo que contradiga ese documento está mal.
 
 ## Estado
 
-Semana 0 — Build Discipline Packet. Sin código de producto todavía.
+Semana 0 — Build Discipline Packet.
 
 | Pieza | Estado |
 |---|---|
 | Documento maestro en el repo | ✅ |
 | Migraciones SQL (esquema + RLS + storage) | ✅ escritas, sin aplicar (falta proyecto Supabase) |
-| Toolchain local (node, pnpm, gh, supabase, stripe, vercel) | ⛔ no instalado |
-| Cuentas 🔑 (dominio, GitHub, Vercel, Supabase, Stripe, Resend, Gemini, fal.ai) | ⛔ pendientes |
-| App Next.js | ⛔ pendiente |
+| Toolchain local | ✅ node 26.7 · pnpm 11.22 · gh · supabase · stripe · vercel |
+| App Next.js 16 + Tailwind v4 + landing | ✅ build verde |
+| Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde · CI en GitHub Actions |
+| Contrato zod de salida del catalogador | ✅ 9 pruebas |
+| Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
+| Cuentas 🔑 y primer deploy | ⛔ pendientes |
 
-Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md).
+Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md) ·
+Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).
+
+## Desarrollo
+
+```bash
+pnpm install
+pnpm dev          # http://localhost:3000
+pnpm test:unit    # Vitest
+pnpm test:e2e     # Playwright
+pnpm typecheck    # next typegen + tsc
+```
 
 ## Stack
 

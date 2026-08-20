@@ -1,0 +1,14 @@
+# Scripts de instalación de dependencias: por defecto pnpm los bloquea y hay que
+# decidir uno por uno. Ninguno de estos hace falta, así que quedan en false.
+#
+#   @google/genai  → publica dist/ ya compilado; sus lifecycle scripts son no-ops.
+#   protobufjs     → su postinstall solo imprime advertencias de versión.
+#   sharp          → la optimización de imágenes la hace Vercel en producción.
+#   unrs-resolver  → binario opcional de resolución para ESLint.
+#
+# Si alguno hace falta más adelante, se cambia aquí con una nota del porqué.
+allowBuilds:
+  '@google/genai': false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false

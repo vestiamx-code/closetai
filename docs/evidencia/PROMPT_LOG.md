@@ -24,3 +24,17 @@ migración 001 desde el Apéndice B y redacción de la migración 002 con las pi
 **Juicio humano:** pendiente de revisión por Tamara. El agente se detuvo antes de instalar
 software de sistema y antes de crear cuentas — ambos pasos requieren a una persona.
 **Commit:** (ver commit inicial)
+
+## [2026-08-19] — Sesión 2
+**Prompt:** continuar §5.0 tras instalar Homebrew: dejar el toolchain completo y levantar el
+scaffold de la aplicación.
+**Resultado:** node 26.7 / pnpm 11.22 / gh / supabase 2.115 / stripe 1.50.3 / vercel 59.1.4
+instalados; Next.js 16.3.1 + React 19.2 + Tailwind v4; landing en es-MX con paleta propia y
+dark mode; SDKs de Supabase, Gemini, fal.ai, Stripe, Resend y zod; Vitest + Playwright
+configurados; CI de GitHub Actions; contrato zod del catalogador con 9 pruebas.
+**Juicio humano:** dos cosas se rechazaron a propósito. (1) La sugerencia del entorno de instalar
+un plugin de Stripe: es un cambio de configuración de la máquina y se pospone a la Semana 3.
+(2) Los scripts de instalación de `@google/genai` y `protobufjs`: en vez de aprobarlos para
+desbloquear el build, se revisó qué ejecutan y se dejaron bloqueados — ver ITERATION_LOG.
+**Commit:** feat: scaffold Next.js app
+
