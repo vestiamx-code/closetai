@@ -1,7 +1,7 @@
 # Notas de decisión humana
 
 Evidencia de rúbrica: *Human judgment & explanation* (nota semanal de 150-250 palabras).
-**Estas notas las revisa y firma el dueño del proyecto.** Son su voz, no la del agente.
+**Estas notas las revisa y firma Tamara.** Son su voz, no la del agente.
 
 ---
 
@@ -26,4 +26,4 @@ creaba la fila de `profiles` al registrarse, el débito de créditos no era ató
 de Storage no existían. Se escribió una migración 002 en vez de editar la 001, para que la
 diferencia entre lo planeado y lo que hace falta quede visible en el historial.
 
-**Firma del dueño:** ____________________
+**Firma:** ____________________

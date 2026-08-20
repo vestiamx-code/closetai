@@ -1,22 +1,22 @@
 # VESTIA — Documento Maestro del Proyecto
 
-**Versión 1.0 — 19 de agosto de 2026**
-**Fuente única de verdad del proyecto. Todo lo que contradiga este documento está mal, salvo que Ricardo diga lo contrario.**
+**Versión 1.1 — 19 de agosto de 2026**
+**Fuente única de verdad del proyecto. Todo lo que contradiga este documento está mal, salvo que Tamara diga lo contrario.**
 
 ---
 
 ## 0. Cómo usar este documento (léelo primero, Claude)
 
-Este documento está escrito para ti: un Claude (Code) recién instalado en una computadora nueva, sin ningún contexto previo. Fue producido tras una fase de investigación y decisiones con Ricardo, el dueño del proyecto. Tu misión es ejecutarlo de principio a fin.
+Este documento está escrito para ti: un Claude (Code) recién instalado en una computadora nueva, sin ningún contexto previo. Fue producido tras una fase de investigación y decisiones con Tamara, titular del proyecto. Tu misión es ejecutarlo de principio a fin.
 
 Reglas de operación:
 
-1. **No vuelvas a preguntar nada que ya esté decidido aquí.** Las decisiones de negocio están tomadas y justificadas. Si surge algo genuinamente nuevo que solo el dueño puede decidir, pregúntale a Ricardo.
-2. **Los pasos marcados 🔑 RICARDO son del dueño.** Tú nunca creas cuentas, nunca tecleas contraseñas ni datos de pago, nunca aceptas términos y condiciones en su nombre. Prepara todo hasta ese punto, pídele el paso, y continúa cuando te dé las credenciales/API keys por el canal que él decida (normalmente el archivo `.env.local`).
+1. **No vuelvas a preguntar nada que ya esté decidido aquí.** Las decisiones de negocio están tomadas y justificadas. Si surge algo genuinamente nuevo que solo la titularidad puede decidir, pregúntale a Tamara.
+2. **Los pasos marcados 🔑 TAMARA son de Tamara.** Tú nunca creas cuentas, nunca tecleas contraseñas ni datos de pago, nunca aceptas términos y condiciones en su nombre. Prepara todo hasta ese punto, pide el paso, y continúa cuando te entregue las credenciales/API keys por el canal que decida (normalmente el archivo `.env.local`).
 3. **La evidencia de la rúbrica se genera desde el día uno como subproducto del trabajo** (ver §7). No es una tarea de última hora: cada sesión de trabajo alimenta los logs.
-4. **Idioma:** el producto, el código de cara al usuario y la comunicación con Ricardo son en español (es-MX). El código interno (nombres de variables, commits) en inglés, como es estándar.
+4. **Idioma:** el producto, el código de cara al usuario y la comunicación con Tamara son en español (es-MX). El código interno (nombres de variables, commits) en inglés, como es estándar.
 5. **Cadencia:** trabaja en fases (§6). Cada fase termina con deploy funcionando en producción. Nunca dejes la rama principal rota.
-6. **Este archivo vive en el repo** como `docs/DOCUMENTO-MAESTRO.md` desde el primer commit. Si una decisión cambia con aprobación de Ricardo, actualiza este documento en el mismo PR.
+6. **Este archivo vive en el repo** como `docs/DOCUMENTO-MAESTRO.md` desde el primer commit. Si una decisión cambia con aprobación de Tamara, actualiza este documento en el mismo PR.
 
 ---
 
@@ -31,7 +31,7 @@ Reglas de operación:
 | Nombre y dominio | **Vestia / vestia.mx** | Verificado disponible 19-ago-2026. Elegante, bilingüe, registrable |
 | Plazo | **&lt; 1 mes** hasta versión evaluable | Deadline académico; ver rúbrica §7 |
 | Presupuesto | **Mínimo posible; free tiers siempre que se pueda** | Único gasto variable inevitable: renders de try-on |
-| Cuentas | **Nuevas, dedicadas al proyecto** | Negocio separado de los demás negocios de Ricardo |
+| Cuentas | **Nuevas, dedicadas al proyecto** | Negocio separado de los demás negocios de Tamara |
 | Modelo de negocio | **Freemium + pago único $100 MXN + créditos de try-on** | Detalle en §2.3. El clóset es gratis para siempre; nunca se paywallea trabajo ya invertido |
 | Mercado inicial | **México, español, mobile-first web** | Hueco real: no existe jugador nativo es-MX/LATAM |
 | Filosofía técnica | **Comprar, no construir** | 1 mes de plazo: APIs comerciales probadas, cero entrenamiento propio |
@@ -41,16 +41,16 @@ Reglas de operación:
 ### Estado al 19-ago-2026
 
 - Investigación de mercado, competencia, APIs de try-on y afiliados: **completada** (síntesis en §2, fuentes en Apéndice D).
-- Dominio vestia.mx: **libre, sin registrar** (paso 🔑 RICARDO en §5).
+- Dominio vestia.mx: **libre, sin registrar** (paso 🔑 TAMARA en §5).
 - Código: **cero líneas**. Todo empieza con este documento.
 
 ---
 
 ## 2. Contexto de negocio
 
-### 2.1 El dueño
+### 2.1 Titularidad
 
-Ricardo Krasovsky (ricardokrasovsky@gmail.com). Emprendedor con varios negocios operando (los conocerás si trabajas en sus otras máquinas; **no** los mezcles con Vestia: cuentas, facturación y repos separados). Toma todas las decisiones de negocio. Opera personalmente la computadora donde tú corres.
+Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma todas las decisiones de negocio y opera personalmente la computadora donde tú corres. Vestia es un negocio propio y separado: cuentas, facturación y repo dedicados, nunca mezclados con nada más.
 
 ### 2.2 Mercado y competencia (síntesis de investigación, ago-2026)
 
@@ -141,7 +141,7 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 - CA: gap analysis produce ≥3 recomendaciones con justificación; cada clic saliente queda en `affiliate_clicks`; los enlaces de Amazon llevan `?tag=` del proyecto.
 
 **M7. Pagos y créditos**
-- Stripe Checkout: pago único $100 MXN (product `vestia_lifetime`) y recargas $49 MXN (product `credits_20`). Webhook `checkout.session.completed` → activa plan / abona créditos en `credit_ledger`. **Toda sesión de Checkout lleva `metadata.user_id`** (lección operativa de otros negocios del dueño: un pago sin metadata es dinero invisible).
+- Stripe Checkout: pago único $100 MXN (product `vestia_lifetime`) y recargas $49 MXN (product `credits_20`). Webhook `checkout.session.completed` → activa plan / abona créditos en `credit_ledger`. **Toda sesión de Checkout lleva `metadata.user_id`** (regla dura: un pago sin metadata es dinero invisible — no hay forma de saber a quién abonarle).
 - CA: compra de prueba (modo test) activa el plan y abona 30 créditos; webhook idempotente (reintento de Stripe no duplica créditos); pantalla de éxito/cancelación; historial de compras en el perfil.
 
 **M8. Panel admin (mínimo pero real)**
@@ -151,7 +151,7 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 ### 3.4 Fuera de alcance del primer mes (backlog priorizado post-lanzamiento)
 
 1. Onboarding por video del clóset (walkthrough → IA segmenta prendas) — el diferenciador #1 detectado; hacerlo en cuanto haya usuarios.
-2. Estilista por WhatsApp ("¿qué me pongo hoy?" con foto) — encaja con experiencia previa del dueño en agentes de WhatsApp.
+2. Estilista por WhatsApp ("¿qué me pongo hoy?" con foto) — canal natural en México.
 3. Feeds de producto Admitad/Awin (Shein, Liverpool, Coppel) + Amazon Creators API (requiere 10 ventas/30 días).
 4. Reventa/segunda mano (GoTrendier, Mercado Libre) — lección de Chicisimo.
 5. pgvector para similitud visual de prendas y "compra parecidos".
@@ -257,7 +257,7 @@ Reglas duras: **RLS activada en el 100% de las tablas desde su creación** (toda
 - Fotos de cuerpo y clóset = **datos personales sensibles**: aviso de privacidad (LFPDPPP México) en `/privacidad` + checkbox de consentimiento explícito en registro y otro específico al subir foto de cuerpo; derechos ARCO vía correo del proyecto; borrado de cuenta purga BD **y** Storage.
 - Moderación de subida: validación con Gemini visión (rechazar desnudos/menores/contenido que no sea ropa o foto de cuerpo vestido).
 - Rate limits por usuario en endpoints de IA (p. ej. 30 catalogaciones/hora, 10 outfits/día free) — tabla `rate_limits` o Upstash Redis free si se prefiere.
-- **Control de gasto**: env `MAX_DAILY_API_SPEND_USD` (default 5). Job de cron suma `api_costs` del día; si excede, activa kill-switch de try-on y avisa por email a Ricardo. Ningún usuario puede gastar más créditos de los que su ledger permite (transacción atómica).
+- **Control de gasto**: env `MAX_DAILY_API_SPEND_USD` (default 5). Job de cron suma `api_costs` del día; si excede, activa kill-switch de try-on y avisa por email a Tamara. Ningún usuario puede gastar más créditos de los que su ledger permite (transacción atómica).
 - Secretos solo en `.env.local` (git-ignored) y en Vercel env vars. Nunca en el repo, nunca en el cliente, nunca en logs.
 - Cabeceras de seguridad (CSP, HSTS) vía `next.config`; dependencias auditadas en CI (`pnpm audit`).
 
@@ -265,7 +265,7 @@ Reglas duras: **RLS activada en el 100% de las tablas desde su creación** (toda
 
 ## 5. Setup de la computadora nueva (ejecutar en orden)
 
-### 5.0 Software base (lo instala Claude; pedir a Ricardo la contraseña de admin cuando el instalador la exija — que la teclee él)
+### 5.0 Software base (lo instala Claude; la contraseña de admin que pida el instalador la teclea Tamara, nunca Claude)
 
 ```bash
 # 1. Homebrew (si no existe)
@@ -277,19 +277,19 @@ brew install git gh node pnpm supabase/tap/supabase stripe/stripe-cli/stripe ver
 git --version && node --version && pnpm --version && gh --version && supabase --version && stripe --version && vercel --version
 ```
 
-### 5.1 Cuentas 🔑 RICARDO (en este orden; Claude prepara y espera)
+### 5.1 Cuentas 🔑 TAMARA (en este orden; Claude prepara y espera)
 
-> Regla: Ricardo crea cada cuenta con el **correo del proyecto** (paso 1) y guarda las credenciales en su gestor de contraseñas. A Claude solo se le entregan **API keys** vía `.env.local`, nunca contraseñas.
+> Regla: Tamara crea cada cuenta con el **correo del proyecto** (paso 1) y guarda las credenciales en su gestor de contraseñas. A Claude solo se le entregan **API keys** vía `.env.local`, nunca contraseñas.
 
 1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `vestia.mx@gmail.com`. Todas las cuentas siguientes se registran con este correo.
 2. **Dominio**: registrar **vestia.mx** en Namecheap (o Akky) (~$45 USD/año). Después: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
-3. **GitHub**: cuenta nueva (u org `vestia-app`); crear repo privado `vestia`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Ricardo teclea el código de dispositivo).
+3. **GitHub**: cuenta nueva (u org `vestia-app`); crear repo privado `vestia`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Tamara teclea el código de dispositivo).
 4. **Vercel**: cuenta con el correo del proyecto; conectar el repo `vestia`.
 5. **Supabase**: cuenta + proyecto `vestia-prod` (región `us-east-1` o la más cercana disponible). Entregar a Claude: URL, anon key, service role key.
-6. **Stripe**: cuenta MX (requiere datos fiscales y cuenta bancaria de Ricardo; puede empezar en modo test sin activar). Entregar keys test y, cuando active, live.
+6. **Stripe**: cuenta MX (requiere datos fiscales y cuenta bancaria de Tamara; puede empezar en modo test sin activar). Entregar keys test y, cuando active, live.
 7. **Resend**: cuenta; agregar dominio vestia.mx (Claude dará los registros DNS a capturar). Entregar API key.
 8. **Google AI Studio** (aistudio.google.com): generar API key de Gemini con el correo del proyecto. Gratis.
-9. **fal.ai**: cuenta + depósito inicial ~$10 USD (🔑 el pago lo hace Ricardo). Entregar FAL_KEY.
+9. **fal.ai**: cuenta + depósito inicial ~$10 USD (🔑 el pago lo hace Tamara). Entregar FAL_KEY.
 10. **Sentry**: cuenta free, proyecto `vestia`. Entregar DSN.
 11. **Amazon Afiliados MX** (afiliados.amazon.com.mx): alta con la URL vestia.mx cuando ya esté deployada (semana 3-4). Anotar el tag (`vestia-20` o similar).
 12. **Mercado Libre Afiliados** (mercadolibre.com.mx/landing/afiliados): alta con cuenta ML + Mercado Pago del proyecto. *(Admitad y Awin: post-lanzamiento.)*
@@ -299,7 +299,7 @@ git --version && node --version && pnpm --version && gh --version && supabase --
 ```bash
 # App
 NEXT_PUBLIC_APP_URL=https://vestia.mx
-ADMIN_EMAILS=ricardokrasovsky@gmail.com,vestia.mx@gmail.com
+ADMIN_EMAILS=tamaramunozdel@gmail.com,vestia.mx@gmail.com   # correo personal + correo del proyecto
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
@@ -373,7 +373,7 @@ Convenciones: rama `main` protegida deployable siempre; ramas `feat/*`, `fix/*`;
 
 ## 6. Plan de ejecución — 4 semanas
 
-> Cada semana cierra con: feature funcionando en producción, ≥5 commits, ≥2 deploys, ≥5 prompts en PROMPT_LOG, ≥3 tests con evidencia, entrada en ITERATION_LOG (qué cambió tras probar), DECISION_NOTE de 150-250 palabras, y video demo de 2-3 min (guion: problema → feature en vivo → qué sigue). El video lo graba Ricardo con guion escrito por Claude.
+> Cada semana cierra con: feature funcionando en producción, ≥5 commits, ≥2 deploys, ≥5 prompts en PROMPT_LOG, ≥3 tests con evidencia, entrada en ITERATION_LOG (qué cambió tras probar), DECISION_NOTE de 150-250 palabras, y video demo de 2-3 min (guion: problema → feature en vivo → qué sigue). El video lo graba Tamara con guion escrito por Claude.
 
 **Semana 0 (días 1-2) — Build Discipline Packet (ANTES de codificar, exige la rúbrica):**
 setup de máquina (§5.0), cuentas core 🔑 (§5.1 pasos 1-10), repo con este documento como commit #1, **mockups generados por imagen** (Nano Banana / Gemini Image: 5-6 pantallas clave — landing, clóset, outfit del día, try-on, paywall — guardados en `docs/evidencia/mockups/` con nota de implementación y recortes de alcance), spec y criterios de aceptación (§3.3) revisados, migración SQL inicial, deploy "hello Vestia" a Vercel con dominio conectado. *Con esto, las categorías 1-4 de la rúbrica (4.5 pts) quedan cubiertas antes de la primera línea de producto.*
@@ -403,7 +403,7 @@ Rúbrica de 10 pts. Cómo la cubre el proceso:
 | Working deployed product (2.0) | URL viva y feature semanal funcionando | vestia.mx en Vercel desde Semana 0; cadencia semanal §6 |
 | Coding/build evidence (1.0) | ≥5 commits, ≥2 deploys, log de prompts del agente | Convención de commits frecuentes + `PROMPT_LOG.md` alimentado cada sesión |
 | Testing & iteration (1.0) | Tests mínimos + ≥1 mejora derivada | Vitest+Playwright (≥3/semana) + `ITERATION_LOG.md` |
-| Human judgment & explanation (1.0) | Explicar decisiones, rechazos, correcciones, tradeoffs | `DECISION_NOTES.md`: nota semanal de 150-250 palabras que **Ricardo revisa y firma** (es su voz, no la del agente) |
+| Human judgment & explanation (1.0) | Explicar decisiones, rechazos, correcciones, tradeoffs | `DECISION_NOTES.md`: nota semanal de 150-250 palabras que **Tamara revisa y firma** (es su voz, no la del agente) |
 | Demo clarity (0.5) | Demo en vivo que prueba el feature | Video semanal 2-3 min; final (Week 6) 5 min, con guion |
 
 Checklist de evidencia exigida: Live URL (Vercel/dominio propio ✓), Build Discipline Packet ✓, UX mockup generado por imagen ✓, Product Spec ✓, Architecture Sketch ✓, GitHub ≥5 commits ✓, Vercel ≥2 deployments ✓, **Supabase evidence** (capturas de tablas con datos reales — tomarlas al cierre de cada semana) ✓, Codex/Claude prompt log ≥5 ✓, Test evidence ≥3 ✓, Iteration log ✓, Demo video ✓, Human Decision Note ✓.
@@ -629,7 +629,7 @@ create policy "own recs" on shopping_recs for select using (auth.uid() = user_id
 -- Storage: buckets privados 'garments', 'avatars', 'renders'; políticas por carpeta user_id; URLs firmadas TTL 15 min.
 ```
 
-## Apéndice C — Marca y tono (inicial; Ricardo aprueba antes del lanzamiento público)
+## Apéndice C — Marca y tono (inicial; Tamara aprueba antes del lanzamiento público)
 
 - **Vestia** — de "vestir". Pronunciación natural es/en.
 - Tono: estilista amiga experta — cálida, directa, honesta, cero jerga técnica, es-MX neutro (tuteo). Nunca body-shaming: el estilo se adapta al cuerpo, no al revés.
@@ -646,3 +646,15 @@ create policy "own recs" on shopping_recs for select using (auth.uid() = user_id
 ---
 
 *Fin del documento. Siguiente acción del Claude que lo lea: §0, luego §5.0.*
+
+---
+
+## Historial de cambios
+
+**v1.1 — 19-ago-2026.** Se corrige la titularidad del proyecto: la dueña es **Tamara Muñoz
+Delgadillo** (tamaramunozdel@gmail.com), quien opera la máquina y hace los pasos 🔑. Se
+actualizan §2.1, §5.1, §5.2 (`ADMIN_EMAILS`), §7 (firma de notas de decisión) y todas las
+marcas 🔑. Se retiran dos afirmaciones que ya no aplican (otros negocios en M7 y
+§3.4). Sin cambios en producto, stack, modelo de negocio ni plan.
+
+**v1.0 — 19-ago-2026.** Documento original.

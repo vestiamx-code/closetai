@@ -21,6 +21,6 @@ indicación implícita de ejecutarlo desde §0.
 **Resultado:** auditoría de la máquina (toolchain vacío), scaffold del repo, transcripción de la
 migración 001 desde el Apéndice B y redacción de la migración 002 con las piezas faltantes
 (trigger de `profiles`, débito atómico de créditos, buckets de Storage).
-**Juicio humano:** pendiente de revisión por el dueño. El agente se detuvo antes de instalar
+**Juicio humano:** pendiente de revisión por Tamara. El agente se detuvo antes de instalar
 software de sistema y antes de crear cuentas — ambos pasos requieren a una persona.
 **Commit:** (ver commit inicial)

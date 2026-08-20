@@ -4,14 +4,9 @@ Actualizado: 2026-08-19. Ordenado por lo que desbloquea más.
 
 ## 🔴 Bloqueantes ahora mismo
 
-### 1. ¿Quién es el dueño que opera esta máquina?
-El documento maestro (§2.1) dice: *"Ricardo Krasovsky (ricardokrasovsky@gmail.com) … Opera
-personalmente la computadora donde tú corres."* Esta máquina es de **Tamara Muñoz Delgadillo**
-(usuario `tamaramunozdelgadillo`, correo `tamaramunozdel@gmail.com`).
-
-Afecta a: `ADMIN_EMAILS`, el correo con el que se abren todas las cuentas (§5.1 paso 1), a quién
-se le piden las API keys, y de quién es la firma de las notas de decisión (§7).
-**Sin resolver esto no se puede ejecutar §5.1.**
+### ~~1. ¿Quién es la titular?~~ ✅ RESUELTO 19-ago-2026
+El proyecto es de **Tamara Muñoz Delgadillo** (`tamaramunozdel@gmail.com`). El documento maestro
+se actualizó a v1.1: §2.1, §5.1, §5.2 (`ADMIN_EMAILS`), §7 y todas las marcas 🔑.
 
 ### 2. Toolchain: la máquina está vacía
 Instalado: `git` (Apple, 2.50.1) y `python3` 3.9.6. **No instalado:** Homebrew, node, pnpm, npm,
