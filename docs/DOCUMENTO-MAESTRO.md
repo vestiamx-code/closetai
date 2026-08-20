@@ -22,13 +22,13 @@ Reglas de operación:
 
 ## 1. Resumen ejecutivo
 
-**Vestia** (vestia.mx) es una aplicación web comercial: un **estilista personal con inteligencia artificial**. El usuario fotografía su ropa, construye su clóset digital, y la IA le genera outfits, se los muestra puestos sobre su propia foto (try-on fotorrealista), aprende sus gustos con cada interacción y le recomienda qué prendas comprar para completar su estilo — monetizando esas recomendaciones con afiliados.
+**Vestia** (vestia.lat) es una aplicación web comercial: un **estilista personal con inteligencia artificial**. El usuario fotografía su ropa, construye su clóset digital, y la IA le genera outfits, se los muestra puestos sobre su propia foto (try-on fotorrealista), aprende sus gustos con cada interacción y le recomienda qué prendas comprar para completar su estilo — monetizando esas recomendaciones con afiliados.
 
 ### Decisiones ya tomadas (no reabrir)
 
 | Decisión | Valor | Racional corto |
 |---|---|---|
-| Nombre y dominio | **Vestia / vestia.mx** | Verificado disponible 19-ago-2026. Elegante, bilingüe, registrable |
+| Nombre y dominio | **Vestia / vestia.lat** | Registrado 19-ago-2026 en Namecheap. `.mx` se evaluó y se descartó: a partir del año 2 cuestan casi lo mismo (ver Historial de cambios v1.2) |
 | Plazo | **&lt; 1 mes** hasta versión evaluable | Deadline académico; ver rúbrica §7 |
 | Presupuesto | **Mínimo posible; free tiers siempre que se pueda** | Único gasto variable inevitable: renders de try-on |
 | Cuentas | **Nuevas, dedicadas al proyecto** | Negocio separado de los demás negocios de Tamara |
@@ -41,7 +41,7 @@ Reglas de operación:
 ### Estado al 19-ago-2026
 
 - Investigación de mercado, competencia, APIs de try-on y afiliados: **completada** (síntesis en §2, fuentes en Apéndice D).
-- Dominio vestia.mx: **libre, sin registrar** (paso 🔑 TAMARA en §5).
+- Dominio vestia.lat: **registrado** 19-ago-2026 (Namecheap, privacidad WHOIS incluida).
 - Código: **cero líneas**. Todo empieza con este documento.
 
 ---
@@ -172,7 +172,7 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 | Hosting | **Vercel** | Hobby $0 | Prescrito por rúbrica. ⚠️ Hobby es no-comercial: al cobrar dinero real, subir a Pro ($20/mes). Durante desarrollo/evaluación, Hobby |
 | BD + Auth + Storage | **Supabase** (Postgres) | $0 (500MB DB, 1GB storage, 50K MAU auth) | Prescrito por rúbrica y además la mejor opción: auth completa (email+OAuth+recovery), RLS, Storage con URLs firmadas. ⚠️ free tier pausa proyectos tras ~1 semana de inactividad — durante desarrollo no pasa; configurar ping semanal después |
 | Pagos | **Stripe MX** | $0 fijo (3.6%+$3+IVA por tx) | Estándar; Checkout + webhooks. Alt: Mercado Pago — considerar como 2º método más adelante (público sin tarjeta) |
-| Email transaccional | **Resend** | $0 (3,000/mes, 100/día) | Verificación, recovery, recibos. Dominio vestia.mx verificado + SMTP custom en Supabase Auth |
+| Email transaccional | **Resend** | $0 (3,000/mes, 100/día) | Verificación, recovery, recibos. Dominio vestia.lat verificado + SMTP custom en Supabase Auth |
 | IA — catalogación visión | **Gemini 2.5 Flash-Lite** (API key de Google AI Studio) | Free tier generoso; pagado ≈ $0.0003/prenda | El más barato con calidad suficiente y JSON estructurado. ⚠️ Google lo retira ~oct-2026: el código usa un **adapter** (`lib/ai/`) con el modelo en env var — migrar al sucesor es cambiar una línea. Alt: Claude Haiku 4.5 (~$0.004/prenda), mejor si se prefiere un solo proveedor |
 | IA — estilista/chat/perfil | **Gemini 2.5 Flash** | Free tier | Razonamiento suficiente + costo ~cero al inicio. El adapter permite subir a Claude Sonnet si la calidad del estilista lo amerita |
 | IA — recorte de fondo | **BiRefNet v2 en fal.ai** | ~$0.001/imagen | SOTA open source; mismo proveedor que try-on (una sola cuenta/key) |
@@ -184,9 +184,9 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 | CI | **GitHub Actions** | $0 | lint + typecheck + tests en cada PR |
 | Observabilidad | **Sentry** (free) + Vercel Analytics + tabla `api_costs` propia | $0 | El costo de APIs se registra en BD y se ve en /admin |
 | Repo | **GitHub** — repo `vestia` en cuenta/org nueva | $0 | Rúbrica: commits como evidencia |
-| DNS/registro | **Namecheap o Akky** para vestia.mx (~$45 USD/año) | — | Único gasto fijo obligado. DNS puede vivir en Vercel |
+| DNS/registro | **Namecheap** para vestia.lat ($2 USD el 1er año, renueva ~$41 USD/año) | — | Único gasto fijo obligado. DNS puede vivir en Vercel. ⚠️ El precio de renovación es 20× el de entrada: anotar la fecha |
 
-**Costo fijo total del primer mes: ~$45 USD (dominio) + depósito inicial ~$10 USD en fal.ai.** Todo lo demás en $0 hasta tener usuarios de pago.
+**Costo fijo total del primer mes: ~$2 USD (dominio) + depósito inicial ~$10 USD en fal.ai.** Todo lo demás en $0 hasta tener usuarios de pago.
 
 ### 4.2 Diagrama de arquitectura
 
@@ -281,25 +281,25 @@ git --version && node --version && pnpm --version && gh --version && supabase --
 
 > Regla: Tamara crea cada cuenta con el **correo del proyecto** (paso 1) y guarda las credenciales en su gestor de contraseñas. A Claude solo se le entregan **API keys** vía `.env.local`, nunca contraseñas.
 
-1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `vestia.mx@gmail.com`. Todas las cuentas siguientes se registran con este correo.
-2. **Dominio**: registrar **vestia.mx** en Namecheap (o Akky) (~$45 USD/año). Después: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
+1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `vestia.lat@gmail.com`. Todas las cuentas siguientes se registran con este correo.
+2. **Dominio**: ✅ **vestia.lat registrado** en Namecheap el 19-ago-2026 ($2 USD el 1er año; renueva ~$41 USD/año, auto-renew activado). Siguiente: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
 3. **GitHub**: cuenta nueva (u org `vestia-app`); crear repo privado `vestia`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Tamara teclea el código de dispositivo).
 4. **Vercel**: cuenta con el correo del proyecto; conectar el repo `vestia`.
 5. **Supabase**: cuenta + proyecto `vestia-prod` (región `us-east-1` o la más cercana disponible). Entregar a Claude: URL, anon key, service role key.
 6. **Stripe**: cuenta MX (requiere datos fiscales y cuenta bancaria de Tamara; puede empezar en modo test sin activar). Entregar keys test y, cuando active, live.
-7. **Resend**: cuenta; agregar dominio vestia.mx (Claude dará los registros DNS a capturar). Entregar API key.
+7. **Resend**: cuenta; agregar dominio vestia.lat (Claude dará los registros DNS a capturar). Entregar API key.
 8. **Google AI Studio** (aistudio.google.com): generar API key de Gemini con el correo del proyecto. Gratis.
 9. **fal.ai**: cuenta + depósito inicial ~$10 USD (🔑 el pago lo hace Tamara). Entregar FAL_KEY.
 10. **Sentry**: cuenta free, proyecto `vestia`. Entregar DSN.
-11. **Amazon Afiliados MX** (afiliados.amazon.com.mx): alta con la URL vestia.mx cuando ya esté deployada (semana 3-4). Anotar el tag (`vestia-20` o similar).
+11. **Amazon Afiliados MX** (afiliados.amazon.com.mx): alta con la URL vestia.lat cuando ya esté deployada (semana 3-4). Anotar el tag (`vestia-20` o similar).
 12. **Mercado Libre Afiliados** (mercadolibre.com.mx/landing/afiliados): alta con cuenta ML + Mercado Pago del proyecto. *(Admitad y Awin: post-lanzamiento.)*
 
 ### 5.2 Variables de entorno (`.env.local` — plantilla completa)
 
 ```bash
 # App
-NEXT_PUBLIC_APP_URL=https://vestia.mx
-ADMIN_EMAILS=tamaramunozdel@gmail.com,vestia.mx@gmail.com   # correo personal + correo del proyecto
+NEXT_PUBLIC_APP_URL=https://vestia.lat
+ADMIN_EMAILS=tamaramunozdel@gmail.com,vestia.lat@gmail.com   # correo personal + correo del proyecto
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
@@ -323,7 +323,7 @@ FAL_KEY=
 
 # Email
 RESEND_API_KEY=
-EMAIL_FROM="Vestia <hola@vestia.mx>"
+EMAIL_FROM="Vestia <hola@vestia.lat>"
 
 # Afiliados
 AMAZON_AFFILIATE_TAG=       # cuando exista (p. ej. vestia-20)
@@ -400,7 +400,7 @@ Rúbrica de 10 pts. Cómo la cubre el proceso:
 | UX planning & image-generated mockup (1.0) | Mockup/wireframe + nota de implementación + recorte de alcance | `docs/evidencia/mockups/` (Semana 0, generados con IA de imagen) |
 | Product spec & acceptance criteria (1.0) | Requisitos y CA claros y testeables | §3.3 — cada módulo con CA que son literalmente los tests e2e |
 | Architecture & stack clarity (1.0) | Sketch de arquitectura + tabla de stack | §4.1 tabla + §4.2 diagrama y flujo de datos |
-| Working deployed product (2.0) | URL viva y feature semanal funcionando | vestia.mx en Vercel desde Semana 0; cadencia semanal §6 |
+| Working deployed product (2.0) | URL viva y feature semanal funcionando | vestia.lat en Vercel desde Semana 0; cadencia semanal §6 |
 | Coding/build evidence (1.0) | ≥5 commits, ≥2 deploys, log de prompts del agente | Convención de commits frecuentes + `PROMPT_LOG.md` alimentado cada sesión |
 | Testing & iteration (1.0) | Tests mínimos + ≥1 mejora derivada | Vitest+Playwright (≥3/semana) + `ITERATION_LOG.md` |
 | Human judgment & explanation (1.0) | Explicar decisiones, rechazos, correcciones, tradeoffs | `DECISION_NOTES.md`: nota semanal de 150-250 palabras que **Tamara revisa y firma** (es su voz, no la del agente) |
@@ -416,10 +416,10 @@ Checklist de evidencia exigida: Live URL (Vercel/dominio propio ✓), Build Disc
 
 | Concepto | Costo | Cuándo |
 |---|---|---|
-| Dominio vestia.mx | ~$45 USD/año | Semana 0 🔑 |
+| Dominio vestia.lat | $2 USD el 1er año (renueva ~$41 USD/año) | Semana 0 🔑 ✅ |
 | Depósito fal.ai (recorte + try-on) | $10 USD (dura ~130 renders o ~10,000 recortes) | Semana 0 🔑 |
 | Vercel, Supabase, Resend, Gemini, Sentry, GitHub, Stripe (fijo), open-meteo | **$0** | free tiers |
-| **Total mes 1** | **~$55 USD** | |
+| **Total mes 1** | **~$12 USD** | dominio $2 + depósito fal.ai $10 |
 | Al vender de verdad: Vercel Pro $20/mes; Supabase Pro $25/mes cuando 1GB storage se agote (~5-8K prendas) | ~$45 USD/mes | pagado por ingresos |
 
 Unit economics recordatorio: venta de $100 MXN deja ~$92.8 netos ≈ $4.9 USD contra costo máximo comprometido $2.25 USD (30 créditos) → margen ≥50% en el peor caso; catalogación y outfits cuestan centavos y se regalan.
@@ -650,6 +650,16 @@ create policy "own recs" on shopping_recs for select using (auth.uid() = user_id
 ---
 
 ## Historial de cambios
+
+**v1.2 — 19-ago-2026.** El dominio del proyecto es **vestia.lat**, no vestia.mx. Decisión de
+Tamara al momento de comprar. Se advirtió el tradeoff antes de confirmar: el precio de entrada
+de `.lat` ($1.80 + $0.20 de ICANN) es promocional y renueva a ~$41 USD/año, prácticamente lo
+mismo que `.mx`, así que el ahorro es solo del primer año; y `.mx` es señal más fuerte para un
+producto cuyo posicionamiento es ser el primero hecho para México. Tamara decidió `.lat`, que
+además encaja con la expansión a LATAM del backlog (§3.4). Se actualizaron todas las referencias
+al dominio en el documento, `.env.local`, CI, el runbook de cuentas y `metadataBase` de la app.
+El correo del proyecto pasa a `vestia.lat@gmail.com`. Presupuesto del mes 1 baja de ~$55 a ~$12 USD.
+
 
 **v1.1 — 19-ago-2026.** Se corrige la titularidad del proyecto: la dueña es **Tamara Muñoz
 Delgadillo** (tamaramunozdel@gmail.com), quien opera la máquina y hace los pasos 🔑. Se

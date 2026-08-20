@@ -19,23 +19,24 @@ cuentas **no van ahí** — esas se quedan en tu gestor de contraseñas y yo nun
 
 ## 1. Correo del proyecto — $0
 
-Cuenta de Google nueva: **vestia.mx@gmail.com** (o la variante que esté libre).
+Cuenta de Google nueva: **vestia.lat@gmail.com** (o la variante que esté libre).
 Todas las cuentas de abajo se registran con este correo, no con el tuyo personal. Es lo que
 mantiene Vestia separado de tus cosas y lo que hace que la cuenta sea transferible o vendible
 después. Pide verificación por teléfono.
 
 → Anota en `.env.local`: nada todavía. Solo dime qué correo quedó.
 
-## 2. Dominio vestia.mx — ~$45 USD/año · el único gasto fijo obligado
+## 2. ~~Dominio vestia.lat~~ ✅ COMPRADO 19-ago-2026
 
-En **Namecheap** (namecheap.com) o **Akky** (akky.mx, registrar mexicano).
-Busca `vestia.mx`, regístralo a 1 año. Activa la protección de privacidad de WHOIS si es gratis.
+Registrado en Namecheap: $1.80 + $0.20 de ICANN = **$2.00 USD el primer año**, con privacidad
+de WHOIS gratis y auto-renovación activada.
 
-Verifícalo antes de pagar: el documento lo dio por libre el 19-ago-2026, conviene confirmar que
-sigue así antes de seguir con el resto.
+⚠️ **Apunta esto en tu calendario:** el precio promocional es solo del primer año. `.lat`
+**renueva a ~$40.98 USD/año** en agosto de 2027. Con auto-renew prendido se cobra solo, así que
+la fecha importa. Si para entonces Vestia no despegó, ahí es donde decides si vale la pena.
 
-→ Después me dices en qué registrar quedó y yo te doy los registros DNS exactos que hay que
-capturar (para Vercel y para Resend).
+Siguiente paso conmigo: cuando tengas la cuenta de Vercel, te doy los registros DNS exactos
+que hay que capturar en Namecheap (para apuntar el dominio a Vercel y para verificar Resend).
 
 ## 3. GitHub — $0
 
@@ -97,7 +98,7 @@ FAL_KEY=
 
 ## 8. Resend — $0
 
-resend.com → cuenta → *Domains* → agregar `vestia.mx`. Te va a mostrar unos registros DNS;
+resend.com → cuenta → *Domains* → agregar `vestia.lat`. Te va a mostrar unos registros DNS;
 mándamelos o dime que ya están y te digo exactamente qué capturar en el registrar.
 
 ```

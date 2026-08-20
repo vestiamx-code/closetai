@@ -24,7 +24,7 @@ Orden y dependencias:
 | # | Cuenta | Costo | Desbloquea |
 |---|---|---|---|
 | 1 | Correo del proyecto (Google) | $0 | todas las demás |
-| 2 | Dominio **vestia.mx** | ~$45 USD/año | URL viva (rúbrica), DNS de Resend |
+| 2 | ~~Dominio **vestia.lat**~~ ✅ 19-ago-2026 | $2 USD 1er año | URL viva (rúbrica), DNS de Resend |
 | 3 | GitHub + repo `vestia` | $0 | evidencia de commits, deploy de Vercel |
 | 4 | Vercel | $0 (Hobby) | URL viva |
 | 5 | Supabase (proyecto `vestia-prod`) | $0 | aplicar migraciones 001 y 002 |
