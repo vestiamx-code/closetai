@@ -16,10 +16,11 @@ Semana 0 — Build Discipline Packet.
 | Migraciones SQL (esquema + RLS + storage) | ✅ escritas, sin aplicar (falta proyecto Supabase) |
 | Toolchain local | ✅ node 26.7 · pnpm 11.22 · gh · supabase · stripe · vercel |
 | App Next.js 16 + Tailwind v4 + landing | ✅ build verde |
-| Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde · CI en GitHub Actions |
+| Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde en local **y en CI** (GitHub Actions, 2m51s) |
 | Contrato zod de salida del catalogador | ✅ 9 pruebas |
 | Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
-| Cuentas 🔑 y primer deploy | ⛔ pendientes |
+| Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado, 9 commits) |
+| Cuentas restantes y primer deploy | ⛔ Vercel, Supabase, Gemini, fal.ai |
 
 Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md) ·
 Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).

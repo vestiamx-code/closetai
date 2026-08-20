@@ -41,18 +41,13 @@ la fecha importa. Si para entonces ClosetAI no despegó, ahí es donde decides s
 Siguiente paso conmigo: cuando tengas la cuenta de Vercel, te doy los registros DNS exactos
 que hay que capturar en Namecheap (para apuntar el dominio a Vercel y para verificar Resend).
 
-## 3. GitHub — $0
+## 3. ~~GitHub~~ ✅ LISTO 20-ago-2026
 
-Cuenta nueva con el correo del proyecto. Crea un repo **privado** llamado `closetai`
-(sin README, sin .gitignore, sin licencia — ya los tengo escritos aquí).
+Cuenta **`vestiamx-code`**, repo privado **`closetai`**, autenticado con `gh` en esta máquina.
+Los 9 commits ya están arriba y el CI de GitHub Actions pasó en verde.
 
-Luego, en la Terminal, corre esto y teclea el código que aparezca:
-
-```bash
-gh auth login
-```
-
-Elige: GitHub.com → HTTPS → autenticar con navegador. Ahí sí tecleas tú el código.
+Los commits se firman con el correo `noreply` de GitHub, no con el personal: así el historial
+público no expone tu correo y GitHub sí los cuenta como tuyos.
 
 ## 4. Vercel — $0 (plan Hobby)
 

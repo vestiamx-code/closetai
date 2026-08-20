@@ -55,3 +55,12 @@ donde de verdad va a estar el usuario, no en escritorio.
 **Resultado:** ✅ 3/3 pasan en 8.7 s.
 **Evidencia:** salida de `playwright test --reporter=list`.
 
+## [2026-08-20] El pipeline corre solo en cada push
+**Tipo:** CI (GitHub Actions) — `.github/workflows/ci.yml`
+**Qué prueba:** que la suite no dependa de esta máquina. Instala en limpio, sin `node_modules`
+ni caché local, y sin ningún secreto real (el build usa claves de relleno a propósito).
+**Cómo:** automático en cada push a `main` y en cada PR.
+**Resultado:** ✅ verde a la primera. `success · 2m51s` — install, lint, typecheck, 9 pruebas
+unitarias, build y auditoría de dependencias.
+**Evidencia:** run `32420304079` en github.com/vestiamx-code/closetai/actions
+

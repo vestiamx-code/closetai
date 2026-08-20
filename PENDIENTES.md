@@ -23,9 +23,9 @@ Orden y dependencias:
 
 | # | Cuenta | Costo | Desbloquea |
 |---|---|---|---|
-| 1 | Correo del proyecto (Google) | $0 | todas las demás |
+| 1 | ~~Correo del proyecto~~ ✅ `vestia.mx@gmail.com` | $0 | todas las demás |
 | 2 | ~~Dominio **closetai.lat**~~ ✅ 19-ago-2026 | $2 USD 1er año | URL viva (rúbrica), DNS de Resend |
-| 3 | GitHub + repo `closetai` | $0 | evidencia de commits, deploy de Vercel |
+| 3 | ~~GitHub + repo `closetai`~~ ✅ 20-ago-2026 | $0 | evidencia de commits, deploy de Vercel |
 | 4 | Vercel | $0 (Hobby) | URL viva |
 | 5 | Supabase (proyecto `closetai-prod`) | $0 | aplicar migraciones 001 y 002 |
 | 6 | Stripe MX (modo test basta al inicio) | $0 | Semana 3 |
@@ -56,3 +56,9 @@ Afiliados (Amazon MX, Mercado Libre) son Semana 3-4: requieren la URL ya deploya
   buckets privados de Storage con políticas por carpeta.
 - Plantilla `.env.local.example`, `.gitignore` que protege secretos, README.
 - Esqueletos de los 4 logs de evidencia de la rúbrica (§7).
+
+## 🟠 Para el día de la evaluación
+
+El repo `vestiamx-code/closetai` es **privado**. La rúbrica pide los commits como evidencia, así
+que ese día hay que darle acceso a quien califique (Settings → Collaborators) o cambiarlo a
+público temporalmente. No dejarlo para el último momento.
