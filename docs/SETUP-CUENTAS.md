@@ -5,11 +5,11 @@ condiciones. Todo lo de esta lista lo haces tú; yo sigo en cuanto me pases las 
 
 ## Cómo me entregas las llaves
 
-**No las pegues en el chat.** Escríbelas en `~/vestia/.env.local` (ya existe, ya está en
+**No las pegues en el chat.** Escríbelas en `~/closetai/.env.local` (ya existe, ya está en
 `.gitignore`, nunca se sube a GitHub). Ábrelo con:
 
 ```bash
-open -e ~/vestia/.env.local
+open -e ~/closetai/.env.local
 ```
 
 Cada vez que llenes una sección, me dices "ya está X" y yo la uso. Las contraseñas de las
@@ -19,28 +19,28 @@ cuentas **no van ahí** — esas se quedan en tu gestor de contraseñas y yo nun
 
 ## 1. Correo del proyecto — $0
 
-Cuenta de Google nueva: **vestia.lat@gmail.com** (o la variante que esté libre).
+Cuenta de Google nueva: **closetai.lat@gmail.com** (o la variante que esté libre).
 Todas las cuentas de abajo se registran con este correo, no con el tuyo personal. Es lo que
-mantiene Vestia separado de tus cosas y lo que hace que la cuenta sea transferible o vendible
+mantiene ClosetAI separado de tus cosas y lo que hace que la cuenta sea transferible o vendible
 después. Pide verificación por teléfono.
 
 → Anota en `.env.local`: nada todavía. Solo dime qué correo quedó.
 
-## 2. ~~Dominio vestia.lat~~ ✅ COMPRADO 19-ago-2026
+## 2. ~~Dominio closetai.lat~~ ✅ COMPRADO 19-ago-2026
 
 Registrado en Namecheap: $1.80 + $0.20 de ICANN = **$2.00 USD el primer año**, con privacidad
 de WHOIS gratis y auto-renovación activada.
 
 ⚠️ **Apunta esto en tu calendario:** el precio promocional es solo del primer año. `.lat`
 **renueva a ~$40.98 USD/año** en agosto de 2027. Con auto-renew prendido se cobra solo, así que
-la fecha importa. Si para entonces Vestia no despegó, ahí es donde decides si vale la pena.
+la fecha importa. Si para entonces ClosetAI no despegó, ahí es donde decides si vale la pena.
 
 Siguiente paso conmigo: cuando tengas la cuenta de Vercel, te doy los registros DNS exactos
 que hay que capturar en Namecheap (para apuntar el dominio a Vercel y para verificar Resend).
 
 ## 3. GitHub — $0
 
-Cuenta nueva con el correo del proyecto. Crea un repo **privado** llamado `vestia`
+Cuenta nueva con el correo del proyecto. Crea un repo **privado** llamado `closetai`
 (sin README, sin .gitignore, sin licencia — ya los tengo escritos aquí).
 
 Luego, en la Terminal, corre esto y teclea el código que aparezca:
@@ -61,7 +61,7 @@ que entre el primer pago real hay que subir a Pro ($20 USD/mes). Está anotado e
 
 ## 5. Supabase — $0
 
-supabase.com → nuevo proyecto **`vestia-prod`**, región la más cercana a México
+supabase.com → nuevo proyecto **`closetai-prod`**, región la más cercana a México
 (`East US (North Virginia)` o `West US`). Te va a pedir crear una contraseña de base de datos:
 **guárdala en tu gestor**, la vas a necesitar.
 
@@ -98,7 +98,7 @@ FAL_KEY=
 
 ## 8. Resend — $0
 
-resend.com → cuenta → *Domains* → agregar `vestia.lat`. Te va a mostrar unos registros DNS;
+resend.com → cuenta → *Domains* → agregar `closetai.lat`. Te va a mostrar unos registros DNS;
 mándamelos o dime que ya están y te digo exactamente qué capturar en el registrar.
 
 ```
@@ -121,7 +121,7 @@ Stripe MX suele tardar en revisar y está listado como riesgo en §9.
 
 ## 10. Sentry — $0
 
-sentry.io → proyecto `vestia` (plataforma: Next.js) → copiar el DSN.
+sentry.io → proyecto `closetai` (plataforma: Next.js) → copiar el DSN.
 
 ```
 SENTRY_DSN=
@@ -134,7 +134,7 @@ Es Semana 4; no corre prisa.
 ## Afiliados — Semana 3-4, requieren la URL ya deployada
 
 11. **Amazon Afiliados MX** (afiliados.amazon.com.mx) — paga 10% en moda, alta inmediata.
-    Pide la URL del sitio, por eso va después del primer deploy. Anota el tag (`vestia-20`).
+    Pide la URL del sitio, por eso va después del primer deploy. Anota el tag (`closetai-20`).
     ⚠️ Cierran cuentas sin 3 ventas en 180 días, pero se puede volver a aplicar.
 12. **Mercado Libre Afiliados** — requiere cuenta de ML + Mercado Pago del proyecto.
 

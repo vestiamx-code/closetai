@@ -3,7 +3,7 @@
  * Versionado aquí a propósito: cuando cambie, el diff queda en el historial
  * y se puede correlacionar con la calidad de la catalogación.
  */
-export const CATALOG_GARMENT_PROMPT = `Eres el catalogador de Vestia. Analiza la foto de una prenda de ropa y devuelve SOLO JSON válido con este esquema:
+export const CATALOG_GARMENT_PROMPT = `Eres el catalogador de ClosetAI. Analiza la foto de una prenda de ropa y devuelve SOLO JSON válido con este esquema:
 { "categoria": "top|bottom|vestido|abrigo|calzado|accesorio|bolsa|otro",
   "subcategoria": "string es-MX (ej. 'playera', 'jeans skinny', 'blazer')",
   "colores": ["1-3 colores dominantes en es-MX"],

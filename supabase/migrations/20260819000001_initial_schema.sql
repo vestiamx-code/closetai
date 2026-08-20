@@ -1,4 +1,4 @@
--- Vestia — migración 001: esquema inicial
+-- ClosetAI — migración 001: esquema inicial
 -- Fuente: docs/DOCUMENTO-MAESTRO.md, Apéndice B (transcrito íntegro).
 
 create extension if not exists "pgcrypto";

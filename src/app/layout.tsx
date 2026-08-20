@@ -14,15 +14,15 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://vestia.lat"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://closetai.lat"),
   title: {
-    default: "Vestia — Tu estilista, en tu bolsillo",
-    template: "%s · Vestia",
+    default: "ClosetAI — Tu estilista, en tu bolsillo",
+    template: "%s · ClosetAI",
   },
   description:
     "Fotografía tu ropa, arma tu clóset digital y deja que la IA te diga qué ponerte — y te lo muestre puesto.",
   openGraph: {
-    title: "Vestia — Tu estilista, en tu bolsillo",
+    title: "ClosetAI — Tu estilista, en tu bolsillo",
     description:
       "Fotografía tu ropa, arma tu clóset digital y deja que la IA te diga qué ponerte — y te lo muestre puesto.",
     locale: "es_MX",

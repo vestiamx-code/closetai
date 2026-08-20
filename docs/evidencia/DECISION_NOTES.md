@@ -30,11 +30,12 @@ diferencia entre lo planeado y lo que hace falta quede visible en el historial.
 
 ---
 
-## Decisión — [2026-08-19] — Dominio: vestia.lat en vez de vestia.mx — *borrador, pendiente de firma*
+## Decisión — [2026-08-19] — TLD `.lat` en vez de `.mx` — *borrador, pendiente de firma*
 
-El plan original pedía vestia.mx porque todo el posicionamiento del producto es ser el primer
-estilista con IA hecho para México, y un `.mx` dice eso sin explicarlo. Terminé comprando
-vestia.lat.
+El plan original pedía un `.mx` porque todo el posicionamiento del producto es ser el primer
+estilista con IA hecho para México, y un `.mx` dice eso sin explicarlo. Terminé comprando un
+`.lat`. (Esta decisión se tomó cuando el proyecto todavía se llamaba Vestia; el nombre cambió
+después a ClosetAI, pero el razonamiento sobre el TLD no.)
 
 El argumento en contra que consideré es real: el $1.80 del primer año es promocional y `.lat`
 renueva a ~$41 USD/año, casi lo mismo que costaría `.mx`. O sea, el ahorro es de un año, no
@@ -42,7 +43,7 @@ permanente, y a cambio se pierde la señal local más fuerte que existe.
 
 Lo compré igual por dos razones. La primera es de flujo de efectivo, no de costo total: en la
 fase donde el proyecto todavía no vale nada y el plazo es de un mes, bajar el desembolso inicial
-de ~$45 a $2 USD importa más que optimizar el año dos — si Vestia no despega, no gasté $45 en un
+de ~$45 a $2 USD importa más que optimizar el año dos — si ClosetAI no despega, no gasté $45 en un
 dominio muerto, y si despega, pagar $41 el año que entra no será el problema. La segunda es que
 `.lat` no contradice la estrategia: la expansión a LATAM ya está en el backlog, y un dominio
 regional envejece mejor que uno nacional si el producto crece hacia allá.

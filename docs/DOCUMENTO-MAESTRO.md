@@ -1,6 +1,6 @@
-# VESTIA — Documento Maestro del Proyecto
+# ClosetAI — Documento Maestro del Proyecto
 
-**Versión 1.1 — 19 de agosto de 2026**
+**Versión 1.3 — 19 de agosto de 2026**
 **Fuente única de verdad del proyecto. Todo lo que contradiga este documento está mal, salvo que Tamara diga lo contrario.**
 
 ---
@@ -22,13 +22,13 @@ Reglas de operación:
 
 ## 1. Resumen ejecutivo
 
-**Vestia** (vestia.lat) es una aplicación web comercial: un **estilista personal con inteligencia artificial**. El usuario fotografía su ropa, construye su clóset digital, y la IA le genera outfits, se los muestra puestos sobre su propia foto (try-on fotorrealista), aprende sus gustos con cada interacción y le recomienda qué prendas comprar para completar su estilo — monetizando esas recomendaciones con afiliados.
+**ClosetAI** (closetai.lat) es una aplicación web comercial: un **estilista personal con inteligencia artificial**. El usuario fotografía su ropa, construye su clóset digital, y la IA le genera outfits, se los muestra puestos sobre su propia foto (try-on fotorrealista), aprende sus gustos con cada interacción y le recomienda qué prendas comprar para completar su estilo — monetizando esas recomendaciones con afiliados.
 
 ### Decisiones ya tomadas (no reabrir)
 
 | Decisión | Valor | Racional corto |
 |---|---|---|
-| Nombre y dominio | **Vestia / vestia.lat** | Registrado 19-ago-2026 en Namecheap. `.mx` se evaluó y se descartó: a partir del año 2 cuestan casi lo mismo (ver Historial de cambios v1.2) |
+| Nombre y dominio | **ClosetAI / closetai.lat** | Registrado 19-ago-2026 en Namecheap. Nombre descriptivo: dice qué hace el producto sin explicarlo. Ver riesgo de colisión de marca en §9 |
 | Plazo | **&lt; 1 mes** hasta versión evaluable | Deadline académico; ver rúbrica §7 |
 | Presupuesto | **Mínimo posible; free tiers siempre que se pueda** | Único gasto variable inevitable: renders de try-on |
 | Cuentas | **Nuevas, dedicadas al proyecto** | Negocio separado de los demás negocios de Tamara |
@@ -41,7 +41,7 @@ Reglas de operación:
 ### Estado al 19-ago-2026
 
 - Investigación de mercado, competencia, APIs de try-on y afiliados: **completada** (síntesis en §2, fuentes en Apéndice D).
-- Dominio vestia.lat: **registrado** 19-ago-2026 (Namecheap, privacidad WHOIS incluida).
+- Dominio closetai.lat: **registrado** 19-ago-2026 (Namecheap, privacidad WHOIS incluida).
 - Código: **cero líneas**. Todo empieza con este documento.
 
 ---
@@ -50,7 +50,7 @@ Reglas de operación:
 
 ### 2.1 Titularidad
 
-Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma todas las decisiones de negocio y opera personalmente la computadora donde tú corres. Vestia es un negocio propio y separado: cuentas, facturación y repo dedicados, nunca mezclados con nada más.
+Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma todas las decisiones de negocio y opera personalmente la computadora donde tú corres. ClosetAI es un negocio propio y separado: cuentas, facturación y repo dedicados, nunca mezclados con nada más.
 
 ### 2.2 Mercado y competencia (síntesis de investigación, ago-2026)
 
@@ -58,9 +58,9 @@ Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma 
 
 **El hueco:** no existe ningún jugador nativo en español/LATAM. Whering y Alta apenas traducen la tienda. Chicisimo (el único gigante hispano) murió en 2020 sin monetizar. Nadie atiende tallas/marcas/precios/ocasiones de México, y nadie usa el ángulo de presupuesto ("maximiza combinaciones con lo que ya tienes") que en LATAM pega más que el framing europeo de sostenibilidad.
 
-**Las 5 quejas que destruyen apps de esta categoría** — Vestia se diseña explícitamente contra ellas:
+**Las 5 quejas que destruyen apps de esta categoría** — ClosetAI se diseña explícitamente contra ellas:
 
-| # | Queja (evidencia) | Antídoto de diseño en Vestia |
+| # | Queja (evidencia) | Antídoto de diseño en ClosetAI |
 |---|---|---|
 | 1 | Fricción de fotografiar todo el clóset — causa #1 de abandono (Stylebook: 6-8 h/100 prendas) | Captura por lotes: varias prendas por foto, IA separa y cataloga; onboarding pide solo 10 prendas para dar valor el día 1 |
 | 2 | Paywall retroactivo sobre el clóset ya catalogado (Acloset: años de trabajo tras un paywall de €130/año) | **El clóset es gratis e ilimitado para siempre.** Se cobra por servicios encima (estilista completo, try-on), jamás por acceder a tus datos |
@@ -75,7 +75,7 @@ Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma 
 | Tier | Precio | Incluye | Costo variable para nosotros |
 |---|---|---|---|
 | **Gratis** | $0 | Clóset ilimitado con catalogación IA, 3 outfits IA/día, 1 try-on de muestra | ~$0.01 USD/usuario/mes (catalogación ≈ $0.0003/prenda; outfits con free tier de Gemini) |
-| **Vestia Completo** | **$100 MXN, una sola vez** | Estilista IA ilimitado, avatar, **30 créditos** de try-on, análisis de qué te falta + recomendaciones de compra | Acotado: 30 créditos ≈ $2.25 USD máximo |
+| **ClosetAI Completo** | **$100 MXN, una sola vez** | Estilista IA ilimitado, avatar, **30 créditos** de try-on, análisis de qué te falta + recomendaciones de compra | Acotado: 30 créditos ≈ $2.25 USD máximo |
 | **Recarga de créditos** | $49 MXN / 20 créditos | 20 renders de try-on | ~$1.50 USD → margen positivo tras comisión Stripe |
 
 - **1 crédito = 1 render de try-on** (FASHN, ~$0.075 USD). El "modo explorar" (visualización rápida de looks, menor fidelidad, Nano Banana ~$0.039) cuesta 0.5 créditos (se cobra 1 crédito por cada 2 usos).
@@ -137,11 +137,11 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 **M6. Recomendaciones de compra (gap analysis + afiliados)**
 - "Qué le falta a tu clóset": análisis IA (mensual o bajo demanda) de huecos reales: básicos ausentes, colores que combinarían con N prendas, ocasiones sin cobertura. Cada recomendación explica el porqué y cuántos outfits nuevos desbloquearía.
 - Por cada prenda recomendada: búsqueda de productos comprables en México (Amazon MX, Mercado Libre, Shein) con precio y talla del usuario, enlazados vía **link resolver propio** `/go/[retailer]/[ref]` que registra el clic y aplica el tag de afiliado si existe (conmutabale por retailer sin redeploy).
-- Divulgación visible: "Vestia puede ganar comisión si compras por estos enlaces."
+- Divulgación visible: "ClosetAI puede ganar comisión si compras por estos enlaces."
 - CA: gap analysis produce ≥3 recomendaciones con justificación; cada clic saliente queda en `affiliate_clicks`; los enlaces de Amazon llevan `?tag=` del proyecto.
 
 **M7. Pagos y créditos**
-- Stripe Checkout: pago único $100 MXN (product `vestia_lifetime`) y recargas $49 MXN (product `credits_20`). Webhook `checkout.session.completed` → activa plan / abona créditos en `credit_ledger`. **Toda sesión de Checkout lleva `metadata.user_id`** (regla dura: un pago sin metadata es dinero invisible — no hay forma de saber a quién abonarle).
+- Stripe Checkout: pago único $100 MXN (product `closetai_lifetime`) y recargas $49 MXN (product `credits_20`). Webhook `checkout.session.completed` → activa plan / abona créditos en `credit_ledger`. **Toda sesión de Checkout lleva `metadata.user_id`** (regla dura: un pago sin metadata es dinero invisible — no hay forma de saber a quién abonarle).
 - CA: compra de prueba (modo test) activa el plan y abona 30 créditos; webhook idempotente (reintento de Stripe no duplica créditos); pantalla de éxito/cancelación; historial de compras en el perfil.
 
 **M8. Panel admin (mínimo pero real)**
@@ -172,7 +172,7 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 | Hosting | **Vercel** | Hobby $0 | Prescrito por rúbrica. ⚠️ Hobby es no-comercial: al cobrar dinero real, subir a Pro ($20/mes). Durante desarrollo/evaluación, Hobby |
 | BD + Auth + Storage | **Supabase** (Postgres) | $0 (500MB DB, 1GB storage, 50K MAU auth) | Prescrito por rúbrica y además la mejor opción: auth completa (email+OAuth+recovery), RLS, Storage con URLs firmadas. ⚠️ free tier pausa proyectos tras ~1 semana de inactividad — durante desarrollo no pasa; configurar ping semanal después |
 | Pagos | **Stripe MX** | $0 fijo (3.6%+$3+IVA por tx) | Estándar; Checkout + webhooks. Alt: Mercado Pago — considerar como 2º método más adelante (público sin tarjeta) |
-| Email transaccional | **Resend** | $0 (3,000/mes, 100/día) | Verificación, recovery, recibos. Dominio vestia.lat verificado + SMTP custom en Supabase Auth |
+| Email transaccional | **Resend** | $0 (3,000/mes, 100/día) | Verificación, recovery, recibos. Dominio closetai.lat verificado + SMTP custom en Supabase Auth |
 | IA — catalogación visión | **Gemini 2.5 Flash-Lite** (API key de Google AI Studio) | Free tier generoso; pagado ≈ $0.0003/prenda | El más barato con calidad suficiente y JSON estructurado. ⚠️ Google lo retira ~oct-2026: el código usa un **adapter** (`lib/ai/`) con el modelo en env var — migrar al sucesor es cambiar una línea. Alt: Claude Haiku 4.5 (~$0.004/prenda), mejor si se prefiere un solo proveedor |
 | IA — estilista/chat/perfil | **Gemini 2.5 Flash** | Free tier | Razonamiento suficiente + costo ~cero al inicio. El adapter permite subir a Claude Sonnet si la calidad del estilista lo amerita |
 | IA — recorte de fondo | **BiRefNet v2 en fal.ai** | ~$0.001/imagen | SOTA open source; mismo proveedor que try-on (una sola cuenta/key) |
@@ -183,8 +183,8 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 | Tests | **Vitest** (unit) + **Playwright** (e2e) | $0 | Rúbrica exige ≥3 tests/semana con evidencia |
 | CI | **GitHub Actions** | $0 | lint + typecheck + tests en cada PR |
 | Observabilidad | **Sentry** (free) + Vercel Analytics + tabla `api_costs` propia | $0 | El costo de APIs se registra en BD y se ve en /admin |
-| Repo | **GitHub** — repo `vestia` en cuenta/org nueva | $0 | Rúbrica: commits como evidencia |
-| DNS/registro | **Namecheap** para vestia.lat ($2 USD el 1er año, renueva ~$41 USD/año) | — | Único gasto fijo obligado. DNS puede vivir en Vercel. ⚠️ El precio de renovación es 20× el de entrada: anotar la fecha |
+| Repo | **GitHub** — repo `closetai` en cuenta/org nueva | $0 | Rúbrica: commits como evidencia |
+| DNS/registro | **Namecheap** para closetai.lat ($2 USD el 1er año, renueva ~$41 USD/año) | — | Único gasto fijo obligado. DNS puede vivir en Vercel. ⚠️ El precio de renovación es 20× el de entrada: anotar la fecha |
 
 **Costo fijo total del primer mes: ~$2 USD (dominio) + depósito inicial ~$10 USD en fal.ai.** Todo lo demás en $0 hasta tener usuarios de pago.
 
@@ -281,25 +281,25 @@ git --version && node --version && pnpm --version && gh --version && supabase --
 
 > Regla: Tamara crea cada cuenta con el **correo del proyecto** (paso 1) y guarda las credenciales en su gestor de contraseñas. A Claude solo se le entregan **API keys** vía `.env.local`, nunca contraseñas.
 
-1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `vestia.lat@gmail.com`. Todas las cuentas siguientes se registran con este correo.
-2. **Dominio**: ✅ **vestia.lat registrado** en Namecheap el 19-ago-2026 ($2 USD el 1er año; renueva ~$41 USD/año, auto-renew activado). Siguiente: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
-3. **GitHub**: cuenta nueva (u org `vestia-app`); crear repo privado `vestia`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Tamara teclea el código de dispositivo).
-4. **Vercel**: cuenta con el correo del proyecto; conectar el repo `vestia`.
-5. **Supabase**: cuenta + proyecto `vestia-prod` (región `us-east-1` o la más cercana disponible). Entregar a Claude: URL, anon key, service role key.
+1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `closetai.lat@gmail.com`. Todas las cuentas siguientes se registran con este correo.
+2. **Dominio**: ✅ **closetai.lat registrado** en Namecheap el 19-ago-2026 ($2 USD el 1er año; renueva ~$41 USD/año, auto-renew activado). Siguiente: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
+3. **GitHub**: cuenta nueva (u org `closetai-app`); crear repo privado `closetai`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Tamara teclea el código de dispositivo).
+4. **Vercel**: cuenta con el correo del proyecto; conectar el repo `closetai`.
+5. **Supabase**: cuenta + proyecto `closetai-prod` (región `us-east-1` o la más cercana disponible). Entregar a Claude: URL, anon key, service role key.
 6. **Stripe**: cuenta MX (requiere datos fiscales y cuenta bancaria de Tamara; puede empezar en modo test sin activar). Entregar keys test y, cuando active, live.
-7. **Resend**: cuenta; agregar dominio vestia.lat (Claude dará los registros DNS a capturar). Entregar API key.
+7. **Resend**: cuenta; agregar dominio closetai.lat (Claude dará los registros DNS a capturar). Entregar API key.
 8. **Google AI Studio** (aistudio.google.com): generar API key de Gemini con el correo del proyecto. Gratis.
 9. **fal.ai**: cuenta + depósito inicial ~$10 USD (🔑 el pago lo hace Tamara). Entregar FAL_KEY.
-10. **Sentry**: cuenta free, proyecto `vestia`. Entregar DSN.
-11. **Amazon Afiliados MX** (afiliados.amazon.com.mx): alta con la URL vestia.lat cuando ya esté deployada (semana 3-4). Anotar el tag (`vestia-20` o similar).
+10. **Sentry**: cuenta free, proyecto `closetai`. Entregar DSN.
+11. **Amazon Afiliados MX** (afiliados.amazon.com.mx): alta con la URL closetai.lat cuando ya esté deployada (semana 3-4). Anotar el tag (`closetai-20` o similar).
 12. **Mercado Libre Afiliados** (mercadolibre.com.mx/landing/afiliados): alta con cuenta ML + Mercado Pago del proyecto. *(Admitad y Awin: post-lanzamiento.)*
 
 ### 5.2 Variables de entorno (`.env.local` — plantilla completa)
 
 ```bash
 # App
-NEXT_PUBLIC_APP_URL=https://vestia.lat
-ADMIN_EMAILS=tamaramunozdel@gmail.com,vestia.lat@gmail.com   # correo personal + correo del proyecto
+NEXT_PUBLIC_APP_URL=https://closetai.lat
+ADMIN_EMAILS=tamaramunozdel@gmail.com,closetai.lat@gmail.com   # correo personal + correo del proyecto
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
@@ -323,10 +323,10 @@ FAL_KEY=
 
 # Email
 RESEND_API_KEY=
-EMAIL_FROM="Vestia <hola@vestia.lat>"
+EMAIL_FROM="ClosetAI <hola@closetai.lat>"
 
 # Afiliados
-AMAZON_AFFILIATE_TAG=       # cuando exista (p. ej. vestia-20)
+AMAZON_AFFILIATE_TAG=       # cuando exista (p. ej. closetai-20)
 
 # Operación
 MAX_DAILY_API_SPEND_USD=5
@@ -342,7 +342,7 @@ Espejo en Vercel: `vercel env` (o dashboard). Nunca commitear este archivo.
 ### 5.3 Estructura del repo
 
 ```
-vestia/
+closetai/
 ├── docs/
 │   ├── DOCUMENTO-MAESTRO.md        # este archivo (commit #1)
 │   └── evidencia/                  # rúbrica, ver §7
@@ -376,7 +376,7 @@ Convenciones: rama `main` protegida deployable siempre; ramas `feat/*`, `fix/*`;
 > Cada semana cierra con: feature funcionando en producción, ≥5 commits, ≥2 deploys, ≥5 prompts en PROMPT_LOG, ≥3 tests con evidencia, entrada en ITERATION_LOG (qué cambió tras probar), DECISION_NOTE de 150-250 palabras, y video demo de 2-3 min (guion: problema → feature en vivo → qué sigue). El video lo graba Tamara con guion escrito por Claude.
 
 **Semana 0 (días 1-2) — Build Discipline Packet (ANTES de codificar, exige la rúbrica):**
-setup de máquina (§5.0), cuentas core 🔑 (§5.1 pasos 1-10), repo con este documento como commit #1, **mockups generados por imagen** (Nano Banana / Gemini Image: 5-6 pantallas clave — landing, clóset, outfit del día, try-on, paywall — guardados en `docs/evidencia/mockups/` con nota de implementación y recortes de alcance), spec y criterios de aceptación (§3.3) revisados, migración SQL inicial, deploy "hello Vestia" a Vercel con dominio conectado. *Con esto, las categorías 1-4 de la rúbrica (4.5 pts) quedan cubiertas antes de la primera línea de producto.*
+setup de máquina (§5.0), cuentas core 🔑 (§5.1 pasos 1-10), repo con este documento como commit #1, **mockups generados por imagen** (Nano Banana / Gemini Image: 5-6 pantallas clave — landing, clóset, outfit del día, try-on, paywall — guardados en `docs/evidencia/mockups/` con nota de implementación y recortes de alcance), spec y criterios de aceptación (§3.3) revisados, migración SQL inicial, deploy "hello ClosetAI" a Vercel con dominio conectado. *Con esto, las categorías 1-4 de la rúbrica (4.5 pts) quedan cubiertas antes de la primera línea de producto.*
 
 **Semana 1 — Clóset (M1 + M2):** auth completa (registro, login, Google, recovery con Resend), perfil, subida por lotes, pipeline recorte+catalogación, revisión/corrección, vista clóset con filtros. Deploy continuo. Demo: "de fotos a clóset digital en 2 minutos".
 
@@ -394,13 +394,13 @@ Gestión de riesgo del plazo: si la semana 3 se atrasa, el modo explorar (Nano B
 
 Rúbrica de 10 pts. Cómo la cubre el proceso:
 
-| Categoría (pts) | Evidencia exigida | Dónde se cumple en Vestia |
+| Categoría (pts) | Evidencia exigida | Dónde se cumple en ClosetAI |
 |---|---|---|
 | Build discipline before coding (1.5) | Problema, usuario, spec, UX, arquitectura, stack, DevOps, plan de pruebas antes de codificar | **Este documento** + Semana 0 completa antes de la primera línea de producto |
 | UX planning & image-generated mockup (1.0) | Mockup/wireframe + nota de implementación + recorte de alcance | `docs/evidencia/mockups/` (Semana 0, generados con IA de imagen) |
 | Product spec & acceptance criteria (1.0) | Requisitos y CA claros y testeables | §3.3 — cada módulo con CA que son literalmente los tests e2e |
 | Architecture & stack clarity (1.0) | Sketch de arquitectura + tabla de stack | §4.1 tabla + §4.2 diagrama y flujo de datos |
-| Working deployed product (2.0) | URL viva y feature semanal funcionando | vestia.lat en Vercel desde Semana 0; cadencia semanal §6 |
+| Working deployed product (2.0) | URL viva y feature semanal funcionando | closetai.lat en Vercel desde Semana 0; cadencia semanal §6 |
 | Coding/build evidence (1.0) | ≥5 commits, ≥2 deploys, log de prompts del agente | Convención de commits frecuentes + `PROMPT_LOG.md` alimentado cada sesión |
 | Testing & iteration (1.0) | Tests mínimos + ≥1 mejora derivada | Vitest+Playwright (≥3/semana) + `ITERATION_LOG.md` |
 | Human judgment & explanation (1.0) | Explicar decisiones, rechazos, correcciones, tradeoffs | `DECISION_NOTES.md`: nota semanal de 150-250 palabras que **Tamara revisa y firma** (es su voz, no la del agente) |
@@ -408,7 +408,7 @@ Rúbrica de 10 pts. Cómo la cubre el proceso:
 
 Checklist de evidencia exigida: Live URL (Vercel/dominio propio ✓), Build Discipline Packet ✓, UX mockup generado por imagen ✓, Product Spec ✓, Architecture Sketch ✓, GitHub ≥5 commits ✓, Vercel ≥2 deployments ✓, **Supabase evidence** (capturas de tablas con datos reales — tomarlas al cierre de cada semana) ✓, Codex/Claude prompt log ≥5 ✓, Test evidence ≥3 ✓, Iteration log ✓, Demo video ✓, Human Decision Note ✓.
 
-**Cómo se excede el piso:** la rúbrica pide una página viva con features semanales; Vestia entrega un producto comercial completo con pagos reales, IA multimodal (visión + generación + razonamiento), sistema de aprendizaje continuo, monetización por afiliados, panel de operación con control de costos, seguridad RLS al 100% y cumplimiento de privacidad mexicano.
+**Cómo se excede el piso:** la rúbrica pide una página viva con features semanales; ClosetAI entrega un producto comercial completo con pagos reales, IA multimodal (visión + generación + razonamiento), sistema de aprendizaje continuo, monetización por afiliados, panel de operación con control de costos, seguridad RLS al 100% y cumplimiento de privacidad mexicano.
 
 ---
 
@@ -416,7 +416,7 @@ Checklist de evidencia exigida: Live URL (Vercel/dominio propio ✓), Build Disc
 
 | Concepto | Costo | Cuándo |
 |---|---|---|
-| Dominio vestia.lat | $2 USD el 1er año (renueva ~$41 USD/año) | Semana 0 🔑 ✅ |
+| Dominio closetai.lat | $2 USD el 1er año (renueva ~$41 USD/año) | Semana 0 🔑 ✅ |
 | Depósito fal.ai (recorte + try-on) | $10 USD (dura ~130 renders o ~10,000 recortes) | Semana 0 🔑 |
 | Vercel, Supabase, Resend, Gemini, Sentry, GitHub, Stripe (fijo), open-meteo | **$0** | free tiers |
 | **Total mes 1** | **~$12 USD** | dominio $2 + depósito fal.ai $10 |
@@ -436,6 +436,7 @@ Unit economics recordatorio: venta de $100 MXN deja ~$92.8 netos ≈ $4.9 USD co
 | Supabase free pausa por inactividad | Baja en dev | Cron semanal de ping post-lanzamiento o upgrade |
 | Amazon Afiliados cierra cuenta sin 3 ventas en 180 días | Media | Es re-aplicable; ML+Admitad como alternas; el link resolver conmuta sin redeploy |
 | Scope creep con 1 mes de plazo | Alta | Fases cerradas §6; recortes predefinidos; backlog §3.4 para todo lo demás |
+| Colisión de marca: «ClosetAI» es descriptivo y se parece a Acloset (§2.2) y a otras apps de la categoría | Media | Verificar IMPI antes de invertir en identidad visual; el nombre es fácil de cambiar mientras no haya usuarios; el dominio costó $2 |
 
 ---
 
@@ -444,7 +445,7 @@ Unit economics recordatorio: venta de $100 MXN deja ~$92.8 netos ≈ $4.9 USD co
 ### A1. Catalogación de prenda (visión → JSON)
 
 ```
-Eres el catalogador de Vestia. Analiza la foto de una prenda de ropa y devuelve SOLO JSON válido con este esquema:
+Eres el catalogador de ClosetAI. Analiza la foto de una prenda de ropa y devuelve SOLO JSON válido con este esquema:
 { "categoria": "top|bottom|vestido|abrigo|calzado|accesorio|bolsa|otro",
   "subcategoria": "string es-MX (ej. 'playera', 'jeans skinny', 'blazer')",
   "colores": ["1-3 colores dominantes en es-MX"],
@@ -461,7 +462,7 @@ Si la imagen no es una prenda (o es contenido inapropiado), devuelve {"error": "
 ### A2. Estilista (generación de outfits)
 
 ```
-Eres Vestia, estilista personal experto en teoría de color, proporciones y moda mexicana actual. SOLO puedes usar prendas del clóset proporcionado (referéncialas por id).
+Eres ClosetAI, estilista personal experto en teoría de color, proporciones y moda mexicana actual. SOLO puedes usar prendas del clóset proporcionado (referéncialas por id).
 Contexto: [PERFIL_DE_ESTILO], [CLIMA], [OCASION], [FEEDBACK_RECIENTE].
 Genera 3 outfits distintos. Por cada uno: prendas (ids), por qué funciona (color/proporción/ocasión, 2-3 frases, tono cálido y directo es-MX, sin tecnicismos vacíos), y un tip para elevarlo.
 Respeta SIEMPRE: colores vetados, estilos odiados y prendas archivadas. Si el clóset no alcanza para la ocasión, dilo honestamente y sugiere qué falta (alimenta gap analysis). Devuelve JSON según esquema.
@@ -470,7 +471,7 @@ Respeta SIEMPRE: colores vetados, estilos odiados y prendas archivadas. Si el cl
 ### A3. Actualizador de perfil de estilo (el moat)
 
 ```
-Eres el motor de aprendizaje de Vestia. Recibes el perfil actual (JSON) y los eventos nuevos de feedback. Devuelve el perfil actualizado:
+Eres el motor de aprendizaje de ClosetAI. Recibes el perfil actual (JSON) y los eventos nuevos de feedback. Devuelve el perfil actualizado:
 { "estilos_preferidos": [{"valor","confianza",„evidencia"}],
   "estilos_rechazados": [...], "colores_favoritos": [...], "colores_vetados": [...],
   "combinaciones_exitosas": [...], "prendas_favoritas": [ids], "siluetas": {...},
@@ -482,7 +483,7 @@ Reglas: la evidencia manda (no inventes); sube confianza con repetición, bájal
 ### A4. Gap analysis (recomendaciones de compra)
 
 ```
-Eres el asesor de compras de Vestia. Con el clóset completo, el perfil de estilo y las ocasiones frecuentes del usuario, detecta 3-5 huecos REALES: básicos ausentes, colores puente que multiplicarían combinaciones, ocasiones sin cobertura. Por cada hueco: prenda concreta (con color y estilo), por qué, y cuántos outfits nuevos habilitaría con prendas existentes (lista ids). Sé conservador: recomendar de más destruye confianza. JSON según esquema.
+Eres el asesor de compras de ClosetAI. Con el clóset completo, el perfil de estilo y las ocasiones frecuentes del usuario, detecta 3-5 huecos REALES: básicos ausentes, colores puente que multiplicarían combinaciones, ocasiones sin cobertura. Por cada hueco: prenda concreta (con color y estilo), por qué, y cuántos outfits nuevos habilitaría con prendas existentes (lista ids). Sé conservador: recomendar de más destruye confianza. JSON según esquema.
 ```
 
 ## Apéndice B — Esquema SQL inicial (migración 001; ejecutar vía `supabase migration`)
@@ -631,7 +632,8 @@ create policy "own recs" on shopping_recs for select using (auth.uid() = user_id
 
 ## Apéndice C — Marca y tono (inicial; Tamara aprueba antes del lanzamiento público)
 
-- **Vestia** — de "vestir". Pronunciación natural es/en.
+- **ClosetAI** — se escribe en una palabra, sin acento y sin espacio, igual que el dominio.
+  En el copy, «clóset» como sustantivo común sí lleva acento: la marca es ClosetAI, el mueble es tu clóset.
 - Tono: estilista amiga experta — cálida, directa, honesta, cero jerga técnica, es-MX neutro (tuteo). Nunca body-shaming: el estilo se adapta al cuerpo, no al revés.
 - Tagline de trabajo: **"Tu estilista, en tu bolsillo."**
 - UI: mobile-first, mucha foto y poco texto, dark mode desde el día 1.
@@ -651,20 +653,26 @@ create policy "own recs" on shopping_recs for select using (auth.uid() = user_id
 
 ## Historial de cambios
 
-**v1.2 — 19-ago-2026.** El dominio del proyecto es **vestia.lat**, no vestia.mx. Decisión de
-Tamara al momento de comprar. Se advirtió el tradeoff antes de confirmar: el precio de entrada
-de `.lat` ($1.80 + $0.20 de ICANN) es promocional y renueva a ~$41 USD/año, prácticamente lo
-mismo que `.mx`, así que el ahorro es solo del primer año; y `.mx` es señal más fuerte para un
-producto cuyo posicionamiento es ser el primero hecho para México. Tamara decidió `.lat`, que
-además encaja con la expansión a LATAM del backlog (§3.4). Se actualizaron todas las referencias
-al dominio en el documento, `.env.local`, CI, el runbook de cuentas y `metadataBase` de la app.
-El correo del proyecto pasa a `vestia.lat@gmail.com`. Presupuesto del mes 1 baja de ~$55 a ~$12 USD.
+**v1.3 — 19-ago-2026.** **El proyecto se llama ClosetAI y vive en closetai.lat.** Antes se
+llamaba Vestia. Decisión de Tamara al comprar el dominio. Se renombró todo: documento, app,
+repositorio (`~/closetai`), paquete, prompts de IA, landing, plantilla de entorno, CI y runbook
+de cuentas. Cambian también los identificadores operativos: producto de Stripe
+`closetai_lifetime`, proyecto de Supabase `closetai-prod`, tag de afiliado `closetai-20`, correo
+del proyecto `closetai.lat@gmail.com`. **Riesgo nuevo registrado en §9:** el nombre es genérico
+y se parece a Acloset, competidor citado en §2.2 — hay que verificar disponibilidad de marca
+antes de invertir en identidad visual.
+
+**v1.2 — 19-ago-2026.** Se eligió TLD `.lat` sobre `.mx` (el proyecto todavía se llamaba
+Vestia). Se advirtió el tradeoff antes de confirmar: el precio de entrada de `.lat` ($1.80 +
+$0.20 de ICANN) es promocional y renueva a ~$41 USD/año, prácticamente lo mismo que `.mx`, así
+que el ahorro es solo del primer año. Tamara decidió `.lat`, que además encaja con la expansión
+a LATAM del backlog (§3.4). Presupuesto del mes 1 baja de ~$55 a ~$12 USD.
 
 
-**v1.1 — 19-ago-2026.** Se corrige la titularidad del proyecto: la dueña es **Tamara Muñoz
+**v1.1 — 19-ago-2026.** (Proyecto aún llamado Vestia.) Se corrige la titularidad: la dueña es **Tamara Muñoz
 Delgadillo** (tamaramunozdel@gmail.com), quien opera la máquina y hace los pasos 🔑. Se
 actualizan §2.1, §5.1, §5.2 (`ADMIN_EMAILS`), §7 (firma de notas de decisión) y todas las
 marcas 🔑. Se retiran dos afirmaciones que ya no aplican (otros negocios en M7 y
 §3.4). Sin cambios en producto, stack, modelo de negocio ni plan.
 
-**v1.0 — 19-ago-2026.** Documento original.
+**v1.0 — 19-ago-2026.** Documento original, bajo el nombre Vestia.

@@ -1,4 +1,4 @@
-# Vestia
+# ClosetAI
 
 Estilista personal con IA para México. Fotografías tu ropa, la IA arma tus outfits,
 te los muestra puestos sobre tu propia foto y aprende tus gustos.

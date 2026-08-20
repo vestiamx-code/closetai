@@ -4,7 +4,7 @@ test.describe("Landing", () => {
   test("carga y comunica la promesa del producto", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Tu estilista");
-    await expect(page).toHaveTitle(/Vestia/);
+    await expect(page).toHaveTitle(/ClosetAI/);
   });
 
   test("declara español de México para lectores de pantalla y SEO", async ({ page }) => {

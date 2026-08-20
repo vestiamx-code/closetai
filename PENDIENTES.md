@@ -24,10 +24,10 @@ Orden y dependencias:
 | # | Cuenta | Costo | Desbloquea |
 |---|---|---|---|
 | 1 | Correo del proyecto (Google) | $0 | todas las demás |
-| 2 | ~~Dominio **vestia.lat**~~ ✅ 19-ago-2026 | $2 USD 1er año | URL viva (rúbrica), DNS de Resend |
-| 3 | GitHub + repo `vestia` | $0 | evidencia de commits, deploy de Vercel |
+| 2 | ~~Dominio **closetai.lat**~~ ✅ 19-ago-2026 | $2 USD 1er año | URL viva (rúbrica), DNS de Resend |
+| 3 | GitHub + repo `closetai` | $0 | evidencia de commits, deploy de Vercel |
 | 4 | Vercel | $0 (Hobby) | URL viva |
-| 5 | Supabase (proyecto `vestia-prod`) | $0 | aplicar migraciones 001 y 002 |
+| 5 | Supabase (proyecto `closetai-prod`) | $0 | aplicar migraciones 001 y 002 |
 | 6 | Stripe MX (modo test basta al inicio) | $0 | Semana 3 |
 | 7 | Resend + verificar dominio | $0 | correos de registro/recuperación |
 | 8 | Google AI Studio (`GEMINI_API_KEY`) | $0 | catalogación y estilista |
@@ -50,7 +50,7 @@ Afiliados (Amazon MX, Mercado Libre) son Semana 3-4: requieren la URL ya deploya
 
 ## 🟢 Hecho (sin necesidad de cuentas ni instalaciones)
 
-- Repo `~/vestia` inicializado, documento maestro como base del historial.
+- Repo `~/closetai` inicializado, documento maestro como base del historial.
 - Migración 001: esquema completo del Apéndice B, RLS en las 13 tablas.
 - Migración 002: trigger de alta de `profiles`, débito atómico de créditos con idempotencia,
   buckets privados de Storage con políticas por carpeta.

@@ -13,7 +13,7 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
-  // Vestia es mobile-first: la suite corre en móvil por defecto (§3.1).
+  // ClosetAI es mobile-first: la suite corre en móvil por defecto (§3.1).
   projects: [
     { name: "mobile-chrome", use: { ...devices["Pixel 7"] } },
     { name: "desktop-chrome", use: { ...devices["Desktop Chrome"] } },

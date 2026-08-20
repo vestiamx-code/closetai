@@ -44,7 +44,7 @@ modelo de visión (Apéndice A1).
 
 ## [2026-08-19] Landing en producción — humo e2e
 **Tipo:** e2e (Playwright 1.62.1) — `e2e/landing.spec.ts`, perfil `mobile-chrome` (Pixel 7)
-**Por qué en móvil:** Vestia es mobile-first (§3.1) — la suite corre primero en el dispositivo
+**Por qué en móvil:** ClosetAI es mobile-first (§3.1) — la suite corre primero en el dispositivo
 donde de verdad va a estar el usuario, no en escritorio.
 **Cómo:** `pnpm test:e2e --project=mobile-chrome`
 **Casos (3):**

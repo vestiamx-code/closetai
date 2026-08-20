@@ -16,7 +16,7 @@ Formato:
 ---
 
 ## [2026-08-19] — Sesión 1
-**Prompt:** Se entregó al agente `VESTIA-DOCUMENTO-MAESTRO.md` sin más instrucción, con la
+**Prompt:** Se entregó al agente `CLOSETAI-DOCUMENTO-MAESTRO.md` sin más instrucción, con la
 indicación implícita de ejecutarlo desde §0.
 **Resultado:** auditoría de la máquina (toolchain vacío), scaffold del repo, transcripción de la
 migración 001 desde el Apéndice B y redacción de la migración 002 con las piezas faltantes

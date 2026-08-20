@@ -13,7 +13,7 @@ const features = [
   },
   {
     title: "Aprende tu estilo",
-    body: "Cada vez que aceptas o rechazas algo, Vestia entiende mejor qué te gusta. A las dos semanas ya no te propone lo que odias.",
+    body: "Cada vez que aceptas o rechazas algo, ClosetAI entiende mejor qué te gusta. A las dos semanas ya no te propone lo que odias.",
   },
 ];
 
@@ -29,7 +29,7 @@ export default function Home() {
     <main className="flex-1">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
         <span className="font-display text-xl font-semibold tracking-tight">
-          Vestia
+          ClosetAI
         </span>
         <span className="rounded-full border border-border px-3 py-1 text-xs text-text-muted">
           En construcción
@@ -48,7 +48,7 @@ export default function Home() {
           propia foto.
         </p>
         <p className="mt-8 text-sm text-text-muted">
-          Estamos construyendo Vestia en público. Pronto abrimos.
+          Estamos construyendo ClosetAI en público. Pronto abrimos.
         </p>
       </section>
 
@@ -92,7 +92,7 @@ export default function Home() {
 
       <footer className="border-t border-border">
         <div className="mx-auto w-full max-w-5xl px-6 py-10 text-sm text-text-muted">
-          <p className="font-display text-base text-text">Vestia</p>
+          <p className="font-display text-base text-text">ClosetAI</p>
           <p className="mt-2">Hecho en México, en español.</p>
         </div>
       </footer>

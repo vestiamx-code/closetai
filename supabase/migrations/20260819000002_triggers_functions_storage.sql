@@ -1,4 +1,4 @@
--- Vestia — migración 002: piezas que el Apéndice B da por supuestas pero no define.
+-- ClosetAI — migración 002: piezas que el Apéndice B da por supuestas pero no define.
 -- Sin esto, el esquema 001 no funciona en runtime (ver docs/evidencia/DECISION_NOTES.md).
 
 -- 1) profiles + style_profiles se crean solos al registrarse (todo el esquema tiene FK a profiles).
