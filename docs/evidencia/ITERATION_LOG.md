@@ -40,3 +40,15 @@ imprime advertencias de versión. Ninguno hace falta → ambos quedan en `false`
 **Efecto:** pipeline verde sin conceder ejecución de código en instalación a ninguna dependencia.
 Si alguno resulta necesario, se cambia con una nota del motivo.
 
+## [2026-08-19] — Franjas grises en el grid de la landing
+**Observado:** al abrir la landing en un viewport de 390×844 (iPhone), la sección de features
+mostraba dos franjas grises verticales pegadas a los bordes de la pantalla.
+**Diagnóstico:** el grid usaba el truco de `gap-px` sobre un contenedor con `bg-border` para
+dibujar líneas divisorias de 1px. Como ese mismo contenedor llevaba el padding horizontal
+(`px-6`), el color de borde se pintaba también en el área de padding, no solo en los huecos.
+Además las tarjetas quedaban con `px-1` en móvil, casi pegadas al texto.
+**Cambio:** se abandonó el truco de líneas y se separaron responsabilidades — un contenedor con
+el padding, y dentro un grid con `gap` normal. Menos CSS y sin artefacto.
+**Efecto:** verificado en claro y en oscuro a 390×844. Encontrado mirando la página, no
+corriendo pruebas: ninguna prueba automática habría detectado esto.
+

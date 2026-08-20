@@ -52,18 +52,20 @@ export default function Home() {
         </p>
       </section>
 
-      <section className="border-t border-border bg-surface">
-        <div className="mx-auto grid w-full max-w-5xl gap-px bg-border px-6 sm:grid-cols-2">
-          {features.map((f) => (
-            <article key={f.title} className="bg-surface px-1 py-10 sm:px-8">
-              <h2 className="font-display text-2xl font-semibold tracking-tight">
-                {f.title}
-              </h2>
-              <p className="mt-3 leading-relaxed text-text-muted text-pretty">
-                {f.body}
-              </p>
-            </article>
-          ))}
+      <section className="border-y border-border bg-surface">
+        <div className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-20">
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-14">
+            {features.map((f) => (
+              <article key={f.title}>
+                <h2 className="font-display text-2xl font-semibold tracking-tight">
+                  {f.title}
+                </h2>
+                <p className="mt-3 leading-relaxed text-text-muted text-pretty">
+                  {f.body}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
