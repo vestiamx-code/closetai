@@ -19,7 +19,7 @@ cuentas **no van ahí** — esas se quedan en tu gestor de contraseñas y yo nun
 
 ## 1. ~~Correo del proyecto~~ ✅ YA EXISTE
 
-Se reutiliza la cuenta de Google que ya se creó cuando el proyecto se llamaba Vestia. **No hace
+**`vestia.mx@gmail.com`** — la cuenta de Google que ya se creó cuando el proyecto se llamaba Vestia. **No hace
 falta crear otra.** El correo es solo la identidad con la que se abren las demás cuentas: no
 tiene relación técnica con el dominio y ningún usuario lo ve nunca. El remitente que sí ven las
 usuarias es `ClosetAI <hola@closetai.lat>`, que sale de Resend con el dominio propio.
