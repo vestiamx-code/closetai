@@ -6,9 +6,13 @@ te los muestra puestos sobre tu propia foto y aprende tus gustos.
 **Fuente única de verdad:** [`docs/DOCUMENTO-MAESTRO.md`](docs/DOCUMENTO-MAESTRO.md).
 Todo lo que contradiga ese documento está mal.
 
+## 🌐 En vivo
+
+**https://closetai.lat** · deploy automático desde `main` en Vercel
+
 ## Estado
 
-Semana 0 — Build Discipline Packet.
+Semana 0 — Build Discipline Packet. **Completa.**
 
 | Pieza | Estado |
 |---|---|
@@ -19,8 +23,10 @@ Semana 0 — Build Discipline Packet.
 | Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde en local **y en CI** (GitHub Actions, 2m51s) |
 | Contrato zod de salida del catalogador | ✅ 9 pruebas |
 | Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
-| Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado, 9 commits) |
-| Cuentas restantes y primer deploy | ⛔ Vercel, Supabase, Gemini, fal.ai |
+| Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado) |
+| Deploy en Vercel + dominio propio | ✅ closetai.lat con HTTPS |
+| Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
+| Cuentas restantes | ⛔ Supabase, Gemini, fal.ai, Resend, Stripe, Sentry |
 
 Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md) ·
 Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).

@@ -2,6 +2,19 @@
 
 Actualizado: 2026-08-19. Ordenado por lo que desbloquea más.
 
+## ⏰ Con fecha límite
+
+### Verificar contacto del dominio (ICANN) — **antes del 4-sep-2026**
+Namecheap muestra un **ALERT** en `closetai.lat`: falta confirmar el correo del titular. Es un
+requisito de ICANN. **Si no se hace en 15 días, suspenden el dominio** y el sitio se cae.
+Namecheap mandó un correo con el enlace de verificación — hay que darle clic. También se puede
+desde Domain List → botón *VERIFY CONTACTS*.
+
+### 2FA en las cuentas del proyecto
+Se pospuso a propósito durante el setup. Hacerlo **antes de activar Stripe**, cuando haya dinero
+real: GitHub `vestiamx-code`, Vercel y el Gmail del proyecto. Guardar los códigos de
+recuperación en el gestor de contraseñas, no en el mismo correo.
+
 ## 🔴 Bloqueantes ahora mismo
 
 ### ~~1. ¿Quién es la titular?~~ ✅ RESUELTO 19-ago-2026
@@ -26,7 +39,7 @@ Orden y dependencias:
 | 1 | ~~Correo del proyecto~~ ✅ `vestia.mx@gmail.com` | $0 | todas las demás |
 | 2 | ~~Dominio **closetai.lat**~~ ✅ 19-ago-2026 | $2 USD 1er año | URL viva (rúbrica), DNS de Resend |
 | 3 | ~~GitHub + repo `closetai`~~ ✅ 20-ago-2026 | $0 | evidencia de commits, deploy de Vercel |
-| 4 | Vercel | $0 (Hobby) | URL viva |
+| 4 | ~~Vercel~~ ✅ 20-ago-2026 | $0 (Hobby) | URL viva |
 | 5 | Supabase (proyecto `closetai-prod`) | $0 | aplicar migraciones 001 y 002 |
 | 6 | Stripe MX (modo test basta al inicio) | $0 | Semana 3 |
 | 7 | Resend + verificar dominio | $0 | correos de registro/recuperación |

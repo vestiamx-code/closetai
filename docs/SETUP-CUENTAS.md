@@ -49,13 +49,15 @@ Los 9 commits ya están arriba y el CI de GitHub Actions pasó en verde.
 Los commits se firman con el correo `noreply` de GitHub, no con el personal: así el historial
 público no expone tu correo y GitHub sí los cuenta como tuyos.
 
-## 4. Vercel — $0 (plan Hobby)
+## 4. ~~Vercel~~ ✅ LISTO 20-ago-2026
 
-Regístrate en vercel.com **con la cuenta de GitHub** que acabas de crear (no con correo).
-No conectes el repo todavía: lo hago yo cuando el código esté listo para el primer deploy.
+Cuenta ligada a GitHub `vestiamx-code`, plan **Hobby**, proyecto `closetai` con deploy
+automático desde `main`. Dominio **closetai.lat** conectado y con HTTPS (Let's Encrypt).
 
-⚠️ Hobby prohíbe uso comercial. Sirve para desarrollo y para la evaluación del curso; el día
-que entre el primer pago real hay que subir a Pro ($20 USD/mes). Está anotado en riesgos (§9).
+DNS en Namecheap: un solo registro — `A` / `@` / `216.198.79.1`. Se borraron el CNAME de `www`
+y el URL Redirect que Namecheap trae de fábrica, porque ocupaban el `@`.
+
+⚠️ Hobby prohíbe uso comercial: subir a Pro ($20 USD/mes) el día que entre el primer pago real.
 
 ## 5. Supabase — $0
 

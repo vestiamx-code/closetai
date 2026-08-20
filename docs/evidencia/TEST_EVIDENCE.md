@@ -64,3 +64,13 @@ ni caché local, y sin ningún secreto real (el build usa claves de relleno a pr
 unitarias, build y auditoría de dependencias.
 **Evidencia:** run `32420304079` en github.com/vestiamx-code/closetai/actions
 
+## [2026-08-20] El producto responde en su propio dominio
+**Tipo:** verificación de producción (curl + openssl, desde fuera de la máquina de desarrollo)
+**Qué se prueba:** que el sitio esté realmente publicado y accesible en internet, no solo en local.
+**Resultado:** ✅
+- `https://closetai.lat` → **HTTP 200**, título `ClosetAI — Tu estilista, en tu bolsillo`
+- `http://closetai.lat` → **308** hacia `https://` (redirección forzada a TLS)
+- Certificado: `CN=closetai.lat`, emisor Let's Encrypt, válido hasta 18-nov-2026
+- DNS propagado y coherente en los resolvers de Google (8.8.8.8) y Cloudflare (1.1.1.1)
+**Evidencia:** salida de `curl -w`, `dig +short` y `openssl s_client`.
+

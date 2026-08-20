@@ -38,3 +38,14 @@ un plugin de Stripe: es un cambio de configuración de la máquina y se pospone 
 desbloquear el build, se revisó qué ejecutan y se dejaron bloqueados — ver ITERATION_LOG.
 **Commit:** feat: scaffold Next.js app
 
+## [2026-08-20] — Sesión 3
+**Prompt:** publicar el proyecto: GitHub, CI, Vercel y dominio propio.
+**Resultado:** repo `vestiamx-code/closetai` con 10 commits y CI verde; Vercel Hobby con deploy
+automático desde `main`; `closetai.lat` con HTTPS y redirección forzada desde http.
+**Juicio humano:** dos correcciones que valió la pena hacer en el momento y no después.
+(1) Vercel había quedado ligado a la cuenta personal de GitHub en vez de la del proyecto — se
+rehízo el registro para no partir la titularidad entre dos cuentas. (2) Se eligió el dominio
+apex (`closetai.lat`) sobre `www` como canónico, para que coincida con `NEXT_PUBLIC_APP_URL` y
+los metadatos del sitio.
+**Commit:** docs: record live deployment at closetai.lat
+
