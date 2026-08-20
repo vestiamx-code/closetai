@@ -281,7 +281,7 @@ git --version && node --version && pnpm --version && gh --version && supabase --
 
 > Regla: Tamara crea cada cuenta con el **correo del proyecto** (paso 1) y guarda las credenciales en su gestor de contraseñas. A Claude solo se le entregan **API keys** vía `.env.local`, nunca contraseñas.
 
-1. **Correo del proyecto**: crear cuenta de Google nueva, p. ej. `closetai.lat@gmail.com`. Todas las cuentas siguientes se registran con este correo.
+1. **Correo del proyecto**: ✅ ya existe (creado cuando el proyecto se llamaba Vestia; se reutiliza tal cual — el nombre del buzón es irrelevante, nadie lo ve). Todas las cuentas siguientes se registran con este correo. Debe tener teléfono y correo de recuperación configurados: es la llave maestra del negocio.
 2. **Dominio**: ✅ **closetai.lat registrado** en Namecheap el 19-ago-2026 ($2 USD el 1er año; renueva ~$41 USD/año, auto-renew activado). Siguiente: delegar DNS a Vercel o gestionarlo en el registrar (Claude dará los registros exactos).
 3. **GitHub**: cuenta nueva (u org `closetai-app`); crear repo privado `closetai`; invitar como colaborador la cuenta que usará Claude o configurar `gh auth login` (Tamara teclea el código de dispositivo).
 4. **Vercel**: cuenta con el correo del proyecto; conectar el repo `closetai`.

@@ -17,14 +17,17 @@ cuentas **no van ahí** — esas se quedan en tu gestor de contraseñas y yo nun
 
 ---
 
-## 1. Correo del proyecto — $0
+## 1. ~~Correo del proyecto~~ ✅ YA EXISTE
 
-Cuenta de Google nueva: **closetai.lat@gmail.com** (o la variante que esté libre).
-Todas las cuentas de abajo se registran con este correo, no con el tuyo personal. Es lo que
-mantiene ClosetAI separado de tus cosas y lo que hace que la cuenta sea transferible o vendible
-después. Pide verificación por teléfono.
+Se reutiliza la cuenta de Google que ya se creó cuando el proyecto se llamaba Vestia. **No hace
+falta crear otra.** El correo es solo la identidad con la que se abren las demás cuentas: no
+tiene relación técnica con el dominio y ningún usuario lo ve nunca. El remitente que sí ven las
+usuarias es `ClosetAI <hola@closetai.lat>`, que sale de Resend con el dominio propio.
 
-→ Anota en `.env.local`: nada todavía. Solo dime qué correo quedó.
+⚠️ **Esa cuenta va a ser la llave maestra del proyecto**: de ella cuelgan GitHub, Vercel,
+Supabase, Stripe, Gemini, fal.ai y Sentry. Antes de seguir, entra a la configuración de esa
+cuenta de Google y asegúrate de que tenga **teléfono y correo de recuperación**. Si se pierde
+el acceso a ese correo, se pierde el acceso a todo el negocio.
 
 ## 2. ~~Dominio closetai.lat~~ ✅ COMPRADO 19-ago-2026
 
