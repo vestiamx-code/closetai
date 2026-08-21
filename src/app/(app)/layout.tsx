@@ -20,6 +20,9 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             <Link href="/closet" className="text-text-muted transition hover:text-text">
               Clóset
             </Link>
+            <Link href="/probar" className="text-text-muted transition hover:text-text">
+              Probar
+            </Link>
             <Link href="/estilo" className="text-text-muted transition hover:text-text">
               Tu estilo
             </Link>

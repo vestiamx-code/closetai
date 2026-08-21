@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { catalogGarment } from "@/lib/ai/gemini";
+import { COSTO_USD, recortarFondo } from "@/lib/fal";
 import { catalogoAColumnas } from "@/lib/closet/tipos";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -98,8 +99,66 @@ export async function catalogarPrenda(rutaImagen: string): Promise<ResultadoCata
     return { ok: false, motivo: "No pudimos guardar la prenda. Intenta de nuevo." };
   }
 
+  // El recorte de fondo va después de guardar, a propósito: si falla, la prenda
+  // ya existe y se ve con su foto original. Es una mejora visual, no un requisito.
+  void recortarEnSegundoPlano(prenda.id, user.id, ruta.data);
+
   revalidatePath("/closet");
   return { ok: true, id: prenda.id, subcategoria: prenda.subcategory ?? "prenda" };
+}
+
+/** Cuánto vive la URL firmada que se le da a fal para descargar la imagen. */
+const TTL_PARA_FAL = 60 * 10;
+
+/**
+ * Quita el fondo de la foto y guarda la versión limpia.
+ *
+ * Sin esto, un clóset fotografiado sobre la cama se ve como un álbum
+ * desordenado. Con esto, se ve como un catálogo.
+ *
+ * Falla en silencio hacia la usuaria y ruidosamente en el log: la prenda sigue
+ * siendo perfectamente usable con su foto original.
+ */
+async function recortarEnSegundoPlano(garmentId: string, userId: string, ruta: string) {
+  try {
+    const supabase = await createClient();
+    const { data: firmada } = await supabase.storage
+      .from("garments")
+      .createSignedUrl(ruta, TTL_PARA_FAL);
+
+    if (!firmada?.signedUrl) return;
+
+    const resultado = await recortarFondo(firmada.signedUrl);
+
+    const admin = createAdminClient();
+    await admin.from("api_costs").insert({
+      user_id: userId,
+      provider: "fal",
+      operation: "remove_background",
+      est_cost_usd: COSTO_USD.recorte,
+    });
+
+    if (!resultado.ok) {
+      console.error("[recorte] no se pudo recortar", { garmentId, motivo: resultado.motivo });
+      return;
+    }
+
+    const imagen = await fetch(resultado.datos.image.url).then((r) => r.arrayBuffer());
+    const rutaLimpia = ruta.replace(/\.[^.]+$/, "") + "-limpia.png";
+
+    const { error } = await admin.storage
+      .from("garments")
+      .upload(rutaLimpia, imagen, { contentType: "image/png", upsert: true });
+
+    if (error) {
+      console.error("[recorte] no se pudo guardar la versión limpia", error);
+      return;
+    }
+
+    await admin.from("garments").update({ clean_image_path: rutaLimpia }).eq("id", garmentId);
+  } catch (error) {
+    console.error("[recorte] falló", error);
+  }
 }
 
 /**

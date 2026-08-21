@@ -153,3 +153,37 @@ producción. La prueba crea su propia usuaria desechable y la borra al terminar.
 
 **Capturas de la app funcionando:** `docs/evidencia/capturas/`
 
+## [2026-08-21] Semana 2: el estilista arma outfits con el clóset real
+**Tipo:** e2e (`e2e/estilista.spec.ts`) + integración contra Gemini (`stylist.live.test.ts`)
+
+| Caso | Por qué importa | Resultado |
+|---|---|---|
+| Arma 3 outfits con explicación | Es el producto | ✅ referencian solo prendas reales |
+| Cita el clima real en la explicación | Sin eso, la recomendación es genérica | ✅ "los 22°C de la ciudad" |
+| **Respeta un color y estilo vetados** | **Es el moat: aprender que odias algo** | ✅ el vestido vino desapareció de las 3 propuestas |
+| Rechazar deja `feedback_event` con motivo | Sin eso M4 no aprende nada | ✅ |
+| El costo de cada llamada queda en `api_costs` | Control de gasto (§4.4) | ✅ |
+
+## [2026-08-21] Semana 3: el camino del dinero
+**Tipo:** e2e (`e2e/pagos.spec.ts`) — webhook real, firmado con el mismo secreto que usa Stripe.
+
+| Caso | Por qué importa | Resultado |
+|---|---|---|
+| Webhook con firma inválida | Sin verificar firma, cualquiera se regala créditos con un POST | ✅ HTTP 400 |
+| Pago válido | | ✅ plan `lifetime` + 30 créditos + compra registrada por $100 |
+| **Mismo evento reenviado** | **Stripe reenvía cuando no recibe 200 a tiempo** | ✅ HTTP 200, saldo sigue en 30 |
+| Recarga posterior | | ✅ saldo 50, plan intacto |
+| Pago sin metadata | Un 500 haría que Stripe reintentara para siempre | ✅ HTTP 200 + incidente en el log |
+
+## [2026-08-21] Semana 3: try-on y recorte de fondo contra fal.ai
+**Tipo:** integración (`src/lib/fal.live.test.ts`) — llamadas reales, con cargo real al saldo.
+
+- ✅ **Recorte de fondo** sobre una prenda del clóset, usando una URL firmada de Storage — el mismo camino que recorre una foto de verdad. Devolvió PNG de 1400px.
+- ✅ **Try-on con FASHN**: render fotorrealista, la tela cae correctamente y la persona conserva su identidad. Revisado a ojo, no solo por el código de respuesta.
+- ✅ **Una imagen que fal no puede descargar se reporta como fallo.** Esto era un bug: fal responde HTTP 200 con el error dentro del cuerpo, y el adapter lo tomaba como éxito.
+- ✅ Las categorías que no se pueden probar (calzado, bolsas, accesorios) devuelven `null` en vez de intentar un render deforme.
+
+**Lo que falta verificar y solo puede hacerlo una persona:** la calidad del try-on con una
+foto casera real, tomada con celular. Es la queja #4 de la categoría (§2.2) y ningún test
+automático la puede medir.
+

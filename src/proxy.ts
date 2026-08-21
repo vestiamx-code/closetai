@@ -17,7 +17,7 @@ import { supabaseConfigured } from "@/lib/supabase/env";
  */
 
 /** Rutas que exigen sesión iniciada. */
-const RUTAS_PRIVADAS = ["/closet", "/hoy", "/estilo", "/perfil", "/subir", "/admin"];
+const RUTAS_PRIVADAS = ["/closet", "/hoy", "/estilo", "/perfil", "/probar", "/comprar", "/admin"];
 
 /** Rutas de autenticación: si ya tienes sesión, no tiene sentido volver a ellas. */
 const RUTAS_DE_ENTRADA = ["/entrar", "/registro"];

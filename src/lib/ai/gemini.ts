@@ -2,6 +2,7 @@ import "server-only";
 
 import { GoogleGenAI } from "@google/genai";
 
+import { AVATAR_PROMPT, AVATAR_PROMPT_VERSION } from "./prompts/avatar";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import {
   PROFILE_PROMPT,
@@ -51,6 +52,7 @@ export const MODELS = {
 export const EST_COST_USD = {
   catalogGarment: 0.0003,
   suggestOutfits: 0.0008,
+  validateAvatar: 0.0003,
   updateStyleProfile: 0.0005,
 } as const;
 
@@ -272,3 +274,85 @@ export async function updateStyleProfile(
 }
 
 export { PROFILE_PROMPT_VERSION };
+
+export type ValidacionAvatar = {
+  sirve: boolean;
+  motivo: string;
+  problema: string;
+};
+
+const ESQUEMA_AVATAR = {
+  type: "object",
+  properties: {
+    sirve: { type: "boolean" },
+    motivo: { type: "string" },
+    problema: {
+      type: "string",
+      enum: [
+        "ninguno",
+        "no_es_persona",
+        "no_cuerpo_completo",
+        "poca_luz",
+        "borrosa",
+        "pose_dificil",
+        "fondo_muy_cargado",
+        "contenido_inapropiado",
+      ],
+    },
+  },
+  required: ["sirve", "motivo", "problema"],
+} as const;
+
+/**
+ * Valida la foto base del try-on antes de gastar un crédito en ella.
+ *
+ * Ante la duda rechaza: un render sobre una foto mala decepciona más que pedir
+ * otra foto, y además cuesta dinero. Si el modelo falla, se rechaza también —
+ * nunca se deja pasar contenido sin revisar.
+ */
+export async function validarFotoBase(
+  imageBase64: string,
+  mimeType = "image/webp",
+): Promise<ValidacionAvatar & { estCostUsd: number }> {
+  const estCostUsd = EST_COST_USD.validateAvatar;
+
+  try {
+    const response = await getClient().models.generateContent({
+      model: MODELS.vision(),
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { inlineData: { mimeType, data: imageBase64 } },
+            { text: AVATAR_PROMPT },
+          ],
+        },
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: ESQUEMA_AVATAR,
+        temperature: 0.1,
+      },
+    });
+
+    const limpio = (response.text ?? "").trim().replace(/^```(?:json)?\s*\n?/, "").replace(/\n?```$/, "");
+    let datos = JSON.parse(limpio);
+    if (Array.isArray(datos)) datos = datos[0];
+
+    return {
+      sirve: Boolean(datos?.sirve),
+      motivo: String(datos?.motivo ?? "No pudimos revisar esta foto."),
+      problema: String(datos?.problema ?? "ninguno"),
+      estCostUsd,
+    };
+  } catch {
+    return {
+      sirve: false,
+      motivo: "No pudimos revisar esta foto. Intenta con otra.",
+      problema: "ninguno",
+      estCostUsd,
+    };
+  }
+}
+
+export { AVATAR_PROMPT_VERSION };
