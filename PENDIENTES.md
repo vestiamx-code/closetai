@@ -2,6 +2,23 @@
 
 Actualizado: 2026-08-19. Ordenado por lo que desbloquea más.
 
+## 🚨 Bloqueante de lanzamiento (no de fecha, de evento)
+
+### Activar facturación en la API de Gemini — **ANTES de la primera usuaria real**
+**Disparador:** el día que alguien que no seas tú suba una foto suya a ClosetAI.
+
+El nivel gratuito de Gemini (el que aceptamos el 20-ago-2026 en AI Studio) dice explícitamente
+que las peticiones **pueden ser revisadas por humanos y usadas para entrenar los modelos de
+Google**. Con ropa de prueba tuya no importa. Con fotos de cuerpo de usuarias reales sí: es dato
+personal sensible bajo la LFPDPPP y contradice el principio de privacidad del §3.2.
+
+**Cómo se resuelve:** activar facturación en la API de Gemini (Google Cloud). En el nivel de
+pago, Google no usa los datos para entrenar. No hay que cambiar de proveedor ni tocar código —
+el adapter de `lib/ai/` se queda igual, solo cambia el nivel de la cuenta.
+
+**Costo:** catalogar una prenda cuesta ~$0.0003 USD. Mil prendas = $0.30 USD. El gasto real
+sigue siendo despreciable; lo que cambia es el trato legal de los datos.
+
 ## ⏰ Con fecha límite
 
 ### Verificar contacto del dominio (ICANN) — **antes del 4-sep-2026**

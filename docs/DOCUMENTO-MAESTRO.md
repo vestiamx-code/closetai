@@ -74,7 +74,7 @@ Tamara Muñoz Delgadillo (tamaramunozdel@gmail.com). Titular del proyecto: toma 
 
 | Tier | Precio | Incluye | Costo variable para nosotros |
 |---|---|---|---|
-| **Gratis** | $0 | Clóset ilimitado con catalogación IA, 3 outfits IA/día, 1 try-on de muestra | ~$0.01 USD/usuario/mes (catalogación ≈ $0.0003/prenda; outfits con free tier de Gemini) |
+| **Gratis** | $0 | Clóset ilimitado con catalogación IA, 3 outfits IA/día, 1 try-on de muestra | ~$0.01 USD/usuario/mes (catalogación ≈ $0.0003/prenda). ⚠️ **No se puede usar el free tier de Gemini en producción**: entrena con los datos. Ver §9 |
 | **ClosetAI Completo** | **$100 MXN, una sola vez** | Estilista IA ilimitado, avatar, **30 créditos** de try-on, análisis de qué te falta + recomendaciones de compra | Acotado: 30 créditos ≈ $2.25 USD máximo |
 | **Recarga de créditos** | $49 MXN / 20 créditos | 20 renders de try-on | ~$1.50 USD → margen positivo tras comisión Stripe |
 
@@ -437,6 +437,7 @@ Unit economics recordatorio: venta de $100 MXN deja ~$92.8 netos ≈ $4.9 USD co
 | Amazon Afiliados cierra cuenta sin 3 ventas en 180 días | Media | Es re-aplicable; ML+Admitad como alternas; el link resolver conmuta sin redeploy |
 | Scope creep con 1 mes de plazo | Alta | Fases cerradas §6; recortes predefinidos; backlog §3.4 para todo lo demás |
 | Colisión de marca: «ClosetAI» es descriptivo y se parece a Acloset (§2.2) y a otras apps de la categoría | Media | Verificar IMPI antes de invertir en identidad visual; el nombre es fácil de cambiar mientras no haya usuarios; el dominio costó $2 |
+| **El nivel gratuito de Gemini usa los datos para entrenar.** Choca con el principio de privacidad (§3.2.6) y con la LFPDPPP: una foto de cuerpo es dato sensible | **Certeza** | Activar facturación en la API de Gemini **antes de que la primera usuaria real suba una foto**. En el nivel de pago Google no entrena con los datos. No implica cambiar de proveedor, solo de nivel. Costo real: la catalogación cuesta ~$0.0003 por prenda, así que el gasto sigue siendo centavos |
 
 ---
 
