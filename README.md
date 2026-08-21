@@ -22,6 +22,8 @@ Semana 0 — Build Discipline Packet. **Completa.**
 | App Next.js 16 + Tailwind v4 + landing | ✅ build verde |
 | Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde en local **y en CI** (GitHub Actions, 2m51s) |
 | Contrato zod de salida del catalogador | ✅ 9 pruebas |
+| **Catalogación de prendas con IA** | ✅ verificada contra Gemini real |
+| API key de Gemini | ✅ texto y visión · ⛔ imágenes (requieren facturación) |
 | Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
 | Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado) |
 | Deploy en Vercel + dominio propio | ✅ closetai.lat con HTTPS |
