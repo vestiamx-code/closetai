@@ -173,11 +173,11 @@ Cada módulo lista sus criterios de aceptación (CA) — son los tests de acepta
 | BD + Auth + Storage | **Supabase** (Postgres) | $0 (500MB DB, 1GB storage, 50K MAU auth) | Prescrito por rúbrica y además la mejor opción: auth completa (email+OAuth+recovery), RLS, Storage con URLs firmadas. ⚠️ free tier pausa proyectos tras ~1 semana de inactividad — durante desarrollo no pasa; configurar ping semanal después |
 | Pagos | **Stripe MX** | $0 fijo (3.6%+$3+IVA por tx) | Estándar; Checkout + webhooks. Alt: Mercado Pago — considerar como 2º método más adelante (público sin tarjeta) |
 | Email transaccional | **Resend** | $0 (3,000/mes, 100/día) | Verificación, recovery, recibos. Dominio closetai.lat verificado + SMTP custom en Supabase Auth |
-| IA — catalogación visión | **Gemini 2.5 Flash-Lite** (API key de Google AI Studio) | Free tier generoso; pagado ≈ $0.0003/prenda | El más barato con calidad suficiente y JSON estructurado. ⚠️ Google lo retira ~oct-2026: el código usa un **adapter** (`lib/ai/`) con el modelo en env var — migrar al sucesor es cambiar una línea. Alt: Claude Haiku 4.5 (~$0.004/prenda), mejor si se prefiere un solo proveedor |
-| IA — estilista/chat/perfil | **Gemini 2.5 Flash** | Free tier | Razonamiento suficiente + costo ~cero al inicio. El adapter permite subir a Claude Sonnet si la calidad del estilista lo amerita |
+| IA — catalogación visión | **Gemini 3.5 Flash-Lite** (API key de Google AI Studio) | Free tier; pagado ≈ $0.0003/prenda | El más barato con calidad suficiente y JSON estructurado. **El retiro previsto ya ocurrió**: al crear la cuenta el 20-ago-2026, Google respondió que `gemini-2.5-flash-lite` «is no longer available to new users» y señaló a `gemini-3.5-flash-lite`. El adapter (`lib/ai/`) con el modelo en env var hizo que migrar fuera cambiar una línea, como estaba previsto. Alt: Claude Haiku 4.5 (~$0.004/prenda), mejor si se prefiere un solo proveedor |
+| IA — estilista/chat/perfil | **Gemini 3.5 Flash** | Free tier | Razonamiento suficiente + costo ~cero al inicio. El adapter permite subir a Claude Sonnet si la calidad del estilista lo amerita |
 | IA — recorte de fondo | **BiRefNet v2 en fal.ai** | ~$0.001/imagen | SOTA open source; mismo proveedor que try-on (una sola cuenta/key) |
 | IA — try-on | **FASHN v1.6 vía fal.ai** ($0.075/render) | pay-as-you-go | El especialista: preserva estampados/logos (fidelidad no negociable), 7-19 s, licencia comercial. Plan B: Amazon Nova Canvas ($0.04-0.08) o fal image-apps-v2 ($0.04). ❌ Evitar IDM-VTON/CatVTON/OOTDiffusion: licencia no comercial |
-| IA — modo explorar | **Gemini 2.5 Flash Image "Nano Banana"** ($0.039) | — | Looks estilizados baratos; NO para el "ver en mí" final (no garantiza fidelidad de prenda) |
+| IA — modo explorar | **Gemini 3.1 Flash Image** ($0.039 aprox.) | ⚠️ sin free tier | Looks estilizados baratos; NO para el "ver en mí" final (no garantiza fidelidad de prenda). **Verificado 20-ago-2026: la generación de imágenes no entra en el free tier** — devuelve `quota exceeded` hasta activar facturación |
 | Clima | **open-meteo.com** | $0, sin key | Para outfits por clima |
 | Shopping search | Links de búsqueda con tag de afiliado (fase 1); **DataForSEO Merchant API** (~$0.002/query) cuando se necesite catálogo estructurado | — | SerpAPI free 250/mes como alternativa de arranque |
 | Tests | **Vitest** (unit) + **Playwright** (e2e) | $0 | Rúbrica exige ≥3 tests/semana con evidencia |
@@ -228,6 +228,8 @@ flowchart LR
   CRON --> DB
   CRON --> GEM
 ```
+
+**Nota de implementación (verificada 20-ago-2026):** las API keys nuevas de Google tienen el formato `AQ.…`, no `AIza…`, y **solo funcionan como encabezado `x-goog-api-key`**, no como parámetro `?key=` en la URL. El SDK `@google/genai` ya lo hace así; cualquier llamada manual debe respetarlo.
 
 **Flujo de datos crítico (try-on):** UI pide render → route handler valida sesión + créditos (RLS + ledger) → firma URLs de foto base y prenda → llama FASHN → guarda resultado en Storage → debita crédito en `credit_ledger` (transacción) → registra costo en `api_costs` → devuelve URL firmada. Todo server-side; **las API keys jamás tocan el cliente.**
 
