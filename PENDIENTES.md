@@ -2,6 +2,30 @@
 
 Actualizado: 2026-08-19. Ordenado por lo que desbloquea más.
 
+## 🔴 Lo primero al retomar
+
+### 1. Variables de entorno en Vercel
+El sitio en vivo (closetai.lat) todavía **no tiene** las credenciales de Supabase ni
+de Gemini, así que la landing carga pero el clóset no funcionaría ahí. En local sí
+funciona todo.
+
+Están listas para copiar en **`~/VERCEL-VARIABLES.txt`** (fuera del repo, a propósito).
+En Vercel: proyecto `closetai` → Settings → Environment Variables → importar el `.env`.
+Después, un redeploy.
+
+### 2. Confirmación de correo al registrarse
+Supabase exige confirmar el correo, y hoy lo manda con su servicio de cortesía:
+pocos envíos por hora y suele caer en spam. Al registrarte, si el correo no llega,
+avísame y confirmo la cuenta a mano en segundos.
+
+**Solución de fondo:** Resend (gratis, §4.1 del documento). Pasó de ser tarea de
+Semana 4 a ser lo que separa un registro que funciona de uno que frustra.
+
+### 3. Cuenta de demostración
+`demo@closetai.lat` con cuatro prendas catalogadas, para ver la app funcionando sin
+registrarte y para grabar el video. La contraseña está en la salida de
+`node scripts/sembrar-demo.mjs`. **Borrarla antes del lanzamiento real.**
+
 ## 🚨 Bloqueante de lanzamiento (no de fecha, de evento)
 
 ### Activar facturación en la API de Gemini — **ANTES de la primera usuaria real**

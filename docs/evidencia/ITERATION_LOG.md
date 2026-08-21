@@ -67,3 +67,34 @@ DEFINER, así que cualquiera podría consultar el saldo de otra pasando su id.
 **Efecto:** ciclo de créditos verificado completo. Sin esta prueba, el error
 habría aparecido hasta la Semana 3, con una usuaria intentando pagar.
 
+## [2026-08-20] — El modelo devolvió un arreglo donde el contrato pedía un objeto
+**Observado:** la primera subida real desde la interfaz falló con *"La IA no pudo
+leer esta foto"*, aunque el mismo modelo y la misma imagen habían funcionado en la
+prueba unitaria minutos antes.
+**Diagnóstico:** el log del servidor lo dijo sin rodeos:
+`expected object, received array`. Con `responseMimeType: application/json` pero
+sin esquema, `gemini-3.5-flash-lite` a veces envuelve el objeto en un arreglo de
+un elemento. Es variación normal de los modelos, no un error de la imagen.
+**Cambio:** dos capas. (1) Se le entrega al modelo el **esquema exacto** vía
+`responseJsonSchema`, para que no tenga margen de desviarse. (2) El parser
+desenvuelve un arreglo de un solo elemento — pero **rechaza** uno con varios,
+porque una foto es una prenda y aceptar la primera en silencio sería inventar.
+**Efecto:** subida verde. Y dos pruebas unitarias nuevas que fijan el
+comportamiento para que no se vuelva a colar.
+**Lo que esto vale:** el contrato de zod se escribió el 19-ago, antes de tener
+siquiera la API key, y su única razón de ser era *"un LLM puede devolver
+cualquier cosa"*. Al día siguiente devolvió cualquier cosa. Sin ese contrato,
+esto se habría guardado en la base de datos como una prenda rota.
+
+## [2026-08-20] — Next 16 renombró `middleware.ts`
+**Observado:** el proyecto trae un `AGENTS.md` que obliga a leer la documentación
+de la versión instalada antes de escribir código.
+**Diagnóstico:** al leerla, `middleware.js` aparece **deprecado y renombrado a
+`proxy.js`** en Next 16. Toda la documentación de Supabase para Next usa el nombre
+viejo. Con `middleware.ts`, el archivo simplemente no se ejecuta: la sesión nunca
+se refresca y las rutas privadas quedan sin proteger — **sin un solo error visible**.
+**Cambio:** el archivo se llama `src/proxy.ts` y exporta `proxy`. El build lo
+confirma: imprime `ƒ Proxy (Middleware)` en la lista de rutas.
+**Efecto:** la prueba e2e #1 verifica que la protección de rutas sí funciona, en vez
+de asumirlo.
+

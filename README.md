@@ -12,28 +12,33 @@ Todo lo que contradiga ese documento está mal.
 
 ## Estado
 
-Semana 0 — Build Discipline Packet. **Completa.**
+**Semana 1 terminada.** El clóset digital funciona de punta a punta.
+
+| Módulo | Estado |
+|---|---|
+| **M1 · Cuentas y perfil** | ✅ registro, entrada, recuperación, rutas protegidas, tallas, borrado real de cuenta |
+| **M2 · Clóset digital** | ✅ subida por lotes, compresión a WebP, catalogación con IA, filtros, corrección manual |
+| M3 · Estilista IA | ⬜ Semana 2 |
+| M4 · Aprendizaje de gustos | 🟡 los `feedback_event` ya se están recolectando |
+| M5 · Avatar y try-on | ⬜ Semana 3 · requiere `FAL_KEY` |
+| M6 · Recomendaciones | ⬜ Semana 4 |
+| M7 · Pagos | 🟡 el ledger de créditos ya existe y está probado · falta Stripe |
+| M8 · Panel admin | ⬜ Semana 4 |
+
+### Infraestructura
 
 | Pieza | Estado |
 |---|---|
-| Documento maestro en el repo | ✅ |
-| Base de datos Supabase | ✅ `closetai-prod` en producción · 13 tablas · RLS · 3 buckets privados |
-| Migraciones SQL | ✅ 001-004 aplicadas y verificadas |
-| Alta de usuaria y ciclo de créditos | ✅ probados de punta a punta |
-| Toolchain local | ✅ node 26.7 · pnpm 11.22 · gh · supabase · stripe · vercel |
-| App Next.js 16 + Tailwind v4 + landing | ✅ build verde |
-| Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde en local **y en CI** (GitHub Actions, 2m51s) |
-| Contrato zod de salida del catalogador | ✅ 9 pruebas |
-| **Catalogación de prendas con IA** | ✅ verificada contra Gemini real |
-| API key de Gemini | ✅ texto y visión · ⛔ imágenes (requieren facturación) |
-| Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
-| Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado) |
-| Deploy en Vercel + dominio propio | ✅ closetai.lat con HTTPS |
-| Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
-| Cuentas restantes | ⛔ fal.ai, Resend, Stripe, Sentry |
+| Sitio en vivo | ✅ [closetai.lat](https://closetai.lat) con HTTPS |
+| Repo + CI | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) |
+| Base de datos | ✅ `closetai-prod` · 13 tablas con RLS · 3 buckets privados |
+| Catalogación con IA | ✅ `gemini-3.5-flash-lite` verificado contra el modelo real |
+| Pruebas | ✅ 12 unitarias · 8 e2e (perfil móvil) |
+| Variables en Vercel | ⛔ **pendiente** — sin esto el sitio en vivo no ve la base de datos |
+| Recorte de fondo (BiRefNet) | ⛔ requiere `FAL_KEY` |
+| Correos propios (Resend) | ⛔ hoy usa el correo de cortesía de Supabase, con límites |
 
-Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md) ·
-Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).
+Pendientes: [`PENDIENTES.md`](PENDIENTES.md) · Runbook: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md)
 
 ## Desarrollo
 
@@ -41,9 +46,16 @@ Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).
 pnpm install
 pnpm dev          # http://localhost:3000
 pnpm test:unit    # Vitest
-pnpm test:e2e     # Playwright
+pnpm test:e2e     # Playwright (perfil móvil)
 pnpm typecheck    # next typegen + tsc
+
+node scripts/sembrar-demo.mjs   # cuenta de demostración con prendas catalogadas
+node scripts/capturas.mjs       # capturas para la evidencia de la rúbrica
 ```
+
+> **Nota de versión:** este proyecto usa Next.js 16, donde `middleware.ts` está
+> deprecado y se llama **`proxy.ts`**. La documentación de la versión instalada
+> vive en `node_modules/next/dist/docs/` — léela antes de escribir código.
 
 ## Stack
 
@@ -55,9 +67,15 @@ Justificación de cada elección: §4.1 del documento maestro.
 
 ```
 docs/            documento maestro + evidencia de rúbrica (§7)
-supabase/        migraciones SQL versionadas
-src/             app Next.js (pendiente)
-e2e/             Playwright (pendiente)
+supabase/        migraciones SQL versionadas (001-004, aplicadas)
+scripts/         herramientas de desarrollo (sembrar demo, capturas)
+src/
+  app/(auth)/    registro, entrada, recuperación
+  app/(app)/     clóset, prenda, perfil — todo detrás de sesión
+  lib/ai/        adapter de Gemini + contratos de salida
+  lib/supabase/  clientes navegador / servidor / servicio
+  proxy.ts       sesión y protección de rutas (Next 16)
+e2e/             Playwright
 ```
 
 ## Convenciones

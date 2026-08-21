@@ -40,6 +40,33 @@ export const EST_COST_USD = {
   catalogGarment: 0.0003,
 } as const;
 
+/**
+ * Esquema que se le impone al modelo. Espeja el Apéndice A1 y el contrato zod.
+ * `error` queda fuera a propósito: el rechazo ("esto no es una prenda") se
+ * detecta por el texto libre, no por esta forma.
+ */
+const ESQUEMA_PRENDA = {
+  type: "object",
+  properties: {
+    categoria: { type: "string", enum: ["top", "bottom", "vestido", "abrigo", "calzado", "accesorio", "bolsa", "otro"] },
+    subcategoria: { type: "string" },
+    colores: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
+    patron: { type: "string", enum: ["liso", "rayas", "cuadros", "floral", "estampado", "animal print", "otro"] },
+    material_aparente: { type: "string" },
+    estilos: {
+      type: "array",
+      items: { type: "string", enum: ["casual", "formal", "streetwear", "deportivo", "elegante", "boho", "minimalista", "romántico", "edgy"] },
+      minItems: 1,
+      maxItems: 3,
+    },
+    temporadas: { type: "array", items: { type: "string", enum: ["primavera", "verano", "otoño", "invierno", "todo el año"] }, minItems: 1 },
+    ocasiones: { type: "array", items: { type: "string", enum: ["diario", "oficina", "fiesta", "cita", "deporte", "playa", "evento formal"] }, minItems: 1 },
+    notas_styling: { type: "string" },
+    confianza: { type: "number" },
+  },
+  required: ["categoria", "subcategoria", "colores", "patron", "material_aparente", "estilos", "temporadas", "ocasiones", "notas_styling", "confianza"],
+} as const;
+
 export type CatalogGarmentResult = GarmentCatalogResult & {
   meta: { model: string; promptVersion: number; estCostUsd: number };
 };
@@ -74,9 +101,13 @@ export async function catalogGarment(
         },
       ],
       config: {
-        // Pedimos JSON de forma explícita; el parser de schemas.ts sigue siendo
-        // la red de seguridad, porque un modelo puede ignorar esto.
+        // Se le entrega el esquema exacto para que no tenga margen de desviarse.
+        // Sin esto, gemini-3.5-flash-lite devolvía a veces un ARREGLO de un
+        // elemento en vez del objeto (visto en producción el 20-ago-2026).
+        // El parser de schemas.ts sigue siendo la red de seguridad: ningún
+        // modelo garantiza respetar el esquema al 100%.
         responseMimeType: "application/json",
+        responseJsonSchema: ESQUEMA_PRENDA,
         temperature: 0.2,
       },
     });

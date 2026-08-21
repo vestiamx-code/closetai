@@ -63,13 +63,21 @@ export function stripCodeFence(raw: string): string {
 }
 
 /**
+ * Los modelos a veces envuelven una sola respuesta en un arreglo, aunque se les
+ * pida un objeto. Visto en producción el 20-ago-2026 con gemini-3.5-flash-lite.
+ */
+function desenvolver(valor: unknown): unknown {
+  return Array.isArray(valor) && valor.length === 1 ? valor[0] : valor;
+}
+
+/**
  * Única puerta de entrada de la salida del catalogador. Nunca lanza:
  * el pipeline de subida marca la prenda como `failed` y sigue con las demás.
  */
 export function parseGarmentCatalog(raw: string): GarmentCatalogResult {
   let parsed: unknown;
   try {
-    parsed = JSON.parse(stripCodeFence(raw));
+    parsed = desenvolver(JSON.parse(stripCodeFence(raw)));
   } catch {
     return { ok: false, reason: "unparseable", message: "el modelo no devolvió JSON" };
   }

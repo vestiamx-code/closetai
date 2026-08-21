@@ -136,3 +136,20 @@ podría abonar créditos varias veces.
 
 **Limpieza:** las usuarias de prueba se borraron; la base quedó en cero.
 
+## [2026-08-20] Semana 1 completa: de la foto al clóset
+**Tipo:** e2e (Playwright, perfil móvil) — `e2e/closet.spec.ts`
+**Qué prueba:** el recorrido real de una usuaria contra Supabase y Gemini de
+producción. La prueba crea su propia usuaria desechable y la borra al terminar.
+
+| # | Caso | Por qué importa | Resultado |
+|---|---|---|---|
+| 1 | Entrar a `/closet` sin sesión | La protección de rutas no puede depender de que la UI esconda el enlace | ✅ redirige a `/entrar` y recuerda a dónde iba |
+| 2 | Contraseña incorrecta vs. correo inexistente | Si los mensajes difieren, cualquiera puede averiguar qué correos tienen cuenta | ✅ mensaje idéntico |
+| 3 | Subir foto → catalogar → ver en el clóset | Es el producto | ✅ 7.4 s de punta a punta |
+| 4 | Corregir el nombre de una prenda | Cada corrección debe alimentar el aprendizaje (M4), no solo cambiar un dato | ✅ genera `feedback_event` tipo `tag_fix` |
+| 5 | Costo de la llamada a la IA | El control de gasto (§4.4) necesita que cada llamada quede registrada | ✅ fila en `api_costs` |
+
+**Resultado:** ✅ 8/8 pruebas e2e (5 de clóset + 3 de landing) y 12 unitarias.
+
+**Capturas de la app funcionando:** `docs/evidencia/capturas/`
+

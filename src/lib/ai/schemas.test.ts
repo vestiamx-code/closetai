@@ -68,6 +68,18 @@ describe("parseGarmentCatalog", () => {
     expect(result.ok).toBe(false);
   });
 
+  it("acepta una respuesta envuelta en un arreglo de un elemento", () => {
+    // Visto en producción: gemini-3.5-flash-lite a veces envuelve el objeto.
+    const result = parseGarmentCatalog(JSON.stringify([validGarment]));
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.garment.subcategoria).toBe("playera de algodón");
+  });
+
+  it("rechaza un arreglo con varias prendas: una foto, una prenda", () => {
+    const result = parseGarmentCatalog(JSON.stringify([validGarment, validGarment]));
+    expect(result.ok).toBe(false);
+  });
+
   it("no lanza cuando el modelo devuelve texto suelto", () => {
     const result = parseGarmentCatalog("Claro, aquí tienes la prenda:");
     expect(result).toEqual({

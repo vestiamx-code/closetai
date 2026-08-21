@@ -49,3 +49,18 @@ apex (`closetai.lat`) sobre `www` como canónico, para que coincida con `NEXT_PU
 los metadatos del sitio.
 **Commit:** docs: record live deployment at closetai.lat
 
+## [2026-08-20] — Sesión 4 (autónoma)
+**Prompt:** *"tu sigue y mañana me encuentro con el closet funcionando"* — construir
+la Semana 1 completa sin supervisión.
+**Resultado:** M1 y M2 funcionando contra producción. Registro, entrada,
+recuperación de contraseña, protección de rutas, subida de fotos por lotes con
+compresión a WebP en el navegador, catalogación con IA, clóset con filtros,
+detalle de prenda con corrección, perfil con tallas y borrado real de cuenta.
+8 pruebas e2e y 12 unitarias en verde.
+**Juicio humano:** lo más importante de la sesión fue **leer la documentación
+antes de escribir**. El proyecto avisa que Next 16 tiene cambios que rompen lo
+aprendido, y resultó cierto: `middleware.ts` está renombrado a `proxy.ts`. Haberlo
+dado por sabido habría dejado la aplicación sin protección de rutas y sin un solo
+error que lo delatara.
+**Commit:** feat: week 1 — auth and digital closet
+
