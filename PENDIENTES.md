@@ -19,13 +19,15 @@ el adapter de `lib/ai/` se queda igual, solo cambia el nivel de la cuenta.
 **Costo:** catalogar una prenda cuesta ~$0.0003 USD. Mil prendas = $0.30 USD. El gasto real
 sigue siendo despreciable; lo que cambia es el trato legal de los datos.
 
-## ⏰ Con fecha límite
+## ⏰ Pendientes sin fecha dura
 
-### Verificar contacto del dominio (ICANN) — **antes del 4-sep-2026**
-Namecheap muestra un **ALERT** en `closetai.lat`: falta confirmar el correo del titular. Es un
-requisito de ICANN. **Si no se hace en 15 días, suspenden el dominio** y el sitio se cae.
-Namecheap mandó un correo con el enlace de verificación — hay que darle clic. También se puede
-desde Domain List → botón *VERIFY CONTACTS*.
+### ~~Verificar contacto del dominio (ICANN)~~ ✅ HECHO 20-ago-2026
+Verificado el mismo día. Namecheap confirmó *"Registrant email address successfully verified"*.
+Ya no aplica la suspensión que vencía el 4-sep-2026.
+
+**Nota:** la cuenta de Namecheap y el contacto del dominio están a nombre del correo **personal**
+(`tamaramunozdel@gmail.com`), no del correo del proyecto. No urge cambiarlo, pero si algún día se
+transfiere o vende ClosetAI, el dominio hay que moverlo aparte del resto de las cuentas.
 
 ### 2FA en las cuentas del proyecto
 Se pospuso a propósito durante el setup. Hacerlo **antes de activar Stripe**, cuando haya dinero
