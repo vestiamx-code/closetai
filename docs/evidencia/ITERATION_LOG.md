@@ -98,3 +98,20 @@ confirma: imprime `ƒ Proxy (Middleware)` en la lista de rutas.
 **Efecto:** la prueba e2e #1 verifica que la protección de rutas sí funciona, en vez
 de asumirlo.
 
+## [2026-08-21] — La interfaz confirmaba antes de saber si había guardado
+**Observado:** la prueba e2e del estilista fallaba al verificar que rechazar un
+outfit dejara un `feedback_event`. La interfaz mostraba *"No te vuelvo a proponer
+algo así"*, pero la base de datos no tenía nada.
+**Diagnóstico:** dos cosas. La prueba consultaba la base antes de que la Server
+Action terminara, sí — pero eso solo era posible porque **la interfaz confirmaba
+de forma optimista**: `setListo(...)` corría antes del `await`, y el resultado de
+la acción se descartaba sin mirarlo. Si el evento no se guardaba, la usuaria veía
+un mensaje diciendo que ClosetAI había aprendido algo que nunca aprendió.
+**Cambio:** la confirmación se muestra después de que el servidor responde, y si
+la acción devuelve error se pinta el error en vez del mensaje de éxito. Además,
+la acción ahora revisa el resultado del insert de `feedback_events` y lo registra
+en el log del servidor: sin ese evento, M4 no aprende nada, así que fallar en
+silencio ahí es lo peor que puede pasar.
+**Efecto:** las tres pruebas del estilista en verde, y ahora una falla real se
+vería en pantalla en vez de esconderse tras una palomita.
+

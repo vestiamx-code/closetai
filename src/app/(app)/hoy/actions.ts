@@ -155,14 +155,23 @@ export async function reaccionar(formData: FormData): Promise<{ error?: string }
     .eq("id", datos.data.outfit_id)
     .eq("user_id", user.id);
 
-  if (error) return { error: "No pudimos guardar tu respuesta." };
+  if (error) {
+    console.error("[reaccionar] no se pudo actualizar el outfit", error);
+    return { error: "No pudimos guardar tu respuesta." };
+  }
 
-  await supabase.from("feedback_events").insert({
+  const { error: errorEvento } = await supabase.from("feedback_events").insert({
     user_id: user.id,
     type: datos.data.tipo,
     outfit_id: datos.data.outfit_id,
     payload: datos.data.motivo ? { motivo: datos.data.motivo } : {},
   });
+
+  if (errorEvento) {
+    // Sin este evento, M4 no aprende nada. Falla ruidosamente en el log.
+    console.error("[reaccionar] no se pudo registrar el feedback", errorEvento);
+    return { error: "Guardamos tu respuesta, pero no pudimos registrarla para el aprendizaje." };
+  }
 
   revalidatePath("/hoy");
   revalidatePath("/estilo");
