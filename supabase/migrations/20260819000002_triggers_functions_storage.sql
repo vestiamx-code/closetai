@@ -55,6 +55,8 @@ begin
 end; $$;
 
 -- Solo el servidor (service role) mueve créditos. El cliente jamás.
+-- ⚠️ Ojo: `public` aquí son TODOS los roles, no los visitantes. Estos revoke
+-- dejaban sin permiso también a service_role; la migración 004 se lo devuelve.
 revoke all on function public.debit_credits(uuid, numeric, text, text) from public, anon, authenticated;
 revoke all on function public.credit_balance(uuid) from public, anon;
 

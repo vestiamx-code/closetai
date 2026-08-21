@@ -52,3 +52,18 @@ el padding, y dentro un grid con `gap` normal. Menos CSS y sin artefacto.
 **Efecto:** verificado en claro y en oscuro a 390×844. Encontrado mirando la página, no
 corriendo pruebas: ninguna prueba automática habría detectado esto.
 
+## [2026-08-20] — `revoke from public` dejó al propio servidor sin permisos
+**Observado:** con la base ya en producción, la primera llamada a `debit_credits`
+devolvió `42501 permission denied for function`. El resto del esquema funcionaba.
+**Diagnóstico:** la migración 002 hacía `revoke all on function … from public` con
+la intención de que ninguna usuaria pudiera mover créditos por su cuenta. Pero en
+Postgres el rol `public` no son "los visitantes": son **todos los roles**. Al
+revocarle a `public` se le quitó el permiso también a `service_role`, que es
+exactamente quien tiene que ejecutar esas funciones desde el servidor.
+**Cambio:** migración 004 que devuelve `execute` a `service_role` únicamente, y una
+advertencia en la 002 para que nadie repita el razonamiento. `credit_balance`
+sigue sin darse a `authenticated` a propósito: recibe un uuid y es SECURITY
+DEFINER, así que cualquiera podría consultar el saldo de otra pasando su id.
+**Efecto:** ciclo de créditos verificado completo. Sin esta prueba, el error
+habría aparecido hasta la Semana 3, con una usuaria intentando pagar.
+

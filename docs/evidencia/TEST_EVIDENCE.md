@@ -104,3 +104,35 @@ clásico y relajado."*
 el esquema del Apéndice A1 sin inventarse categorías, y el contrato de zod acepta la salida sin
 correcciones. Costo de la llamada: ~$0.0003 USD.
 
+## [2026-08-20] Base de datos en producción: alta de usuaria y ciclo de créditos
+**Tipo:** integración contra el proyecto real `closetai-prod` (no una copia local)
+**Cómo:** llamadas HTTP a la API de Supabase con la llave de servicio.
+
+### Estructura
+- ✅ Las **13 tablas** del Apéndice B responden.
+- ✅ Los **3 buckets** de Storage existen y los tres son **privados**.
+- ✅ El chequeo automático de Supabase al aplicar el SQL solo objetó la tabla de
+  bitácora de migraciones: confirmó por su cuenta que las 13 tablas del producto
+  ya traían RLS activada.
+
+### Alta de usuaria (trigger de la migración 002)
+Al crear una usuaria, sin que la app haga nada más:
+- ✅ `profiles` → `{display_name: "Prueba Trigger", plan: "free", city: "Ciudad de México", onboarding_done: false}`
+- ✅ `style_profiles` → `{version: 0, profile: {}}`
+
+### Ciclo completo de créditos
+| Paso | Esperado | Resultado |
+|---|---|---|
+| Cobrar sin saldo | rechazo | ✅ `insufficient_credits` |
+| Abonar compra de 30 | saldo 30 | ✅ 30.0 |
+| Cobrar 1 render | saldo 29 | ✅ 29.0 |
+| Reintentar el mismo pago de Stripe | bloqueado | ✅ HTTP 409 |
+| Saldo tras el duplicado | 29 | ✅ 29.0 |
+| Borrar usuaria | borra sus movimientos | ✅ cascada correcta |
+
+El cuarto renglón es el que protege el dinero: Stripe reenvía webhooks cuando no
+recibe confirmación, y sin el índice único en `credit_ledger.ref` una sola compra
+podría abonar créditos varias veces.
+
+**Limpieza:** las usuarias de prueba se borraron; la base quedó en cero.
+

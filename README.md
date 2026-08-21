@@ -17,7 +17,9 @@ Semana 0 — Build Discipline Packet. **Completa.**
 | Pieza | Estado |
 |---|---|
 | Documento maestro en el repo | ✅ |
-| Migraciones SQL (esquema + RLS + storage) | ✅ escritas, sin aplicar (falta proyecto Supabase) |
+| Base de datos Supabase | ✅ `closetai-prod` en producción · 13 tablas · RLS · 3 buckets privados |
+| Migraciones SQL | ✅ 001-004 aplicadas y verificadas |
+| Alta de usuaria y ciclo de créditos | ✅ probados de punta a punta |
 | Toolchain local | ✅ node 26.7 · pnpm 11.22 · gh · supabase · stripe · vercel |
 | App Next.js 16 + Tailwind v4 + landing | ✅ build verde |
 | Pipeline de calidad (lint · typecheck · unit · build) | ✅ verde en local **y en CI** (GitHub Actions, 2m51s) |
@@ -28,7 +30,7 @@ Semana 0 — Build Discipline Packet. **Completa.**
 | Repo en GitHub | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) (privado) |
 | Deploy en Vercel + dominio propio | ✅ closetai.lat con HTTPS |
 | Mockups generados por imagen (rúbrica) | ⛔ requiere `GEMINI_API_KEY` |
-| Cuentas restantes | ⛔ Supabase, Gemini, fal.ai, Resend, Stripe, Sentry |
+| Cuentas restantes | ⛔ fal.ai, Resend, Stripe, Sentry |
 
 Pendientes que bloquean: [`PENDIENTES.md`](PENDIENTES.md) ·
 Runbook de cuentas: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md).
