@@ -3,6 +3,18 @@ import "server-only";
 import { GoogleGenAI } from "@google/genai";
 
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
+import {
+  PROFILE_PROMPT,
+  PROFILE_PROMPT_VERSION,
+  STYLIST_PROMPT,
+  STYLIST_PROMPT_VERSION,
+} from "./prompts/stylist";
+import {
+  parseStyleProfile,
+  parseStylistResponse,
+  type StyleProfile,
+  type StylistResult,
+} from "./outfits";
 import { parseGarmentCatalog, type GarmentCatalogResult } from "./schemas";
 
 /**
@@ -38,6 +50,8 @@ export const MODELS = {
 /** Costo estimado por operación, para alimentar la tabla `api_costs` (§4.4). */
 export const EST_COST_USD = {
   catalogGarment: 0.0003,
+  suggestOutfits: 0.0008,
+  updateStyleProfile: 0.0005,
 } as const;
 
 /**
@@ -123,3 +137,138 @@ export async function catalogGarment(
 
   return { ...parseGarmentCatalog(raw), meta };
 }
+
+/** Prenda tal como se le presenta al estilista: lo mínimo para decidir. */
+export type PrendaParaEstilista = {
+  id: string;
+  subcategoria: string | null;
+  categoria: string | null;
+  colores: string[];
+  estilos: string[];
+  temporadas: string[];
+  ocasiones: string[];
+};
+
+export type ContextoEstilista = {
+  prendas: PrendaParaEstilista[];
+  perfil: StyleProfile;
+  clima: { ciudad: string; temperatura: number; descripcion: string } | null;
+  ocasion: string | null;
+  /** Últimos rechazos, para no volver a proponer lo mismo. */
+  feedbackReciente: string[];
+};
+
+export type SuggestOutfitsResult = StylistResult & {
+  meta: { model: string; promptVersion: number; estCostUsd: number };
+};
+
+/**
+ * Genera outfits con el clóset real de la usuaria (Apéndice A2).
+ * Nunca lanza: la pantalla muestra un mensaje honesto si el modelo falla.
+ */
+export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOutfitsResult> {
+  const model = MODELS.reasoning();
+  const meta = {
+    model,
+    promptVersion: STYLIST_PROMPT_VERSION,
+    estCostUsd: EST_COST_USD.suggestOutfits,
+  };
+
+  const contexto = [
+    `CLÓSET (${ctx.prendas.length} prendas):`,
+    JSON.stringify(ctx.prendas),
+    "",
+    "PERFIL DE ESTILO APRENDIDO:",
+    JSON.stringify(ctx.perfil),
+    "",
+    ctx.clima
+      ? `CLIMA: ${ctx.clima.ciudad}, ${ctx.clima.temperatura}°C, ${ctx.clima.descripcion}.`
+      : "CLIMA: no disponible. No menciones el clima en las explicaciones.",
+    ctx.ocasion ? `OCASIÓN PEDIDA: ${ctx.ocasion}` : "OCASIÓN: día normal.",
+    ctx.feedbackReciente.length
+      ? `RECHAZOS RECIENTES (no repitas esto): ${ctx.feedbackReciente.join(" · ")}`
+      : "",
+  ].join("\n");
+
+  let raw: string;
+  try {
+    const response = await getClient().models.generateContent({
+      model,
+      contents: [{ role: "user", parts: [{ text: `${STYLIST_PROMPT}\n\n${contexto}` }] }],
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: ESQUEMA_ESTILISTA,
+        temperature: 0.9, // más alta que la catalogación: aquí sí queremos variedad
+      },
+    });
+    raw = response.text ?? "";
+  } catch (error) {
+    return {
+      ok: false,
+      message: `el proveedor falló: ${error instanceof Error ? error.message : String(error)}`,
+      meta,
+    };
+  }
+
+  const ids = new Set(ctx.prendas.map((p) => p.id));
+  return { ...parseStylistResponse(raw, ids), meta };
+}
+
+const ESQUEMA_ESTILISTA = {
+  type: "object",
+  properties: {
+    outfits: {
+      type: "array",
+      minItems: 1,
+      maxItems: 3,
+      items: {
+        type: "object",
+        properties: {
+          garment_ids: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 5 },
+          title: { type: "string" },
+          explanation: { type: "string" },
+          tip: { type: "string" },
+        },
+        required: ["garment_ids", "title", "explanation", "tip"],
+      },
+    },
+    falta: { type: "string" },
+  },
+  required: ["outfits"],
+} as const;
+
+/**
+ * Reescribe el perfil de estilo a partir de los eventos nuevos (Apéndice A3).
+ * Es el moat del producto: lo que hace que a las dos semanas ya no proponga
+ * lo que la usuaria odia.
+ */
+export async function updateStyleProfile(
+  perfilActual: StyleProfile,
+  eventos: Array<Record<string, unknown>>,
+): Promise<{ perfil: StyleProfile | null; estCostUsd: number; model: string }> {
+  const model = MODELS.reasoning();
+  const contexto = [
+    "PERFIL ACTUAL:",
+    JSON.stringify(perfilActual),
+    "",
+    `EVENTOS NUEVOS (${eventos.length}):`,
+    JSON.stringify(eventos),
+  ].join("\n");
+
+  try {
+    const response = await getClient().models.generateContent({
+      model,
+      contents: [{ role: "user", parts: [{ text: `${PROFILE_PROMPT}\n\n${contexto}` }] }],
+      config: { responseMimeType: "application/json", temperature: 0.3 },
+    });
+    return {
+      perfil: parseStyleProfile(response.text ?? ""),
+      estCostUsd: EST_COST_USD.updateStyleProfile,
+      model,
+    };
+  } catch {
+    return { perfil: null, estCostUsd: EST_COST_USD.updateStyleProfile, model };
+  }
+}
+
+export { PROFILE_PROMPT_VERSION };

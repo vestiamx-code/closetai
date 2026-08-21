@@ -14,8 +14,11 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             ClosetAI
           </Link>
           <div className="flex items-center gap-5 text-sm">
+            <Link href="/hoy" className="text-text-muted transition hover:text-text">
+              Hoy
+            </Link>
             <Link href="/closet" className="text-text-muted transition hover:text-text">
-              Mi clóset
+              Clóset
             </Link>
             <Link href="/perfil" className="text-text-muted transition hover:text-text">
               Perfil
