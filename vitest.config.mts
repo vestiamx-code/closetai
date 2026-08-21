@@ -1,10 +1,17 @@
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
+
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
   // Resolución nativa de los paths de tsconfig (@/* → src/*).
-  resolve: { tsconfigPaths: true },
+  resolve: {
+    tsconfigPaths: true,
+    alias: {
+      "server-only": fileURLToPath(new URL("./src/tests/stubs/server-only.ts", import.meta.url)),
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,

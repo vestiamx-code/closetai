@@ -74,3 +74,33 @@ unitarias, build y auditoría de dependencias.
 - DNS propagado y coherente en los resolvers de Google (8.8.8.8) y Cloudflare (1.1.1.1)
 **Evidencia:** salida de `curl -w`, `dig +short` y `openssl s_client`.
 
+## [2026-08-20] El catalogador funciona contra Gemini real
+**Tipo:** integración (Vitest) — `src/lib/ai/gemini.live.test.ts`
+**Qué prueba:** la cadena completa de catalogación, no una simulación: imagen → API de
+Gemini → JSON → validación con zod → objeto tipado. Es el corazón del M2.
+**Cómo:** `pnpm test:unit`. La prueba **se salta sola si no hay `GEMINI_API_KEY`**, para que el
+CI no dependa de secretos ni queme cuota.
+**Prenda de prueba:** `src/tests/fixtures/playera-rayas.png` — una playera de rayas azul marino
+generada por código (PNG escrito a mano en Python), para no depender de fotos de nadie.
+
+**Resultado:** ✅ pasa. Respuesta del modelo `gemini-3.5-flash-lite`:
+
+| Campo | Devuelto |
+|---|---|
+| categoria | `top` |
+| subcategoria | `playera` (es-MX correcto, no "t-shirt") |
+| colores | azul marino, blanco |
+| patron | `rayas` |
+| material_aparente | algodón |
+| estilos | casual, minimalista |
+| temporadas | verano, primavera |
+| ocasiones | diario |
+| confianza | 0.98 |
+
+`notas_styling`: *"Combínala con unos jeans de mezclilla y tenis blancos para un look marinero
+clásico y relajado."*
+
+**Lo que esto demuestra:** el modelo responde en español de México con vocabulario local, respeta
+el esquema del Apéndice A1 sin inventarse categorías, y el contrato de zod acepta la salida sin
+correcciones. Costo de la llamada: ~$0.0003 USD.
+
