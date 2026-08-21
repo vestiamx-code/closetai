@@ -23,8 +23,23 @@ const RUTAS_PRIVADAS = ["/closet", "/perfil", "/subir", "/admin"];
 const RUTAS_DE_ENTRADA = ["/entrar", "/registro"];
 
 export async function proxy(request: NextRequest) {
-  // Sin configuración de Supabase (build en CI, por ejemplo) no hay nada que hacer.
-  if (!supabaseConfigured()) return NextResponse.next();
+  const { pathname: rutaPedida } = request.nextUrl;
+
+  // Sin configuración de Supabase no hay cuentas posibles. Puede pasar en el
+  // build de CI, o en un despliegue al que todavía no se le cargaron las
+  // variables. En vez de reventar con un 500 en producción, la app se comporta
+  // como lo que es en ese momento: una landing. La rama principal nunca queda rota.
+  if (!supabaseConfigured()) {
+    const necesitaCuenta = [...RUTAS_PRIVADAS, ...RUTAS_DE_ENTRADA].some((r) =>
+      rutaPedida.startsWith(r),
+    );
+    if (!necesitaCuenta) return NextResponse.next();
+
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   let response = NextResponse.next({ request });
 
@@ -55,7 +70,7 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
+  const pathname = rutaPedida;
 
   if (!user && RUTAS_PRIVADAS.some((ruta) => pathname.startsWith(ruta))) {
     const url = request.nextUrl.clone();

@@ -17,3 +17,16 @@ test.describe("Landing", () => {
     await expect(page.getByText(/gratis e ilimitado/i)).toBeVisible();
   });
 });
+
+test.describe("Sin configuración de Supabase", () => {
+  test.skip(
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
+    "Solo aplica cuando la app corre sin credenciales",
+  );
+
+  test("las rutas de cuenta llevan a la landing en vez de reventar", async ({ page }) => {
+    const respuesta = await page.goto("/closet");
+    expect(respuesta?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/$/);
+  });
+});
