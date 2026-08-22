@@ -1,0 +1,50 @@
+[
+ {
+  "id": "01",
+  "texto": "ClosetAI es un estilista personal con inteligencia artificial, hecho para México. Está en línea ahorita mismo, en closetai punto lat, con dominio propio y HTTPS."
+ },
+ {
+  "id": "02",
+  "texto": "El problema es sencillo: tengo el clóset lleno y siento que no tengo nada que ponerme. No me falta ropa. Me falta acordarme de lo que tengo y de cómo combinarlo."
+ },
+ {
+  "id": "03",
+  "texto": "Entro con una cuenta real. Todas las rutas privadas están protegidas: sin sesión, la aplicación te manda a iniciar sesión y te regresa a donde ibas."
+ },
+ {
+  "id": "04",
+  "texto": "Este es mi clóset. Ocho prendas, y cada una la catalogó la inteligencia artificial a partir de una sola foto: qué prenda es, de qué color, y para qué sirve. Todo en español de México: dice playera, no t-shirt."
+ },
+ {
+  "id": "05",
+  "texto": "Fíjense en las fotos. Unas son tomas de producto y otras son fotos de verdad, tomadas en una cama y con mala luz. Esa diferencia es justo por lo que el recorte de fondo es parte del proceso y no un adorno."
+ },
+ {
+  "id": "06",
+  "texto": "Ahora la parte importante. Le pido que me diga qué ponerme, y me arma tres outfits con la ropa que ya tengo. Cada uno me explica por qué funciona: habla de color, de proporción, y del clima real de mi ciudad hoy."
+ },
+ {
+  "id": "07",
+  "texto": "Y si algo no me gusta, se lo digo. Ese rechazo se guarda, con motivo. Un no sin razón no le enseña nada a la aplicación."
+ },
+ {
+  "id": "08",
+  "texto": "Aquí veo lo que ha aprendido de mí. Con solo tres reacciones todavía no me conoce, y lo dice en vez de inventarse un perfil. Cuando aprenda algo, va a venir con su evidencia."
+ },
+ {
+  "id": "09",
+  "texto": "Esta pantalla me deja probarme la ropa sin probármela, sobre mi propia foto. La foto base la revisa la inteligencia artificial antes de aceptarla, porque una foto mala da un resultado feo."
+ },
+ {
+  "id": "10",
+  "texto": "El clóset es gratis e ilimitado, para siempre. Lo que se paga es un desbloqueo de cien pesos, una sola vez, sin mensualidades. Este pago es real: pasó por Stripe, el webhook firmado abonó treinta créditos, y ya gasté cinco en pruebas virtuales. Quedan veinticinco."
+ },
+ {
+  "id": "11",
+  "texto": "Y una foto de tu cuerpo es dato personal sensible bajo la ley mexicana. Por eso hay aviso de privacidad, seguridad por fila en las trece tablas de la base de datos, y los archivos viven en buckets privados."
+ },
+ {
+  "id": "12",
+  "texto": "El repositorio es público: veintiocho commits, integración continua en verde, y cuarenta despliegues. Treinta y cuatro pruebas automatizadas más una verificación contra el sitio en vivo. Esto es ClosetAI. Gracias."
+ }
+]
