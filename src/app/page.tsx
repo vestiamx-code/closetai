@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const features = [
   {
     title: "Tu clóset, digital",
@@ -31,9 +33,12 @@ export default function Home() {
         <span className="font-display text-xl font-semibold tracking-tight">
           ClosetAI
         </span>
-        <span className="rounded-full border border-border px-3 py-1 text-xs text-text-muted">
-          En construcción
-        </span>
+        <Link
+          href="/entrar"
+          className="rounded-full border border-border px-4 py-2 text-sm transition hover:border-text hover:text-text"
+        >
+          Entrar
+        </Link>
       </header>
 
       <section className="mx-auto w-full max-w-5xl px-6 pt-10 pb-20 sm:pt-20">
@@ -47,8 +52,22 @@ export default function Home() {
           artificial te diga qué ponerte — y te lo muestre puesto, sobre tu
           propia foto.
         </p>
-        <p className="mt-8 text-sm text-text-muted">
-          Estamos construyendo ClosetAI en público. Pronto abrimos.
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Link
+            href="/registro"
+            className="inline-flex items-center justify-center rounded-full bg-text px-7 py-3.5 text-base font-medium text-bg transition hover:opacity-90"
+          >
+            Arma tu clóset gratis
+          </Link>
+          <Link
+            href="/entrar"
+            className="inline-flex items-center justify-center rounded-full border border-border px-7 py-3.5 text-base transition hover:border-text"
+          >
+            Ya tengo cuenta
+          </Link>
+        </div>
+        <p className="mt-5 text-sm text-text-muted">
+          Empieza con diez prendas. No pedimos tarjeta.
         </p>
       </section>
 

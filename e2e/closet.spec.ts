@@ -1,8 +1,9 @@
-import { readFileSync } from "node:fs";
 import path from "node:path";
 
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
+
+import { cargarEnv } from "./entorno";
 
 /**
  * Recorrido completo de la Semana 1: entrar, subir una prenda, verla catalogada
@@ -13,19 +14,6 @@ import { expect, test } from "@playwright/test";
  * para que el CI no dependa de secretos.
  */
 
-function cargarEnv() {
-  try {
-    const ruta = path.join(__dirname, "..", ".env.local");
-    for (const linea of readFileSync(ruta, "utf8").split("\n")) {
-      const m = /^([A-Z0-9_]+)=(.*)$/.exec(linea.trim());
-      if (!m) continue;
-      const valor = m[2].split("#")[0].trim();
-      if (valor && !process.env[m[1]]) process.env[m[1]] = valor;
-    }
-  } catch {
-    /* sin .env.local */
-  }
-}
 cargarEnv();
 
 const URL_SUPABASE = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -1,26 +1,13 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
-
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
+
+import { cargarEnv } from "./entorno";
 
 /**
  * Recorrido de la Semana 2: el estilista arma outfits con el clóset real,
  * la usuaria reacciona, y esa reacción queda registrada para el aprendizaje.
  */
 
-function cargarEnv() {
-  try {
-    for (const linea of readFileSync(path.join(__dirname, "..", ".env.local"), "utf8").split("\n")) {
-      const m = /^([A-Z0-9_]+)=(.*)$/.exec(linea.trim());
-      if (!m) continue;
-      const valor = m[2].split("#")[0].trim();
-      if (valor && !process.env[m[1]]) process.env[m[1]] = valor;
-    }
-  } catch {
-    /* sin .env.local */
-  }
-}
 cargarEnv();
 
 const URL_SUPABASE = process.env.NEXT_PUBLIC_SUPABASE_URL;

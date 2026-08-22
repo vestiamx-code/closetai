@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
 
+import { cargarEnv } from "./entorno";
+
+// Sin esto, el `skip` de más abajo depende de qué otro spec le tocó al worker.
+cargarEnv();
+
 test.describe("Landing", () => {
   test("carga y comunica la promesa del producto", async ({ page }) => {
     await page.goto("/");
@@ -28,5 +33,21 @@ test.describe("Sin configuración de Supabase", () => {
     const respuesta = await page.goto("/closet");
     expect(respuesta?.status()).toBeLessThan(400);
     await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+test.describe("La landing deja entrar", () => {
+  // La app estuvo en vivo con todo funcionando y la landing seguía diciendo
+  // "En construcción", sin un solo enlace para entrar. Desde el navegador no
+  // había forma de llegar al producto sin escribir la URL a mano.
+  test("hay cómo llegar a la app desde la portada", async ({ page }) => {
+    await page.goto("/");
+
+    await page.getByRole("link", { name: "Arma tu clóset gratis" }).click();
+    await expect(page).toHaveURL(/\/registro$/);
+
+    await page.goto("/");
+    await page.getByRole("link", { name: "Ya tengo cuenta" }).click();
+    await expect(page).toHaveURL(/\/entrar$/);
   });
 });
