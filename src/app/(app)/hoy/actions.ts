@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth";
 import { suggestOutfits, type PrendaParaEstilista } from "@/lib/ai/gemini";
 import { PERFIL_VACIO, styleProfileSchema } from "@/lib/ai/outfits";
 import { obtenerClima } from "@/lib/clima";
+import { revisarLimite } from "@/lib/limites";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -17,6 +18,10 @@ const MINIMO_PRENDAS = 4;
 
 export async function generarOutfits(ocasion?: string): Promise<ResultadoOutfits> {
   const user = await requireUser();
+
+  const limite = await revisarLimite(user.id, "suggest_outfits");
+  if (!limite.permitido) return { ok: false, motivo: limite.motivo };
+
   const supabase = await createClient();
 
   const { data: prendas } = await supabase

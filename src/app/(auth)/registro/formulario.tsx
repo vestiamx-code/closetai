@@ -33,6 +33,26 @@ export function FormularioRegistro() {
         required
       />
 
+      <label className="flex gap-3 text-sm leading-relaxed text-text-muted">
+        <input
+          type="checkbox"
+          name="consentimiento"
+          required
+          className="mt-0.5 size-4 shrink-0 accent-[var(--accent)]"
+        />
+        <span className="text-pretty">
+          Entiendo cómo ClosetAI usa mis fotos y acepto el{" "}
+          <a
+            href="/privacidad"
+            target="_blank"
+            className="text-accent underline underline-offset-4"
+          >
+            aviso de privacidad
+          </a>
+          .
+        </span>
+      </label>
+
       <Boton cargando="Creando tu cuenta…">Crear cuenta</Boton>
     </form>
   );

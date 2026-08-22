@@ -6,6 +6,7 @@ import { z } from "zod";
 import { catalogGarment } from "@/lib/ai/gemini";
 import { COSTO_USD, recortarFondo } from "@/lib/fal";
 import { catalogoAColumnas } from "@/lib/closet/tipos";
+import { revisarLimite } from "@/lib/limites";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
@@ -29,6 +30,9 @@ const rutaSchema = z
  */
 export async function catalogarPrenda(rutaImagen: string): Promise<ResultadoCatalogacion> {
   const user = await requireUser();
+
+  const limite = await revisarLimite(user.id, "catalog_garment");
+  if (!limite.permitido) return { ok: false, motivo: limite.motivo };
 
   const ruta = rutaSchema.safeParse(rutaImagen);
   if (!ruta.success) return { ok: false, motivo: "Ruta de imagen inválida." };

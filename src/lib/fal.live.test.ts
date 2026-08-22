@@ -1,4 +1,10 @@
 // @vitest-environment node
+/**
+ * Prueba EN VIVO: llama a la API real y, en el caso del try-on, cuesta dinero.
+ * No corre en `pnpm test:unit` ni en CI. Para correrla:
+ *
+ *   PRUEBAS_VIVAS=1 pnpm test:unit
+ */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -23,7 +29,7 @@ const haySupabase = Boolean(
   process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
 );
 
-describe.skipIf(!process.env.FAL_KEY || !haySupabase)("fal.ai real", () => {
+describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.FAL_KEY || !haySupabase)("fal.ai real", () => {
   it("recorta el fondo de una prenda del clóset", { timeout: 90_000 }, async () => {
     // Se usa una URL firmada de Storage, igual que en producción: así la prueba
     // ejercita el mismo camino que va a recorrer una foto de verdad.
@@ -85,7 +91,7 @@ describe("categoriaParaTryon", () => {
   });
 });
 
-describe.skipIf(!process.env.FAL_KEY)("try-on real (FASHN)", () => {
+describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.FAL_KEY)("try-on real (FASHN)", () => {
   it(
     "pone una prenda sobre la foto de una persona",
     { timeout: 180_000 },

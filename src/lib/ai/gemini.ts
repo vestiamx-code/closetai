@@ -3,6 +3,7 @@ import "server-only";
 import { GoogleGenAI } from "@google/genai";
 
 import { AVATAR_PROMPT, AVATAR_PROMPT_VERSION } from "./prompts/avatar";
+import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import {
   PROFILE_PROMPT,
@@ -53,6 +54,7 @@ export const EST_COST_USD = {
   catalogGarment: 0.0003,
   suggestOutfits: 0.0008,
   validateAvatar: 0.0003,
+  analyzeGaps: 0.0008,
   updateStyleProfile: 0.0005,
 } as const;
 
@@ -356,3 +358,73 @@ export async function validarFotoBase(
 }
 
 export { AVATAR_PROMPT_VERSION };
+
+const ESQUEMA_HUECOS = {
+  type: "object",
+  properties: {
+    huecos: {
+      type: "array",
+      maxItems: 5,
+      items: {
+        type: "object",
+        properties: {
+          prenda: { type: "string" },
+          porque: { type: "string" },
+          desbloquea: { type: "integer" },
+          con_ids: { type: "array", items: { type: "string" } },
+          busqueda: { type: "string" },
+        },
+        required: ["prenda", "porque", "desbloquea", "con_ids", "busqueda"],
+      },
+    },
+  },
+  required: ["huecos"],
+} as const;
+
+/**
+ * Detecta qué le falta al clóset (Apéndice A4).
+ * Deliberadamente conservador: recomendar de más convierte al estilista en
+ * vendedor, que es justo lo que el documento prohíbe (§3.2.4).
+ */
+export async function analizarHuecos(
+  prendas: PrendaParaEstilista[],
+  perfil: StyleProfile,
+): Promise<{
+  huecos: import("./compras-tipos").HuecoDetectado[] | null;
+  estCostUsd: number;
+  model: string;
+}> {
+  const model = MODELS.reasoning();
+  const { parseGaps } = await import("../compras");
+
+  const contexto = [
+    `CLÓSET (${prendas.length} prendas):`,
+    JSON.stringify(prendas),
+    "",
+    "PERFIL DE ESTILO:",
+    JSON.stringify(perfil),
+  ].join("\n");
+
+  try {
+    const response = await getClient().models.generateContent({
+      model,
+      contents: [{ role: "user", parts: [{ text: `${GAPS_PROMPT}\n\n${contexto}` }] }],
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: ESQUEMA_HUECOS,
+        temperature: 0.4,
+      },
+    });
+
+    const ids = new Set(prendas.map((p) => p.id));
+    return {
+      huecos: parseGaps(response.text ?? "", ids),
+      estCostUsd: EST_COST_USD.analyzeGaps,
+      model,
+    };
+  } catch {
+    return { huecos: null, estCostUsd: EST_COST_USD.analyzeGaps, model };
+  }
+}
+
+export { GAPS_PROMPT_VERSION };

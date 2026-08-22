@@ -7,6 +7,8 @@ import { requireUser } from "@/lib/auth";
 import { validarFotoBase } from "@/lib/ai/gemini";
 import { cobrar, saldo } from "@/lib/credits";
 import { categoriaParaTryon, COSTO_USD, probarPrenda } from "@/lib/fal";
+import { estadoTryon } from "@/lib/gasto";
+import { revisarLimite } from "@/lib/limites";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -87,6 +89,13 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
 
   const id = z.string().uuid().safeParse(garmentId);
   if (!id.success) return { ok: false, motivo: "Prenda inválida." };
+
+  // El freno de gasto va primero: antes de tocar la base o llamar a fal.
+  const estado = await estadoTryon();
+  if (!estado.habilitado) return { ok: false, motivo: estado.motivo };
+
+  const limite = await revisarLimite(user.id, "tryon");
+  if (!limite.permitido) return { ok: false, motivo: limite.motivo };
 
   const supabase = await createClient();
 

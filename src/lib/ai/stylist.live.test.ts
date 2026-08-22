@@ -1,4 +1,10 @@
 // @vitest-environment node
+/**
+ * Prueba EN VIVO: llama a la API real y, en el caso del try-on, cuesta dinero.
+ * No corre en `pnpm test:unit` ni en CI. Para correrla:
+ *
+ *   PRUEBAS_VIVAS=1 pnpm test:unit
+ */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -30,7 +36,7 @@ const CLOSET = [
   { id: "g6", subcategoria: "bolsa de mano", categoria: "bolsa", colores: ["café"], estilos: ["elegante"], temporadas: ["todo el año"], ocasiones: ["oficina"] },
 ];
 
-describe.skipIf(!process.env.GEMINI_API_KEY)("estilista contra Gemini real", () => {
+describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.GEMINI_API_KEY)("estilista contra Gemini real", () => {
   it("arma outfits usando solo prendas del clóset", { timeout: 120_000 }, async () => {
     const { suggestOutfits } = await import("./gemini");
 

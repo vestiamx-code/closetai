@@ -54,3 +54,76 @@ sigue siendo comprable después y redirigir cuesta poco.
 
 **Firma:** ____________________
 
+---
+
+## Semana 2 — [2026-08-21] — Qué tan lejos dejar llegar a la IA — *borrador, pendiente de firma*
+
+El estilista podía construirse de dos maneras. La fácil: pedirle al modelo que
+proponga outfits y mostrar lo que devuelva. La que elegí: pasarle únicamente las
+prendas que la usuaria tiene, validar que cada id que devuelva exista de verdad,
+y descartar el outfit completo si se inventó una prenda.
+
+Cuesta más código y aun así descarta trabajo del modelo. Lo hice porque el
+problema de esta categoría no es que la IA proponga poco, es que decepciona
+(§2.2, queja #4). Un outfit con una prenda que no tengo no es una sugerencia
+imperfecta: es la prueba de que la app no sabe qué hay en mi clóset. Después de
+eso, ya no le crees nada.
+
+La decisión que más me costó fue la temperatura del modelo. En la catalogación
+la puse baja, porque ahí quiero la misma respuesta siempre. En el estilista la
+subí, porque tres outfits idénticos no sirven de nada. Es la misma herramienta
+pidiéndole cosas opuestas, y eso solo se ve cuando pruebas.
+
+Lo que me convenció de que iba bien fue una prueba: le veté un color y un estilo,
+y el vestido que los tenía desapareció de las tres propuestas. Eso es el producto
+funcionando, no el modelo siendo listo.
+
+**Firma:** ____________________
+
+## Semana 3 — [2026-08-21] — Cobrar después, nunca antes — *borrador, pendiente de firma*
+
+En el try-on había un orden que decidir: cobrar el crédito antes de generar el
+render, o después. Antes es más fácil de programar y protege contra que alguien
+dispare renders sin saldo. Elegí después.
+
+La razón es que un render puede fallar por cosas que no son culpa de la usuaria:
+que fal esté saturado, que la foto tenga una pose rara, que se caiga la conexión.
+Cobrarle un crédito por un error nuestro es pequeño en dinero y enorme en
+confianza. Cien pesos compran treinta créditos; que uno se pierda por nuestra
+falla convierte una compra en un reclamo.
+
+El costo de hacerlo bien fue tener que resolver otro problema: si el cobro va
+después, dos renders simultáneos podrían gastar el mismo crédito. Eso se resolvió
+con un lock por usuaria dentro de la función de base de datos, y con un índice
+único que hace imposible cobrar dos veces por el mismo render.
+
+Lo mismo del lado de Stripe. Stripe reenvía el webhook cuando no recibe respuesta
+a tiempo, y sin protección una compra abonaría créditos varias veces. La probé a
+propósito reenviando el mismo evento: el saldo no se movió.
+
+**Firma:** ____________________
+
+## Semana 4 — [2026-08-21] — El estilista no puede ser vendedor — *borrador, pendiente de firma*
+
+La parte de recomendaciones de compra es donde ClosetAI gana dinero por afiliados,
+y por lo mismo es donde más fácil se rompe. Si el estilista empieza a recomendar
+de más, deja de ser estilista y se vuelve un catálogo con opinión.
+
+El prompt le dice explícitamente que sea conservador y que devolver dos huecos
+reales vale más que cinco inventados. Y el código respeta esa respuesta: si el
+modelo dice que el clóset está bien cubierto, la pantalla muestra exactamente eso
+en vez de forzar una lista. Es la única parte del producto donde deliberadamente
+programé algo para vender menos.
+
+También decidí que todos los enlaces salientes pasen por un resolvedor propio en
+lugar de enlazar directo a las tiendas. La razón inmediata es poder cambiar el
+código de afiliado sin volver a desplegar. La razón real es que al principio la
+comisión no va a ser nada — unos pocos pesos — y lo que sí vale es saber qué
+clican: eso dice qué recomendaciones sirven, y eso mejora el producto aunque
+nunca llegue una sola venta.
+
+Y la divulgación de que ganamos comisión está en la misma pantalla, en texto
+legible, no escondida en los términos.
+
+**Firma:** ____________________
+

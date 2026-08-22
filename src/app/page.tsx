@@ -94,6 +94,11 @@ export default function Home() {
         <div className="mx-auto w-full max-w-5xl px-6 py-10 text-sm text-text-muted">
           <p className="font-display text-base text-text">ClosetAI</p>
           <p className="mt-2">Hecho en México, en español.</p>
+          <p className="mt-4">
+            <a href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
+              Aviso de privacidad
+            </a>
+          </p>
         </div>
       </footer>
     </main>

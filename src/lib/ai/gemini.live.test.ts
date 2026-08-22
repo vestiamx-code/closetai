@@ -1,4 +1,10 @@
 // @vitest-environment node
+/**
+ * Prueba EN VIVO: llama a la API real y, en el caso del try-on, cuesta dinero.
+ * No corre en `pnpm test:unit` ni en CI. Para correrla:
+ *
+ *   PRUEBAS_VIVAS=1 pnpm test:unit
+ */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 

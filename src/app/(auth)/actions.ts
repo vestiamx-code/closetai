@@ -17,6 +17,9 @@ const registroSchema = z.object({
   email: correo,
   password: contrasena,
   nombre: z.string().trim().min(1, "¿Cómo te llamas?").max(60),
+  // El `required` del HTML se puede quitar desde el navegador. El consentimiento
+  // para tratar datos sensibles tiene que comprobarse en el servidor (§4.4).
+  consentimiento: z.literal("on", { message: "Necesitamos tu consentimiento para crear la cuenta." }),
 });
 
 const entrarSchema = z.object({ email: correo, password: z.string().min(1, "Escribe tu contraseña") });
@@ -41,6 +44,7 @@ export async function registrarse(
     email: formData.get("email"),
     password: formData.get("password"),
     nombre: formData.get("nombre"),
+    consentimiento: formData.get("consentimiento"),
   });
   if (!datos.success) return { error: primerError(datos.error) };
 
@@ -49,7 +53,11 @@ export async function registrarse(
     email: datos.data.email,
     password: datos.data.password,
     options: {
-      data: { full_name: datos.data.nombre },
+      data: {
+        full_name: datos.data.nombre,
+        // Queda constancia de cuándo se dio el consentimiento.
+        consentimiento_privacidad: new Date().toISOString(),
+      },
       emailRedirectTo: `${await urlDelSitio()}/auth/callback`,
     },
   });

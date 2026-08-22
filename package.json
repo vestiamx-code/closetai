@@ -11,7 +11,8 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "db:push": "supabase db push"
+    "db:push": "supabase db push",
+    "test:vivas": "PRUEBAS_VIVAS=1 vitest run"
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.1",
