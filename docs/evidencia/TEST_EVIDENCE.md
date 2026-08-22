@@ -187,3 +187,26 @@ producción. La prueba crea su propia usuaria desechable y la borra al terminar.
 foto casera real, tomada con celular. Es la queja #4 de la categoría (§2.2) y ningún test
 automático la puede medir.
 
+
+## [2026-08-21] Verificación contra el sitio en vivo (closetai.lat)
+**Tipo:** end-to-end contra producción, con la cuenta demo y perfil de iPhone 13.
+
+Esto no lo cubre el pipeline: el pipeline levanta un servidor local. Producción
+tiene HTTPS, arranques en frío y el proxy de Vercel enfrente — y ahí es donde
+apareció el bug de sesión que ninguna prueba local vio.
+
+| Qué se probó | Resultado |
+|---|---|
+| Entrar con `demo@closetai.lat` | ✅ `POST /entrar` entrega la cookie de sesión |
+| La cookie va marcada `Secure` sobre HTTPS | ✅ (antes no lo estaba) |
+| `/closet` `/hoy` `/estilo` `/probar` `/comprar` `/perfil` con sesión viva | ✅ 6/6, dos vueltas |
+| Diez navegaciones seguidas entre secciones | ✅ la sesión no se cae |
+| El clóset sirve las imágenes con URL firmada | ✅ 4 prendas |
+| Rutas privadas sin sesión | ✅ 307 a `/entrar?destino=…` |
+| Webhook de Stripe sin firma | ✅ HTTP 400, no 500 |
+| Cron sin secreto | ✅ HTTP 401 |
+| Errores 5xx o de JavaScript | ✅ ninguno |
+
+**20 de 20 en dos vueltas completas.** La afirmación importante no es "la página
+carga": es **"no aparece el campo de contraseña"**. Con la primera, una sesión
+caída se ve idéntica a un éxito — que es justo como este bug llegó a producción.

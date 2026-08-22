@@ -115,3 +115,51 @@ silencio ahí es lo peor que puede pasar.
 **Efecto:** las tres pruebas del estilista en verde, y ahora una falla real se
 vería en pantalla en vez de esconderse tras una palomita.
 
+
+## [2026-08-21] — Las pruebas estaban verdes con la sesión rota en producción
+**Observado:** con las cuatro semanas terminadas y todo el pipeline en verde —
+lint, tipos, 14 unitarias, build, 16 e2e — entré al sitio en vivo con la cuenta
+demo y el clóset apareció vacío. Al navegar a otra sección, la app me pedía la
+contraseña otra vez. Intermitente: a veces sí, a veces no.
+
+**Por qué las pruebas no lo vieron:** porque afirmaban lo que no debían. La
+comprobación era *"la página carga sin error"*, y la pantalla de inicio de sesión
+carga perfectamente. Una sesión caída se veía exactamente igual que un éxito.
+Diecinueve pruebas en verde y el producto no funcionaba en producción.
+
+**Diagnóstico:** `proxy.ts` redirige en dos casos —a `/entrar` sin sesión, y a
+`/closet` si ya la tienes— y en ambos devolvía un `NextResponse.redirect()` recién
+creado. Las cookies que `getUser()` acababa de refrescar viven en otro objeto de
+respuesta, y se iban a la basura. Supabase **rota** el token de refresco: entrega
+uno nuevo y anula el anterior. Al tirar el nuevo, el navegador se quedaba con uno
+muerto.
+
+Lo intermitente tiene explicación: Supabase acepta el mismo refresh token repetido
+durante unos segundos, así que la petición siguiente alcanzaba a reparar la cookie
+y la falla se tapaba sola. Con arranques en frío de Vercel de por medio, ese margen
+no alcanza. En local nunca se veía.
+
+**Cambio:** `redirigirConSesion()` copia las cookies a la redirección. Y de paso,
+las cookies de sesión ahora van marcadas `Secure` sobre HTTPS — no lo estaban, ni
+en producción; el flag se decide por el protocolo real, así que localhost sigue
+funcionando igual.
+
+**Sobre la prueba de regresión — dos intentos fallidos antes del bueno:**
+1. La primera versión entraba y navegaba por las rutas privadas. Pasaba **con y
+   sin** el arreglo: recién entrada el token no ha vencido, así que no hay rotación
+   que perder.
+2. La segunda envejecía el token a mano para forzar la rotación, y también pasaba
+   sin el arreglo — por el margen de reutilización del refresh token, la petición
+   siguiente reparaba la cookie.
+3. La tercera afirma lo estrecho y exacto: que la **respuesta de redirección misma**
+   traiga la cookie nueva. Ese es el invariante que se rompía.
+
+Y aun así casi la doy por buena mal: `headersArray()` es asíncrono en esta versión
+de Playwright, así que fallaba con un `TypeError` — y una prueba que revienta
+también "falla". Estuve a un paso de registrar como detección lo que era un error
+mío. **Una prueba de regresión no sirve hasta que la ves fallar por el motivo
+correcto**, con el mensaje que escribiste, y pasar al aplicar el arreglo. Ese ciclo
+completo está verificado.
+
+**Efecto:** 19 e2e en verde, y dos vueltas completas contra el sitio en vivo con la
+cuenta demo: 20 de 20, incluidas diez idas y vueltas seguidas entre secciones.
