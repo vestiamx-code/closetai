@@ -44,3 +44,4 @@ next-env.d.ts
 
 # Config local del agente: launch.json lleva rutas absolutas de esta máquina
 .claude/launch.json
+.env*

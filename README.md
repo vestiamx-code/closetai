@@ -12,18 +12,18 @@ Todo lo que contradiga ese documento está mal.
 
 ## Estado
 
-**Semana 1 terminada.** El clóset digital funciona de punta a punta.
+**Las cuatro semanas están terminadas.** El producto completo está en vivo.
 
 | Módulo | Estado |
 |---|---|
 | **M1 · Cuentas y perfil** | ✅ registro, entrada, recuperación, rutas protegidas, tallas, borrado real de cuenta |
 | **M2 · Clóset digital** | ✅ subida por lotes, compresión a WebP, catalogación con IA, filtros, corrección manual |
-| M3 · Estilista IA | ⬜ Semana 2 |
-| M4 · Aprendizaje de gustos | 🟡 los `feedback_event` ya se están recolectando |
-| M5 · Avatar y try-on | ⬜ Semana 3 · requiere `FAL_KEY` |
-| M6 · Recomendaciones | ⬜ Semana 4 |
-| M7 · Pagos | 🟡 el ledger de créditos ya existe y está probado · falta Stripe |
-| M8 · Panel admin | ⬜ Semana 4 |
+| **M3 · Estilista IA** | ✅ arma outfits con la ropa real, explica el porqué, usa el clima del día |
+| **M4 · Aprendizaje de gustos** | ✅ perfil de estilo con evidencia y confianza, editable · cron diario |
+| **M5 · Avatar y try-on** | ✅ foto base validada por IA · recorte de fondo · render con FASHN |
+| **M6 · Recomendaciones** | ✅ análisis de huecos conservador · enlaces con divulgación de comisión |
+| **M7 · Pagos** | ✅ Checkout + webhook firmado · idempotente · desbloqueo de $100 MXN |
+| **M8 · Panel admin** | ✅ gasto del día, uso por módulo, interruptor de try-on |
 
 ### Infraestructura
 
@@ -33,10 +33,11 @@ Todo lo que contradiga ese documento está mal.
 | Repo + CI | ✅ [vestiamx-code/closetai](https://github.com/vestiamx-code/closetai) |
 | Base de datos | ✅ `closetai-prod` · 13 tablas con RLS · 3 buckets privados |
 | Catalogación con IA | ✅ `gemini-3.5-flash-lite` verificado contra el modelo real |
-| Pruebas | ✅ 12 unitarias · 8 e2e (perfil móvil) |
-| Variables en Vercel | ⛔ **pendiente** — sin esto el sitio en vivo no ve la base de datos |
-| Recorte de fondo (BiRefNet) | ⛔ requiere `FAL_KEY` |
-| Correos propios (Resend) | ⛔ hoy usa el correo de cortesía de Supabase, con límites |
+| Pagos (Stripe) | ✅ en modo prueba · falta borrar 2 endpoints viejos de webhook (ver PENDIENTES) |
+| Pruebas | ✅ 14 unitarias · 19 e2e (perfil móvil) · 5 pruebas contra APIs reales tras `PRUEBAS_VIVAS=1` |
+| Variables en Vercel | ✅ las 23 cargadas en producción y preview |
+| Recorte de fondo (BiRefNet) | ✅ vía fal.ai |
+| Correos propios (Resend) | ✅ configurado |
 
 Pendientes: [`PENDIENTES.md`](PENDIENTES.md) · Runbook: [`docs/SETUP-CUENTAS.md`](docs/SETUP-CUENTAS.md)
 

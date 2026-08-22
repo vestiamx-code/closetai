@@ -41,7 +41,28 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Sobre HTTPS las cookies de sesión tienen que ir marcadas `Secure`. En
+  // local (http://localhost) no, o el navegador las descarta.
+  const esHttps = request.nextUrl.protocol === "https:";
+
   let response = NextResponse.next({ request });
+
+  /**
+   * Redirigir SIN perder la sesión.
+   *
+   * `getUser()` puede rotar el token: Supabase devuelve uno nuevo y anula el
+   * anterior. Esas cookies nuevas se escriben en `response`. Si redirigimos con
+   * un `NextResponse.redirect()` recién creado, se van sin las cookies: el
+   * navegador se queda con el token viejo, que ya no sirve, y la sesión se cae
+   * sola en la siguiente navegación. Hay que copiarlas a mano.
+   */
+  const redirigirConSesion = (url: URL) => {
+    const redireccion = NextResponse.redirect(url);
+    for (const cookie of response.cookies.getAll()) {
+      redireccion.cookies.set(cookie);
+    }
+    return redireccion;
+  };
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -57,7 +78,7 @@ export async function proxy(request: NextRequest) {
           }
           response = NextResponse.next({ request });
           for (const { name, value, options } of cookiesToSet) {
-            response.cookies.set(name, value, options);
+            response.cookies.set(name, value, { ...options, secure: esHttps });
           }
         },
       },
@@ -77,14 +98,14 @@ export async function proxy(request: NextRequest) {
     url.pathname = "/entrar";
     // Para regresarla a donde iba después de iniciar sesión.
     url.searchParams.set("destino", pathname);
-    return NextResponse.redirect(url);
+    return redirigirConSesion(url);
   }
 
   if (user && RUTAS_DE_ENTRADA.some((ruta) => pathname.startsWith(ruta))) {
     const url = request.nextUrl.clone();
     url.pathname = "/closet";
     url.search = "";
-    return NextResponse.redirect(url);
+    return redirigirConSesion(url);
   }
 
   return response;

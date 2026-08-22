@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import { supabaseAnonKey, supabaseUrl } from "./env";
 
@@ -14,6 +14,10 @@ import { supabaseAnonKey, supabaseUrl } from "./env";
 export async function createClient() {
   const cookieStore = await cookies();
 
+  // Detrás del proxy de Vercel el protocolo real llega en `x-forwarded-proto`.
+  // Sobre HTTPS la cookie de sesión va marcada `Secure`; en local, no.
+  const esHttps = (await headers()).get("x-forwarded-proto") === "https";
+
   return createServerClient(supabaseUrl(), supabaseAnonKey(), {
     cookies: {
       getAll() {
@@ -22,7 +26,7 @@ export async function createClient() {
       setAll(cookiesToSet) {
         try {
           for (const { name, value, options } of cookiesToSet) {
-            cookieStore.set(name, value, options);
+            cookieStore.set(name, value, { ...options, secure: esHttps });
           }
         } catch {
           // Los Server Components no pueden escribir cookies. No es un problema:
