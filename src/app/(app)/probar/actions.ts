@@ -64,7 +64,9 @@ export async function registrarFotoBase(rutaImagen: string): Promise<ResultadoAv
     image_path: ruta.data,
     is_primary: true,
     validation: "ok",
-    validation_note: validacion.motivo,
+    // El aviso importa más que el elogio: es lo que la usuaria puede accionar
+    // para que el próximo render salga mejor.
+    validation_note: validacion.aviso || validacion.motivo,
   });
 
   if (error) return { ok: false, motivo: "No pudimos guardar tu foto." };
@@ -102,7 +104,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   const [{ data: prenda }, { data: avatar }] = await Promise.all([
     supabase
       .from("garments")
-      .select("id, image_path, clean_image_path, category, subcategory")
+      .select("id, image_path, clean_image_path, category, subcategory, ai_meta")
       .eq("id", id.data)
       .single(),
     supabase
@@ -128,6 +130,12 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   if ((await saldo(user.id)) < 1) {
     return { ok: false, motivo: "Te quedaste sin créditos.", sinSaldo: true };
   }
+
+  // Cómo leer la foto de la prenda lo dijo el catalogador al mirarla. Si es una
+  // prenda vieja sin ese dato, se asume "puesta": es la suposición conservadora
+  // que el propio prompt indica ante la duda.
+  const metadatos = prenda.ai_meta as { tipo_de_foto?: string } | null;
+  const prendaSola = metadatos?.tipo_de_foto === "prenda_sola";
 
   const rutaPrenda = prenda.clean_image_path ?? prenda.image_path;
   const [firmadaAvatar, firmadaPrenda] = await Promise.all([
@@ -160,6 +168,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
     fotoUsuaria: firmadaAvatar.data.signedUrl,
     fotoPrenda: firmadaPrenda.data.signedUrl,
     categoria,
+    prendaSola,
   });
 
   await admin.from("api_costs").insert({

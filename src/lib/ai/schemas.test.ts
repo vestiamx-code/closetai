@@ -3,6 +3,7 @@ import { parseGarmentCatalog, stripCodeFence } from "./schemas";
 
 const validGarment = {
   categoria: "top",
+  tipo_de_foto: "prenda_sola",
   subcategoria: "playera de algodón",
   colores: ["blanco", "azul marino"],
   patron: "rayas",
@@ -87,5 +88,18 @@ describe("parseGarmentCatalog", () => {
       reason: "unparseable",
       message: "el modelo no devolvió JSON",
     });
+  });
+
+  it("exige tipo_de_foto: sin él, el try-on adivina cómo leer la prenda", () => {
+    const { tipo_de_foto: _omitido, ...sinTipo } = validGarment;
+    const result = parseGarmentCatalog(JSON.stringify(sinTipo));
+    expect(result.ok).toBe(false);
+  });
+
+  it("rechaza un tipo_de_foto inventado", () => {
+    const result = parseGarmentCatalog(
+      JSON.stringify({ ...validGarment, tipo_de_foto: "maniqui" }),
+    );
+    expect(result.ok).toBe(false);
   });
 });

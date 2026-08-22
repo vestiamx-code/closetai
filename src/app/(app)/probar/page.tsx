@@ -19,7 +19,7 @@ export default async function ProbarPage() {
   const [{ data: avatar }, { data: prendas }, { data: renders }, creditos] = await Promise.all([
     supabase
       .from("avatar_photos")
-      .select("id, image_path")
+      .select("id, image_path, validation_note")
       .eq("is_primary", true)
       .eq("validation", "ok")
       .maybeSingle(),
@@ -96,6 +96,13 @@ export default async function ProbarPage() {
                 ) : null}
               </div>
               <p className="mt-2 text-xs text-text-muted">Tu foto base</p>
+              {avatar.validation_note ? (
+                // El aviso de la IA sobre esta foto. No bloquea nada: dice qué
+                // cambiar para que el siguiente render salga mejor.
+                <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-text-muted">
+                  {avatar.validation_note}
+                </p>
+              ) : null}
               <SubirFotoBase userId={user.id} compacto />
             </div>
 

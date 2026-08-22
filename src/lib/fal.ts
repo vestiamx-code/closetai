@@ -102,13 +102,30 @@ export async function recortarFondo(
 
 /**
  * Pone una prenda sobre la foto de la usuaria.
- * `category` le dice al modelo dónde va la prenda; sin eso confunde una blusa
- * con un vestido y el resultado se deforma.
+ *
+ * Los cuatro parámetros de abajo no son afinación fina: sin ellos el render sale
+ * mal de formas concretas, comprobadas contra el modelo real (22-ago-2026).
+ *
+ * `segmentation_free: false` es el más importante. El valor por defecto de FASHN
+ * es `true`, que le dice al modelo que NO recorte la ropa que la usuaria ya trae
+ * puesta: la prenda nueva se pega encima y queda como un babero sobre la
+ * sudadera vieja. Con `false` el modelo segmenta y sustituye de verdad.
+ *
+ * `mode: "quality"` en vez del `balanced` por defecto. Es más lento — de ahí el
+ * tope de tiempo más alto — pero esto se cobra un crédito, y un render feo por
+ * ahorrar segundos es un crédito tirado.
+ *
+ * `garment_photo_type` no se puede dejar en `auto`: adivina, y cuando adivina mal
+ * deforma la prenda. Se lo dice el catalogador, que ya miró la foto. Ojo: NO se
+ * puede deducir de si la prenda tiene recorte — quitarle el fondo a una foto de
+ * alguien con la sudadera puesta deja a la persona recortada, no la sudadera.
  */
 export async function probarPrenda(params: {
   fotoUsuaria: string;
   fotoPrenda: string;
   categoria: "tops" | "bottoms" | "one-pieces";
+  /** true si la foto muestra la prenda sola; false si alguien la trae puesta. */
+  prendaSola: boolean;
 }): Promise<ResultadoFal<{ images: Array<{ url: string }> }>> {
   return ejecutar(
     MODELO_TRYON,
@@ -116,8 +133,12 @@ export async function probarPrenda(params: {
       model_image: params.fotoUsuaria,
       garment_image: params.fotoPrenda,
       category: params.categoria,
+      mode: "quality",
+      segmentation_free: false,
+      garment_photo_type: params.prendaSola ? "flat-lay" : "model",
+      output_format: "png",
     },
-    120_000,
+    180_000,
   );
 }
 

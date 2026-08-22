@@ -105,6 +105,7 @@ describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.FAL_KEY)("try-on real
         fotoUsuaria: "https://storage.googleapis.com/falserverless/example_inputs/model.png",
         fotoPrenda: "https://storage.googleapis.com/falserverless/example_inputs/garment.webp",
         categoria: "tops",
+        prendaSola: true,
       });
 
       console.log("try-on:", JSON.stringify(r).slice(0, 240));

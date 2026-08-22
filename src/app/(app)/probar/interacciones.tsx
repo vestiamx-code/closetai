@@ -25,7 +25,7 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
     setEstado("subiendo");
 
     try {
-      const webp = await comprimirAWebp(archivo);
+      const webp = await comprimirAWebp(archivo, "cuerpo");
       const ruta = `${userId}/${nombreDeArchivo()}`;
       const supabase = createClient();
 

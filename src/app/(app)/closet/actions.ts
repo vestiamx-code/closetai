@@ -93,6 +93,8 @@ export async function catalogarPrenda(rutaImagen: string): Promise<ResultadoCata
         confianza: resultado.garment.confianza,
         modelo: resultado.meta.model,
         version_prompt: resultado.meta.promptVersion,
+        // Lo usa el try-on para decirle al modelo cómo leer la foto de la prenda.
+        tipo_de_foto: resultado.garment.tipo_de_foto,
       },
       ...catalogoAColumnas(resultado.garment),
     })
@@ -122,6 +124,12 @@ const TTL_PARA_FAL = 60 * 10;
  *
  * Falla en silencio hacia la usuaria y ruidosamente en el log: la prenda sigue
  * siendo perfectamente usable con su foto original.
+ *
+ * Reintenta una vez. Los fallos que vimos en producción no fueron rechazos del
+ * modelo — la misma imagen funcionó al volver a mandarla — sino tropiezos de red
+ * o de cola. Sin reintento, la prenda se queda para siempre sin recorte, y eso
+ * después se nota en el try-on: sin recorte hay que mandarle al modelo la foto
+ * original, que suele ser alguien con la prenda puesta.
  */
 async function recortarEnSegundoPlano(garmentId: string, userId: string, ruta: string) {
   try {
@@ -132,9 +140,9 @@ async function recortarEnSegundoPlano(garmentId: string, userId: string, ruta: s
 
     if (!firmada?.signedUrl) return;
 
-    const resultado = await recortarFondo(firmada.signedUrl);
-
     const admin = createAdminClient();
+
+    let resultado = await recortarFondo(firmada.signedUrl);
     await admin.from("api_costs").insert({
       user_id: userId,
       provider: "fal",
@@ -143,7 +151,25 @@ async function recortarEnSegundoPlano(garmentId: string, userId: string, ruta: s
     });
 
     if (!resultado.ok) {
-      console.error("[recorte] no se pudo recortar", { garmentId, motivo: resultado.motivo });
+      console.warn("[recorte] primer intento falló, reintentando", {
+        garmentId,
+        motivo: resultado.motivo,
+      });
+      await new Promise((listo) => setTimeout(listo, 1500));
+      resultado = await recortarFondo(firmada.signedUrl);
+      await admin.from("api_costs").insert({
+        user_id: userId,
+        provider: "fal",
+        operation: "remove_background",
+        est_cost_usd: COSTO_USD.recorte,
+      });
+    }
+
+    if (!resultado.ok) {
+      console.error("[recorte] no se pudo recortar tras dos intentos", {
+        garmentId,
+        motivo: resultado.motivo,
+      });
       return;
     }
 

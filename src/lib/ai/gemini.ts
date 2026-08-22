@@ -67,6 +67,7 @@ const ESQUEMA_PRENDA = {
   type: "object",
   properties: {
     categoria: { type: "string", enum: ["top", "bottom", "vestido", "abrigo", "calzado", "accesorio", "bolsa", "otro"] },
+    tipo_de_foto: { type: "string", enum: ["prenda_sola", "puesta"] },
     subcategoria: { type: "string" },
     colores: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
     patron: { type: "string", enum: ["liso", "rayas", "cuadros", "floral", "estampado", "animal print", "otro"] },
@@ -82,7 +83,7 @@ const ESQUEMA_PRENDA = {
     notas_styling: { type: "string" },
     confianza: { type: "number" },
   },
-  required: ["categoria", "subcategoria", "colores", "patron", "material_aparente", "estilos", "temporadas", "ocasiones", "notas_styling", "confianza"],
+  required: ["categoria", "tipo_de_foto", "subcategoria", "colores", "patron", "material_aparente", "estilos", "temporadas", "ocasiones", "notas_styling", "confianza"],
 } as const;
 
 export type CatalogGarmentResult = GarmentCatalogResult & {
@@ -281,6 +282,12 @@ export type ValidacionAvatar = {
   sirve: boolean;
   motivo: string;
   problema: string;
+  /**
+   * La foto sirve, pero algo va a bajar la calidad del render — casi siempre
+   * ropa holgada, que impide ver la silueta. Se avisa en vez de rechazar:
+   * bloquear una foto usable molesta más que advertir.
+   */
+  aviso: string;
 };
 
 const ESQUEMA_AVATAR = {
@@ -288,6 +295,7 @@ const ESQUEMA_AVATAR = {
   properties: {
     sirve: { type: "boolean" },
     motivo: { type: "string" },
+    aviso: { type: "string" },
     problema: {
       type: "string",
       enum: [
@@ -302,7 +310,7 @@ const ESQUEMA_AVATAR = {
       ],
     },
   },
-  required: ["sirve", "motivo", "problema"],
+  required: ["sirve", "motivo", "problema", "aviso"],
 } as const;
 
 /**
@@ -345,6 +353,7 @@ export async function validarFotoBase(
       sirve: Boolean(datos?.sirve),
       motivo: String(datos?.motivo ?? "No pudimos revisar esta foto."),
       problema: String(datos?.problema ?? "ninguno"),
+      aviso: String(datos?.aviso ?? "").trim(),
       estCostUsd,
     };
   } catch {
@@ -352,6 +361,7 @@ export async function validarFotoBase(
       sirve: false,
       motivo: "No pudimos revisar esta foto. Intenta con otra.",
       problema: "ninguno",
+      aviso: "",
       estCostUsd,
     };
   }

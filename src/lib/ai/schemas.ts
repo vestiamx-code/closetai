@@ -27,8 +27,17 @@ export const occasionSchema = z.enum([
 ]);
 
 /** Catalogación exitosa de una prenda (Apéndice A1). */
+/**
+ * Cómo está fotografiada la prenda. No es un dato cosmético: el modelo de prueba
+ * virtual necesita saberlo (`garment_photo_type`), y adivinarlo mal deforma el
+ * render. No se puede deducir de si hay recorte — quitarle el fondo a una foto
+ * de alguien con la sudadera puesta deja a la persona recortada, no la sudadera.
+ */
+export const garmentPhotoTypeSchema = z.enum(["prenda_sola", "puesta"]);
+
 export const garmentCatalogSchema = z.object({
   categoria: garmentCategorySchema,
+  tipo_de_foto: garmentPhotoTypeSchema,
   subcategoria: z.string().min(1),
   colores: z.array(z.string().min(1)).min(1).max(3),
   patron: garmentPatternSchema,
