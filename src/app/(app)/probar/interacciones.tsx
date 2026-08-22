@@ -7,12 +7,14 @@ import { useState, useTransition } from "react";
 
 import { probar, registrarFotoBase } from "./actions";
 import { Aviso } from "@/components/ui/aviso";
-import { comprimirAWebp, nombreDeArchivo } from "@/lib/imagen";
+import { ALTO_MINIMO_CUERPO, altoOriginal, comprimirAWebp, nombreDeArchivo } from "@/lib/imagen";
 import { createClient } from "@/lib/supabase/client";
 
 export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?: boolean }) {
   const [estado, setEstado] = useState<"listo" | "subiendo" | "revisando">("listo");
   const [error, setError] = useState<string>();
+  /** No es un error: la foto se sube igual, pero conviene saberlo. */
+  const [nota, setNota] = useState<string>();
   const [pendiente, iniciar] = useTransition();
   const router = useRouter();
 
@@ -22,9 +24,21 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
     if (!archivo) return;
 
     setError(undefined);
+    setNota(undefined);
     setEstado("subiendo");
 
     try {
+      // El render sale a la resolución de esta foto. Si entra chica, sale
+      // blanda, y no hay nada que la app pueda hacer después para arreglarlo.
+      // Vale más avisarlo antes de gastar un crédito.
+      if ((await altoOriginal(archivo)) < ALTO_MINIMO_CUERPO) {
+        setNota(
+          "Esta foto es de baja resolución, así que las pruebas van a salir algo borrosas. " +
+            "Si puedes, tómala directo con la cámara y súbela sin mandártela por WhatsApp — " +
+            "esas apps la comprimen mucho.",
+        );
+      }
+
       const webp = await comprimirAWebp(archivo, "cuerpo");
       const ruta = `${userId}/${nombreDeArchivo()}`;
       const supabase = createClient();
@@ -61,6 +75,7 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
         <input type="file" accept="image/*" className="sr-only" onChange={alElegir} disabled={ocupado} />
         {texto ?? "Cambiar foto"}
         {error ? <span className="mt-1 block text-red-600 dark:text-red-400">{error}</span> : null}
+        {nota ? <span className="mt-1 block not-italic text-text-muted">{nota}</span> : null}
       </label>
     );
   }
@@ -70,6 +85,11 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
       {error ? (
         <div className="mb-3">
           <Aviso>{error}</Aviso>
+        </div>
+      ) : null}
+      {nota ? (
+        <div className="mb-3">
+          <Aviso>{nota}</Aviso>
         </div>
       ) : null}
       <label className="block cursor-pointer rounded-lg bg-accent px-5 py-3 text-center font-medium text-accent-contrast transition hover:opacity-90">

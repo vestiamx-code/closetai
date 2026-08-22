@@ -91,7 +91,8 @@ describe("parseGarmentCatalog", () => {
   });
 
   it("exige tipo_de_foto: sin él, el try-on adivina cómo leer la prenda", () => {
-    const { tipo_de_foto: _omitido, ...sinTipo } = validGarment;
+    const sinTipo: Record<string, unknown> = { ...validGarment };
+    delete sinTipo.tipo_de_foto;
     const result = parseGarmentCatalog(JSON.stringify(sinTipo));
     expect(result.ok).toBe(false);
   });

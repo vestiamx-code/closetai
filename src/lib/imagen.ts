@@ -57,6 +57,14 @@ export async function comprimirAWebp(archivo: File, perfil: Perfil = "prenda"): 
  */
 export const ALTO_MINIMO_CUERPO = 1200;
 
+/** Alto en pixeles del archivo original, para avisar antes de subirlo. */
+export async function altoOriginal(archivo: File): Promise<number> {
+  const bitmap = await createImageBitmap(archivo);
+  const alto = bitmap.height;
+  bitmap.close();
+  return alto;
+}
+
 /** Nombre único y sin sorpresas: el original puede traer acentos o espacios. */
 export function nombreDeArchivo(): string {
   return `${crypto.randomUUID()}.webp`;
