@@ -26,6 +26,22 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         </nav>
       </header>
       <main className="flex-1">{children}</main>
+
+      {/*
+        Ancla la página. Sin él, las secciones cortas —Comprar, Tu estilo,
+        Perfil— dejaban media pantalla en blanco y se veían a medio terminar.
+        Y el aviso de privacidad hoy solo se alcanzaba desde la portada: si
+        tratamos fotos del cuerpo como dato sensible, tiene que estar a mano
+        desde dentro de la app, no solo desde fuera.
+      */}
+      <footer className="mt-16 border-t border-border">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>Tu clóset es gratis e ilimitado. Tus fotos son tuyas y las puedes borrar.</p>
+          <Link href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
+            Aviso de privacidad
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }

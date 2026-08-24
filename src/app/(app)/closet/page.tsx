@@ -81,20 +81,27 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
                 className="group block overflow-hidden rounded-xl border border-border bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(20,17,15,0.18)]"
               >
                 {/*
-                  `object-contain` y no `cover`: las prendas vienen recortadas y
-                  con proporciones que no se parecen entre sí — una foto de
-                  cuerpo entero junto a una playera extendida. Recortar al cuadro
-                  le cortaba la cabeza a unas y dejaba a otras flotando chiquitas.
-                  Contenerlas con el mismo margen las pone a una escala pareja.
+                  El encuadre depende de cómo esté fotografiada la prenda, dato
+                  que ya trae el catálogo.
+
+                  Una prenda sola —extendida o en catálogo— se contiene entera:
+                  recortarla al cuadro le come las mangas. Una prenda puesta se
+                  encuadra al torso: si se contiene la foto de cuerpo completo, la
+                  prenda queda diminuta y no se distingue de las demás. Antes todo
+                  usaba `cover` y a las personas les cortaba la cabeza.
                 */}
-                <div className="relative aspect-square bg-surface-2 p-4">
+                <div className="relative aspect-square overflow-hidden bg-surface-2">
                   {urls.get(prenda.clean_image_path ?? prenda.image_path) ? (
                     <Image
                       src={urls.get(prenda.clean_image_path ?? prenda.image_path)!}
                       alt={prenda.subcategory ?? "Prenda"}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-contain p-4 transition duration-300 group-hover:scale-[1.04]"
+                      className={
+                        esPuesta(prenda.ai_meta)
+                          ? "object-cover object-[50%_18%] transition duration-300 group-hover:scale-[1.04]"
+                          : "object-contain p-6 transition duration-300 group-hover:scale-[1.04]"
+                      }
                     />
                   ) : null}
                 </div>
@@ -146,4 +153,12 @@ function ClosetVacio() {
       </Link>
     </div>
   );
+}
+
+/**
+ * ¿La foto muestra a alguien con la prenda puesta? Lo dijo el catalogador al
+ * mirarla. Las prendas viejas no traen el dato; se asume que no.
+ */
+function esPuesta(meta: unknown): boolean {
+  return (meta as { tipo_de_foto?: string } | null)?.tipo_de_foto === "puesta";
 }

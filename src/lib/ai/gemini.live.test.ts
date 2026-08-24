@@ -31,7 +31,13 @@ function loadEnvLocal() {
 }
 loadEnvLocal();
 
-const hasKey = Boolean(process.env.GEMINI_API_KEY);
+/**
+ * La compuerta tiene que exigir las DOS cosas. Con solo la llave, esta prueba
+ * corría en cada `pnpm test:unit`: pegaba a Gemini de verdad, tardaba medio
+ * minuto y fallaba sola cuando la API iba lenta. Una prueba que cuesta dinero
+ * no se corre por accidente.
+ */
+const hasKey = Boolean(process.env.PRUEBAS_VIVAS && process.env.GEMINI_API_KEY);
 
 describe.skipIf(!hasKey)("catalogGarment contra Gemini real", () => {
   it("cataloga una playera de rayas y respeta el contrato", { timeout: 90_000 }, async () => {
