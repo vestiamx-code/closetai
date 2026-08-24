@@ -151,35 +151,36 @@ test.describe("Estilista", () => {
       })),
     );
 
-    const { data: antes } = await a
-      .from("style_profiles")
-      .select("version")
-      .eq("user_id", userId)
-      .single();
-
     await iniciarSesion(page);
     await page.goto("/hoy");
     await page.getByRole("button", { name: "No, gracias" }).first().click();
     await page.getByRole("button", { name: "No es mi estilo" }).first().click();
     await expect(page.getByText(/No te vuelvo a proponer/)).toBeVisible();
 
-    // `after()` corre tras la respuesta, así que hay que darle un momento —
-    // pero muy lejos de las horas que tardaba antes.
-    let despues = antes?.version ?? 0;
-    for (let intento = 0; intento < 20; intento++) {
+    // Lo que se afirma es que la actualización SE DISPARÓ al reaccionar, no que
+    // Gemini haya devuelto un buen perfil. Son cosas distintas: el modelo puede
+    // ir limitado y fallar, y aun así el cableado —que es lo que arregló este
+    // cambio— estaría bien. Mezclarlas daba una prueba que fallaba sola cuando
+    // la cuota andaba justa, y una prueba que falla sola acaba ignorándose.
+    //
+    // La huella de que corrió es el costo registrado: `perfil-estilo.ts` lo
+    // escribe siempre, haya devuelto perfil o no.
+    let intentos = 0;
+    for (let i = 0; i < 20; i++) {
       await page.waitForTimeout(2000);
       const { data } = await a
-        .from("style_profiles")
-        .select("version")
+        .from("api_costs")
+        .select("id")
         .eq("user_id", userId)
-        .single();
-      despues = data?.version ?? 0;
-      if (despues > (antes?.version ?? 0)) break;
+        .eq("operation", "update_style_profile");
+      intentos = data?.length ?? 0;
+      if (intentos > 0) break;
     }
 
-    expect(despues, "el perfil no se reescribió tras la quinta reacción").toBeGreaterThan(
-      antes?.version ?? 0,
-    );
+    expect(
+      intentos,
+      "reaccionar no disparó la actualización del perfil: sigue dependiendo del cron",
+    ).toBeGreaterThan(0);
 
     // Y los eventos quedaron marcados, para no volver a pagarle al modelo por lo mismo.
     const { data: pendientes } = await a

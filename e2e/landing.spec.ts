@@ -43,11 +43,13 @@ test.describe("La landing deja entrar", () => {
   test("hay cómo llegar a la app desde la portada", async ({ page }) => {
     await page.goto("/");
 
-    await page.getByRole("link", { name: "Arma tu clóset gratis" }).click();
+    // La portada repite el llamado a la acción arriba y al cierre, a propósito:
+    // quien baja leyendo no debería tener que subir para entrar.
+    await page.getByRole("link", { name: "Arma tu clóset gratis" }).first().click();
     await expect(page).toHaveURL(/\/registro$/);
 
     await page.goto("/");
-    await page.getByRole("link", { name: "Ya tengo cuenta" }).click();
+    await page.getByRole("link", { name: "Ya tengo cuenta" }).first().click();
     await expect(page).toHaveURL(/\/entrar$/);
   });
 });
