@@ -23,7 +23,12 @@ const PERFILES: Record<Perfil, { lado: number; peso: number; calidades: number[]
 
 export async function comprimirAWebp(archivo: File, perfil: Perfil = "prenda"): Promise<Blob> {
   const { lado, peso, calidades } = PERFILES[perfil];
-  const bitmap = await createImageBitmap(archivo);
+
+  // `imageOrientation: "from-image"` no es opcional. Las fotos de celular traen
+  // la rotación en los metadatos EXIF, no en los pixeles: el celular las guarda
+  // acostadas y marca "esto va girado 90°". Sin esta opción el canvas dibuja los
+  // pixeles crudos y la prenda queda de lado — pasó con una sudadera del clóset.
+  const bitmap = await createImageBitmap(archivo, { imageOrientation: "from-image" });
 
   const escala = Math.min(1, lado / Math.max(bitmap.width, bitmap.height));
   const ancho = Math.round(bitmap.width * escala);
@@ -59,7 +64,7 @@ export const ALTO_MINIMO_CUERPO = 1200;
 
 /** Alto en pixeles del archivo original, para avisar antes de subirlo. */
 export async function altoOriginal(archivo: File): Promise<number> {
-  const bitmap = await createImageBitmap(archivo);
+  const bitmap = await createImageBitmap(archivo, { imageOrientation: "from-image" });
   const alto = bitmap.height;
   bitmap.close();
   return alto;

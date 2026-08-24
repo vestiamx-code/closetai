@@ -85,7 +85,7 @@ export default async function HoyPage() {
                             alt={prenda.subcategory ?? "Prenda"}
                             fill
                             sizes="(max-width: 640px) 33vw, 200px"
-                            className="object-cover"
+                            className="object-contain p-2"
                           />
                         ) : null}
                       </li>

@@ -38,7 +38,7 @@ export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) 
               alt={prenda.subcategory ?? "Prenda"}
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
-              className="object-cover"
+              className="object-contain p-6"
             />
           ) : null}
         </div>

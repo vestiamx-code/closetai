@@ -184,7 +184,7 @@ export function ProbadorPrendas({
                     alt={prenda.nombre}
                     fill
                     sizes="120px"
-                    className="object-cover"
+                    className="object-contain p-2"
                   />
                 ) : null}
                 {probando === prenda.id ? (

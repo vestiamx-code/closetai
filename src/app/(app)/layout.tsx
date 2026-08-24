@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { Navegacion } from "./navegacion";
+
 import { salir } from "@/app/(auth)/actions";
 import { requireUser } from "@/lib/auth";
 
@@ -14,21 +16,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             ClosetAI
           </Link>
           <div className="flex items-center gap-5 text-sm">
-            <Link href="/hoy" className="text-text-muted transition hover:text-text">
-              Hoy
-            </Link>
-            <Link href="/closet" className="text-text-muted transition hover:text-text">
-              Clóset
-            </Link>
-            <Link href="/probar" className="text-text-muted transition hover:text-text">
-              Probar
-            </Link>
-            <Link href="/estilo" className="text-text-muted transition hover:text-text">
-              Tu estilo
-            </Link>
-            <Link href="/perfil" className="text-text-muted transition hover:text-text">
-              Perfil
-            </Link>
+            <Navegacion />
             <form action={salir}>
               <button type="submit" className="text-text-muted transition hover:text-text">
                 Salir

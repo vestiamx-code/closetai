@@ -78,22 +78,33 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
             <li key={prenda.id}>
               <Link
                 href={`/closet/${prenda.id}`}
-                className="group block overflow-hidden rounded-xl border border-border bg-surface transition hover:border-accent/50"
+                className="group block overflow-hidden rounded-xl border border-border bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(20,17,15,0.18)]"
               >
-                <div className="relative aspect-square bg-surface-2">
+                {/*
+                  `object-contain` y no `cover`: las prendas vienen recortadas y
+                  con proporciones que no se parecen entre sí — una foto de
+                  cuerpo entero junto a una playera extendida. Recortar al cuadro
+                  le cortaba la cabeza a unas y dejaba a otras flotando chiquitas.
+                  Contenerlas con el mismo margen las pone a una escala pareja.
+                */}
+                <div className="relative aspect-square bg-surface-2 p-4">
                   {urls.get(prenda.clean_image_path ?? prenda.image_path) ? (
                     <Image
                       src={urls.get(prenda.clean_image_path ?? prenda.image_path)!}
                       alt={prenda.subcategory ?? "Prenda"}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-cover transition group-hover:scale-[1.03]"
+                      className="object-contain p-4 transition duration-300 group-hover:scale-[1.04]"
                     />
                   ) : null}
                 </div>
-                <div className="p-3">
-                  <p className="truncate text-sm font-medium">{prenda.subcategory ?? "Prenda"}</p>
-                  <p className="truncate text-xs text-text-muted">{prenda.colors.join(" · ")}</p>
+                <div className="border-t border-border/60 px-3 py-2.5">
+                  <p className="truncate text-sm font-medium first-letter:uppercase">
+                    {prenda.subcategory ?? "Prenda"}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-text-muted first-letter:uppercase">
+                    {prenda.colors.join(" · ")}
+                  </p>
                 </div>
               </Link>
             </li>
