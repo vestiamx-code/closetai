@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Navegacion } from "./navegacion";
+import { NavegacionEscritorio, NavegacionMovil } from "./navegacion";
 
 import { salir } from "@/app/(auth)/actions";
 import { requireUser } from "@/lib/auth";
@@ -16,7 +16,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             ClosetAI
           </Link>
           <div className="flex items-center gap-5 text-sm">
-            <Navegacion />
+            <NavegacionEscritorio />
             <form action={salir}>
               <button type="submit" className="text-text-muted transition hover:text-text">
                 Salir
@@ -34,7 +34,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         tratamos fotos del cuerpo como dato sensible, tiene que estar a mano
         desde dentro de la app, no solo desde fuera.
       */}
-      <footer className="mt-16 border-t border-border">
+      <footer className="mt-16 border-t border-border pb-[calc(env(safe-area-inset-bottom)+4.5rem)] sm:pb-0">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>Tu clóset es gratis e ilimitado. Tus fotos son tuyas y las puedes borrar.</p>
           <Link href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
@@ -42,6 +42,8 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           </Link>
         </div>
       </footer>
+
+      <NavegacionMovil />
     </div>
   );
 }

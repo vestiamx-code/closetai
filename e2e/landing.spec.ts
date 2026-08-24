@@ -51,3 +51,16 @@ test.describe("La landing deja entrar", () => {
     await expect(page).toHaveURL(/\/entrar$/);
   });
 });
+
+test.describe("Navegación en teléfono", () => {
+  // El encabezado se rompía en móvil: con seis enlaces, "Tu estilo" se partía
+  // en dos líneas y "Salir" se salía de la pantalla. En una app que se usa
+  // desde el celular, eso no es un detalle estético.
+  test("el encabezado no desborda a lo ancho", async ({ page }) => {
+    await page.goto("/entrar");
+    const desborda = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    );
+    expect(desborda, "la página se desplaza horizontalmente").toBe(false);
+  });
+});
