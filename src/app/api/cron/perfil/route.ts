@@ -1,19 +1,21 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { updateStyleProfile } from "@/lib/ai/gemini";
-import { PERFIL_VACIO, styleProfileSchema } from "@/lib/ai/outfits";
+import { actualizarPerfilSiToca } from "@/lib/perfil-estilo";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Reescribe el perfil de estilo de quienes tengan feedback sin procesar.
+ * Red de seguridad del aprendizaje de gustos.
  *
- * Corre por cron (§3.3 M4: cada 5 eventos o 24 h, lo que ocurra primero).
+ * El perfil se reescribe al reaccionar (ver `perfil-estilo.ts`). Este cron
+ * atrapa lo que se quedó fuera: quien acumuló eventos sin llegar al umbral de 5
+ * y ya pasó de 24 horas, y cualquier actualización que haya fallado en el
+ * momento. Antes esto era el único camino, y por eso "cada 5 eventos" tardaba
+ * hasta un día en cumplirse.
+ *
  * Protegido con CRON_SECRET: sin eso, cualquiera podría dispararlo y quemar
  * cuota de Gemini a costa del proyecto.
  */
 
-/** Eventos acumulados que justifican reescribir el perfil. */
-const UMBRAL_EVENTOS = 5;
 /** Techo de usuarias por corrida, para que el gasto por ejecución sea acotado. */
 const MAX_USUARIAS = 50;
 
@@ -29,7 +31,7 @@ export async function GET(request: NextRequest) {
 
   const { data: pendientes } = await admin
     .from("feedback_events")
-    .select("user_id, type, payload, garment_id, outfit_id, created_at")
+    .select("user_id")
     .eq("processed", false)
     .order("created_at", { ascending: true })
     .limit(500);
@@ -38,72 +40,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ procesadas: 0, motivo: "sin eventos pendientes" });
   }
 
-  // Agrupar por usuaria: un solo perfil reescrito por persona, no uno por evento.
-  const porUsuaria = new Map<string, typeof pendientes>();
-  for (const evento of pendientes) {
-    const lista = porUsuaria.get(evento.user_id) ?? [];
-    lista.push(evento);
-    porUsuaria.set(evento.user_id, lista);
-  }
+  const usuarias = [...new Set(pendientes.map((e) => e.user_id))].slice(0, MAX_USUARIAS);
 
-  const resultados: Array<{ user_id: string; ok: boolean }> = [];
-  let procesadas = 0;
-
-  for (const [userId, eventos] of porUsuaria) {
-    if (procesadas >= MAX_USUARIAS) break;
-
-    const masViejo = new Date(eventos[0].created_at).getTime();
-    const hanPasado24h = Date.now() - masViejo > 24 * 60 * 60 * 1000;
-    if (eventos.length < UMBRAL_EVENTOS && !hanPasado24h) continue;
-
-    const { data: fila } = await admin
-      .from("style_profiles")
-      .select("profile, version")
-      .eq("user_id", userId)
-      .single();
-
-    const validado = styleProfileSchema.safeParse(fila?.profile ?? {});
-    const actual = validado.success ? validado.data : PERFIL_VACIO;
-
-    const { perfil, estCostUsd, model } = await updateStyleProfile(
-      actual,
-      eventos.map((e) => ({
-        tipo: e.type,
-        detalle: e.payload,
-        cuando: e.created_at,
-      })),
+  const resultados: Array<{ user_id: string; ok: boolean; motivo?: string }> = [];
+  for (const userId of usuarias) {
+    const r = await actualizarPerfilSiToca(userId);
+    resultados.push(
+      r.actualizado ? { user_id: userId, ok: true } : { user_id: userId, ok: false, motivo: r.motivo },
     );
-
-    await admin.from("api_costs").insert({
-      user_id: userId,
-      provider: "google",
-      operation: "update_style_profile",
-      est_cost_usd: estCostUsd,
-    });
-
-    if (perfil) {
-      await admin
-        .from("style_profiles")
-        .update({
-          profile: perfil,
-          version: (fila?.version ?? 0) + 1,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
-    }
-
-    // Los eventos se marcan aunque el modelo falle: reintentar indefinidamente
-    // sobre los mismos eventos gastaría cuota sin aprender nada nuevo.
-    await admin
-      .from("feedback_events")
-      .update({ processed: true })
-      .eq("user_id", userId)
-      .eq("processed", false);
-
-    resultados.push({ user_id: userId, ok: Boolean(perfil) });
-    procesadas += 1;
-    void model;
   }
 
-  return NextResponse.json({ procesadas, resultados });
+  return NextResponse.json({
+    procesadas: resultados.filter((r) => r.ok).length,
+    revisadas: resultados.length,
+    resultados,
+  });
 }

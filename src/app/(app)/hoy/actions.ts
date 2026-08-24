@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { requireUser } from "@/lib/auth";
@@ -9,6 +10,7 @@ import { PERFIL_VACIO, styleProfileSchema } from "@/lib/ai/outfits";
 import { obtenerClima } from "@/lib/clima";
 import { revisarLimite } from "@/lib/limites";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { actualizarPerfilEnSegundoPlano } from "@/lib/perfil-estilo";
 import { createClient } from "@/lib/supabase/server";
 
 export type ResultadoOutfits = { ok: true; cuantos: number } | { ok: false; motivo: string };
@@ -178,6 +180,10 @@ export async function reaccionar(formData: FormData): Promise<{ error?: string }
     return { error: "Guardamos tu respuesta, pero no pudimos registrarla para el aprendizaje." };
   }
 
+  // El perfil se reescribe después de responderle a la usuaria: aprender no debe
+  // hacerla esperar, pero tampoco debe esperar al cron de mañana.
+  after(() => actualizarPerfilEnSegundoPlano(user.id));
+
   revalidatePath("/hoy");
   revalidatePath("/estilo");
   return {};
@@ -200,6 +206,8 @@ export async function comentar(formData: FormData): Promise<{ error?: string }> 
     outfit_id: datos.data.outfit_id,
     payload: { texto: datos.data.texto },
   });
+
+  after(() => actualizarPerfilEnSegundoPlano(user.id));
 
   revalidatePath("/hoy");
   return {};

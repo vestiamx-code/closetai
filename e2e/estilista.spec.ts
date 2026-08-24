@@ -125,4 +125,68 @@ test.describe("Estilista", () => {
 
     expect(data?.length).toBeGreaterThan(0);
   });
+
+  test("al llegar a 5 reacciones, el perfil se reescribe sin esperar al cron", async ({ page }) => {
+    // El sondeo tiene que caber dentro del tiempo de la prueba. Con el timeout
+    // por defecto, la falla salía como "Test timeout" en vez del mensaje escrito
+    // abajo — y un fallo real se veía igual que una prueba mal hecha.
+    test.setTimeout(120_000);
+    // Esta es la regla del documento (§3.3 M4): cada 5 eventos o 24 horas.
+    // Vivía solo dentro del cron de las 8am, así que "cada 5 eventos" en la
+    // práctica quería decir "mañana". Alguien que se registraba y reaccionaba a
+    // diez outfits veía "Todavía no te conozco" hasta el día siguiente.
+
+    const a = admin();
+
+    // Dejar el contador justo por debajo del umbral: cuatro eventos sin procesar.
+    // La quinta reacción la hace la usuaria en la interfaz, que es el camino que
+    // se quiere probar.
+    await a.from("feedback_events").update({ processed: true }).eq("user_id", userId);
+    await a.from("feedback_events").insert(
+      Array.from({ length: 4 }, (_, i) => ({
+        user_id: userId,
+        type: "reject",
+        payload: { motivo: `siembra ${i}` },
+        processed: false,
+      })),
+    );
+
+    const { data: antes } = await a
+      .from("style_profiles")
+      .select("version")
+      .eq("user_id", userId)
+      .single();
+
+    await iniciarSesion(page);
+    await page.goto("/hoy");
+    await page.getByRole("button", { name: "No, gracias" }).first().click();
+    await page.getByRole("button", { name: "No es mi estilo" }).first().click();
+    await expect(page.getByText(/No te vuelvo a proponer/)).toBeVisible();
+
+    // `after()` corre tras la respuesta, así que hay que darle un momento —
+    // pero muy lejos de las horas que tardaba antes.
+    let despues = antes?.version ?? 0;
+    for (let intento = 0; intento < 20; intento++) {
+      await page.waitForTimeout(2000);
+      const { data } = await a
+        .from("style_profiles")
+        .select("version")
+        .eq("user_id", userId)
+        .single();
+      despues = data?.version ?? 0;
+      if (despues > (antes?.version ?? 0)) break;
+    }
+
+    expect(despues, "el perfil no se reescribió tras la quinta reacción").toBeGreaterThan(
+      antes?.version ?? 0,
+    );
+
+    // Y los eventos quedaron marcados, para no volver a pagarle al modelo por lo mismo.
+    const { data: pendientes } = await a
+      .from("feedback_events")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("processed", false);
+    expect(pendientes?.length ?? 0).toBe(0);
+  });
 });

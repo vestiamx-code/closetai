@@ -1,10 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { requireUser } from "@/lib/auth";
 import { PERFIL_VACIO, styleProfileSchema, type StyleProfile } from "@/lib/ai/outfits";
+import { actualizarPerfilEnSegundoPlano } from "@/lib/perfil-estilo";
 import { createClient } from "@/lib/supabase/server";
 
 const LISTAS = [
@@ -65,6 +67,8 @@ export async function corregirInferencia(formData: FormData): Promise<{ error?: 
     type: "profile_fix",
     payload: { lista: datos.data.lista, valor_rechazado: datos.data.valor },
   });
+
+  after(() => actualizarPerfilEnSegundoPlano(user.id));
 
   revalidatePath("/estilo");
   return {};

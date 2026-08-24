@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { catalogGarment } from "@/lib/ai/gemini";
@@ -8,6 +9,7 @@ import { COSTO_USD, recortarFondo } from "@/lib/fal";
 import { catalogoAColumnas } from "@/lib/closet/tipos";
 import { revisarLimite } from "@/lib/limites";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { actualizarPerfilEnSegundoPlano } from "@/lib/perfil-estilo";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 
@@ -236,6 +238,8 @@ export async function corregirPrenda(formData: FormData): Promise<{ error?: stri
     garment_id: datos.data.id,
     payload: { antes, despues: { subcategory: datos.data.subcategory, category: datos.data.category } },
   });
+
+  after(() => actualizarPerfilEnSegundoPlano(user.id));
 
   revalidatePath("/closet");
   return {};
