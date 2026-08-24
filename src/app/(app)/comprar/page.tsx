@@ -11,9 +11,16 @@ export default async function ComprarPage() {
   const user = await requireUser();
   const supabase = await createClient();
 
-  const [{ data: perfil }, creditos] = await Promise.all([
+  const [{ data: perfil }, creditos, { data: movimientos }] = await Promise.all([
     supabase.from("profiles").select("plan").eq("id", user.id).single(),
     saldo(user.id),
+    // El historial es de la usuaria y no se mostraba en ningún lado. Si cobramos
+    // por crédito, tiene derecho a ver en qué se fueron sin preguntarnos.
+    supabase
+      .from("credit_ledger")
+      .select("id, delta, reason, created_at")
+      .order("created_at", { ascending: false })
+      .limit(8),
   ]);
 
   const yaCompro = perfil?.plan === "lifetime";
@@ -68,10 +75,40 @@ export default async function ComprarPage() {
         </div>
       </div>
 
-      <p className="mt-8 text-center text-sm text-text-muted text-pretty">
+      {movimientos && movimientos.length > 0 ? (
+        <section className="mt-10">
+          <h2 className="font-display text-lg font-semibold">Tus movimientos</h2>
+          <ul className="mt-3 divide-y divide-border border-t border-border">
+            {movimientos.map((m) => (
+              <li key={m.id} className="flex items-baseline justify-between gap-4 py-2.5 text-sm">
+                <span className="text-text-muted">
+                  {NOMBRE_MOVIMIENTO[m.reason] ?? m.reason}
+                  <span className="ml-2 text-xs">{fecha(m.created_at)}</span>
+                </span>
+                <span className={m.delta > 0 ? "font-medium text-accent" : "text-text-muted"}>
+                  {m.delta > 0 ? `+${m.delta}` : m.delta}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <p className="mt-10 text-center text-sm text-text-muted text-pretty">
         Tus prendas y tus fotos siguen siendo tuyas, pagues o no. El clóset es gratis e ilimitado
         para siempre.
       </p>
     </div>
   );
+}
+
+/** Los motivos se guardan en clave; a la usuaria se le muestran en su idioma. */
+const NOMBRE_MOVIMIENTO: Record<string, string> = {
+  "compra:lifetime": "Desbloqueo de ClosetAI Completo",
+  "compra:credits_20": "Recarga de 20 créditos",
+  tryon: "Prueba virtual",
+};
+
+function fecha(iso: string): string {
+  return new Date(iso).toLocaleDateString("es-MX", { day: "numeric", month: "short" });
 }
