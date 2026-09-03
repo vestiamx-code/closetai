@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
 
-import { cargarEnv } from "./entorno";
+import { cargarEnv, hayCuotaDeRazonamiento } from "./entorno";
 
 /**
  * Semana 1 · `/core` — el módulo generativo público.
@@ -27,6 +27,13 @@ const admin = () =>
 
 test.describe("Núcleo de estilo (/core)", () => {
   test.skip(!hay, "Faltan credenciales: la prueba se salta");
+
+  // El tope diario del nivel gratuito de Gemini deja al modelo de razonamiento
+  // sin cuota. Eso no es un fallo de la app: se salta con motivo, no se finge
+  // que pasó.
+  test.beforeAll(async () => {
+    test.skip(!(await hayCuotaDeRazonamiento()), "Gemini sin cuota (429): no se pudo comprobar");
+  });
 
   test("carga sin sesión y muestra el formulario", async ({ page }) => {
     // Sin storageState: este contexto no tiene cookies. Es la prueba de que la

@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
 
-import { cargarEnv } from "./entorno";
+import { cargarEnv, hayCuotaDeRazonamiento } from "./entorno";
 
 /**
  * Recorrido de la Semana 2: el estilista arma outfits con el clóset real,
@@ -29,6 +29,13 @@ test.describe.configure({ mode: "serial" });
 
 test.describe("Estilista", () => {
   test.skip(!hay, "Faltan credenciales");
+
+  // El tope diario del nivel gratuito de Gemini deja al modelo de razonamiento
+  // sin cuota. Eso no es un fallo de la app: se salta con motivo, no se finge
+  // que pasó.
+  test.beforeAll(async () => {
+    test.skip(!(await hayCuotaDeRazonamiento()), "Gemini sin cuota (429): no se pudo comprobar");
+  });
 
   let userId = "";
   const admin = () =>
