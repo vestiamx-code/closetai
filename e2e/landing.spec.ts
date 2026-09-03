@@ -65,4 +65,14 @@ test.describe("Navegación en teléfono", () => {
     );
     expect(desborda, "la página se desplaza horizontalmente").toBe(false);
   });
+
+  test("la portada lleva a /core sin pedir cuenta", async ({ page }) => {
+    // El módulo de la Semana 1 existe para dar valor antes del registro. Si no
+    // se puede llegar a él desde la portada, no cumple su función: fue el mismo
+    // error que la app entera tuvo en la Semana 0.
+    await page.goto("/");
+    await page.getByRole("link", { name: "Extraer mi núcleo" }).click();
+    await expect(page).toHaveURL(/\/core$/);
+    await expect(page.getByLabel(/Cómo te gusta vestirte/i)).toBeVisible();
+  });
 });

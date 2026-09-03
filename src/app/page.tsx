@@ -78,12 +78,20 @@ export default function Home() {
 
         <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
           <span className="font-display text-xl font-semibold tracking-tight">ClosetAI</span>
-          <Link
-            href="/entrar"
-            className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
-          >
-            Entrar
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/core"
+              className="rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text"
+            >
+              Núcleo de estilo
+            </Link>
+            <Link
+              href="/entrar"
+              className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
+            >
+              Entrar
+            </Link>
+          </div>
         </header>
 
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 pb-16">
@@ -206,6 +214,30 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ---------- Puerta a /core ---------- */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-8">
+        <div
+          className="rounded-2xl px-8 py-12 sm:px-14 sm:py-16"
+          style={{ background: "var(--arena)" }}
+        >
+          <p className="text-xs tracking-[0.2em] text-text-muted uppercase">
+            ¿Todavía no quieres subir fotos?
+          </p>
+          <h2 className="mt-5 max-w-2xl font-display text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">
+            Cuéntame cómo te gusta vestirte y te digo cuál es tu núcleo de estilo.
+          </h2>
+          <p className="mt-4 max-w-xl leading-relaxed text-text-muted text-pretty">
+            Sin cuenta y sin fotografiar una sola prenda. Un minuto.
+          </p>
+          <Link
+            href="/core"
+            className="mt-8 inline-flex items-center justify-center rounded-full bg-text px-8 py-3.5 text-base font-medium text-bg transition hover:opacity-90"
+          >
+            Extraer mi núcleo
+          </Link>
         </div>
       </section>
 
