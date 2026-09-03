@@ -127,3 +127,31 @@ legible, no escondida en los términos.
 
 **Firma:** ____________________
 
+---
+
+## Semana 1 — [2026-09-02] — Que admita cuando no sabe — *borrador, pendiente de firma*
+
+La tarea pedía convertir una metodología previa en un módulo generativo. Pude
+haber hecho un extractor de textos genérico y habría cumplido la letra. Elegí
+convertir el Apéndice A3 de mi documento maestro —cómo ClosetAI deduce el estilo
+de alguien— porque eso resuelve un problema real que ya me habían señalado: que
+mi app pide fotografiar diez prendas antes de darte nada. `/core` da algo útil en
+un minuto, sin cuenta y sin fotos.
+
+La decisión de la que estoy más segura es la más chica. El prompt obliga al modelo
+a declarar qué tan seguro está y qué le faltó saber, y le prohíbe el relleno de
+revista. Lo probé con un texto vago a propósito y devolvió 25% de confianza, con
+la paleta y las siluetas vacías. Un extractor que le inventa una paleta a alguien
+que nunca mencionó un color se siente listo diez segundos y falso para siempre.
+
+Rechacé pedir cuenta para guardar. Es lo cómodo y es exactamente el problema que
+esta página ataca.
+
+Y hay una corrección que me costó: dos veces escribí pruebas que estaban verdes
+sin probar nada. La segunda pasaba en una décima de segundo porque el texto que
+buscaba ya estaba en el párrafo de introducción. Es la misma falla de la semana
+pasada con otro disfraz. Ya aprendí a desconfiar de una prueba que pasa
+demasiado rápido.
+
+**Firma:** ____________________
+

@@ -163,3 +163,32 @@ completo está verificado.
 
 **Efecto:** 19 e2e en verde, y dos vueltas completas contra el sitio en vivo con la
 cuenta demo: 20 de 20, incluidas diez idas y vueltas seguidas entre secciones.
+
+## [2026-09-02] — Dos pruebas mal escritas antes de una bien escrita
+**Observado:** la prueba de `/core` fallaba con la tarjeta visible en pantalla. El
+módulo funcionaba; la prueba no.
+
+**Primer intento.** Afirmaba `getByText("Tu núcleo de estilo")`. Falló siempre,
+aunque la tarjeta estuviera ahí. El encabezado usa `uppercase` de CSS y Playwright
+lee el texto **ya transformado**: buscaba "Tu núcleo de estilo" contra "TU NÚCLEO
+DE ESTILO".
+
+**Segundo intento.** Lo cambié a una expresión insensible a mayúsculas. Entonces
+pasó — pero pasó **al instante, en 0.1 s**, sin que hubiera ocurrido ninguna
+generación. El párrafo de introducción de la página dice *"destilo tu núcleo de
+estilo: tus principios, tu paleta"*, así que la aserción coincidía con la página
+recién cargada. La prueba estaba verde y no probaba nada.
+
+**Lo que quedó.** Las aserciones se anclan al elemento de la tarjeta, no a la
+página: `page.locator("article")`. Así no hay forma de que coincidan con el texto
+de la introducción.
+
+**Por qué importa:** es exactamente la misma falla de la Semana 0, con otro
+disfraz. Allá la prueba afirmaba que "la página carga sin error" y la pantalla de
+login carga perfecto. Aquí afirmaba un texto que ya existía antes de generar nada.
+Las dos veces la aserción podía cumplirse **sin que la función funcionara**.
+
+Y hubo un rato en que creí que el bug estaba en el producto: llegué a instrumentar
+la Server Action paso por paso para encontrar dónde se colgaba. Los logs mostraron
+`modelo respondió, ok = true` en 7.7 s — el módulo llevaba todo el tiempo bien.
+Cuando una prueba y el producto se contradicen, la prueba también es sospechosa.

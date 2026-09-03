@@ -64,3 +64,66 @@ dado por sabido habría dejado la aplicación sin protección de rutas y sin un 
 error que lo delatara.
 **Commit:** feat: week 1 — auth and digital closet
 
+
+---
+
+# Semana 1 · Núcleo de estilo (`/core`)
+
+## [2026-09-02] — Sesión 1 · Planear antes de programar
+**Prompt:** "Aquí está la tarea de la Semana 1 y su rúbrica. Dime qué ya tenemos y qué falta,
+antes de escribir nada."
+**Resultado:** inventario contra la rúbrica. Cinco motores generativos ya existían, pero todos
+detrás de un login; `/core` daba 404. La rúbrica tiene un tope duro: sin página en vivo, máximo
+5/10.
+**Juicio humano:** se decidió que el "módulo generativo" fuera el Apéndice A3 del Documento
+Maestro —cómo ClosetAI deduce el estilo— y no un extractor genérico de textos. Un extractor
+genérico habría cumplido la letra de la tarea sin servirle al producto.
+**Commit:** a4e9890
+
+## [2026-09-02] — Sesión 2 · El packet, antes del código
+**Prompt:** "Escribe el Build Discipline Packet de esta función y **commitéalo antes** de tocar
+código, para que el historial pruebe el orden."
+**Resultado:** `docs/SEMANA-1-PACKET.md` con problema, usuaria, éxito, UX, recorte de alcance,
+especificación con criterios comprobables, arquitectura, stack, DevOps y plan de pruebas.
+**Juicio humano:** el recorte de alcance se escribió con razones, no como lista de deseos. No
+conectar el núcleo al estilista todavía es deliberado: primero hay que comprobar que el núcleo
+que sale es bueno.
+**Commit:** a4e9890
+
+## [2026-09-02] — Sesión 3 · Migración y contrato
+**Prompt:** "Escribe la migración de `core_outputs` y el contrato zod. No inventes columnas."
+**Resultado:** migración 005 y `styleCoreSchema` con topes por lista.
+**Juicio humano:** dos decisiones de seguridad que no venían en la tarea. La tabla revoca
+`insert` a `anon` —si no, cualquiera escribe filas saltándose el contrato— y la consulta pública
+**no selecciona la columna `entrada`**: lo que alguien escribe sobre sí misma es suyo, y la
+lista muestra el núcleo, no la confesión.
+**Commit:** (ver commit de la función)
+
+## [2026-09-02] — Sesión 4 · El prompt del módulo
+**Prompt:** "Escribe el prompt de extracción. Que no invente: si el texto es vago, que lo diga."
+**Resultado:** `src/lib/ai/prompts/core.ts`, versionado como los demás. Prohíbe explícitamente el
+relleno de revista ("elegancia atemporal", "versátil y sofisticado") y obliga a declarar
+`confianza` y `falta`.
+**Juicio humano:** temperatura 0.45, elegida probando. Con 0 el modelo repetía las mismas cinco
+frases para entradas distintas; más alto empezaba a inventar colores que nadie mencionó.
+**Commit:** (ver commit de la función)
+
+## [2026-09-02] — Sesión 5 · Página y guardado
+**Prompt:** "Arma `/core`: formulario, tarjeta estructurada, botón de guardar y la lista de
+guardados. Pública, sin sesión."
+**Resultado:** la página fuera del grupo `(app)` para que no herede la exigencia de sesión, con
+las Server Actions `generarNucleo` y `guardarNucleo`.
+**Juicio humano:** `guardarNucleo` **vuelve a validar** lo que llega del navegador. Una Server
+Action se puede llamar por POST directo; confiar en que el payload sigue siendo el que generamos
+sería dejar la puerta abierta.
+**Commit:** (ver commit de la función)
+
+## [2026-09-02] — Sesión 6 · Probar contra el sitio real
+**Prompt:** "Corre las tres pruebas contra producción, no contra localhost, con entradas
+distintas — incluida una vaga a propósito."
+**Resultado:** las tres pasaron. La tercera es la que importa: con texto vago el módulo devolvió
+25% de confianza, paleta vacía y dijo qué le faltaba saber.
+**Juicio humano:** dos pruebas mías estuvieron mal escritas antes de estarlo bien, y las dos
+fallaron igual: afirmaban texto que **también existe en la página recién cargada**. Ver el
+Iteration Log.
+**Commit:** (ver commit de evidencia)

@@ -210,3 +210,35 @@ apareció el bug de sesión que ninguna prueba local vio.
 **20 de 20 en dos vueltas completas.** La afirmación importante no es "la página
 carga": es **"no aparece el campo de contraseña"**. Con la primera, una sesión
 caída se ve idéntica a un éxito — que es justo como este bug llegó a producción.
+
+---
+
+# Semana 1 · `/core` — las tres corridas
+
+**Contra el sitio en vivo (closetai.lat/core), no contra localhost.** Cada corrida
+se guardó y quedó su fila en `core_outputs`.
+
+| # | Entrada | Resultado esperado | Resultado real | Qué falló | Qué cambié |
+|---|---|---|---|---|---|
+| 1 | Texto rico y específico: comodidad, negro y beige, jeans anchos, tenis, saco para oficina | Núcleo completo, confianza alta, paleta con los colores que mencionó | 6.4 s · **90 %** · 3 principios · paleta `negro · beige · blanco` · 3 siluetas · 2 a evitar | Nada | — |
+| 2 | Estilo opuesto a propósito: color, vestidos floreados, aretes grandes, odia el negro, sandalias | Un núcleo **distinto** al anterior. Si saliera parecido, el módulo estaría devolviendo plantillas | 7.2 s · **90 %** · 4 principios · paleta `Rojo · Amarillo` · sin negro por ningún lado | Nada | — |
+| 3 | Texto vago a propósito: "me gusta verme bien, nada del otro mundo, lo normal para el diario" | Que **admita que no sabe** en vez de rellenar | 7.5 s · **25 %** · 2 principios · **paleta vacía, siluetas vacías, evitar vacío** · dice qué le faltó preguntar | Nada | — |
+
+La corrida 3 es la que de verdad se estaba probando. Un extractor que devuelve
+una paleta bonita para alguien que nunca mencionó un color se siente inteligente
+durante diez segundos y falso para siempre. El prompt prohíbe el relleno y el
+resultado lo confirma: con poca información, las listas salen vacías y la
+confianza baja a 25 %.
+
+## Pruebas automáticas de la semana
+
+**Unitarias del contrato (8 nuevas)** — que rechace menos de 2 principios, más de
+5, una confianza fuera de rango, un arreglo con varios núcleos, y que distinga el
+rechazo del modelo de un error de formato.
+
+**End-to-end (5 nuevas)** — que `/core` cargue **sin sesión** (esa es la función,
+no un detalle), que rechace texto corto antes de gastar una llamada al modelo, que
+genere la tarjeta con sus cinco bloques y la guarde en `core_outputs`, que el costo
+quede registrado, y que **la lista pública nunca muestre lo que la persona escribió**.
+
+Total del proyecto tras esta semana: **23 unitarias + 27 e2e**, verdes.
