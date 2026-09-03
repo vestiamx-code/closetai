@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { parseGarmentCatalog, stripCodeFence } from "./schemas";
+import { parseGarmentCatalog, stripCodeFence,
+  parseStyleCore,
+} from "./schemas";
 
 const validGarment = {
   categoria: "top",
@@ -104,3 +106,63 @@ describe("parseGarmentCatalog", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+/* ---------------- Núcleo de estilo · Semana 1 ---------------- */
+
+const nucleoValido = {
+  esencia: "Cómoda pero arreglada, con base neutra y siluetas amplias.",
+  principios: ["Comodidad primero", "Neutros como base", "Una prenda estructurada encima"],
+  paleta: ["negro", "beige", "blanco"],
+  siluetas: ["pantalón ancho", "saco recto"],
+  evitar: ["entallado", "estampados grandes"],
+  regla: "Si no me puedo sentar cómoda, no me lo pongo.",
+  confianza: 0.78,
+  falta: "",
+};
+
+describe("parseStyleCore", () => {
+  it("acepta un núcleo bien formado", () => {
+    const r = parseStyleCore(JSON.stringify(nucleoValido));
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.core.principios).toHaveLength(3);
+  });
+
+  it("desenvuelve un arreglo de un elemento, como ya devolvió el modelo en producción", () => {
+    const r = parseStyleCore(JSON.stringify([nucleoValido]));
+    expect(r.ok).toBe(true);
+  });
+
+  it("rechaza un arreglo con varios núcleos: una persona, un núcleo", () => {
+    const r = parseStyleCore(JSON.stringify([nucleoValido, nucleoValido]));
+    expect(r.ok).toBe(false);
+  });
+
+  it("rechaza menos de 2 principios: con uno solo no es un núcleo, es una frase", () => {
+    const r = parseStyleCore(JSON.stringify({ ...nucleoValido, principios: ["Comodidad"] }));
+    expect(r.ok).toBe(false);
+  });
+
+  it("rechaza más de 5 principios: la tarjeta deja de leerse", () => {
+    const r = parseStyleCore(
+      JSON.stringify({ ...nucleoValido, principios: ["a", "b", "c", "d", "e", "f"] }),
+    );
+    expect(r.ok).toBe(false);
+  });
+
+  it("rechaza una confianza fuera de rango", () => {
+    const r = parseStyleCore(JSON.stringify({ ...nucleoValido, confianza: 1.4 }));
+    expect(r.ok).toBe(false);
+  });
+
+  it("distingue el rechazo del modelo de un error de formato", () => {
+    const r = parseStyleCore(JSON.stringify({ error: "Eso no habla de ropa." }));
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toBe("rejected");
+  });
+
+  it("no lanza cuando el modelo devuelve texto suelto", () => {
+    expect(() => parseStyleCore("lo siento, no puedo")).not.toThrow();
+    expect(parseStyleCore("lo siento, no puedo").ok).toBe(false);
+  });
+});
+

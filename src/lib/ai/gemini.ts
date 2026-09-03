@@ -5,6 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 import { AVATAR_PROMPT, AVATAR_PROMPT_VERSION } from "./prompts/avatar";
 import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
+import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
 import {
   PROFILE_PROMPT,
   PROFILE_PROMPT_VERSION,
@@ -17,7 +18,7 @@ import {
   type StyleProfile,
   type StylistResult,
 } from "./outfits";
-import { parseGarmentCatalog, type GarmentCatalogResult } from "./schemas";
+import { parseGarmentCatalog, parseStyleCore, type GarmentCatalogResult, type StyleCoreResult } from "./schemas";
 
 /**
  * Adapter del proveedor de IA. Todo el resto de la app habla con este módulo,
@@ -56,6 +57,7 @@ export const EST_COST_USD = {
   validateAvatar: 0.0003,
   analyzeGaps: 0.0008,
   updateStyleProfile: 0.0005,
+  extractCore: 0.0006,
 } as const;
 
 /**
@@ -438,3 +440,63 @@ export async function analizarHuecos(
 }
 
 export { GAPS_PROMPT_VERSION };
+
+/* ------------------------------------------------------------------ *
+ * Núcleo de estilo — Semana 1, página /core
+ * ------------------------------------------------------------------ */
+
+const ESQUEMA_CORE = {
+  type: "object",
+  properties: {
+    esencia: { type: "string" },
+    principios: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 5 },
+    paleta: { type: "array", items: { type: "string" }, maxItems: 6 },
+    siluetas: { type: "array", items: { type: "string" }, maxItems: 4 },
+    evitar: { type: "array", items: { type: "string" }, maxItems: 4 },
+    regla: { type: "string" },
+    confianza: { type: "number" },
+    falta: { type: "string" },
+  },
+  required: ["esencia", "principios", "paleta", "siluetas", "evitar", "regla", "confianza", "falta"],
+} as const;
+
+export type ResultadoCore = StyleCoreResult & { estCostUsd: number; model: string; promptVersion: number };
+
+/**
+ * Extrae el núcleo de estilo del texto que escribió una persona.
+ *
+ * Temperatura media: con 0 el modelo repite las mismas cinco frases para
+ * entradas distintas, y el punto de la página es que dos personas reciban dos
+ * núcleos que se sientan suyos. Pero tampoco alta, o empieza a inventar color
+ * y silueta que nadie mencionó — que es justo lo que el prompt prohíbe.
+ */
+export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
+  const estCostUsd = EST_COST_USD.extractCore;
+  const model = MODELS.reasoning();
+  const promptVersion = CORE_PROMPT_VERSION;
+
+  try {
+    const response = await getClient().models.generateContent({
+      model,
+      contents: [{ role: "user", parts: [{ text: `${CORE_PROMPT}\n\nTexto de la persona:\n"""\n${texto}\n"""` }] }],
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: ESQUEMA_CORE,
+        temperature: 0.45,
+      },
+    });
+
+    return { ...parseStyleCore(response.text ?? ""), estCostUsd, model, promptVersion };
+  } catch (error) {
+    console.error("[core] falló la llamada al modelo", error);
+    return {
+      ok: false,
+      reason: "unparseable",
+      message: "No pudimos generar tu núcleo ahora. Inténtalo en un momento.",
+      estCostUsd,
+      model,
+      promptVersion,
+    };
+  }
+}
+

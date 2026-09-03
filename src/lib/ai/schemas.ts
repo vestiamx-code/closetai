@@ -107,3 +107,67 @@ export function parseGarmentCatalog(raw: string): GarmentCatalogResult {
 
   return { ok: true, garment: garment.data };
 }
+
+/* ------------------------------------------------------------------ *
+ * Núcleo de estilo — Semana 1, página /core
+ * ------------------------------------------------------------------ */
+
+/**
+ * Contrato del núcleo de estilo.
+ *
+ * Los topes de cada lista no son decoración: sin ellos el modelo devuelve
+ * quince principios y la tarjeta deja de leerse. Y `confianza` obliga a que
+ * diga qué tan seguro está, en vez de sonar igual de convencido con tres
+ * líneas vagas que con un párrafo detallado.
+ */
+export const styleCoreSchema = z.object({
+  esencia: z.string().trim().min(10).max(220),
+  principios: z.array(z.string().trim().min(3)).min(2).max(5),
+  paleta: z.array(z.string().trim().min(2)).max(6),
+  siluetas: z.array(z.string().trim().min(2)).max(4),
+  evitar: z.array(z.string().trim().min(3)).max(4),
+  regla: z.string().trim().min(10).max(220),
+  confianza: z.number().min(0).max(1),
+  falta: z.string().trim().max(300),
+});
+
+export type StyleCore = z.infer<typeof styleCoreSchema>;
+
+export type StyleCoreResult =
+  | { ok: true; core: StyleCore }
+  | { ok: false; reason: "rejected"; message: string }
+  | { ok: false; reason: "unparseable"; message: string };
+
+/**
+ * Interpreta la respuesta del modelo para /core.
+ *
+ * Mismo patrón que `parseGarmentCatalog`, y por la misma razón: el modelo ya nos
+ * devolvió un arreglo de un elemento en producción una vez. Aquí se desenvuelve
+ * igual, y se rechaza si trae varios.
+ */
+export function parseStyleCore(raw: string): StyleCoreResult {
+  let datos: unknown;
+  try {
+    datos = JSON.parse(stripCodeFence(raw));
+  } catch {
+    return { ok: false, reason: "unparseable", message: "El modelo no devolvió JSON." };
+  }
+
+  if (Array.isArray(datos)) {
+    if (datos.length !== 1) {
+      return { ok: false, reason: "unparseable", message: "El modelo devolvió varios núcleos." };
+    }
+    datos = datos[0];
+  }
+
+  const rechazo = garmentCatalogRejectionSchema.safeParse(datos);
+  if (rechazo.success) return { ok: false, reason: "rejected", message: rechazo.data.error };
+
+  const validado = styleCoreSchema.safeParse(datos);
+  if (!validado.success) {
+    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Formato inesperado." };
+  }
+
+  return { ok: true, core: validado.data };
+}
+
