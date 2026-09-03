@@ -97,6 +97,40 @@ export type CatalogGarmentResult = GarmentCatalogResult & {
  * Nunca lanza por culpa del modelo: devuelve un resultado tipado que el
  * pipeline de subida usa para marcar la prenda como lista o como fallida.
  */
+/**
+ * Reintenta una llamada cuando el proveedor responde 429.
+ *
+ * El nivel gratuito de Gemini permite 20 peticiones por minuto. Al pasarse,
+ * devuelve `RESOURCE_EXHAUSTED` con un `retryDelay` — y hasta hoy eso llegaba a
+ * la usuaria como "el estilista no pudo armar nada", que es mentira: sí podía,
+ * solo había que esperar cuarenta segundos.
+ *
+ * Se respeta el retraso que pide Google en vez de inventar uno. Dos reintentos:
+ * más que eso deja a alguien mirando un botón deshabilitado demasiado tiempo, y
+ * a esa altura conviene más devolver el error.
+ */
+async function conReintentoSiHayCuota<T>(llamada: () => Promise<T>): Promise<T> {
+  const MAX_INTENTOS = 3;
+
+  for (let intento = 1; ; intento++) {
+    try {
+      return await llamada();
+    } catch (error) {
+      const texto = error instanceof Error ? error.message : String(error);
+      const esCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
+      if (!esCuota || intento >= MAX_INTENTOS) throw error;
+
+      // Google dice cuánto esperar; si no lo dice, se usa una espera creciente.
+      const pedido = /"?retryDelay"?:\s*"?(\d+(?:\.\d+)?)s/.exec(texto);
+      const segundos = pedido ? Math.ceil(Number(pedido[1])) : intento * 20;
+      const espera = Math.min(segundos, 45) * 1000;
+
+      console.warn(`[gemini] cuota agotada, reintento ${intento} en ${espera / 1000}s`);
+      await new Promise((listo) => setTimeout(listo, espera));
+    }
+  }
+}
+
 export async function catalogGarment(
   imageBase64: string,
   mimeType = "image/webp",
@@ -110,7 +144,8 @@ export async function catalogGarment(
 
   let raw: string;
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model,
       contents: [
         {
@@ -131,7 +166,7 @@ export async function catalogGarment(
         responseJsonSchema: ESQUEMA_PRENDA,
         temperature: 0.2,
       },
-    });
+    }));
     raw = response.text ?? "";
   } catch (error) {
     return {
@@ -199,7 +234,8 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
 
   let raw: string;
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model,
       contents: [{ role: "user", parts: [{ text: `${STYLIST_PROMPT}\n\n${contexto}` }] }],
       config: {
@@ -207,7 +243,7 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
         responseJsonSchema: ESQUEMA_ESTILISTA,
         temperature: 0.9, // más alta que la catalogación: aquí sí queremos variedad
       },
-    });
+    }));
     raw = response.text ?? "";
   } catch (error) {
     return {
@@ -263,11 +299,12 @@ export async function updateStyleProfile(
   ].join("\n");
 
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model,
       contents: [{ role: "user", parts: [{ text: `${PROFILE_PROMPT}\n\n${contexto}` }] }],
       config: { responseMimeType: "application/json", temperature: 0.3 },
-    });
+    }));
     return {
       perfil: parseStyleProfile(response.text ?? ""),
       estCostUsd: EST_COST_USD.updateStyleProfile,
@@ -329,7 +366,8 @@ export async function validarFotoBase(
   const estCostUsd = EST_COST_USD.validateAvatar;
 
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model: MODELS.vision(),
       contents: [
         {
@@ -345,7 +383,7 @@ export async function validarFotoBase(
         responseJsonSchema: ESQUEMA_AVATAR,
         temperature: 0.1,
       },
-    });
+    }));
 
     const limpio = (response.text ?? "").trim().replace(/^```(?:json)?\s*\n?/, "").replace(/\n?```$/, "");
     let datos = JSON.parse(limpio);
@@ -418,7 +456,8 @@ export async function analizarHuecos(
   ].join("\n");
 
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model,
       contents: [{ role: "user", parts: [{ text: `${GAPS_PROMPT}\n\n${contexto}` }] }],
       config: {
@@ -426,7 +465,7 @@ export async function analizarHuecos(
         responseJsonSchema: ESQUEMA_HUECOS,
         temperature: 0.4,
       },
-    });
+    }));
 
     const ids = new Set(prendas.map((p) => p.id));
     return {
@@ -476,7 +515,8 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
   const promptVersion = CORE_PROMPT_VERSION;
 
   try {
-    const response = await getClient().models.generateContent({
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
       model,
       contents: [{ role: "user", parts: [{ text: `${CORE_PROMPT}\n\nTexto de la persona:\n"""\n${texto}\n"""` }] }],
       config: {
@@ -484,7 +524,7 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
         responseJsonSchema: ESQUEMA_CORE,
         temperature: 0.45,
       },
-    });
+    }));
 
     return { ...parseStyleCore(response.text ?? ""), estCostUsd, model, promptVersion };
   } catch (error) {

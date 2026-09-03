@@ -46,6 +46,11 @@ test.describe("Núcleo de estilo (/core)", () => {
   });
 
   test("genera un núcleo con los cinco bloques y lo guarda", async ({ page }) => {
+    // La generación tarda entre 6 y 12 segundos contra el modelo real. El tope
+    // por defecto de Playwright son 30 s para toda la prueba, así que la espera
+    // de 90 s de abajo nunca se alcanzaba: moría antes la prueba, y el fallo
+    // salía como "Test timeout" en vez de decir qué no apareció.
+    test.setTimeout(180_000);
     const a = admin();
     const { count: antes } = await a
       .from("core_outputs")
