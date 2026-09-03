@@ -46,12 +46,25 @@ export default async function EstiloPage() {
               ? `Llevas ${eventos} ${eventos === 1 ? "reacción" : "reacciones"}. Con unas cuantas más empiezo a notar patrones.`
               : "Acepta o rechaza algunos outfits y empiezo a entender qué te gusta."}
           </p>
-          <Link
-            href="/hoy"
-            className="mt-6 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
-          >
-            Ver mis outfits de hoy
-          </Link>
+          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <Link
+              href="/hoy"
+              className="inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
+            >
+              Ver mis outfits de hoy
+            </Link>
+            {/*
+              Esperar cinco reacciones es la ruta lenta. Quien no quiera esperar
+              puede escribir su estilo y tener un núcleo en un minuto — es
+              justo para lo que existe /core.
+            */}
+            <Link
+              href="/core"
+              className="inline-block rounded-lg border border-border px-5 py-2.5 text-sm transition hover:border-text"
+            >
+              O cuéntamelo tú en un minuto
+            </Link>
+          </div>
         </div>
       ) : (
         <>
