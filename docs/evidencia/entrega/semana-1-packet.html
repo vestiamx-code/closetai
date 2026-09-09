@@ -1,0 +1,686 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ClosetAI — Week 1 Submission Packet</title>
+<style>
+  @page { size: Letter; margin: 15mm 15mm 16mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0; font: 10.2pt/1.55 "Charter", "Georgia", serif; color: #17140f;
+    background: #fff;
+  }
+  h1, h2, h3, .ui { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+  /* ---------- cover ---------- */
+  .cover { page-break-after: always; padding-top: 6mm; }
+  .kicker { font: 600 8.2pt/1 "Helvetica Neue", sans-serif; letter-spacing: .16em;
+            text-transform: uppercase; color: #8a7f6d; }
+  .cover h1 { font-size: 30pt; line-height: 1.06; margin: 7mm 0 0; letter-spacing: -.022em;
+              font-weight: 700; }
+  .cover h1 em { font-family: "Charter", Georgia, serif; font-style: italic;
+                 font-weight: 400; color: #7a3b28; }
+  .cover .sub { margin-top: 5mm; font-size: 11.5pt; color: #4a4238; max-width: 118mm; }
+  .byline { margin-top: 9mm; font: 9.4pt/1.7 "Helvetica Neue", sans-serif; color: #4a4238; }
+  .byline b { color: #17140f; }
+
+  .links { margin-top: 8mm; border-top: 1.6pt solid #17140f; }
+  .links a { display: flex; gap: 5mm; align-items: baseline; text-decoration: none;
+             color: #17140f; padding: 3.1mm 0; border-bottom: .4pt solid #ddd6c9; }
+  .links .lbl { font: 600 8pt/1 "Helvetica Neue", sans-serif; letter-spacing: .12em;
+                text-transform: uppercase; color: #8a7f6d; width: 30mm; flex: none; }
+  .links .url { font-size: 10.4pt; color: #7a3b28; word-break: break-all; }
+
+  .gate { margin-top: 9mm; background: #f6f2ea; border-left: 2.4pt solid #7a3b28;
+          padding: 4mm 5mm; font-size: 9.4pt; line-height: 1.5; }
+  .gate b { font-family: "Helvetica Neue", sans-serif; font-size: 8.6pt; letter-spacing: .04em; }
+
+  /* ---------- sections ---------- */
+  h2 { font-size: 13pt; letter-spacing: -.012em; margin: 0 0 3.5mm;
+       padding-bottom: 1.6mm; border-bottom: 1.4pt solid #17140f; font-weight: 700; }
+  section { margin-bottom: 6.5mm; }
+  .brk { page-break-before: always; }
+  .avoid { page-break-inside: avoid; }
+  h3 { font-size: 9.4pt; letter-spacing: .01em; margin: 5mm 0 1.6mm; font-weight: 700; }
+  p { margin: 0 0 2.4mm; }
+  .lead { color: #4a4238; font-size: 9.6pt; margin-bottom: 4mm; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.9pt; margin: 2mm 0 3mm; }
+  th { text-align: left; font: 600 7.6pt/1.3 "Helvetica Neue", sans-serif;
+       letter-spacing: .09em; text-transform: uppercase; color: #6d6355;
+       border-bottom: 1pt solid #17140f; padding: 1.6mm 2.4mm 1.6mm 0; vertical-align: bottom; }
+  td { padding: 1.7mm 2.4mm 1.7mm 0; border-bottom: .4pt solid #e4ded2; vertical-align: top;
+       line-height: 1.4; }
+  tr { page-break-inside: avoid; }
+  td.ok { color: #2f6b3f; font-weight: 700; white-space: nowrap; }
+  code, .mono { font-family: "SF Mono", "Menlo", monospace; font-size: 8.3pt;
+                background: #f2eee6; padding: .4mm 1mm; border-radius: 1.4pt; }
+  pre { font-family: "SF Mono", "Menlo", monospace; font-size: 7.7pt; line-height: 1.5;
+        background: #f6f2ea; border-left: 2pt solid #d8cfbe; padding: 3mm 4mm;
+        white-space: pre-wrap; margin: 2mm 0 3mm; page-break-inside: avoid; }
+  ul { margin: 0 0 3mm; padding-left: 4.6mm; }
+  li { margin-bottom: 1.2mm; }
+
+  figure { margin: 3mm 0 4mm; page-break-inside: avoid; }
+  figure img { width: 100%; border: .6pt solid #ddd6c9; border-radius: 2pt; display: block; }
+  figcaption { font: 8.1pt/1.45 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 1.8mm; }
+  .two { display: flex; gap: 5mm; }
+  .two figure { flex: 1; margin-top: 0; }
+  .media { max-width: 118mm; margin-left: auto; margin-right: auto; }
+  /* Una tabla no debe dejar dos filas solas al otro lado del salto. */
+  thead { display: table-header-group; }
+  tbody tr:first-child, tbody tr:nth-child(2) { page-break-after: auto; }
+
+  .note { border: .8pt solid #17140f; padding: 5mm 5.5mm; background: #fdfcfa;
+          page-break-inside: avoid; }
+  .note p { font-size: 10pt; }
+  .wc { font: 8pt/1 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 3mm; }
+
+  .prompt { border-left: 2pt solid #d8cfbe; padding-left: 4mm; margin: 0 0 4mm;
+            page-break-inside: avoid; }
+  .prompt .h { font: 700 8.6pt/1.4 "Helvetica Neue", sans-serif; }
+  .prompt .q { font-style: italic; color: #4a4238; margin: 1mm 0; }
+  .prompt .r { font-size: 8.9pt; margin: 1mm 0 0; }
+  .prompt .j { font-size: 8.9pt; margin: 1mm 0 0; background: #f6f2ea; padding: 2mm 2.6mm; }
+  .prompt .j b { font-family: "Helvetica Neue", sans-serif; font-size: 8.1pt; }
+</style>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker">Week 1 · Generative Core Agent</div>
+  <h1>ClosetAI —<br><em>the style core.</em></h1>
+  <p class="sub">Turning Appendix A3 of my master document into a working generative
+     module that anyone can use in one minute, with no account and no photos.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted 9 September 2026 · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat/core"><span class="lbl">Live page</span><span class="url">closetai.lat/core</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+    <a href="https://closetai.lat/demo/semana-1"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/semana-1</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE FEATURE IN ONE LINE.</b> ClosetAI asks you to photograph ten garments before it
+    gives you anything. That was the strongest objection my value proposition received, and it is
+    what killed the other apps in this category. <code>/core</code> reverses the order: you write
+    three sentences about how you like to dress, and you get a structured style core back —
+    essence, principles, palette, silhouettes, what to avoid, and one rule of your own. No sign-up.
+    No upload. If your text is vague, it says so instead of inventing a palette for you.
+  </div>
+
+</div>
+
+<!-- ============ 1. CHECKLIST ============ -->
+<section>
+  <h2>1 · Weekly Submission Packet — every required item</h2>
+  <table>
+    <thead><tr><th style="width:30mm">Item</th><th style="width:26mm">Required</th><th>Delivered</th><th style="width:14mm">Status</th></tr></thead>
+    <tbody>
+      <tr><td>Live URL</td><td>Deployed page</td><td><code>closetai.lat/core</code> — HTTP 200 with no session cookie, verified at submission time (§4)</td><td class="ok">✓</td></tr>
+      <tr><td>Build Discipline Packet</td><td>Complete before coding</td><td>All 11 sections (§2). Committed in <code>a4e9890</code>, <b>17 minutes before</b> the first line of feature code in <code>e02b657</code> — git history proves the order</td><td class="ok">✓</td></tr>
+      <tr><td>UX image / mockup</td><td>Image-generated concept</td><td>Image-generated mockup + three-state wireframe (§3)</td><td class="ok">✓</td></tr>
+      <tr><td>Product Spec</td><td>Requirements + acceptance criteria</td><td>8 requirements, each with a checkable criterion (§2)</td><td class="ok">✓</td></tr>
+      <tr><td>Architecture Sketch</td><td>Data flow + components</td><td>Full flow from browser to Postgres, with the contract gate marked (§2)</td><td class="ok">✓</td></tr>
+      <tr><td>GitHub commits</td><td>Minimum 5</td><td><b>13 commits</b> this week, all pushed and public (§5)</td><td class="ok">✓</td></tr>
+      <tr><td>Vercel deployments</td><td>Minimum 2</td><td><b>7 production deployments</b>, all Ready (§6)</td><td class="ok">✓</td></tr>
+      <tr><td>Supabase evidence</td><td>Table / data evidence</td><td>Migration <code>005_core_outputs</code> + <b>10 real rows</b> queried live from production (§7)</td><td class="ok">✓</td></tr>
+      <tr><td>Prompt log</td><td>Minimum 5 prompts</td><td><b>6 prompts</b>, each with result and the human judgment applied (§8)</td><td class="ok">✓</td></tr>
+      <tr><td>Test evidence</td><td>Minimum 3 tests</td><td><b>3 live runs</b> against production, plus 13 new automated tests, plus a full pre-submission verification against the live site (§9)</td><td class="ok">✓</td></tr>
+      <tr><td>Iteration Log</td><td>What changed after testing</td><td>Three entries: two badly written tests, the provider quota, and three red tests found the day of submission (§10)</td><td class="ok">✓</td></tr>
+      <tr><td>Demo video</td><td>2–3 minutes</td><td><b>2:59</b>, hosted on the product's own domain (§11)</td><td class="ok">✓</td></tr>
+      <tr><td>Human Decision Note</td><td>150–250 words</td><td><b>239 words</b> (§12)</td><td class="ok">✓</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Intake form</td><td><code>/core</code>, 40–1000 characters, live counter, validated before any model call is spent</td></tr>
+      <tr><td>Core extraction output card</td><td>Structured card: essence, principles, palette, silhouettes, what to avoid, one rule</td></tr>
+      <tr><td>Save button</td><td>Server Action <code>guardarNucleo</code>, which re-validates the payload server-side</td></tr>
+      <tr><td>Supabase table <code>core_outputs</code></td><td>Migration <code>20260902000005</code>, applied to production, 7 rows</td></tr>
+      <tr><td>Dashboard preview</td><td>"Núcleos que ya se generaron" — the saved cores, below the form</td></tr>
+      <tr><td>Prompt library entry</td><td><code>src/lib/ai/prompts/core.ts</code>, versioned like the project's other prompts</td></tr>
+      <tr><td>3 test runs</td><td>§9 — three different inputs against the live site, one vague on purpose</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. BUILD DISCIPLINE PACKET ============ -->
+<section class="brk">
+  <h2>2 · Build Discipline Packet</h2>
+  <p class="lead">Written before touching code. The commit that added this file
+    (<code>a4e9890</code>, 20:16) precedes the commit that added the feature
+    (<code>e02b657</code>, 20:33). The history is public and checkable.</p>
+
+  <h3>🧩 Problem</h3>
+  <p>For ClosetAI to be useful today, you have to photograph about ten garments. The value
+    arrives <b>after</b> an hour of work. That is the strongest objection my value proposition
+    received, and it is the same thing that killed the other apps in this category: they make you
+    catalogue your closet, and only then give you something. Nobody can tell whether ClosetAI's
+    taste is worth that hour before spending it.</p>
+
+  <h3>👤 User</h3>
+  <p>Someone landing on closetai.lat for the first time, with no account and no photos. It also
+    serves people who already have an account: their style core feeds the stylist from day one,
+    instead of waiting for five outfit reactions to accumulate.</p>
+
+  <h3>🎯 Success — what has to work by the end of the week</h3>
+  <ul>
+    <li><code>/core</code> loads in production, <b>with no session</b>, in a private window.</li>
+    <li>I write in my own words how I like to dress and get back a <b>structured style core</b>,
+        not a loose paragraph.</li>
+    <li>I can save it and see it again on the same page.</li>
+    <li>Every save lands in the <code>core_outputs</code> table in Supabase.</li>
+    <li>Three runs with different inputs produce three different, believable cores.</li>
+  </ul>
+
+  <h3>🖼️ UX concept</h3>
+  <p>One screen, three states: empty form → generating → result card with a save button. Below it,
+    what has already been saved. Mockup and wireframe in §3.</p>
+
+  <h3>✂️ Scope cut — what looked nice and is deliberately not built</h3>
+  <ul>
+    <li><b>Accounts on <code>/core</code>.</b> Saving without a session is the whole point:
+        asking someone to register before proving value is exactly the problem this feature attacks.</li>
+    <li><b>Editing a saved core.</b> You can generate again; field-by-field editing is another week's work.</li>
+    <li><b>Wiring the core into the stylist.</b> It is the obvious next step and that is precisely why
+        it waits: first I have to prove the core that comes out is any good.</li>
+    <li><b>Photo upload on <code>/core</code>.</b> The entire point is that none is needed.</li>
+  </ul>
+
+  <h3>🧱 Product spec and acceptance criteria</h3>
+  <table>
+    <thead><tr><th style="width:8mm">#</th><th style="width:44mm">Requirement</th><th>Acceptance criterion (checkable)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Public page</td><td><code>GET /core</code> returns 200 with no session cookie</td></tr>
+      <tr><td>2</td><td>Intake form</td><td>Accepts 40–1000 characters; outside that range, a clear error in Spanish</td></tr>
+      <tr><td>3</td><td>Core extraction</td><td>The model's response passes a zod contract before it is displayed; if it fails, an error is shown and nothing is saved</td></tr>
+      <tr><td>4</td><td>Structured card</td><td>Shows essence, principles, palette, silhouettes, what to avoid, and one rule</td></tr>
+      <tr><td>5</td><td>Save</td><td>Writes a row to <code>core_outputs</code> and the row appears in the list without a reload</td></tr>
+      <tr><td>6</td><td>Saved view</td><td>Shows the most recent saved cores</td></tr>
+      <tr><td>7</td><td>Cost logged</td><td>Every generation writes its cost to <code>api_costs</code></td></tr>
+      <tr><td>8</td><td>Usage limit</td><td>One IP cannot generate more than 10 times per hour</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🏗️ Architecture</h3>
+<pre>Browser  (/core — no session)
+   │  form  →  Server Action  generarNucleo()
+   ▼
+Server Action
+   ├─ validates the input with zod
+   ├─ checks the per-IP rate limit
+   ├─ calls Gemini with CORE_PROMPT (versioned)
+   ├─ validates the output with styleCoreSchema   ←  if this fails: error, nothing saved
+   └─ logs the cost to api_costs
+   │
+   ▼  (the person decides to save)
+Server Action  guardarNucleo()      ←  re-validates; a Server Action is reachable by direct POST
+   └─ inserts into core_outputs (admin client; RLS allows public read only)
+   │
+   ▼
+Supabase Postgres · core_outputs
+   └─ the public list SELECTs every column except `entrada`</pre>
+  <p><b>Why a Server Action and not an API route:</b> the Gemini key never leaves the server, and
+    there is no public endpoint for anyone to hit directly.</p>
+
+  <h3>🧰 Tech stack</h3>
+  <table>
+    <thead><tr><th style="width:36mm">Tool</th><th style="width:38mm">For what</th><th>Why this one</th></tr></thead>
+    <tbody>
+      <tr><td>Next.js 16 · Server Actions</td><td>Page and server logic</td><td>Already the project's stack; the API key stays server-side</td></tr>
+      <tr><td>Gemini <code>flash</code></td><td>Extracting the core</td><td>This is reasoning over text, not vision — the cheap model is enough</td></tr>
+      <tr><td>zod</td><td>Output contract</td><td>A model returns free text sooner or later; this is the fence</td></tr>
+      <tr><td>Supabase Postgres</td><td><code>core_outputs</code> table</td><td>The project and its migrations already exist</td></tr>
+      <tr><td>Tailwind v4</td><td>Styling</td><td>Same design tokens as the rest of the app</td></tr>
+    </tbody>
+  </table>
+
+  <h3>⚙️ DevOps</h3>
+  <ul>
+    <li>Repo <code>vestiamx-code/closetai</code>, public. Branch <code>main</code>, automatic deploy.</li>
+    <li>New migration <code>005_core_outputs.sql</code>, applied to production <i>before</i> deploying.</li>
+    <li>No new environment variables: reuses <code>GEMINI_API_KEY</code> and the Supabase ones.</li>
+    <li>GitHub Actions already runs lint, types, unit tests and build on every push.</li>
+  </ul>
+
+  <h3>🧪 Test plan</h3>
+  <p><b>Automated —</b> unit: the contract rejects a core with no <code>esencia</code>; the contract
+    rejects more than 5 principles. End-to-end: <code>/core</code> loads with no session and shows the
+    form; valid text produces a card with all its fields; the save button makes the core appear in
+    the list.</p>
+  <p><b>Three manual runs against the live site</b>, with different inputs, recording input /
+    expected result / actual result / what failed / what I changed.</p>
+
+  <h3>🤖 Coding agent prompt</h3>
+<pre>Build the public page /core in the ClosetAI project (Next.js 16, App Router,
+Server Actions, Tailwind v4, Supabase).
+
+Use the methodology in Appendix A3 of the master document as the source and turn
+it into a generative module: the user writes in her own words how she likes to
+dress, and the module returns a structured style core — essence, principles,
+palette, silhouettes, what to avoid, and one personal rule.
+
+Requirements: the page is public, no session. The model's output goes through a
+zod contract before being displayed and is not saved if it does not comply. A
+save button that writes to the core_outputs table. Below it, the list of saved
+cores. Log the cost of each call to api_costs and limit to 10 generations per IP
+per hour. Write the prompt in src/lib/ai/prompts/core.ts, versioned, like the
+ones that already exist. Do not invent columns: write the migration first.</pre>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX image and wireframe</h2>
+  <p class="lead">The mockup was image-generated from the concept above. The wireframe shows the
+    three states the page actually has.</p>
+  <div class="two">
+    <figure>
+      <img src="04-mockup.jpg" alt="">
+      <figcaption>Image-generated mockup of the core card.</figcaption>
+    </figure>
+    <figure>
+      <img src="05-wireframe.jpg" alt="">
+      <figcaption>Three states: empty form → generating → result card with save.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ 4. LIVE ============ -->
+<section>
+  <h2>4 · Live page</h2>
+  <p class="lead">Verified at submission time, in a private window, against the custom domain —
+    not localhost:</p>
+<pre>$ curl -s -o /dev/null -w "HTTP %{http_code} · %{time_total}s\n" https://closetai.lat/core
+HTTP 200 · 3.39s</pre>
+  <div class="two">
+    <figure>
+      <img src="01-core-vacia.jpg" alt="">
+      <figcaption>The empty state, in a private window with no session.</figcaption>
+    </figure>
+    <figure>
+      <img src="02a-tarjeta.jpg" alt="">
+      <figcaption>A full run: the text someone wrote, and the core that came back. The line under
+        the card states the model's confidence (<b>90%</b>) and what it never got to ask.</figcaption>
+    </figure>
+  </div>
+  <figure class="media">
+    <img src="02b-lista.jpg" alt="">
+    <figcaption>The public list below the form. It shows the generated cores — and never the text
+      anyone wrote about themselves.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 5. COMMITS ============ -->
+<section>
+  <h2>5 · GitHub commits — 13 this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:26mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">a4e9890</td><td>Sep 2, 20:16</td><td>docs: build discipline packet, before writing code</td></tr>
+      <tr><td class="mono">e02b657</td><td>Sep 2, 20:33</td><td>feat: <code>/core</code> — the style core, a public generative module</td></tr>
+      <tr><td class="mono">1f3a887</td><td>Sep 2, 20:39</td><td>docs: evidence for <code>/core</code> — prompt log, three runs, wireframe</td></tr>
+      <tr><td class="mono">6320e68</td><td>Sep 2, 20:40</td><td>feat: the landing page links to the style core</td></tr>
+      <tr><td class="mono">b2b01f8</td><td>Sep 2, 20:40</td><td>feat: "I don't know you yet" now offers a way into the core</td></tr>
+      <tr><td class="mono">7a8c1ec</td><td>Sep 2, 20:54</td><td>fix: retry when Gemini answers 429 instead of giving up</td></tr>
+      <tr><td class="mono">3a8bbef</td><td>Sep 2, 22:23</td><td>test: skip with a stated reason when Gemini runs out of quota, don't fail</td></tr>
+      <tr><td class="mono">21dd04d</td><td>Sep 3, 09:44</td><td>docs: image-generated mockup for <code>/core</code></td></tr>
+      <tr><td class="mono">ffb8afe</td><td>Sep 3, 09:56</td><td>docs: demo video script</td></tr>
+      <tr><td class="mono">2dc22d0</td><td>Sep 3, 10:19</td><td>docs: video script in English too</td></tr>
+      <tr><td class="mono">b368c10</td><td>Sep 8, 19:23</td><td>feat: demo video page at <code>/demo/semana-1</code></td></tr>
+      <tr><td class="mono">6bb7fb1</td><td>Sep 8, 19:45</td><td>fix: don't blame the person who wrote the text when it is the provider that failed</td></tr>
+      <tr><td class="mono">4baa73e</td><td>Sep 8, 21:30</td><td>docs: the pre-submission verification, including what failed</td></tr>
+    </tbody>
+  </table>
+  <figure>
+    <img src="03-commits.jpg" alt="">
+    <figcaption>The public repository — github.com/vestiamx-code/closetai</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 6. DEPLOYS ============ -->
+<section>
+  <h2>6 · Vercel deployments — 7 this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready. Counted from the Vercel deployment list, not from
+    the number of pushes.</p>
+  <table>
+    <thead><tr><th style="width:26mm">When</th><th style="width:22mm">Environment</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
+    <tbody>
+      <tr><td>Sep 2, 20:34</td><td>Production</td><td class="ok">● Ready</td><td>The <code>/core</code> page itself</td></tr>
+      <tr><td>Sep 2, 20:39</td><td>Production</td><td class="ok">● Ready</td><td>The week's evidence documents</td></tr>
+      <tr><td>Sep 2, 22:24</td><td>Production</td><td class="ok">● Ready</td><td>Entry points from the landing and the stylist, <b>plus the 429 retry</b> — a bug found by testing, fixed and redeployed</td></tr>
+      <tr><td>Sep 8, 19:22</td><td>Production</td><td class="ok">● Ready</td><td>The evidence commits that were still only local</td></tr>
+      <tr><td>Sep 8, 19:23</td><td>Production</td><td class="ok">● Ready</td><td>The demo video page</td></tr>
+      <tr><td>Sep 8, 19:45</td><td>Production</td><td class="ok">● Ready</td><td><b>The honest error message</b> — a defect found while verifying, fixed and redeployed</td></tr>
+      <tr><td>Sep 8, 21:31</td><td>Production</td><td class="ok">● Ready</td><td>The verification record</td></tr>
+    </tbody>
+  </table>
+  <p>The third row is Gate 3 of the week in one line: a test found a real bug, the bug was fixed,
+    and the fix was deployed.</p>
+</section>
+
+<!-- ============ 7. SUPABASE ============ -->
+<section>
+  <h2>7 · Supabase evidence</h2>
+  <p class="lead">The migration, and the rows it actually holds — queried live from the production
+    database, not from a local copy.</p>
+
+  <h3>Migration <code>20260902000005_core_outputs.sql</code></h3>
+<pre>create table if not exists public.core_outputs (
+  id            uuid primary key default gen_random_uuid(),
+  user_id       uuid references auth.users(id) on delete set null,
+  entrada       text not null check (char_length(entrada) between 40 and 1000),
+  nucleo        jsonb not null,
+  modelo        text,
+  version_prompt int,
+  created_at    timestamptz not null default now()
+);
+
+alter table public.core_outputs enable row level security;
+
+create policy "núcleos visibles para todos"
+  on public.core_outputs for select using (true);
+
+revoke insert, update, delete on public.core_outputs from anon, authenticated;
+grant  select on public.core_outputs to anon, authenticated;
+grant  all    on public.core_outputs to service_role;</pre>
+
+  <p><b>Two security decisions the assignment did not ask for.</b> Writes are revoked from
+    <code>anon</code>: without that, anyone could insert rows straight into the Supabase API,
+    skipping the zod contract and the rate limit. And the public query
+    <b>does not select the <code>entrada</code> column</b> — what someone writes about
+    themselves is theirs. The list shows the core, not the confession.</p>
+
+  <h3>Live contents — 10 rows</h3>
+  <table>
+    <thead><tr><th style="width:17mm">Row</th><th style="width:24mm">Created</th><th style="width:23mm">Model</th><th style="width:14mm">Conf.</th><th>Palette returned</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">e840b638</td><td>Sep 3, 02:31</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco</td></tr>
+      <tr><td class="mono">4558e2a2</td><td>Sep 3, 02:33</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco</td></tr>
+      <tr><td class="mono">696d5b4f</td><td>Sep 3, 02:35</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco &nbsp;<b>← run 1</b></td></tr>
+      <tr><td class="mono">67db6e80</td><td>Sep 3, 02:36</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>Rojo · Amarillo &nbsp;<b>← run 2</b></td></tr>
+      <tr><td class="mono">79fc4840</td><td>Sep 3, 02:36</td><td class="mono">gemini-3.5-flash</td><td><b>25 %</b></td><td><b>(empty)</b> &nbsp;<b>← run 3</b></td></tr>
+      <tr><td class="mono">f5ff07fc</td><td>Sep 3, 02:43</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco</td></tr>
+      <tr><td class="mono">17d53b4d</td><td>Sep 3, 15:53</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco</td></tr>
+      <tr><td class="mono">d8c9b18a</td><td>Sep 9, 01:30</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco &nbsp;<b>← written by the test suite</b></td></tr>
+      <tr><td class="mono">39642c71</td><td>Sep 9, 01:37</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco &nbsp;<b>← written by the test suite</b></td></tr>
+      <tr><td class="mono">4cbf3e39</td><td>Sep 9, 01:40</td><td class="mono">gemini-3.5-flash</td><td>90 %</td><td>negro · beige · blanco &nbsp;<b>← written by the test suite</b></td></tr>
+    </tbody>
+  </table>
+  <p>Every row records which model produced it and which version of the prompt, so a change in
+    output quality can be traced to a change in the prompt.</p>
+  <p>The last three rows were written by the end-to-end suite during the verification described
+    in §9 — which is itself the evidence that the test does what it claims: it saves for real,
+    against the production database, and then checks that the row count went up.</p>
+</section>
+
+<!-- ============ 8. PROMPT LOG ============ -->
+<section>
+  <h2>8 · Prompt log — 6 prompts (minimum 5)</h2>
+  <p class="lead">Each one records what I asked, what came back, and the judgment I had to apply
+    on top of it. The judgment line is the part that matters: it is where I disagreed with the
+    obvious answer.</p>
+
+  <div class="prompt">
+    <div class="h">1 · Plan before programming &nbsp;·&nbsp; <span class="mono">a4e9890</span></div>
+    <div class="q">"Here is the Week 1 assignment and its rubric. Tell me what we already have and
+      what is missing, before writing anything."</div>
+    <div class="r"><b>Result:</b> an inventory against the rubric. Five generative engines already
+      existed — but all of them behind a login, and <code>/core</code> returned 404. The rubric has a
+      hard cap: no live page, maximum 5/10.</div>
+    <div class="j"><b>My judgment:</b> I decided the "generative module" would be Appendix A3 of my
+      master document — how ClosetAI infers style — and not a generic text extractor. A generic
+      extractor would have satisfied the letter of the assignment without serving the product.</div>
+  </div>
+
+  <div class="prompt">
+    <div class="h">2 · The packet, before the code &nbsp;·&nbsp; <span class="mono">a4e9890</span></div>
+    <div class="q">"Write the Build Discipline Packet for this feature and <b>commit it before</b>
+      touching any code, so the history proves the order."</div>
+    <div class="r"><b>Result:</b> <code>docs/SEMANA-1-PACKET.md</code> with problem, user, success,
+      UX, scope cut, spec with checkable criteria, architecture, stack, DevOps and test plan.</div>
+    <div class="j"><b>My judgment:</b> the scope cut was written with reasons, not as a wish list.
+      Not wiring the core into the stylist yet is deliberate: first I have to prove the core that
+      comes out is good.</div>
+  </div>
+
+  <div class="prompt">
+    <div class="h">3 · Migration and contract &nbsp;·&nbsp; <span class="mono">e02b657</span></div>
+    <div class="q">"Write the <code>core_outputs</code> migration and the zod contract. Do not
+      invent columns."</div>
+    <div class="r"><b>Result:</b> migration 005 and <code>styleCoreSchema</code>, with a cap on the
+      length of every list.</div>
+    <div class="j"><b>My judgment:</b> two security decisions the assignment never asked for. The
+      table revokes <code>insert</code> from <code>anon</code> — otherwise anyone writes rows around
+      the contract — and the public query <b>does not select the <code>entrada</code> column</b>:
+      what someone writes about herself is hers.</div>
+  </div>
+
+  <div class="prompt">
+    <div class="h">4 · The module's prompt &nbsp;·&nbsp; <span class="mono">e02b657</span></div>
+    <div class="q">"Write the extraction prompt. Make it not invent: if the text is vague, it
+      should say so."</div>
+    <div class="r"><b>Result:</b> <code>src/lib/ai/prompts/core.ts</code>, versioned like the
+      others. It explicitly forbids magazine filler ("timeless elegance", "versatile and
+      sophisticated") and requires the model to declare <code>confianza</code> and
+      <code>falta</code>.</div>
+    <div class="j"><b>My judgment:</b> temperature 0.45, chosen by testing. At 0 the model repeated
+      the same five phrases for different inputs; higher, it started inventing colors nobody had
+      mentioned.</div>
+  </div>
+
+  <div class="prompt">
+    <div class="h">5 · Page and saving &nbsp;·&nbsp; <span class="mono">e02b657</span></div>
+    <div class="q">"Build <code>/core</code>: form, structured card, save button and the list of
+      saved cores. Public, no session."</div>
+    <div class="r"><b>Result:</b> the page placed outside the <code>(app)</code> route group so it
+      does not inherit the session requirement, with the Server Actions <code>generarNucleo</code>
+      and <code>guardarNucleo</code>.</div>
+    <div class="j"><b>My judgment:</b> <code>guardarNucleo</code> <b>re-validates</b> whatever
+      arrives from the browser. A Server Action can be called by direct POST; trusting that the
+      payload is still the one we generated would leave the door open.</div>
+  </div>
+
+  <div class="prompt">
+    <div class="h">6 · Test against the real site &nbsp;·&nbsp; <span class="mono">1f3a887</span></div>
+    <div class="q">"Run the three tests against production, not localhost, with different inputs —
+      including one that is vague on purpose."</div>
+    <div class="r"><b>Result:</b> all three passed. The third is the one that matters: with vague
+      text the module returned 25% confidence, an empty palette, and said what it had failed to
+      ask.</div>
+    <div class="j"><b>My judgment:</b> two of my own tests were badly written before they were
+      written well, and both failed the same way: they asserted text that <b>also exists on the
+      freshly loaded page</b>. See §10.</div>
+  </div>
+</section>
+
+<!-- ============ 9. TESTS ============ -->
+<section>
+  <h2>9 · Test evidence — 3 live runs (minimum 3) + 13 automated tests</h2>
+  <p class="lead">Against the live site, closetai.lat/core — not localhost. Each run left its row
+    in <code>core_outputs</code> (§7), so these are checkable against the database.</p>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:40mm">Input</th><th style="width:38mm">Expected</th><th>Actual</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Rich, specific text: comfort, black and beige, wide jeans, sneakers, a blazer for the office</td>
+        <td>A complete core, high confidence, a palette containing the colors she named</td>
+        <td><b>6.4 s · 90 %</b> · 3 principles · palette <code>negro · beige · blanco</code> ·
+            3 silhouettes · 2 things to avoid. <b>Nothing failed.</b></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>A deliberately opposite style: color, floral dresses, big earrings, hates black, sandals</td>
+        <td>A core <b>different</b> from the previous one. If it came out similar, the module would
+            be returning templates</td>
+        <td><b>7.2 s · 90 %</b> · 4 principles · palette <code>Rojo · Amarillo</code> · no black
+            anywhere. <b>Nothing failed.</b></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Deliberately vague text: "I like to look good, nothing out of this world, just normal
+            for every day"</td>
+        <td>That it <b>admits it does not know</b>, instead of filling in</td>
+        <td><b>7.5 s · 25 %</b> · 2 principles · <b>empty palette, empty silhouettes, empty
+            avoid-list</b> · states what it never got to ask. <b>Nothing failed.</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><b>Run 3 is what was actually being tested.</b> An extractor that returns a pretty palette to
+    someone who never mentioned a color feels intelligent for ten seconds and false forever. The
+    prompt forbids the filler and the result confirms it: with little information the lists come
+    back empty and confidence drops to 25%.</p>
+
+  <h3>Automated tests added this week</h3>
+  <p><b>8 unit tests on the contract</b> — that it rejects fewer than 2 principles, more than 5, a
+    confidence value out of range, an array containing several cores, and that it distinguishes the
+    model refusing from a formatting error.</p>
+  <p><b>5 end-to-end tests</b> — that <code>/core</code> loads <b>with no session</b> (that is the
+    feature, not a detail); that it rejects short text before spending a model call; that it
+    generates the card with all its blocks and saves it to <code>core_outputs</code>; that the cost
+    is logged; and that <b>the public list never shows what the person wrote</b>.</p>
+  <h3>Full verification on submission day — against the live site</h3>
+  <table>
+    <thead><tr><th style="width:56mm">What was run</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Unit tests (<code>vitest run</code>)</td><td class="ok">✓ 23 pass</td></tr>
+      <tr><td>End-to-end, one spec at a time</td><td class="ok">✓ all pass</td></tr>
+      <tr><td>End-to-end, all 58 in parallel</td><td class="ok">✓ 46 pass · 12 skipped for Gemini quota · 0 fail</td></tr>
+      <tr><td><code>npm run build</code></td><td class="ok">✓ compiles</td></tr>
+      <tr><td><code>/core</code> with no session</td><td class="ok">✓ HTTP 200</td></tr>
+      <tr><td><code>/demo/semana-1</code></td><td class="ok">✓ HTTP 200</td></tr>
+    </tbody>
+  </table>
+  <p>The 12 skips are the tests that depend on the reasoning model. Gemini's free tier allows 20
+    calls per minute and the suite exhausts it. <b>Skipped is not passed</b> — the report states each
+    skip and its reason, and nobody collects a green they did not earn.</p>
+  <p><b>Being honest about how fragile this is:</b> repeating the parallel run, between zero and four
+    tests fail depending on the run — always ones that go through login or through the model. Run
+    alone or in series they always pass, and the product verified by hand on the live site does not
+    fail. It is the suite contending with production, not the code. It is written down rather than
+    hidden.</p>
+</section>
+
+<!-- ============ 10. ITERATION ============ -->
+<section>
+  <h2>10 · Iteration log — what changed after testing</h2>
+  <h3>Two badly written tests before one written well &nbsp;<span style="font-weight:400;color:#6d6355">· Sep 2</span></h3>
+  <p><b>Observed:</b> the <code>/core</code> test failed while the card was visibly on screen. The
+    module worked; the test did not.</p>
+  <p><b>First attempt.</b> It asserted <code>getByText("Tu núcleo de estilo")</code>. It always
+    failed, even with the card right there. The heading uses CSS <code>uppercase</code>, and
+    Playwright reads the text <b>already transformed</b>: it was comparing "Tu núcleo de estilo"
+    against "TU NÚCLEO DE ESTILO".</p>
+  <p><b>Second attempt.</b> I made it case-insensitive. Then it passed — but it passed
+    <b>instantly, in 0.1 s</b>, with no generation having happened at all. The page's intro
+    paragraph says <i>"I distill your style core: your principles, your palette"</i>, so the
+    assertion matched the freshly loaded page. <b>The test was green and was testing nothing.</b></p>
+  <p><b>What stayed.</b> The assertions are anchored to the card element, not to the page:
+    <code>page.locator("article")</code>. Now there is no way for them to match the intro text.</p>
+  <p><b>Why it matters:</b> this is exactly the same failure as Week 0 in a different disguise.
+    There, the test asserted "the page loads without error" — and the login screen loads perfectly.
+    Here it asserted text that already existed before anything was generated. Both times the
+    assertion could be satisfied <b>without the feature working</b>.</p>
+  <p>And for a while I believed the bug was in the product: I instrumented the Server Action step
+    by step to find where it was hanging. The logs showed <code>model responded, ok = true</code> in
+    7.7 s — the module had been fine the whole time. <b>When a test and the product contradict each
+    other, the test is a suspect too.</b></p>
+
+  <h3>A second thing testing changed &nbsp;<span style="font-weight:400;color:#6d6355">· Sep 2</span></h3>
+  <p>The runs hit Gemini's free-tier limit — 20 requests per minute — and came back
+    <code>429 RESOURCE_EXHAUSTED</code>. I did not treat it as flakiness: I instrumented the call
+    and read the actual limit off the response. Two changes came out of it, both deployed
+    (§6): the call now retries, honoring the <code>retryDelay</code> the API itself asks for, and
+    the end-to-end tests <b>skip with a stated reason</b> when quota is gone instead of reporting a
+    failure that is not one.</p>
+  <h3>Three red tests on submission day, and none of them was the code
+    &nbsp;<span style="font-weight:400;color:#6d6355">· Sep 8</span></h3>
+  <p>Verifying the full suite against production before assembling this packet, three tests failed.
+    All said the same thing: navigating to a private route bounced to <code>/entrar</code>.</p>
+  <p><b>The first move was not to believe the test.</b> I opened the live site with a freshly created
+    account, waited the way a person waits, and walked all six private routes. All fine. The product
+    was not broken.</p>
+  <p><b>What was actually happening.</b> I instrumented the browser and it came out clean: at the
+    instant the URL changes to <code>/closet</code>, <b>the browser does not have the session cookie
+    yet</b>. It arrives about 300 ms later — the redirect is done by the router using the payload in
+    the same Server Action response, while the <code>Set-Cookie</code> headers are processed
+    separately. With a 0 ms wait, all six routes failed; with 300 ms, none did. No person can click
+    inside that gap. Playwright can.</p>
+  <p><b>What stayed.</b> A single <code>entrarConSesionLista()</code> in <code>e2e/entorno.ts</code>
+    that does not return until the cookie exists. Three specs each had their own copy of the login
+    step — and all three failed for the same reason; now there is one. And the test now asserts
+    something nobody was checking: <b>that logging in leaves a cookie</b>. I verified it by
+    deliberately sabotaging the pattern it searches for, to watch it fail with the message I wrote
+    rather than some other one.</p>
+  <p><b>The second finding.</b> The Gemini quota gate in <code>core.spec.ts</code> sat in a
+    <code>beforeAll</code> and skipped all five tests. Only one calls the model. The other four —
+    that <code>/core</code> loads with no session, that it rejects short text, that the cost is
+    logged, that the list does not expose what someone wrote — never touch Google. The central claim
+    of the week was hiding behind a provider's quota.</p>
+  <p><b>The third is a product defect, and it is the one I care about most.</b> When Gemini answered
+    429, the page told the person <i>"I couldn't read what you wrote properly."</i> Her text was
+    fine; the one who did not answer was the model. There is now a separate reason,
+    <code>unavailable</code>, and the page tells the truth: the model is overloaded, try again in a
+    minute. Blaming someone for a failure that is not theirs costs more than the technical error.</p>
+</section>
+
+<!-- ============ 11. VIDEO ============ -->
+<section>
+  <h2>11 · Demo video — 2:59</h2>
+  <p class="lead">Hosted on the product's own domain rather than a third-party account that could
+    expire or change its terms: <b>closetai.lat/demo/semana-1</b></p>
+  <figure>
+    <img src="06-demo-semana1.jpg" alt="">
+    <figcaption>The video page, live. The Week 0 video stays at <code>/demo</code>; each submission
+      has its own stable link.</figcaption>
+  </figure>
+  <p>The walkthrough covers, in order: the problem the feature attacks; <code>/core</code> opening
+    on the custom domain with no session; a text written in ordinary words; the structured core; the
+    save and the new row in Supabase; the public list showing the core but never the input text; and
+    the vague-input run where the module admits it does not know.</p>
+</section>
+
+<!-- ============ 12. DECISION NOTE ============ -->
+<section>
+  <h2>12 · Human Decision Note</h2>
+  <div class="note">
+    <p>The brief asked me to turn a prior methodology into a generative module. I could have built
+      a generic text extractor and met the letter of it. I chose Appendix A3 of my master document
+      — how ClosetAI infers someone's style — because it answers the strongest objection my value
+      proposition had already received: my app makes you photograph ten garments before it gives you
+      anything. <code>/core</code> gives you something useful in one minute, with no account and no
+      photos.</p>
+    <p>The decision I am most sure of is the smallest one. The prompt forces the model to declare
+      how confident it is and what it never got to ask, and it forbids magazine filler like
+      "timeless elegance". I tested it with a deliberately vague text and it came back at 25%
+      confidence, with the palette and the silhouettes empty. An extractor that invents a palette
+      for someone who never mentioned a color feels clever for ten seconds and false forever.</p>
+    <p>I rejected requiring an account in order to save. That is the comfortable choice, and it is
+      exactly the problem this page attacks.</p>
+    <p>One correction cost me. Twice I wrote tests that were green without testing anything. The
+      second passed in a tenth of a second, because the text I was asserting already existed in the
+      page's intro paragraph. It is last week's failure wearing a different disguise. I have learned
+      to distrust a test that passes too fast.</p>
+    <div class="wc">239 words</div>
+  </div>
+</section>
+
+<!-- ============ GATES ============ -->
+<section class="avoid">
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:38mm">Gate</th><th style="width:52mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · commit <code>a4e9890</code>, 17 minutes ahead of the first feature commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§5 · 13 commits &nbsp;·&nbsp; §6 · 7 production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§9 · 3 live runs &nbsp;·&nbsp; §10 · three defects found by testing, fixed and redeployed (Sep 2, 22:24 and Sep 8, 19:45)</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§11 · 2:59 video &nbsp;·&nbsp; §12 · 239 words</td></tr>
+    </tbody>
+  </table>
+</section>
