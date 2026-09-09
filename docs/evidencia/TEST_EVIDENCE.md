@@ -242,3 +242,26 @@ genere la tarjeta con sus cinco bloques y la guarde en `core_outputs`, que el co
 quede registrado, y que **la lista pública nunca muestre lo que la persona escribió**.
 
 Total del proyecto tras esta semana: **23 unitarias + 27 e2e**, verdes.
+
+## [2026-09-08] — Verificación completa antes de entregar la Semana 1
+
+Contra `https://closetai.lat`, no contra localhost.
+
+| Qué se corrió | Resultado |
+|---|---|
+| Unitarias (`vitest run`) | ✅ **23 pasan**, 6 se saltan (son las que llaman a APIs de verdad, y corren aparte) |
+| e2e completas, en serie por spec | ✅ **todas pasan** |
+| e2e completas, 58 en paralelo | ✅ **46 pasan · 12 se saltan por cuota de Gemini · 0 fallan** |
+| `npm run build` | ✅ compila |
+| `/core` sin sesión | ✅ HTTP 200 |
+| `/demo/semana-1` | ✅ HTTP 200 |
+
+Las 12 que se saltan son las que dependen del modelo de razonamiento: el nivel
+gratuito de Gemini da 20 llamadas por minuto y la suite las agota. **Saltarse no es
+pasar** — el reporte lo dice con su motivo y nadie se lleva un verde que no se ganó.
+
+**Honestidad sobre la fragilidad:** repitiendo la corrida en paralelo, entre cero y
+cuatro pruebas fallan según la vez, siempre las que pasan por el inicio de sesión o
+por el modelo. Solas y en serie pasan siempre, y el producto verificado a mano en el
+sitio en vivo no falla. Es contención de la suite contra producción. Queda escrito
+aquí en vez de escondido.

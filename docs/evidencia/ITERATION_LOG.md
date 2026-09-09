@@ -192,3 +192,46 @@ Y hubo un rato en que creí que el bug estaba en el producto: llegué a instrume
 la Server Action paso por paso para encontrar dónde se colgaba. Los logs mostraron
 `modelo respondió, ok = true` en 7.7 s — el módulo llevaba todo el tiempo bien.
 Cuando una prueba y el producto se contradicen, la prueba también es sospechosa.
+
+## [2026-09-08] — Tres pruebas rojas antes de entregar, y ninguna era del código
+
+Al verificar la suite completa contra producción antes de armar la entrega,
+fallaron tres: dos de sesión y una del estilista. Todas decían lo mismo — al
+navegar a una ruta privada, la app mandaba a `/entrar`.
+
+**Lo primero fue no creerle a la prueba.** Entré al sitio en vivo con una cuenta
+recién creada, esperé como esperaría una persona y recorrí las seis rutas
+privadas: todas bien. El producto no estaba roto.
+
+**Qué pasaba de verdad.** Instrumenté el navegador y salió limpio: en el instante
+en que la URL cambia a `/closet`, **el navegador todavía no tiene la cookie de
+sesión**. Llega unos 300 ms después. La redirección la hace el router con la carga
+que viene en la misma respuesta de la Server Action; las cabeceras `Set-Cookie` se
+procesan por su lado. Con 0 ms de espera fallaban las seis rutas; con 300 ms,
+ninguna. Ninguna persona alcanza a hacer clic en ese hueco. Playwright sí.
+
+**Qué quedó.** Un solo `entrarConSesionLista()` en `e2e/entorno.ts`, que no
+devuelve el control hasta que la cookie existe. Tres specs tenían su propia copia
+del inicio de sesión —y las tres fallaban por lo mismo—; ahora hay una. Y de paso
+la prueba afirma algo que nadie comprobaba: **que entrar deja cookie**. Lo verifiqué
+saboteando el patrón de búsqueda a propósito, para verla fallar con el motivo que
+le escribí, no con otro.
+
+**El segundo hallazgo, más importante.** La compuerta de cuota de Gemini en
+`core.spec.ts` estaba en un `beforeAll` y saltaba las cinco pruebas. Solo una llama
+al modelo. Las otras cuatro —que `/core` cargue sin sesión, que rechace texto corto,
+que el costo quede registrado, que la lista no exponga lo que alguien escribió— no
+tocan a Google. La afirmación central de la semana estaba escondida detrás de la
+cuota de un proveedor.
+
+**El tercero es un defecto de producto, y es el que más me importa.** Cuando Gemini
+respondía 429, la página le decía a la persona *"No pude leer bien lo que escribiste"*.
+Su texto estaba perfecto; el que no contestó fue el modelo. Ahora hay un motivo
+aparte, `unavailable`, y la página dice la verdad: que el modelo está saturado y que
+lo intente en un minuto. Echarle a alguien la culpa de una falla ajena es más caro
+que el error técnico.
+
+**Lo que no arreglé, y lo digo.** Corriendo los 58 en paralelo contra producción,
+entre cero y cuatro fallan según la corrida; solas y en serie pasan siempre. Es
+contención de la suite contra el sitio en vivo, no del código. Queda anotado en vez
+de escondido: prefiero una corrida verde con asterisco a un verde que no me creo.
