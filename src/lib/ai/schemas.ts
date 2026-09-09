@@ -136,7 +136,10 @@ export type StyleCore = z.infer<typeof styleCoreSchema>;
 export type StyleCoreResult =
   | { ok: true; core: StyleCore }
   | { ok: false; reason: "rejected"; message: string }
-  | { ok: false; reason: "unparseable"; message: string };
+  | { ok: false; reason: "unparseable"; message: string }
+  // El proveedor no contestó: cuota agotada o caído. No es culpa de lo que
+  // escribió la persona, y decirle que no la entendimos sería mentirle.
+  | { ok: false; reason: "unavailable"; message: string };
 
 /**
  * Interpreta la respuesta del modelo para /core.

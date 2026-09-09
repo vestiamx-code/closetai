@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
 
-import { cargarEnv, hayCuotaDeRazonamiento } from "./entorno";
+import { cargarEnv, entrarConSesionLista, hayCuotaDeRazonamiento } from "./entorno";
 
 /**
  * Recorrido de la Semana 2: el estilista arma outfits con el clóset real,
@@ -68,11 +68,7 @@ test.describe("Estilista", () => {
   });
 
   async function iniciarSesion(page: import("@playwright/test").Page) {
-    await page.goto("/entrar");
-    await page.getByLabel("Correo").fill(CORREO);
-    await page.getByLabel("Contraseña").fill(CONTRASENA);
-    await page.getByRole("button", { name: "Entrar" }).click();
-    await expect(page).toHaveURL(/\/closet/);
+    await entrarConSesionLista(page, CORREO, CONTRASENA);
   }
 
   test("arma tres outfits explicando por qué funcionan", async ({ page }) => {

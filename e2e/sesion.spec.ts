@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
 
-import { cargarEnv } from "./entorno";
+import { cargarEnv, entrarConSesionLista } from "./entorno";
 
 /**
  * Regresión: la sesión tiene que sobrevivir a navegar entre rutas privadas.
@@ -55,11 +55,7 @@ test.describe("La sesión sobrevive", () => {
   });
 
   test("después de entrar, ninguna ruta privada vuelve a pedir contraseña", async ({ page }) => {
-    await page.goto("/entrar");
-    await page.getByLabel("Correo").fill(CORREO);
-    await page.getByLabel("Contraseña").fill(CONTRASENA);
-    await page.getByRole("button", { name: "Entrar" }).click();
-    await expect(page).toHaveURL(/\/closet/);
+    await entrarConSesionLista(page, CORREO, CONTRASENA);
 
     for (const ruta of RUTAS_PRIVADAS) {
       await page.goto(ruta);
@@ -71,11 +67,7 @@ test.describe("La sesión sobrevive", () => {
   });
 
   test("volver a /entrar con sesión te manda al clóset y la sesión sigue viva", async ({ page }) => {
-    await page.goto("/entrar");
-    await page.getByLabel("Correo").fill(CORREO);
-    await page.getByLabel("Contraseña").fill(CONTRASENA);
-    await page.getByRole("button", { name: "Entrar" }).click();
-    await expect(page).toHaveURL(/\/closet/);
+    await entrarConSesionLista(page, CORREO, CONTRASENA);
 
     // Esta es la redirección que borraba las cookies refrescadas.
     await page.goto("/entrar");
@@ -102,11 +94,7 @@ test.describe("La sesión sobrevive", () => {
    * tiene que traer la cookie nueva. Es justo el invariante que se rompía.
    */
   test("la redirección misma entrega el token rotado", async ({ page, context }) => {
-    await page.goto("/entrar");
-    await page.getByLabel("Correo").fill(CORREO);
-    await page.getByLabel("Contraseña").fill(CONTRASENA);
-    await page.getByRole("button", { name: "Entrar" }).click();
-    await expect(page).toHaveURL(/\/closet/);
+    await entrarConSesionLista(page, CORREO, CONTRASENA);
 
     const sesion = (await context.cookies()).find((c) => /^sb-.*-auth-token(\.0)?$/.test(c.name));
     expect(sesion, "no se encontró la cookie de sesión").toBeTruthy();

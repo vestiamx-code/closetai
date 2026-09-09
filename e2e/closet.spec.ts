@@ -3,7 +3,7 @@ import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { expect, test } from "@playwright/test";
 
-import { cargarEnv } from "./entorno";
+import { cargarEnv, entrarConSesionLista } from "./entorno";
 
 /**
  * Recorrido completo de la Semana 1: entrar, subir una prenda, verla catalogada
@@ -30,11 +30,7 @@ test.describe.configure({ mode: "serial" });
  * Por eso las que necesitan estar dentro vuelven a entrar aquí.
  */
 async function iniciarSesion(page: import("@playwright/test").Page) {
-  await page.goto("/entrar");
-  await page.getByLabel("Correo").fill(CORREO);
-  await page.getByLabel("Contraseña").fill(CONTRASENA);
-  await page.getByRole("button", { name: "Entrar" }).click();
-  await expect(page).toHaveURL(/\/closet/);
+  await entrarConSesionLista(page, CORREO, CONTRASENA);
 }
 
 test.describe("Clóset digital", () => {

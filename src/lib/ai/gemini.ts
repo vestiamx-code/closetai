@@ -529,10 +529,17 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
     return { ...parseStyleCore(response.text ?? ""), estCostUsd, model, promptVersion };
   } catch (error) {
     console.error("[core] falló la llamada al modelo", error);
+    const texto = error instanceof Error ? error.message : String(error);
+    const sinCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
     return {
       ok: false,
-      reason: "unparseable",
-      message: "No pudimos generar tu núcleo ahora. Inténtalo en un momento.",
+      // Distinguir importa: si el proveedor se quedó sin cuota, el texto de la
+      // persona estaba perfecto. Meterlo en el mismo cajón que "no te entendí"
+      // le echa encima una culpa que no es suya.
+      reason: sinCuota ? "unavailable" : "unparseable",
+      message: sinCuota
+        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
+        : "No pudimos generar tu núcleo ahora. Inténtalo en un momento.",
       estCostUsd,
       model,
       promptVersion,

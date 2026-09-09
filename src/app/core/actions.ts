@@ -79,7 +79,8 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
     return {
       estado: "error",
       mensaje:
-        resultado.reason === "rejected"
+        // "unavailable" es del proveedor, no de quien escribió: se dice tal cual.
+        resultado.reason === "rejected" || resultado.reason === "unavailable"
           ? resultado.message
           : "No pude leer bien lo que escribiste. Cuéntame cómo te gusta vestirte, con tus palabras.",
     };
