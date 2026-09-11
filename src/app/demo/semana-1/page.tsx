@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Video demo · Semana 1 · ClosetAI",
   description:
-    "Recorrido de 2:59 por /core, el núcleo de estilo: un módulo generativo público que funciona sin cuenta y sin subir fotos.",
+    "Recorrido de 2:14 por /core, el núcleo de estilo: un módulo generativo público que funciona sin cuenta y sin subir fotos.",
 };
 
 /**
@@ -22,7 +22,7 @@ export default function DemoSemana1() {
         Semana 1 · El núcleo de estilo
       </h1>
       <p className="mt-4 max-w-xl text-lg leading-relaxed text-text-muted text-pretty">
-        Recorrido de 2:59 por <code className="text-text">/core</code> en producción — sin cuenta,
+        Recorrido de 2:14 por <code className="text-text">/core</code> en producción — sin cuenta,
         sin subir fotos y sin nada simulado.
       </p>
 
