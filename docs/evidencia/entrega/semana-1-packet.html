@@ -124,8 +124,8 @@
       <tr><td>UX image / mockup</td><td>Image-generated concept</td><td>Image-generated mockup + three-state wireframe (§3)</td><td class="ok">✓</td></tr>
       <tr><td>Product Spec</td><td>Requirements + acceptance criteria</td><td>8 requirements, each with a checkable criterion (§2)</td><td class="ok">✓</td></tr>
       <tr><td>Architecture Sketch</td><td>Data flow + components</td><td>Full flow from browser to Postgres, with the contract gate marked (§2)</td><td class="ok">✓</td></tr>
-      <tr><td>GitHub commits</td><td>Minimum 5</td><td><b>13 commits</b> this week, all pushed and public (§5)</td><td class="ok">✓</td></tr>
-      <tr><td>Vercel deployments</td><td>Minimum 2</td><td><b>7 production deployments</b>, all Ready (§6)</td><td class="ok">✓</td></tr>
+      <tr><td>GitHub commits</td><td>Minimum 5</td><td><b>15 commits</b> this week, all pushed and public (§5)</td><td class="ok">✓</td></tr>
+      <tr><td>Vercel deployments</td><td>Minimum 2</td><td><b>9 production deployments</b>, all Ready (§6)</td><td class="ok">✓</td></tr>
       <tr><td>Supabase evidence</td><td>Table / data evidence</td><td>Migration <code>005_core_outputs</code> + <b>10 real rows</b> queried live from production (§7)</td><td class="ok">✓</td></tr>
       <tr><td>Prompt log</td><td>Minimum 5 prompts</td><td><b>6 prompts</b>, each with result and the human judgment applied (§8)</td><td class="ok">✓</td></tr>
       <tr><td>Test evidence</td><td>Minimum 3 tests</td><td><b>3 live runs</b> against production, plus 13 new automated tests, plus a full pre-submission verification against the live site (§9)</td><td class="ok">✓</td></tr>
@@ -318,7 +318,7 @@ HTTP 200 · 3.39s</pre>
 
 <!-- ============ 5. COMMITS ============ -->
 <section>
-  <h2>5 · GitHub commits — 13 this week (minimum 5)</h2>
+  <h2>5 · GitHub commits — 15 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:26mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -335,17 +335,22 @@ HTTP 200 · 3.39s</pre>
       <tr><td class="mono">b368c10</td><td>Sep 8, 19:23</td><td>feat: demo video page at <code>/demo/semana-1</code></td></tr>
       <tr><td class="mono">6bb7fb1</td><td>Sep 8, 19:45</td><td>fix: don't blame the person who wrote the text when it is the provider that failed</td></tr>
       <tr><td class="mono">4baa73e</td><td>Sep 8, 21:30</td><td>docs: the pre-submission verification, including what failed</td></tr>
+      <tr><td class="mono">80ab136</td><td>Sep 9, 11:22</td><td>docs: this submission packet, with the source to rebuild it</td></tr>
+      <tr><td class="mono">c92ec6d</td><td>Sep 11, 15:21</td><td>feat: the demo video now carries my own voice</td></tr>
     </tbody>
   </table>
+  <p>The list ends at the commit that shipped the narrated video; the commit that publishes this
+    document into the repository comes after it.</p>
   <figure>
     <img src="03-commits.jpg" alt="">
-    <figcaption>The public repository — github.com/vestiamx-code/closetai</figcaption>
+    <figcaption>The public repository — github.com/vestiamx-code/closetai. Every commit carries a
+      green CI run.</figcaption>
   </figure>
 </section>
 
 <!-- ============ 6. DEPLOYS ============ -->
 <section>
-  <h2>6 · Vercel deployments — 7 this week (minimum 2)</h2>
+  <h2>6 · Vercel deployments — 9 this week (minimum 2)</h2>
   <p class="lead">All Production, all Ready. Counted from the Vercel deployment list, not from
     the number of pushes.</p>
   <table>
@@ -356,6 +361,8 @@ HTTP 200 · 3.39s</pre>
       <tr><td>Sep 2, 22:24</td><td>Production</td><td class="ok">● Ready</td><td>Entry points from the landing and the stylist, <b>plus the 429 retry</b> — a bug found by testing, fixed and redeployed</td></tr>
       <tr><td>Sep 8, 19:22</td><td>Production</td><td class="ok">● Ready</td><td>The evidence commits that were still only local</td></tr>
       <tr><td>Sep 8, 19:23</td><td>Production</td><td class="ok">● Ready</td><td>The demo video page</td></tr>
+      <tr><td>Sep 9, 11:22</td><td>Production</td><td class="ok">● Ready</td><td>This submission packet and the source to rebuild it</td></tr>
+      <tr><td>Sep 11, 15:21</td><td>Production</td><td class="ok">● Ready</td><td><b>The demo video with my narration</b></td></tr>
       <tr><td>Sep 8, 19:45</td><td>Production</td><td class="ok">● Ready</td><td><b>The honest error message</b> — a defect found while verifying, fixed and redeployed</td></tr>
       <tr><td>Sep 8, 21:31</td><td>Production</td><td class="ok">● Ready</td><td>The verification record</td></tr>
     </tbody>
@@ -635,6 +642,11 @@ grant  all    on public.core_outputs to service_role;</pre>
   <h2>11 · Demo video — 2:14</h2>
   <p class="lead">Hosted on the product's own domain rather than a third-party account that could
     expire or change its terms: <b>closetai.lat/demo/semana-1</b></p>
+  <p><b>The narration is my own voice.</b> I recorded it in one take and read faster than the
+    screen recording ran, so rather than let the two drift apart, the take was split at my own
+    pauses and each block was placed on the moment it describes — "I save it" over the save button,
+    "the repo is public" over GitHub. The only things cut from the screen recording were stretches
+    where the picture was frozen.</p>
   <figure>
     <img src="06-demo-semana1.jpg" alt="">
     <figcaption>The video page, live. The Week 0 video stays at <code>/demo</code>; each submission
@@ -678,7 +690,7 @@ grant  all    on public.core_outputs to service_role;</pre>
     <thead><tr><th style="width:38mm">Gate</th><th style="width:52mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · commit <code>a4e9890</code>, 17 minutes ahead of the first feature commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§5 · 13 commits &nbsp;·&nbsp; §6 · 7 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§5 · 15 commits &nbsp;·&nbsp; §6 · 9 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§9 · 3 live runs &nbsp;·&nbsp; §10 · three defects found by testing, fixed and redeployed (Sep 2, 22:24 and Sep 8, 19:45)</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§11 · 2:14 video &nbsp;·&nbsp; §12 · 239 words</td></tr>
     </tbody>
