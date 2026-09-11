@@ -70,6 +70,8 @@
   thead { display: table-header-group; }
   tbody tr:first-child, tbody tr:nth-child(2) { page-break-after: auto; }
 
+  section a { color: #7a3b28; text-decoration: none; border-bottom: .4pt solid #c9b9a6; }
+  figure a { border: none; }
   .note { border: .8pt solid #17140f; padding: 5mm 5.5mm; background: #fdfcfa;
           page-break-inside: avoid; }
   .note p { font-size: 10pt; }
@@ -643,16 +645,17 @@ grant  all    on public.core_outputs to service_role;</pre>
 <section>
   <h2>11 · Demo video — 2:14</h2>
   <p class="lead">Hosted on the product's own domain rather than a third-party account that could
-    expire or change its terms: <b>closetai.lat/demo/semana-1</b></p>
+    expire or change its terms:
+    <a href="https://closetai.lat/demo/semana-1"><b>closetai.lat/demo/semana-1</b></a></p>
   <p><b>The narration is my own voice.</b> I recorded it in one take and read faster than the
     screen recording ran, so rather than let the two drift apart, the take was split at my own
     pauses and each block was placed on the moment it describes — "I save it" over the save button,
     "the repo is public" over GitHub. The only things cut from the screen recording were stretches
     where the picture was frozen.</p>
   <figure>
-    <img src="06-demo-semana1.jpg" alt="">
-    <figcaption>The video page, live. The Week 0 video stays at <code>/demo</code>; each submission
-      has its own stable link.</figcaption>
+    <a href="https://closetai.lat/demo/semana-1"><img src="06-demo-semana1.jpg" alt=""></a>
+    <figcaption><b>This is a screenshot — click it, or the link above, to play the video.</b> The
+      Week 0 video stays at <code>/demo</code>; each submission has its own stable link.</figcaption>
   </figure>
   <p>The walkthrough covers, in order: the problem the feature attacks; <code>/core</code> opening
     on the custom domain with no session; a text written in ordinary words; the structured core; the
