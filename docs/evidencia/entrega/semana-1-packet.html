@@ -135,6 +135,7 @@
     </tbody>
   </table>
 
+  <div class="avoid">
   <h3>Required features and coding tasks from the week overview</h3>
   <table>
     <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
@@ -144,14 +145,15 @@
       <tr><td>Save button</td><td>Server Action <code>guardarNucleo</code>, which re-validates the payload server-side</td></tr>
       <tr><td>Supabase table <code>core_outputs</code></td><td>Migration <code>20260902000005</code>, applied to production, 7 rows</td></tr>
       <tr><td>Dashboard preview</td><td>"Núcleos que ya se generaron" — the saved cores, below the form</td></tr>
-      <tr><td>Prompt library entry</td><td><code>src/lib/ai/prompts/core.ts</code>, versioned like the project's other prompts</td></tr>
+      <tr><td>Prompt library entry</td><td><code>src/lib/ai/prompts/core.ts</code>, versioned — and written out in full, with its reasoning, in <code>docs/PROMPT-CORE.md</code></td></tr>
       <tr><td>3 test runs</td><td>§9 — three different inputs against the live site, one vague on purpose</td></tr>
     </tbody>
   </table>
+  </div>
 </section>
 
 <!-- ============ 2. BUILD DISCIPLINE PACKET ============ -->
-<section class="brk">
+<section>
   <h2>2 · Build Discipline Packet</h2>
   <p class="lead">Written before touching code. The commit that added this file
     (<code>a4e9890</code>, 20:16) precedes the commit that added the feature
@@ -339,8 +341,8 @@ HTTP 200 · 3.39s</pre>
       <tr><td class="mono">c92ec6d</td><td>Sep 11, 15:21</td><td>feat: the demo video now carries my own voice</td></tr>
     </tbody>
   </table>
-  <p>The list ends at the commit that shipped the narrated video; the commit that publishes this
-    document into the repository comes after it.</p>
+  <p>The list ends at the commit that shipped the narrated video. The commits after it publish
+    this document itself into the repository.</p>
   <figure>
     <img src="03-commits.jpg" alt="">
     <figcaption>The public repository — github.com/vestiamx-code/closetai. Every commit carries a
