@@ -7,7 +7,7 @@ import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
 import { RESEARCH_PROMPT, RESEARCH_PROMPT_VERSION } from "./prompts/research";
-import { clasificarFalloDelProveedor } from "./fallos";
+import { clasificarFalloDelProveedor, conModeloDeRespaldo, esTiempoAgotado } from "./fallos";
 import {
   PROFILE_PROMPT,
   PROFILE_PROMPT_VERSION,
@@ -56,6 +56,8 @@ export const MODELS = {
   vision: () => process.env.GEMINI_MODEL_VISION ?? "gemini-3.5-flash-lite",
   /** Razonamiento: estilista, chat y actualización del perfil de estilo. */
   reasoning: () => process.env.GEMINI_MODEL_REASONING ?? "gemini-3.5-flash",
+  /** Respaldo del de razonamiento cuando el proveedor lo tiene saturado. Ver `conModeloDeRespaldo`. */
+  reasoningFallback: () => process.env.GEMINI_MODEL_REASONING_FALLBACK ?? "gemini-3.5-flash-lite",
   /** Imagen: mockups y modo explorar. Requiere facturación activa. */
   image: () => process.env.GEMINI_MODEL_IMAGE ?? "gemini-3.1-flash-image",
 };
@@ -529,22 +531,26 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
   const promptVersion = CORE_PROMPT_VERSION;
 
   try {
-    const response = await conReintentoSiHayCuota(() =>
-      getClient().models.generateContent({
-      model,
-      contents: [{ role: "user", parts: [{ text: `${CORE_PROMPT}\n\nTexto de la persona:\n"""\n${texto}\n"""` }] }],
-      config: {
-        responseMimeType: "application/json",
-        responseJsonSchema: ESQUEMA_CORE,
-        temperature: 0.45,
-      },
-    }));
+    const { resultado: response, modelo } = await conModeloDeRespaldo(
+      { principal: model, respaldo: MODELS.reasoningFallback() },
+      (m, senal) =>
+        getClient().models.generateContent({
+          model: m,
+          contents: [{ role: "user", parts: [{ text: `${CORE_PROMPT}\n\nTexto de la persona:\n"""\n${texto}\n"""` }] }],
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema: ESQUEMA_CORE,
+            temperature: 0.45,
+            abortSignal: senal,
+          },
+        }),
+    );
 
-    return { ...parseStyleCore(response.text ?? ""), estCostUsd, model, promptVersion };
+    return { ...parseStyleCore(response.text ?? ""), estCostUsd, model: modelo, promptVersion };
   } catch (error) {
     console.error("[core] falló la llamada al modelo", error);
     const texto = error instanceof Error ? error.message : String(error);
-    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null;
+    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
     return {
       ok: false,
       // Distinguir importa: si el proveedor se quedó sin cuota, el texto de la
@@ -611,36 +617,39 @@ export async function generarInforme(
   const idsValidos = new Set(fuentes.map((f) => f.id));
 
   try {
-    const response = await conReintentoSiHayCuota(() =>
-      getClient().models.generateContent({
-        model,
-        contents: [
-          {
-            role: "user",
-            parts: [
-              {
-                text: `${RESEARCH_PROMPT}\n\n${datosParaElPrompt(fuentes, riesgos)}\n\nPREGUNTA:\n"""\n${pregunta}\n"""`,
-              },
-            ],
+    const { resultado: response, modelo } = await conModeloDeRespaldo(
+      { principal: model, respaldo: MODELS.reasoningFallback() },
+      (m, senal) =>
+        getClient().models.generateContent({
+          model: m,
+          contents: [
+            {
+              role: "user",
+              parts: [
+                {
+                  text: `${RESEARCH_PROMPT}\n\n${datosParaElPrompt(fuentes, riesgos)}\n\nPREGUNTA:\n"""\n${pregunta}\n"""`,
+                },
+              ],
+            },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema: ESQUEMA_INFORME,
+            temperature: 0.2,
+            abortSignal: senal,
           },
-        ],
-        config: {
-          responseMimeType: "application/json",
-          responseJsonSchema: ESQUEMA_INFORME,
-          temperature: 0.2,
-        },
-      }),
+        }),
     );
 
     const resultado = parseResearchReport(response.text ?? "", idsValidos);
     if (!resultado.ok && resultado.reason === "invented_source") {
-      console.warn(`[research] el modelo inventó una fuente: ${resultado.message}`);
+      console.warn(`[research] ${modelo} inventó una fuente: ${resultado.message}`);
     }
-    return { ...resultado, estCostUsd, model, promptVersion };
+    return { ...resultado, estCostUsd, model: modelo, promptVersion };
   } catch (error) {
     console.error("[research] falló la llamada al modelo", error);
     const texto = error instanceof Error ? error.message : String(error);
-    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null;
+    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
     return {
       ok: false,
       reason: proveedorCaido ? "unavailable" : "unparseable",
