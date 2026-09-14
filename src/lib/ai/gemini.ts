@@ -7,6 +7,7 @@ import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
 import { RESEARCH_PROMPT, RESEARCH_PROMPT_VERSION } from "./prompts/research";
+import { clasificarFalloDelProveedor } from "./fallos";
 import {
   PROFILE_PROMPT,
   PROFILE_PROMPT_VERSION,
@@ -108,7 +109,7 @@ export type CatalogGarmentResult = GarmentCatalogResult & {
  * pipeline de subida usa para marcar la prenda como lista o como fallida.
  */
 /**
- * Reintenta una llamada cuando el proveedor responde 429.
+ * Reintenta una llamada cuando el proveedor está caído: 429 (cuota) o 503 (saturado).
  *
  * El nivel gratuito de Gemini permite 20 peticiones por minuto. Al pasarse,
  * devuelve `RESOURCE_EXHAUSTED` con un `retryDelay` — y hasta hoy eso llegaba a
@@ -127,15 +128,18 @@ async function conReintentoSiHayCuota<T>(llamada: () => Promise<T>): Promise<T> 
       return await llamada();
     } catch (error) {
       const texto = error instanceof Error ? error.message : String(error);
-      const esCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
-      if (!esCuota || intento >= MAX_INTENTOS) throw error;
+      const fallo = clasificarFalloDelProveedor(texto);
+      if (!fallo || intento >= MAX_INTENTOS) throw error;
 
       // Google dice cuánto esperar; si no lo dice, se usa una espera creciente.
+      // La saturación (503) se despeja en segundos; la cuota (429), en decenas.
       const pedido = /"?retryDelay"?:\s*"?(\d+(?:\.\d+)?)s/.exec(texto);
-      const segundos = pedido ? Math.ceil(Number(pedido[1])) : intento * 20;
+      const segundos = pedido ? Math.ceil(Number(pedido[1])) : fallo === "cuota" ? intento * 20 : intento * 4;
       const espera = Math.min(segundos, 45) * 1000;
 
-      console.warn(`[gemini] cuota agotada, reintento ${intento} en ${espera / 1000}s`);
+      console.warn(
+        `[gemini] ${fallo === "cuota" ? "cuota agotada" : "modelo saturado"}, reintento ${intento} en ${espera / 1000}s`,
+      );
       await new Promise((listo) => setTimeout(listo, espera));
     }
   }
@@ -540,14 +544,14 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
   } catch (error) {
     console.error("[core] falló la llamada al modelo", error);
     const texto = error instanceof Error ? error.message : String(error);
-    const sinCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
+    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null;
     return {
       ok: false,
       // Distinguir importa: si el proveedor se quedó sin cuota, el texto de la
       // persona estaba perfecto. Meterlo en el mismo cajón que "no te entendí"
       // le echa encima una culpa que no es suya.
-      reason: sinCuota ? "unavailable" : "unparseable",
-      message: sinCuota
+      reason: proveedorCaido ? "unavailable" : "unparseable",
+      message: proveedorCaido
         ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
         : "No pudimos generar tu núcleo ahora. Inténtalo en un momento.",
       estCostUsd,
@@ -636,11 +640,11 @@ export async function generarInforme(
   } catch (error) {
     console.error("[research] falló la llamada al modelo", error);
     const texto = error instanceof Error ? error.message : String(error);
-    const sinCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
+    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null;
     return {
       ok: false,
-      reason: sinCuota ? "unavailable" : "unparseable",
-      message: sinCuota
+      reason: proveedorCaido ? "unavailable" : "unparseable",
+      message: proveedorCaido
         ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
         : "No pudimos generar el informe ahora. Inténtalo en un momento.",
       estCostUsd,
