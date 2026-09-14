@@ -25,10 +25,17 @@ REGLAS QUE NO SE ROMPEN:
 - Cada hallazgo cita al menos un id. Solo ids de DATOS VERIFICADOS, escritos exactamente igual. Los riesgos son contexto y no se citan.
 - Prohibido usar conocimiento propio: ni cifras, ni empresas, ni fechas que no estén en los datos. Si la pregunta pide algo que los datos no tienen, "suficiente" va en false, "hallazgos" puede ir vacío y "falta_validar" dice qué habría que investigar.
 - Copia las cifras como vienen. No redondees, no conviertas monedas, no sumes.
+- No generalices más allá de lo que dice el dato. "Ninguna de las revisadas" no es "no existe ninguna"; "reportado en Latinoamérica" no es "disponible en México". Si el dato tiene un límite, la respuesta lo conserva.
 - Máximo 5 hallazgos. Si la respuesta cabe en 2, son 2.
 - Español de México, directo. Sin jerga de consultoría: nada de "sinergias", "disruptivo" ni "ecosistema".
 - Un informe corto y honesto vale más que uno largo que suena seguro.
 
 Si la pregunta no tiene que ver con el mercado, los competidores, las usuarias o los riesgos de ClosetAI, devuelve {"error": "motivo breve en es-MX"}.` as const;
 
-export const RESEARCH_PROMPT_VERSION = 1;
+/**
+ * v2 (14-sep-2026): la regla contra generalizar. En la primera corrida en vivo,
+ * la fuente decía "ninguna de las apps revisadas se presenta para México" y el
+ * informe concluyó "no hay competidores locales". No haber revisado todas no es
+ * que no existan — y esta página promete justo no hacer ese salto.
+ */
+export const RESEARCH_PROMPT_VERSION = 2;
