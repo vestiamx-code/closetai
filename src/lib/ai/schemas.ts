@@ -174,3 +174,84 @@ export function parseStyleCore(raw: string): StyleCoreResult {
   return { ok: true, core: validado.data };
 }
 
+
+// ---------------------------------------------------------------------------
+// Semana 2 · Informe de investigación (/research)
+// ---------------------------------------------------------------------------
+
+/** Mismo formato que los ids de `research_sources`. */
+const idDeFuente = z.string().regex(/^[a-z0-9-]{2,40}$/, "Una fuente con un id de formato inválido.");
+
+export const researchReportSchema = z
+  .object({
+    respuesta: z.string().trim().min(1).max(700),
+    hallazgos: z
+      .array(
+        z.object({
+          afirmacion: z.string().trim().min(1).max(320),
+          fuentes: z.array(idDeFuente).min(1, "Cada hallazgo necesita al menos una fuente.").max(4),
+        }),
+      )
+      .max(5),
+    hueco: z.string().trim().max(320),
+    riesgo: z.string().trim().max(320),
+    falta_validar: z.string().trim().min(1).max(320),
+    suficiente: z.boolean(),
+  })
+  .refine((r) => !r.suficiente || r.hallazgos.length > 0, {
+    message: "Un informe que dice tener evidencia suficiente necesita al menos un hallazgo.",
+  });
+
+export type ResearchReport = z.infer<typeof researchReportSchema>;
+
+export type ResearchReportResult =
+  | { ok: true; informe: ResearchReport }
+  | { ok: false; reason: "rejected"; message: string }
+  | { ok: false; reason: "unparseable"; message: string }
+  // El modelo citó un id que no existe en `research_sources`: una afirmación
+  // que se presentaría como verificada sin estarlo. Se rechaza el informe entero.
+  | { ok: false; reason: "invented_source"; message: string }
+  | { ok: false; reason: "unavailable"; message: string };
+
+/**
+ * Interpreta el informe de `/research`.
+ *
+ * Además del esquema, comprueba cada cita contra los ids que de verdad existen.
+ * Es la diferencia entre "la IA dice que tiene fuentes" y "tiene fuentes".
+ */
+export function parseResearchReport(raw: string, fuentesValidas: ReadonlySet<string>): ResearchReportResult {
+  let datos: unknown;
+  try {
+    datos = JSON.parse(stripCodeFence(raw));
+  } catch {
+    return { ok: false, reason: "unparseable", message: "El modelo no devolvió JSON." };
+  }
+
+  if (Array.isArray(datos)) {
+    if (datos.length !== 1) {
+      return { ok: false, reason: "unparseable", message: "El modelo devolvió varios informes." };
+    }
+    datos = datos[0];
+  }
+
+  const rechazo = garmentCatalogRejectionSchema.safeParse(datos);
+  if (rechazo.success) return { ok: false, reason: "rejected", message: rechazo.data.error };
+
+  const validado = researchReportSchema.safeParse(datos);
+  if (!validado.success) {
+    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Formato inesperado." };
+  }
+
+  const inventadas = [
+    ...new Set(validado.data.hallazgos.flatMap((h) => h.fuentes).filter((id) => !fuentesValidas.has(id))),
+  ];
+  if (inventadas.length > 0) {
+    return {
+      ok: false,
+      reason: "invented_source",
+      message: `El informe cita fuentes que no están verificadas: ${inventadas.join(", ")}.`,
+    };
+  }
+
+  return { ok: true, informe: validado.data };
+}

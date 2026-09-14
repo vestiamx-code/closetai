@@ -6,6 +6,7 @@ import { AVATAR_PROMPT, AVATAR_PROMPT_VERSION } from "./prompts/avatar";
 import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
+import { RESEARCH_PROMPT, RESEARCH_PROMPT_VERSION } from "./prompts/research";
 import {
   PROFILE_PROMPT,
   PROFILE_PROMPT_VERSION,
@@ -18,7 +19,15 @@ import {
   type StyleProfile,
   type StylistResult,
 } from "./outfits";
-import { parseGarmentCatalog, parseStyleCore, type GarmentCatalogResult, type StyleCoreResult } from "./schemas";
+import {
+  parseGarmentCatalog,
+  parseResearchReport,
+  parseStyleCore,
+  type GarmentCatalogResult,
+  type ResearchReportResult,
+  type StyleCoreResult,
+} from "./schemas";
+import { datosParaElPrompt, type FuenteParaInforme, type RiesgoParaInforme } from "@/lib/research";
 
 /**
  * Adapter del proveedor de IA. Todo el resto de la app habla con este módulo,
@@ -58,6 +67,7 @@ export const EST_COST_USD = {
   analyzeGaps: 0.0008,
   updateStyleProfile: 0.0005,
   extractCore: 0.0006,
+  researchReport: 0.0008,
 } as const;
 
 /**
@@ -547,3 +557,95 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
   }
 }
 
+
+// ---------------------------------------------------------------------------
+// Semana 2 · Informe de investigación (/research)
+// ---------------------------------------------------------------------------
+
+const ESQUEMA_INFORME = {
+  type: "object",
+  properties: {
+    respuesta: { type: "string" },
+    hallazgos: {
+      type: "array",
+      maxItems: 5,
+      items: {
+        type: "object",
+        properties: {
+          afirmacion: { type: "string" },
+          fuentes: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 4 },
+        },
+        required: ["afirmacion", "fuentes"],
+      },
+    },
+    hueco: { type: "string" },
+    riesgo: { type: "string" },
+    falta_validar: { type: "string" },
+    suficiente: { type: "boolean" },
+  },
+  required: ["respuesta", "hallazgos", "hueco", "riesgo", "falta_validar", "suficiente"],
+} as const;
+
+export type ResultadoInforme = ResearchReportResult & { estCostUsd: number; model: string; promptVersion: number };
+
+/**
+ * Responde una pregunta de investigación usando solo los datos verificados.
+ *
+ * Temperatura 0.2, más baja que la de `/core` (0.45). Allá importaba que dos
+ * personas recibieran núcleos distintos; aquí importa lo contrario: que la misma
+ * evidencia produzca la misma respuesta, y que las cifras se copien, no se
+ * reinterpreten.
+ */
+export async function generarInforme(
+  pregunta: string,
+  fuentes: FuenteParaInforme[],
+  riesgos: RiesgoParaInforme[],
+): Promise<ResultadoInforme> {
+  const estCostUsd = EST_COST_USD.researchReport;
+  const model = MODELS.reasoning();
+  const promptVersion = RESEARCH_PROMPT_VERSION;
+  const idsValidos = new Set(fuentes.map((f) => f.id));
+
+  try {
+    const response = await conReintentoSiHayCuota(() =>
+      getClient().models.generateContent({
+        model,
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: `${RESEARCH_PROMPT}\n\n${datosParaElPrompt(fuentes, riesgos)}\n\nPREGUNTA:\n"""\n${pregunta}\n"""`,
+              },
+            ],
+          },
+        ],
+        config: {
+          responseMimeType: "application/json",
+          responseJsonSchema: ESQUEMA_INFORME,
+          temperature: 0.2,
+        },
+      }),
+    );
+
+    const resultado = parseResearchReport(response.text ?? "", idsValidos);
+    if (!resultado.ok && resultado.reason === "invented_source") {
+      console.warn(`[research] el modelo inventó una fuente: ${resultado.message}`);
+    }
+    return { ...resultado, estCostUsd, model, promptVersion };
+  } catch (error) {
+    console.error("[research] falló la llamada al modelo", error);
+    const texto = error instanceof Error ? error.message : String(error);
+    const sinCuota = texto.includes("429") || texto.includes("RESOURCE_EXHAUSTED");
+    return {
+      ok: false,
+      reason: sinCuota ? "unavailable" : "unparseable",
+      message: sinCuota
+        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
+        : "No pudimos generar el informe ahora. Inténtalo en un momento.",
+      estCostUsd,
+      model,
+      promptVersion,
+    };
+  }
+}
