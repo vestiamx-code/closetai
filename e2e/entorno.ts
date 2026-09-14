@@ -27,35 +27,42 @@ export function cargarEnv() {
 }
 
 /**
- * ¿El modelo de razonamiento tiene cuota disponible?
+ * ¿Hay algún modelo de razonamiento con cuota disponible?
  *
- * El nivel gratuito de Gemini tiene un tope diario por modelo. Cuando se agota,
- * las pruebas que dependen del estilista o de `/core` fallan — pero no por un
- * error del código: el proveedor devuelve 429 y no hay nada que arreglar del
- * lado de la app.
+ * El nivel gratuito de Gemini tiene tope por minuto y por día, por modelo.
+ * Cuando se agota, las pruebas que generan con IA no pueden comprobar nada —
+ * pero no por un error de la app: el proveedor devuelve 429.
  *
- * Estas pruebas se **saltan** con un motivo explícito en vez de fallar. Saltarse
- * no es lo mismo que pasar: el reporte dice en voz alta que no se comprobaron, y
- * nadie se lleva un verde que no se ganó.
+ * Desde la Semana 2 la app usa un modelo de respaldo cuando el principal falla
+ * (`conModeloDeRespaldo`). Por eso aquí se consultan **los dos**: si esta
+ * compuerta solo mirara el principal, saltaría pruebas que la página sí aprueba
+ * contestando con el respaldo — que es justo lo que pasó el 14-sep-2026.
+ *
+ * Saltarse no es pasar: el reporte lo dice en voz alta y nadie se lleva un
+ * verde que no se ganó.
  */
 export async function hayCuotaDeRazonamiento(): Promise<boolean> {
   const llave = process.env.GEMINI_API_KEY;
-  const modelo = process.env.GEMINI_MODEL_REASONING;
-  if (!llave || !modelo) return false;
+  if (!llave) return false;
 
-  try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`,
-      {
+  const modelos = [
+    process.env.GEMINI_MODEL_REASONING ?? "gemini-3.5-flash",
+    process.env.GEMINI_MODEL_REASONING_FALLBACK ?? "gemini-3.5-flash-lite",
+  ];
+
+  for (const modelo of modelos) {
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`, {
         method: "POST",
         headers: { "x-goog-api-key": llave, "Content-Type": "application/json" },
         body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "ok" }] }] }),
-      },
-    );
-    return r.status !== 429;
-  } catch {
-    return false;
+      });
+      if (r.status !== 429) return true;
+    } catch {
+      /* sin red hacia Google: se prueba el siguiente */
+    }
   }
+  return false;
 }
 
 /**
