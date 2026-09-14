@@ -127,3 +127,71 @@ distintas — incluida una vaga a propósito."
 fallaron igual: afirmaban texto que **también existe en la página recién cargada**. Ver el
 Iteration Log.
 **Commit:** (ver commit de evidencia)
+
+
+---
+
+# Semana 2 · Investigación y benchmarking (`/research`)
+
+## [2026-09-14] — Sesión 1 · Verificar antes de planear
+**Prompt:** "Esto es lo que tenemos que entregar esta semana. Antes de construir, revisa qué
+investigación ya existe en el Documento Maestro y comprueba cada dato en su fuente."
+**Resultado:** la investigación del §2.2 revisada fuente por fuente. Nueve afirmaciones no
+sobrevivieron tal cual y seis se descartaron por no poder comprobarse. Registro completo en
+`docs/evidencia/INVESTIGACION-SEMANA-2.md`.
+**Juicio humano:** la regla fue **abrir la fuente, no leer el resumen del buscador**. Resultó
+necesaria: el buscador resumió que Indyx cobra estilista desde $25 al mes (la página dice $15) y
+que GoTrendier cobra 20% + $9 (el desarrollador dice 14% + $14). El hallazgo más importante
+cambió la tesis del producto: **sí hay apps de clóset en español**. El hueco no es el idioma, es México.
+**Commit:** e3f65d3
+
+## [2026-09-14] — Sesión 2 · El packet, antes del código
+**Prompt:** "Escribe el Build Discipline Packet de /research sobre la investigación verificada y
+commitéalo antes de tocar código."
+**Resultado:** `docs/SEMANA-2-PACKET.md`, commit `e3f65d3` a las 11:37. El primer archivo de
+código entró en `1d0f355` a las 11:51.
+**Juicio humano:** el recorte de alcance más importante fue **no dejar que la IA investigue en
+internet**. Un modelo que busca y resume inventa cifras con total seguridad, y en esta misma
+sesión el buscador ya se había equivocado dos veces.
+**Commit:** e3f65d3
+
+## [2026-09-14] — Sesión 3 · Migración y datos sembrados
+**Prompt:** "Escribe la migración 006 con las cuatro tablas y siembra solo lo que está en el
+documento de investigación, con su URL y fecha. La tabla de validación no se siembra."
+**Resultado:** `research_sources` (15 filas), `research_risks` (7), `validation_conversations`
+(vacía, con check de consentimiento) y `research_outputs`. Lectura pública, escritura solo desde
+el servidor.
+**Juicio humano:** la tabla de validación **exige consentimiento a nivel de base de datos**, no
+solo en la interfaz. Y como Postgres no permite llave foránea sobre un arreglo, la integridad de
+la evidencia de cada riesgo la garantiza una prueba e2e en lugar de confiar en que nadie se equivoque.
+**Commit:** 1d0f355
+
+## [2026-09-14] — Sesión 4 · El contrato que no deja inventar fuentes
+**Prompt:** "El informe solo puede usar los datos de la tabla. Haz que el contrato lo compruebe:
+si cita un id que no existe, se rechaza entero."
+**Resultado:** `parseResearchReport` valida el esquema y luego cada cita contra los ids reales.
+Nueva razón de fallo, `invented_source`, distinta de un error de formato.
+**Juicio humano:** el prompt **pide** no inventar; el contrato lo **impide**. Temperatura 0.2,
+más baja que la de `/core` (0.45): allá importaba que dos personas recibieran núcleos distintos;
+aquí importa que la misma evidencia dé la misma respuesta. Y al guardar se revalida contra la
+base, porque una Server Action se puede llamar por POST directo.
+**Commit:** 1d0f355
+
+## [2026-09-14] — Sesión 5 · La página
+**Prompt:** "Arma /research: panel de resumen desde la base, pregunta de investigación, 5
+referentes, México, tabla con filtro y búsqueda, mapa de riesgos, validación y lo descartado."
+**Resultado:** página pública con la tabla y el filtro como componente de cliente, y el mapa de
+riesgos como cuadrícula de CSS.
+**Juicio humano:** la búsqueda **ignora acentos**: quien escribe "mexico" en el celular no pone
+tilde, y sin eso la búsqueda falla en silencio. La sección de validación dice "Pendiente" mientras
+no haya una conversación real, y lo que no se pudo verificar aparece al final, fuera de los datos.
+**Commit:** 1d0f355
+
+## [2026-09-14] — Sesión 6 · Ver fallar las pruebas antes de creerles
+**Prompt:** "Las 18 pruebas pasan. Sabotea el código a propósito y comprueba que las importantes
+fallan con el motivo correcto."
+**Resultado:** al quitar la comprobación de citas, falla exactamente la prueba de fuentes
+inventadas; al quitar la normalización de acentos, fallan las dos de búsqueda. Restaurado: 18 de 18.
+**Juicio humano:** es la lección de las semanas 0 y 1 aplicada desde el principio, no después del
+susto: una prueba que nunca has visto fallar no prueba nada.
+**Commit:** 1d0f355
