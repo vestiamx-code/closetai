@@ -235,3 +235,90 @@ que el error técnico.
 entre cero y cuatro fallan según la corrida; solas y en serie pasan siempre. Es
 contención de la suite contra el sitio en vivo, no del código. Queda anotado en vez
 de escondido: prefiero una corrida verde con asterisco a un verde que no me creo.
+
+---
+
+# Semana 2 · `/research`
+
+## [2026-09-14] — El buscador se equivocó dos veces antes de la primera línea de código
+**Observado:** al verificar la investigación del Documento Maestro, dos cifras venían mal en el
+resumen del buscador: Indyx "cobra estilista desde $25 al mes" (la página dice $15) y GoTrendier
+"cobra 20% + $9" (el desarrollador dice 14% + $14).
+
+**Lo que cambió:** la regla de la semana es **abrir la fuente**. Cada dato de `/research` se
+comprobó en su página; lo que no se pudo abrir quedó fuera, en la lista de descartados. De paso
+cayó la tesis de mercado —sí hay apps de clóset en español— y apareció una app que ya se llama
+"Closet AI".
+
+## [2026-09-14] — La migración traía comillas invertidas
+**Observado:** la Semana 1 se aplicó pegando el SQL dentro de una plantilla de JavaScript en el
+editor de Supabase. La migración 006 trae 6 comillas invertidas en sus comentarios: con ese
+método, el script se habría roto a la mitad.
+
+**Lo que cambió:** el SQL viajó como texto JSON escapado. Antes de ejecutar se comprobó que el
+editor tuviera exactamente el mismo texto (13,547 caracteres, idénticos). Después se verificó
+contra la base, no contra la pantalla: 15 fuentes, 7 riesgos, lectura pública sí, escritura
+pública rechazada (401) y una conversación sin consentimiento rechazada por la propia base (23514).
+
+## [2026-09-14] — Un 503 le pedía a la persona que cambiara su pregunta
+**Observado:** la prueba e2e de generación falló en producción. La página decía *"No pude armar un
+informe confiable con esa pregunta. Prueba a formularla de otra forma."*
+
+**Diagnóstico:** reproducido fuera del navegador con la misma pregunta y los mismos datos: Gemini
+respondía **503 UNAVAILABLE — "This model is currently experiencing high demand"**. La pregunta
+estaba bien. El código solo reconocía la caída del proveedor cuando llegaba como 429.
+
+**Lo que cambió:** `clasificarFalloDelProveedor()` distingue cuota (429) de saturación (503). Lo
+usan el reintento y los errores de `/core` y `/research`, que tenían el mismo hueco. **Es el
+defecto de la Semana 1 con otro código de error.** La prueba nueva usa el texto literal del 503 y
+se verificó saboteando el clasificador.
+
+## [2026-09-14] — Reintentar un modelo saturado solo alargaba la espera
+**Observado:** con el 503 ya reconocido, las pruebas siguieron fallando, ahora por tiempo.
+
+**Medido, no supuesto** (misma petición mínima, "responde solo: ok"):
+
+| Modelo | Intento 1 | Intento 2 | Intento 3 |
+|---|---|---|---|
+| `gemini-3.5-flash` | 503 en 22.3 s | 503 en 1.5 s | 200 en **86.4 s** |
+| `gemini-3.5-flash-lite` | 200 en 0.8 s | 200 en 0.5 s | 200 en 0.5 s |
+
+**Lo que cambió:** cada intento tiene 25 s como máximo y, si el proveedor falla, contesta el
+modelo ligero. Si la petición está mal, **no** se cambia de modelo: eso escondería el error. El
+modelo que contestó de verdad queda en la fila guardada. Resultado: las 4 pruebas de generación
+pasan en producción, y los informes y núcleos de hoy los contestó el respaldo — que sin el
+cambio habrían sido errores.
+
+## [2026-09-14] — Un verde con cuatro pruebas saltadas
+**Observado:** tras desplegar el respaldo, la suite dijo "22 pasan, 0 fallan". Pero había
+saltadas, y resultaron ser **las cuatro de generación**: justo las que comprobaban el arreglo.
+
+**Diagnóstico:** la compuerta de cuota solo consultaba el modelo principal, que ya estaba sin
+cuota. Saltaba pruebas que la página sí aprueba contestando con el respaldo.
+
+**Lo que cambió:** la compuerta consulta los dos modelos. Con el cambio, las cuatro corren y pasan.
+Es la lección de siempre con otra forma: **un verde con saltadas no es un verde**.
+
+## [2026-09-14] — "Ninguna de las revisadas" no es "no existe ninguna"
+**Observado:** en la primera corrida en vivo, la fuente decía *"ninguna de las apps de clóset en
+español revisadas se presenta con tallas, tiendas o precios de México"* y el informe concluyó
+*"no hay competidores locales dedicados a organizar clósets"*. Lo revelador: en "falta validar",
+el mismo informe reconocía que podría haber startups locales menores. **Sabía que no sabía, y lo
+afirmó igual.**
+
+**Lo que cambió:** prompt v2, con la regla de conservar el límite del dato. Misma pregunta, en
+vivo: *"Las apps de clóset revisadas con interfaz en español no se presentan con tallas, tiendas
+o precios de México."*
+
+**Una corrección mía, en el camino:** el primer script que verificaba el v2 leía el párrafo
+equivocado —la pregunta, no la respuesta— y dijo "no generaliza ✓". Un chequeo que pasa sin
+mirar lo que dice mirar. Se repitió leyendo la respuesta desde la base de datos.
+
+## [2026-09-14] — El límite por IP, comprobado sin querer
+**Observado:** una corrida más no llegó a producir informe. El registro de costos mostró
+**exactamente 10 informes en la última hora desde la misma IP**: el límite anti-abuso funcionó
+en producción.
+
+**Lo que cambió:** las pruebas de generación de `/research` y `/core` no contemplaban el límite y
+habrían fallado al correrse muchas veces seguidas. Ahora, si aparece el aviso del límite, se
+saltan con ese motivo escrito.

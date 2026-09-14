@@ -265,3 +265,53 @@ cuatro pruebas fallan según la vez, siempre las que pasan por el inicio de sesi
 por el modelo. Solas y en serie pasan siempre, y el producto verificado a mano en el
 sitio en vivo no falla. Es contención de la suite contra producción. Queda escrito
 aquí en vez de escondido.
+
+---
+
+# Semana 2 · `/research`
+
+## Tres corridas contra el sitio en vivo (closetai.lat/research)
+
+Cada corrida quedó guardada en `research_outputs`, con el modelo y la versión del prompt.
+
+| # | Pregunta | Resultado esperado | Resultado real | Qué falló | Qué cambié |
+|---|---|---|---|---|---|
+| 1 | "¿Hay competidores hechos para México, o solo apps traducidas?" | Citar las fuentes de México y conservar sus límites | 2.9 s · cita `apps-espanol` y `gotrendier` · llega a la tesis verificada | **Generalizó de más:** "no hay competidores locales", cuando la fuente dice "ninguna de las revisadas" | Prompt v2: el informe conserva el límite del dato |
+| 1 (v2) | La misma | Que ya no afirme "no hay" | 4.9 s · *"Las apps de clóset revisadas… no se presentan con tallas, tiendas o precios de México"* | Nada | — |
+| 2 | "¿Qué tan grande es la compra de ropa en línea en México y qué tan satisfecha está la gente?" | Cifras exactas, sin redondear | 3.3 s · cita los 3 datos de AMVO · 77 M, 37 M (2018), 59%, más del 50% y 35%, copiados tal cual | Nada | — |
+| 3 | "¿Cuántas personas en Guadalajara usan apps para organizar su ropa?" (fuera de los datos, a propósito) | Que **admita que no sabe** | 2.3 s · *"Los datos verificados no alcanzan para responder esto"* · **0 citas, 0 cifras inventadas** · propone una encuesta local | Nada | — |
+
+Las cuatro las contestó `gemini-3.5-flash-lite`, el modelo de respaldo: el principal estaba saturado.
+
+## Migración 006, verificada contra la base
+
+| Qué se comprobó | Resultado |
+|---|---|
+| Filas en `research_sources` / `research_risks` | ✅ 15 / 7 |
+| `validation_conversations` y `research_outputs` creadas | ✅ vacías |
+| Lectura pública (anon) | ✅ permitida |
+| Escritura pública (anon) | ✅ **rechazada**: 401 permission denied |
+| Conversación con `consentimiento = false` | ✅ **rechazada por la base**: 23514 check violation |
+| Límite de 10 informes por IP por hora | ✅ la corrida 11 se bloqueó; `api_costs` registró exactamente 10 |
+
+## Pruebas automáticas
+
+**Unitarias: 50 en verde** (27 nuevas esta semana):
+- 11 de la lógica pura: búsqueda sin acentos, filtro por tipo, riesgo más alto, conteos desde las filas y que los riesgos no lleven corchetes en el prompt.
+- 7 del contrato del informe, la más importante: **rechaza el informe entero si cita una fuente que no existe**.
+- 9 de fallos del proveedor: el 503 literal de hoy, el respaldo, el tiempo agotado y que un 400 no se esconda cambiando de modelo.
+
+Las pruebas clave se verificaron **saboteando el código** para verlas fallar con el motivo correcto.
+
+**e2e de `/research`, contra producción: 7 pruebas × 2 perfiles (celular y escritorio).** Carga sin
+sesión con 5 referentes y al menos 8 filas; búsqueda sin tilde; filtro por tipo; mapa de riesgos con
+evidencia existente; validación "pendiente" o real, nunca otra cosa; rechazo de pregunta corta sin
+gastar una llamada; y generación con citas reales que se guarda.
+
+Resultado final: **todas pasan**, incluidas las 4 de generación de `/research` y `/core`, que primero
+fallaron (503), luego por tiempo, luego se saltaron por la compuerta, y al final pasaron con el respaldo.
+
+## Validación con una persona real
+
+⏳ **Pendiente.** La hace Tamara con la guía de preguntas. La página dice "Pendiente" mientras tanto;
+no se simula.

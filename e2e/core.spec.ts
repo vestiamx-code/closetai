@@ -89,8 +89,11 @@ test.describe("Núcleo de estilo (/core)", () => {
     // comprobación y esta llamada. Si eso pasa, la app lo dice con todas sus
     // letras, y saltarse con ese motivo es lo honesto — fallar acusaría al
     // código de algo que hizo Google.
-    await expect(tarjeta.or(saturado)).toBeVisible({ timeout: 90_000 });
+    // El límite de 10 por IP por hora es una función, no un fallo.
+    const limite = page.getByText(/Ya generaste varios núcleos/i);
+    await expect(tarjeta.or(saturado).or(limite)).toBeVisible({ timeout: 90_000 });
     test.skip(await saturado.isVisible(), "Gemini sin cuota a media prueba (429)");
+    test.skip(await limite.isVisible(), "Límite de 10 núcleos por IP por hora alcanzado: no se pudo comprobar");
 
     await expect(tarjeta).toBeVisible();
 

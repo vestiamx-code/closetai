@@ -135,8 +135,12 @@ test.describe("Investigación (/research)", () => {
 
     const informe = page.getByTestId("informe");
     const saturado = page.getByText(/El modelo está saturado/i);
-    await expect(informe.or(saturado)).toBeVisible({ timeout: 90_000 });
+    // El límite de 10 informes por IP por hora es una función, no un fallo: correr
+    // la suite varias veces seguidas desde la misma computadora lo alcanza.
+    const limite = page.getByText(/Ya generaste varios informes/i);
+    await expect(informe.or(saturado).or(limite)).toBeVisible({ timeout: 90_000 });
     test.skip(await saturado.isVisible(), "Gemini sin cuota a media prueba (429)");
+    test.skip(await limite.isVisible(), "Límite de 10 informes por IP por hora alcanzado: no se pudo comprobar");
 
     // Cada cita del informe es un enlace a una fuente que existe en la tabla.
     const citas = informe.locator("a[data-fuente]");

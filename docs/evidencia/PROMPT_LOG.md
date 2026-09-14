@@ -195,3 +195,28 @@ inventadas; al quitar la normalización de acentos, fallan las dos de búsqueda.
 **Juicio humano:** es la lección de las semanas 0 y 1 aplicada desde el principio, no después del
 susto: una prueba que nunca has visto fallar no prueba nada.
 **Commit:** 1d0f355
+
+## [2026-09-14] — Sesión 7 · Reproducir el fallo fuera del navegador
+**Prompt:** "La prueba de generación falla en producción. No cambies nada todavía: reproduce la
+llamada fuera del navegador, con la misma pregunta y los mismos datos, y enséñame la respuesta cruda."
+**Resultado:** Gemini respondía 503 UNAVAILABLE. La página culpaba a la pregunta.
+**Juicio humano:** diagnosticar antes de arreglar. Con solo el mensaje de la interfaz, lo obvio era
+sospechar del contrato o del prompt; la respuesta cruda mostró que el problema estaba en otro lado.
+**Commit:** bb9ac53
+
+## [2026-09-14] — Sesión 8 · Medir antes de decidir el respaldo
+**Prompt:** "Antes de agregar un modelo de respaldo, mide: ¿el SDK permite tiempo máximo? ¿el modelo
+ligero está respondiendo mientras el principal no?"
+**Resultado:** flash tardó 86 s o dio 503; flash-lite respondió en medio segundo tres veces. El SDK
+acepta `abortSignal`.
+**Juicio humano:** el respaldo solo se activa cuando falla el proveedor. Si la petición está mal,
+cambiar de modelo escondería un error real. Y se registra qué modelo contestó.
+**Commit:** 23abff3
+
+## [2026-09-14] — Sesión 9 · Prompt v2, a partir de una corrida real
+**Prompt:** "En la corrida 1 el informe dijo 'no hay competidores locales' cuando la fuente dice
+'ninguna de las revisadas'. Agrega la regla y repite la misma pregunta."
+**Resultado:** v2 conserva el límite del dato.
+**Juicio humano:** el cambio salió de leer la respuesta con lupa, no de una prueba automática: ningún
+contrato detecta que una frase generalizó de más. Eso lo tiene que ver una persona.
+**Commit:** 46a1e64
