@@ -220,3 +220,12 @@ cambiar de modelo escondería un error real. Y se registra qué modelo contestó
 **Juicio humano:** el cambio salió de leer la respuesta con lupa, no de una prueba automática: ningún
 contrato detecta que una frase generalizó de más. Eso lo tiene que ver una persona.
 **Commit:** 46a1e64
+
+## [2026-09-18] — Sesión 10 · Leer la pantalla del fallo, no solo el mensaje
+**Prompt:** "Corre toda la suite contra producción. Si algo falla, no lo marques como intermitente
+sin antes leer qué había en la pantalla."
+**Resultado:** la falla del estilista resultó intermitente, pero su pantalla mostraba "Ciudad de
+M√©xico". Una cuenta temporal confirmó que la base le asignaba ese valor a toda cuenta nueva.
+**Juicio humano:** el error que importaba no era el que hizo fallar la prueba, sino uno que estaba
+en la captura, al lado. Y en la Semana 1 ya se había visto: se corrigió el síntoma y no la causa.
+**Commit:** (ver commit de la migración 007)

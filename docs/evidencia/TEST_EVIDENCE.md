@@ -315,3 +315,15 @@ fallaron (503), luego por tiempo, luego se saltaron por la compuerta, y al final
 
 ⏳ **Pendiente.** La hace Tamara con la guía de preguntas. La página dice "Pendiente" mientras tanto;
 no se simula.
+
+## [2026-09-18] — Suite completa contra producción
+
+| Qué se corrió | Resultado |
+|---|---|
+| e2e completa, 72 pruebas, en paralelo | **67 pasan** · 4 saltadas · **1 falla** |
+| `/research` | ✅ 14 de 14, incluidas las 2 de generación |
+| `/core`, clóset, pagos, sesión | ✅ todas |
+| 2 saltadas de la portada | Por diseño: solo aplican cuando la app corre sin credenciales |
+| 1 falla del estilista (celular) + 2 saltadas detrás | Intermitente: sola, en serie, **4 de 4 pasan** |
+| Lo que destapó esa falla | **Un bug real**: toda cuenta nueva nacía con la ciudad mal codificada (ver Iteration Log) |
+| Tras la migración 007 | ✅ 0 perfiles rotos · cuenta nueva correcta · prueba nueva `datos.spec.ts` en verde |

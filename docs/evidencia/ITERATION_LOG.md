@@ -322,3 +322,29 @@ en producción.
 **Lo que cambió:** las pruebas de generación de `/research` y `/core` no contemplaban el límite y
 habrían fallado al correrse muchas veces seguidas. Ahora, si aparece el aviso del límite, se
 saltan con ese motivo escrito.
+
+## [2026-09-18] — Un mes de cuentas nuevas con la ciudad rota
+**Observado:** en la suite completa contra producción, una prueba del estilista falló en celular.
+En la pantalla del usuario de prueba decía **"Ciudad de M√©xico"**.
+
+**Diagnóstico:** el texto roto no estaba en el código ni en las pruebas. Se creó una cuenta
+temporal sin elegir ciudad y se leyeron sus bytes: `e2 88 9a c2 a9` donde debía ir `c3 a9`. Es la
+«é» leída como Mac Roman. La migración 001 declara `city default 'Ciudad de México'`, pero cuando
+se aplicó en la Semana 0 el texto pasó por ese camino, y **la base guardó el valor por omisión
+roto**. Toda cuenta nueva nacía así. El clima funcionaba igual —el código cae a las coordenadas de
+la CDMX—, y ninguna prueba leía la ciudad: por eso nadie lo vio en un mes.
+
+**Una corrección mía:** en la Semana 1 esto ya había aparecido en el perfil de Tamara. Lo corregí
+a mano y lo atribuí a un comando de terminal, sin revisar el valor por omisión. **Corregí el síntoma
+y no la causa.**
+
+**Lo que cambió:**
+- Migración 007: corrige el valor por omisión y repara las filas rotas, reconociéndolas por su forma
+  para no escribir el texto roto. Verificado contra la base: 0 perfiles rotos, y una cuenta nueva
+  nace con "Ciudad de México", byte por byte.
+- Auditoría: era el único texto con acento fuera de comentarios en las migraciones 001 a 004.
+- Prueba nueva, `e2e/datos.spec.ts`: crea una cuenta nueva y compara los bytes de su ciudad.
+
+**La falla del estilista, aparte:** corriendo el archivo solo en celular, pasaron las 4. Es
+intermitente —una carrera de tiempos cuando la suite corre en paralelo contra producción—, no un
+defecto del producto. Queda anotada en vez de escondida.
