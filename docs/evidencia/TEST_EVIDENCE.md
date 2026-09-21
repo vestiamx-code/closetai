@@ -311,10 +311,20 @@ gastar una llamada; y generación con citas reales que se guarda.
 Resultado final: **todas pasan**, incluidas las 4 de generación de `/research` y `/core`, que primero
 fallaron (503), luego por tiempo, luego se saltaron por la compuerta, y al final pasaron con el respaldo.
 
-## Validación con una persona real
+## Validación con una persona real — [2026-09-21]
 
-⏳ **Pendiente.** La hace Tamara con la guía de preguntas. La página dice "Pendiente" mientras tanto;
-no se simula.
+✅ **Hecha, en persona, con consentimiento** para usarla sin nombre en la entrega y en la página.
+
+| | |
+|---|---|
+| Perfil | Mujer, 57 años, CDMX, organizadora de eventos. **Familiar de la fundadora y fuera del segmento núcleo (18 a 35)**: los dos límites se declaran en la página |
+| Confirmó | El problema existe: tarda 20 minutos en decidir y termina con lo mismo de siempre. Olvida lo que ya compró (un vestido sin estrenar). Usó `/core` sola y sin dificultad |
+| Contradijo | Subiría una foto de cuerpo completo **solo sin la cara**. Fotografiar cansa, pero su límite está en **40 prendas**, no en las 10 que supusimos |
+| No se probó | Si pagaría por ClosetAI. Solo que ya paga una suscripción mensual (Disney+, $339) |
+
+Las citas publicadas salen de sus respuestas, tal como Tamara las anotó; se revisaron una por una
+contra esas respuestas antes de publicarlas. La prueba e2e de la sección ahora comprueba la otra
+rama: que se vea la conversación y que ya no diga "Pendiente".
 
 ## [2026-09-18] — Suite completa contra producción
 

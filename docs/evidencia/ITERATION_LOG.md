@@ -348,3 +348,19 @@ y no la causa.**
 **La falla del estilista, aparte:** corriendo el archivo solo en celular, pasaron las 4. Es
 intermitente —una carrera de tiempos cuando la suite corre en paralelo contra producción—, no un
 defecto del producto. Queda anotada en vez de escondida.
+
+## [2026-09-21] — Lo que cambió una conversación real
+**Observado:** la entrevista (mujer de 57 años, familiar de la fundadora, fuera del segmento) no
+confirmó todo lo que suponíamos.
+
+**Lo que cambia en el producto:**
+- **El try-on tiene que aceptar una foto sin cara.** Subiría una foto de cuerpo completo, pero "con
+  cara lo pensaría 2 veces, por miedo a que las fotos salgan". Hoy la captura guiada pide una foto
+  completa.
+- **El umbral de fotografiar no es 10 prendas.** Dijo que se vuelve tedioso "después de la prenda
+  40". Diez sigue siendo el mínimo para dar valor, pero no es el techo.
+- **El pago único no está probado.** Paga Disney+ cada mes; la entrevista no probó si pagaría por
+  ClosetAI. Es la pregunta de la siguiente conversación, con alguien del segmento.
+
+**Proceso:** las citas se revisaron contra sus respuestas antes de publicarlas, y solo se publicaron
+las que coinciden con lo que ella dijo.

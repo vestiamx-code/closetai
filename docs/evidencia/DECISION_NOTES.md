@@ -155,3 +155,29 @@ demasiado rápido.
 
 **Firma:** ____________________
 
+
+---
+
+## Semana 2 — [2026-09-21] — Verificar antes de construir — *borrador, pendiente de aprobación*
+
+Esta semana tenía que demostrar que el problema es real, así que empecé por revisar mi propia
+investigación. Abrí cada fuente en vez de confiar en el resumen de un buscador, y nueve afirmaciones
+de mi Documento Maestro no sobrevivieron. La que más me dolió fue mi tesis: creía que no existía
+ninguna app de clóset en español, y hay varias. El hueco no es el idioma; es México: tallas,
+tiendas y precios en pesos. También encontré una app que ya se llama "Closet AI".
+
+La decisión que defiendo es que la IA solo razone sobre datos que una persona verificó. Rechacé
+dejarla buscar en internet: en esta misma investigación el buscador se equivocó en dos cifras. Y
+cuando un informe dijo "no hay competidores locales" mientras su fuente decía "ninguna de las
+revisadas", reescribí el prompt.
+
+Mi conversación real fue con mi mamá, de 57 años, fuera de mi segmento de 18 a 35, y la página lo
+dice. Aun así cambió dos cosas: fotografiaría hasta 40 prendas, no las 10 que supuse, y subiría una
+foto de cuerpo completo solo sin su cara, así que el try-on tiene que aceptar eso. Paga Disney+ cada
+mes, así que mi creencia de que la gente solo acepta pagos únicos no está probada. Esa es mi
+siguiente conversación.
+
+Las pruebas también encontraron un bug de la Semana 0 que yo había corregido a mano sin buscar su
+causa. Esta vez corregí la causa.
+
+**Firma:** ____________________
