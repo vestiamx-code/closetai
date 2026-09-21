@@ -44,11 +44,17 @@ export function esTiempoAgotado(error: unknown): boolean {
  * mal, otro modelo no la arregla, y ocultarlo sería peor.
  *
  * Devuelve qué modelo contestó de verdad, para que quede registrado.
+ *
+ * El límite era de 25 s y se bajó a 15 s el 21-sep-2026, con otra medición:
+ * con el principal colgado, cuatro preguntas seguidas a /research tardaron
+ * 27.7, 27.6, 17.5 y 27.6 s — casi todo esperando a que se agotaran los 25 s.
+ * Una respuesta normal tarda de 3 a 8 s, así que 15 s sigue dejando margen y
+ * el peor caso baja de ~28 s a ~17 s.
  */
 export async function conModeloDeRespaldo<T>(
   modelos: { principal: string; respaldo: string },
   llamada: (modelo: string, senal: AbortSignal) => Promise<T>,
-  tiempoMaximoMs = 25_000,
+  tiempoMaximoMs = 15_000,
 ): Promise<{ resultado: T; modelo: string; usoRespaldo: boolean }> {
   try {
     const resultado = await llamada(modelos.principal, AbortSignal.timeout(tiempoMaximoMs));
