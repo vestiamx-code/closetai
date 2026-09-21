@@ -158,7 +158,7 @@ demasiado rápido.
 
 ---
 
-## Semana 2 — [2026-09-21] — Verificar antes de construir — *borrador, pendiente de aprobación*
+## Semana 2 — [2026-09-21] — Verificar antes de construir
 
 Esta semana tenía que demostrar que el problema es real, así que empecé por revisar mi propia
 investigación. Abrí cada fuente en vez de confiar en el resumen de un buscador, y nueve afirmaciones
@@ -180,4 +180,4 @@ siguiente conversación.
 Las pruebas también encontraron un bug de la Semana 0 que yo había corregido a mano sin buscar su
 causa. Esta vez corregí la causa.
 
-**Firma:** ____________________
+**Aprobada por Tamara Muñoz Delgadillo el 21 de septiembre de 2026.**
