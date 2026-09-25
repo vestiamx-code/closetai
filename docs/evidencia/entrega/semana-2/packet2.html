@@ -517,6 +517,10 @@ HTTP 200</pre>
   <p><b>End-to-end, against production, on phone and desktop:</b> <code>/research</code> <b>14 of 14</b>. Full suite on
     Sep 18: <b>67 pass</b>; 1 intermittent stylist test (4 of 4 when run alone); 4 skipped by design or in chain.
     That run also uncovered a real bug — see §12.</p>
+  <p><b>Re-verified on September 25, before submitting:</b> 50 unit tests pass, and <code>/research</code> is
+    14 of 14 against production. In the first of three runs that afternoon, the risk-map test failed once on the
+    phone profile and passed on every repeat, alone and in the full file. The cause is not identified, so it is
+    written here instead of being left out: an intermittent test is a test I do not trust yet.</p>
 </section>
 
 <!-- ============ 11. VALIDATION ============ -->
