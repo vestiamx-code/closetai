@@ -1,0 +1,614 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ClosetAI — Week 2 Submission Packet</title>
+<style>
+@page { size: Letter; margin: 15mm 15mm 16mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0; font: 10.2pt/1.55 "Charter", "Georgia", serif; color: #17140f;
+    background: #fff;
+  }
+  h1, h2, h3, .ui { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+  /* ---------- cover ---------- */
+  .cover { page-break-after: always; padding-top: 6mm; }
+  .kicker { font: 600 8.2pt/1 "Helvetica Neue", sans-serif; letter-spacing: .16em;
+            text-transform: uppercase; color: #8a7f6d; }
+  .cover h1 { font-size: 30pt; line-height: 1.06; margin: 7mm 0 0; letter-spacing: -.022em;
+              font-weight: 700; }
+  .cover h1 em { font-family: "Charter", Georgia, serif; font-style: italic;
+                 font-weight: 400; color: #7a3b28; }
+  .cover .sub { margin-top: 5mm; font-size: 11.5pt; color: #4a4238; max-width: 118mm; }
+  .byline { margin-top: 9mm; font: 9.4pt/1.7 "Helvetica Neue", sans-serif; color: #4a4238; }
+  .byline b { color: #17140f; }
+
+  .links { margin-top: 8mm; border-top: 1.6pt solid #17140f; }
+  .links a { display: flex; gap: 5mm; align-items: baseline; text-decoration: none;
+             color: #17140f; padding: 3.1mm 0; border-bottom: .4pt solid #ddd6c9; }
+  .links .lbl { font: 600 8pt/1 "Helvetica Neue", sans-serif; letter-spacing: .12em;
+                text-transform: uppercase; color: #8a7f6d; width: 30mm; flex: none; }
+  .links .url { font-size: 10.4pt; color: #7a3b28; word-break: break-all; }
+
+  .gate { margin-top: 9mm; background: #f6f2ea; border-left: 2.4pt solid #7a3b28;
+          padding: 4mm 5mm; font-size: 9.4pt; line-height: 1.5; }
+  .gate b { font-family: "Helvetica Neue", sans-serif; font-size: 8.6pt; letter-spacing: .04em; }
+
+  /* ---------- sections ---------- */
+  h2 { font-size: 13pt; letter-spacing: -.012em; margin: 0 0 3.5mm;
+       padding-bottom: 1.6mm; border-bottom: 1.4pt solid #17140f; font-weight: 700; }
+  section { margin-bottom: 6.5mm; }
+  .brk { page-break-before: always; }
+  .avoid { page-break-inside: avoid; }
+  h3 { font-size: 9.4pt; letter-spacing: .01em; margin: 5mm 0 1.6mm; font-weight: 700; }
+  p { margin: 0 0 2.4mm; }
+  .lead { color: #4a4238; font-size: 9.6pt; margin-bottom: 4mm; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.9pt; margin: 2mm 0 3mm; }
+  th { text-align: left; font: 600 7.6pt/1.3 "Helvetica Neue", sans-serif;
+       letter-spacing: .09em; text-transform: uppercase; color: #6d6355;
+       border-bottom: 1pt solid #17140f; padding: 1.6mm 2.4mm 1.6mm 0; vertical-align: bottom; }
+  td { padding: 1.7mm 2.4mm 1.7mm 0; border-bottom: .4pt solid #e4ded2; vertical-align: top;
+       line-height: 1.4; }
+  tr { page-break-inside: avoid; }
+  td.ok { color: #2f6b3f; font-weight: 700; white-space: nowrap; }
+  code, .mono { font-family: "SF Mono", "Menlo", monospace; font-size: 8.3pt;
+                background: #f2eee6; padding: .4mm 1mm; border-radius: 1.4pt; }
+  pre { font-family: "SF Mono", "Menlo", monospace; font-size: 7.7pt; line-height: 1.5;
+        background: #f6f2ea; border-left: 2pt solid #d8cfbe; padding: 3mm 4mm;
+        white-space: pre-wrap; margin: 2mm 0 3mm; page-break-inside: avoid; }
+  ul { margin: 0 0 3mm; padding-left: 4.6mm; }
+  li { margin-bottom: 1.2mm; }
+
+  figure { margin: 3mm 0 4mm; page-break-inside: avoid; }
+  figure img { width: 100%; border: .6pt solid #ddd6c9; border-radius: 2pt; display: block; }
+  figcaption { font: 8.1pt/1.45 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 1.8mm; }
+  .two { display: flex; gap: 5mm; }
+  .two figure { flex: 1; margin-top: 0; }
+  .media { max-width: 118mm; margin-left: auto; margin-right: auto; }
+  /* Una tabla no debe dejar dos filas solas al otro lado del salto. */
+  thead { display: table-header-group; }
+  tbody tr:first-child, tbody tr:nth-child(2) { page-break-after: auto; }
+
+  section a { color: #7a3b28; text-decoration: none; border-bottom: .4pt solid #c9b9a6; }
+  figure a { border: none; }
+  .note { border: .8pt solid #17140f; padding: 5mm 5.5mm; background: #fdfcfa;
+          page-break-inside: avoid; }
+  .note p { font-size: 10pt; }
+  .wc { font: 8pt/1 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 3mm; }
+
+  .prompt { border-left: 2pt solid #d8cfbe; padding-left: 4mm; margin: 0 0 4mm;
+            page-break-inside: avoid; }
+  .prompt .h { font: 700 8.6pt/1.4 "Helvetica Neue", sans-serif; }
+  .prompt .q { font-style: italic; color: #4a4238; margin: 1mm 0; }
+  .prompt .r { font-size: 8.9pt; margin: 1mm 0 0; }
+  .prompt .j { font-size: 8.9pt; margin: 1mm 0 0; background: #f6f2ea; padding: 2mm 2.6mm; }
+  .prompt .j b { font-family: "Helvetica Neue", sans-serif; font-size: 8.1pt; }
+
+  .pendiente { background: #fff3b0; outline: 1pt dashed #b38f00; padding: .4mm 1.4mm; font-weight: 700; color: #6b5400; }
+  p.pendiente { display: block; padding: 4mm; }
+  section a { color: #7a3b28; text-decoration: none; border-bottom: .4pt solid #c9b9a6; }
+  figure a { border: none; }
+
+</style>
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker">Week 2 · Research + Benchmarking Dashboard</div>
+  <h1>Is the problem real?<br><em>With sources.</em></h1>
+  <p class="sub">A public research module for ClosetAI where every data point links to the page
+     that proves it — and where the AI can only reason over data a person already verified.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted September 25, 2026 · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat/research"><span class="lbl">Live page</span><span class="url">closetai.lat/research</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+    <a href="https://closetai.lat/demo/semana-2"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/semana-2</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE WEEK IN ONE LINE.</b> Before building on my market thesis, I checked it source by source.
+    Nine claims in my own master document did not survive. The biggest one: my thesis was "there is
+    no closet app in Spanish" — <b>there are several</b>. The gap is not the language; it is Mexico:
+    sizes, stores and prices in pesos. I also found an app that is already called "Closet AI".
+    Building three more weeks on an unverified thesis would have been the most expensive mistake
+    this product could make.
+  </div>
+</div>
+
+<!-- ============ 1. RUBRIC ============ -->
+<section>
+  <h2>1 · The rubric, category by category</h2>
+  <table>
+    <thead><tr><th style="width:52mm">Category</th><th style="width:12mm">Pts</th><th>Evidence</th><th style="width:10mm">§</th></tr></thead>
+    <tbody>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed at 11:37 (<code>e3f65d3</code>); first line of code at 11:51 (<code>1d0f355</code>). Public history.</td><td>2</td></tr>
+      <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Image-generated mockup (Gemini) · wireframe with implementation notes and scope cut</td><td>3</td></tr>
+      <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>11 requirements, each with a checkable criterion</td><td>2</td></tr>
+      <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow from browser to Postgres, with the contract gate marked; stack table with the why</td><td>2</td></tr>
+      <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/research</code> loads with no session; <b>14 of 14</b> end-to-end tests pass against production</td><td>4, 10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>15 commits</b> (min. 5) · <b>14 deployments</b> (min. 2) · <b>10</b> coding-agent prompts</td><td>6–9</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td>50 unit tests · end-to-end against production · 3 live runs · <b>5 defects found by testing, fixed and redeployed</b> · <b>1 real human conversation</b>, in person, with consent</td><td>10–12</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>9 corrections to my own research · decision note, 240 words</td><td>5, 14</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>2:30 walkthrough recorded against production, narrated by me</td><td>13</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Research intake</td><td>A research question (20–500 characters) that returns a report citing only verified sources</td></tr>
+      <tr><td>5 global examples</td><td>Benchmark cards: Whering, Stylebook, Style DNA, Indyx, Google try-on</td></tr>
+      <tr><td>Mexico localization</td><td>Mexico section: 77 M digital buyers, 59% buy clothes online, 35% "very satisfied", GoTrendier, Spanish-language apps</td></tr>
+      <tr><td>8 competitors/substitutes</td><td><b>11</b> in a table: 9 competitors and 2 substitutes</td></tr>
+      <tr><td>Filter/search table</td><td>Filter by type; search that ignores accents ("mexico" finds "México")</td></tr>
+      <tr><td>Risk map</td><td>7 risks on a 3×3 probability × impact grid, each linked to its evidence</td></tr>
+      <tr><td>Saved research output</td><td><code>research_outputs</code> table; saved reports listed on the page</td></tr>
+      <tr><td>1 human validation conversation</td><td>Done in person on Sep 21, with consent; published on the page without a name (§11)</td></tr>
+      <tr><td>Create competitor table · add filter/search · add benchmark cards · save research record · add dashboard widget</td><td>All live. The dashboard widget is the summary panel at the top, computed from the database</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. BUILD DISCIPLINE PACKET ============ -->
+<section class="brk">
+  <h2>2 · Build Discipline Packet</h2>
+  <p class="lead">Written before touching code. Committed at 11:37 (<code>e3f65d3</code>); the first
+    file of the feature arrived at 11:51 (<code>1d0f355</code>). The research it stands on was verified
+    first, in the same commit.</p>
+
+  <h3>🧩 Problem</h3>
+  <p>ClosetAI was designed on a market thesis — "nobody serves Mexico" — written in August from desk
+    research. When I checked it, part of it was false: <b>there are closet apps in Spanish</b>, and
+    <b>there is already an app called "Closet AI"</b>. Building three more weeks on an unverified thesis
+    is the most expensive mistake a new product can make. And nobody outside the project — a professor,
+    an investor, a potential user — could check today why ClosetAI would have a place in the market.</p>
+
+  <h3>👤 User</h3>
+  <p>(1) <b>Me, the founder</b>, deciding with evidence what to build, at what price and under what name.
+    (2) <b>Whoever evaluates ClosetAI</b> — professor, investor — who needs to see the proof, not believe it.
+    (3) <b>The person interviewed</b>, whose real conversation becomes evidence, with consent.</p>
+
+  <h3>🎯 Success — what has to work by the end of the week</h3>
+  <ul>
+    <li><code>/research</code> loads in production with no session.</li>
+    <li>Every data point links to its source and carries a verification date.</li>
+    <li>5 global examples, Mexico localization, and at least 8 competitors and substitutes in a table
+      that can be filtered and searched.</li>
+    <li>A risk map where each risk points to the evidence behind it.</li>
+    <li>A research question produces a report that <b>only uses verified data</b> and cites every claim;
+      it can be saved and lands in Supabase.</li>
+    <li><b>One real conversation with a person</b>, recorded with consent. Until it exists, the page says
+      "pending": it is never simulated.</li>
+  </ul>
+
+  <h3>🖼️ UX concept</h3>
+  <p>One page, top to bottom, ordered the way an argument reads: summary panel → research question and
+    report → 5 global examples → Mexico → competitors and substitutes → risk map → real conversation →
+    saved reports → what we discarded. Wireframe in §3.</p>
+
+  <h3>✂️ Scope cut — what looked nice and is deliberately not built</h3>
+  <ul>
+    <li><b>An AI that researches the internet.</b> A model that searches and summarizes invents figures
+      with total confidence — and in this same research, the search engine's summaries got two figures
+      wrong. The AI only reasons over data a person verified.</li>
+    <li><b>Automatic competitor updates</b> (scraping): fragile, against several stores' terms, and it
+      changes data nobody reviews.</li>
+    <li><b>Editing the research from the page:</b> data enters through a migration, with its source.</li>
+    <li><b>A charting library:</b> a CSS grid is enough for 7 risks.</li>
+    <li><b>More than one validation conversation:</b> the assignment asks for one; doing it well beats
+      doing five in a rush.</li>
+  </ul>
+
+  <h3>🧱 Product spec and acceptance criteria</h3>
+  <table>
+    <thead><tr><th style="width:7mm">#</th><th style="width:42mm">Requirement</th><th>Acceptance criterion (checkable)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Public page</td><td><code>GET /research</code> returns 200 with no session cookie</td></tr>
+      <tr><td>2</td><td>Summary panel</td><td>Counts come from the database, not from the code</td></tr>
+      <tr><td>3</td><td>5 global examples</td><td>5 cards, each with key fact, lesson, source link and date</td></tr>
+      <tr><td>4</td><td>Mexico localization</td><td>A Mexico section, each data point with its source</td></tr>
+      <tr><td>5</td><td>Competitors and substitutes</td><td>A table with at least 8 rows of type competitor or substitute</td></tr>
+      <tr><td>6</td><td>Filter and search</td><td>Filtering by type shows only that type; "mexico" finds "México"; no match shows a message, not an empty table</td></tr>
+      <tr><td>7</td><td>Risk map</td><td>Each risk placed by probability × impact, with its mitigation and evidence</td></tr>
+      <tr><td>8</td><td>Research question</td><td>20–500 characters; the report passes a zod contract; <b>every cited source exists in the data</b>; a claim with no source is rejected; if the data is not enough, the report says so</td></tr>
+      <tr><td>9</td><td>Save</td><td>Writes a row to <code>research_outputs</code> and appears in the list without reloading</td></tr>
+      <tr><td>10</td><td>Human validation</td><td>Shows the real, consented conversation; if none, says "pending"</td></tr>
+      <tr><td>11</td><td>Cost and limit</td><td>Every report logs its cost; one IP cannot generate more than 10 per hour</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🏗️ Architecture</h3>
+<pre>Browser (/research, no session)
+   │
+   ▼
+Server Component — reads research_sources · research_risks
+                   validation_conversations · research_outputs
+   ├─ Table (client): filter and accent-insensitive search over the loaded rows
+   ├─ Risk map: 3×3 CSS grid
+   └─ Form → Server Action generarInvestigacion()
+        ├─ validates the question with zod · checks the per-IP limit
+        ├─ reads the verified data from Supabase
+        ├─ calls Gemini with RESEARCH_PROMPT + that data, identified by id
+        │     └─ if the model is saturated or times out (25 s) → lighter backup model
+        ├─ contract: zod schema + every cited id must exist   ← if not, nothing is shown
+        └─ logs the cost in api_costs
+             ▼ (the person decides to save)
+        guardarInvestigacion()  ← re-checks the citations: reachable by direct POST
+             └─ inserts into research_outputs</pre>
+  <p><b>Why the AI cannot search the internet:</b> the report can only cite ids that exist in the table.
+    An unverified data point cannot appear, because the contract rejects the whole report.</p>
+
+  <h3>🧰 Tech stack</h3>
+  <table>
+    <thead><tr><th style="width:40mm">Tool</th><th style="width:36mm">For what</th><th>Why this one</th></tr></thead>
+    <tbody>
+      <tr><td>Next.js 16 · Server Components and Actions</td><td>Page and logic</td><td>The project's stack; the Gemini key never leaves the server</td></tr>
+      <tr><td>Supabase Postgres</td><td>4 new tables</td><td>This week the research is evidence: it has to live in the database, not in the code</td></tr>
+      <tr><td>Gemini <code>flash</code>, with <code>flash-lite</code> as backup</td><td>Report from the data</td><td>Reasoning over short text; the backup was added after measuring the main model at 86 s</td></tr>
+      <tr><td>zod</td><td>Report and citation contract</td><td>The fence between what the model says and what is shown</td></tr>
+      <tr><td>Tailwind v4</td><td>Styles and risk map</td><td>No chart library needed. No new dependencies</td></tr>
+    </tbody>
+  </table>
+
+  <h3>⚙️ DevOps</h3>
+  <ul>
+    <li>Public repo <code>vestiamx-code/closetai</code>, branch <code>main</code>, automatic deploy to Vercel.</li>
+    <li>Migration <code>006_research</code> creates the 4 tables and seeds the verified data with source and
+      date; applied to production <b>before</b> deploying, and verified against the database.</li>
+    <li>RLS on all 4 tables: public read, server-only write. No new environment variables.</li>
+  </ul>
+
+  <h3>🧪 Test plan</h3>
+  <p><b>Automated:</b> unit tests for the contract (it rejects an invented source and a claim with no
+    source) and for accent-insensitive search; end-to-end tests that the page loads with no session and
+    at least 8 rows, that a search with no match shows the message, that the risk map shows every risk,
+    and that generating and saving a report writes a row. <b>Three live runs</b> against production,
+    including <b>one question the data cannot answer</b>. <b>One real conversation</b> with a person in
+    the segment, asking about past behavior rather than opinions of the idea.</p>
+
+  <h3>🤖 Coding agent prompt</h3>
+<pre>Build the public page /research in ClosetAI (Next.js 16, App Router, Server
+Components and Actions, Tailwind v4, Supabase).
+
+Source of truth: docs/evidencia/INVESTIGACION-SEMANA-2.md. Do not add any data
+point that is not there, with its source.
+
+First the migration 006_research: tables research_sources, research_risks,
+validation_conversations and research_outputs, with public-read / server-write
+RLS. Seed the verified data with its source URL and date. The validation table
+requires consent and is NOT seeded: Tamara fills it with a real conversation.
+
+The page shows, in order: a summary panel with counts computed from the
+database; a research question form; 5 global benchmark cards; the Mexico
+section; the competitor and substitute table with type filter and
+accent-insensitive search; a 3×3 risk map; the validation conversation or
+"pending"; saved reports; and what was discarded as unverifiable.
+
+The report is generated by Gemini ONLY from the database rows, identified by
+id. Zod contract: every claim carries at least one source and every source must
+exist in the data; if the data is not enough, the report says so. Version the
+prompt in src/lib/ai/prompts/research.ts. Log the cost in api_costs and limit
+to 10 reports per IP per hour, as in /core.</pre>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX: wireframe and mockup</h2>
+  <p class="lead">The wireframe fixes the order of the argument and carries the implementation notes and
+    scope cuts next to each section.</p>
+  <figure>
+    <img src="06-research-wireframe.png" alt="">
+    <figcaption>Wireframe of /research, with implementation notes and scope cuts.</figcaption>
+  </figure>
+  <figure class="brk">
+    <img src="12-mockup.jpg" alt="">
+    <figcaption><b>Image-generated mockup (Gemini), desktop and phone.</b> A concept, not data: every number,
+      source and even the “real conversation” quote in this image were <b>invented by the image model</b> as
+      placeholder text — none of them are in the product. The verified figures are in §4 and §5, and the real
+      conversation is in §11. It is, in its own way, the argument of the week: left alone, a generative model
+      fills gaps with confident, made-up sources. That is why the AI in <code>/research</code> can only cite rows a
+      person verified.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 4. LIVE ============ -->
+<section class="brk">
+  <h2>4 · The live page</h2>
+<pre>$ curl -s -o /dev/null -w "HTTP %{http_code}\n" https://closetai.lat/research
+HTTP 200</pre>
+  <figure class="media" style="max-width:150mm">
+    <a href="https://closetai.lat/research"><img src="01-hero-panel.jpg" alt=""></a>
+    <figcaption>Top of the page: the question it answers, the verification date, and the summary panel.
+      Every number in the panel is computed from the database.</figcaption>
+  </figure>
+  <div class="two">
+    <figure><img src="02-referentes.jpg" alt=""><figcaption>5 global examples: verified key fact, lesson for ClosetAI, source and date.</figcaption></figure>
+    <figure><img src="03-mexico.jpg" alt=""><figcaption>Mexico localization.</figcaption></figure>
+  </div>
+  <div class="two">
+    <figure><img src="04-tabla.jpg" alt=""><figcaption>Competitors and substitutes: 11 rows, each with its source link.</figcaption></figure>
+    <figure><img src="05-busqueda-mexico.jpg" alt=""><figcaption>Typing "mexico", with no accent, finds México.</figcaption></figure>
+  </div>
+  <div class="two">
+    <figure style="flex:1.45"><img src="06-riesgos.jpg" alt=""><figcaption>The risk map: 7 risks by probability × impact; below, each one's mitigation and evidence.</figcaption></figure>
+    <figure style="flex:1"><img src="09-celular.jpg" alt=""><figcaption>On a phone, with no horizontal overflow.</figcaption></figure>
+  </div>
+  <figure class="media" style="max-width:150mm">
+    <img src="08-descartado.jpg" alt="">
+    <figcaption>What we discarded: possibly true, but not verifiable at the source — so it is not in the data.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 5. RESEARCH ============ -->
+<section class="brk">
+  <h2>5 · What verifying the research changed</h2>
+  <p class="lead">Every data point was checked by opening its source, not by reading a search engine's
+    summary. That rule turned out to be necessary: the search engine summarized two figures wrong
+    (Indyx's stylist price: it said $25/month, the page says $15; GoTrendier's commission: it said
+    20% + $9, the developer says 14% + $14).</p>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:52mm">My master document said</th><th>The source says</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>"There is no native Spanish/LATAM player"</td><td><b>There are closet apps in Spanish</b> on the App Store. The thesis changes: the gap is Mexico, not the language</td></tr>
+      <tr><td>2</td><td>Style DNA is bootstrapped</td><td>Its founder: personal savings, then angel investors and a fund</td></tr>
+      <tr><td>3</td><td>Acloset: "€130/year paywall"</td><td>App Store: plans from $3.99 to $24.99 USD a month, up to $147.99 a year</td></tr>
+      <tr><td>4</td><td>Alta and Doji raised in 2026</td><td>Both rounds were in 2025</td></tr>
+      <tr><td>5</td><td>Google's try-on "available in Mexico"</td><td>Reported for Latin America (May 2026); Mexico is not named</td></tr>
+      <tr><td>6</td><td>—</td><td><b>An app called "Closet AI" already exists</b> — a new brand risk</td></tr>
+      <tr><td>7</td><td>Average online fashion ticket ~$1,300 MXN</td><td>No source found — excluded</td></tr>
+      <tr><td>8</td><td>—</td><td>GoTrendier, Mexican, has over 8 million users: secondhand already has scale in Mexico</td></tr>
+      <tr><td>9</td><td>—</td><td>Indyx charges $295 USD to catalog 100 items for you: cataloging friction is real</td></tr>
+    </tbody>
+  </table>
+  <p><b>Discarded as unverifiable</b> (they may be true; they are not in the data): that Chicisimo was the
+    #1 fashion app in Mexico in 2014; that 90% of GoTrendier users are women; that cataloging 100 items in
+    Stylebook takes 6–8 hours; that Doji changed users' race in avatars; the Daydream and Phia rounds;
+    the $1,300 MXN average ticket.</p>
+</section>
+
+<!-- ============ 6. COMMITS ============ -->
+<section>
+  <h2>6 · GitHub commits — 15 this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:26mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">e3f65d3</td><td>Sep 14, 11:37</td><td>docs: Build Discipline Packet and verified research, before writing code</td></tr>
+      <tr><td class="mono">1d0f355</td><td>Sep 14, 11:51</td><td>feat: <code>/research</code> — research and benchmarking with verified sources</td></tr>
+      <tr><td class="mono">1b031c3</td><td>Sep 14, 11:53</td><td>docs: <code>/research</code> wireframe and the week's prompt log</td></tr>
+      <tr><td class="mono">bb9ac53</td><td>Sep 14, 12:16</td><td>fix: a Gemini 503 no longer asks the person to rephrase their question</td></tr>
+      <tr><td class="mono">23abff3</td><td>Sep 14, 12:33</td><td>fix: if Gemini is saturated, the lighter model answers instead of making people wait</td></tr>
+      <tr><td class="mono">4854dd1</td><td>Sep 14, 12:41</td><td>test: the quota gate checks both models, not just the main one</td></tr>
+      <tr><td class="mono">46a1e64</td><td>Sep 14, 12:43</td><td>fix: prompt v2 — the report does not generalize beyond the data</td></tr>
+      <tr><td class="mono">f9ffc84</td><td>Sep 14, 12:55</td><td>docs: test and iteration evidence, and the per-IP limit in e2e</td></tr>
+      <tr><td class="mono">11f1e28</td><td>Sep 18, 17:04</td><td>fix(db): every new account was born with a mis-encoded city</td></tr>
+      <tr><td class="mono">7494e17</td><td>Sep 21, 11:47</td><td>docs: the real validation conversation and the decision note</td></tr>
+      <tr><td class="mono">e857c80</td><td>Sep 21, 11:56</td><td>perf(ai): the backup model steps in at 15 s, not 25</td></tr>
+      <tr><td class="mono">a2badee</td><td>Sep 21, 12:02</td><td>feat: demo video page at <code>/demo/semana-2</code></td></tr>
+      <tr><td class="mono">7eeca68</td><td>Sep 21, 12:05</td><td>docs: decision note approved by me</td></tr>
+      <tr><td class="mono">539ad85</td><td>Sep 21, 12:13</td><td>docs: <code>/research</code> mockup generated with Gemini</td></tr>
+      <tr><td class="mono">87c2711</td><td>Sep 25, 16:47</td><td>feat: the demo video now carries my own narration</td></tr>
+    </tbody>
+  </table>
+  <figure>
+    <img src="10-commits.jpg" alt="">
+    <figcaption>The public repository. Every commit carries a green CI run.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 7. DEPLOYS ============ -->
+<section>
+  <h2>7 · Vercel deployments — 14 this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready, with exact times read from Vercel.</p>
+  <table>
+    <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
+    <tbody>
+      <tr><td>Sep 14, 11:37</td><td class="ok">● Ready</td><td>The packet and the verified research</td></tr>
+      <tr><td>Sep 14, 12:08</td><td class="ok">● Ready</td><td><code>/research</code> — after its migration was applied and verified</td></tr>
+      <tr><td>Sep 14, 12:16</td><td class="ok">● Ready</td><td>Fix: 503 recognized as a provider failure</td></tr>
+      <tr><td>Sep 14, 12:33</td><td class="ok">● Ready</td><td>Fix: backup model with a 25 s limit per attempt</td></tr>
+      <tr><td>Sep 14, 12:41</td><td class="ok">● Ready</td><td>Test fix: the quota gate</td></tr>
+      <tr><td>Sep 14, 12:44</td><td class="ok">● Ready</td><td>Prompt v2</td></tr>
+      <tr><td>Sep 14, 12:55</td><td class="ok">● Ready</td><td>Evidence, and the per-IP limit in tests</td></tr>
+      <tr><td>Sep 18, 17:04</td><td class="ok">● Ready</td><td>Fix: the mis-encoded city for new accounts</td></tr>
+      <tr><td>Sep 21, 11:48</td><td class="ok">● Ready</td><td>The validation conversation and the decision note</td></tr>
+      <tr><td>Sep 21, 11:56</td><td class="ok">● Ready</td><td>The backup model at 15 s</td></tr>
+      <tr><td>Sep 21, 12:02</td><td class="ok">● Ready</td><td>The demo video page</td></tr>
+      <tr><td>Sep 21, 12:06</td><td class="ok">● Ready</td><td>The approved decision note</td></tr>
+      <tr><td>Sep 21, 12:14</td><td class="ok">● Ready</td><td>The Gemini mockup in the evidence</td></tr>
+      <tr><td>Sep 25, 16:47</td><td class="ok">● Ready</td><td>The demo video with my narration</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 8. SUPABASE ============ -->
+<section class="brk">
+  <h2>8 · Supabase evidence</h2>
+  <p class="lead">Migration <code>20260914000006_research</code>: 4 tables, RLS, and the verified data
+    seeded with its source URL and verification date. Checked against the database, not the screen.</p>
+  <table>
+    <thead><tr><th style="width:80mm">What was checked</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Rows in <code>research_sources</code> / <code>research_risks</code></td><td class="ok">15 / 7</td></tr>
+      <tr><td><code>validation_conversations</code>, <code>research_outputs</code> created</td><td class="ok">✓</td></tr>
+      <tr><td>Public read (anon key)</td><td class="ok">✓ allowed</td></tr>
+      <tr><td>Public write (anon key)</td><td class="ok">✓ rejected — 401 permission denied</td></tr>
+      <tr><td>A conversation with <code>consentimiento = false</code></td><td class="ok">✓ rejected by the database itself — 23514</td></tr>
+      <tr><td>10 reports per IP per hour</td><td class="ok">✓ the 11th was blocked; <code>api_costs</code> logged exactly 10</td></tr>
+      <tr><td>Saved reports in <code>research_outputs</code></td><td class="ok">7, each recording the model and prompt version</td></tr>
+    </tbody>
+  </table>
+<pre>create table public.validation_conversations (
+  id uuid primary key default gen_random_uuid(),
+  fecha date not null,
+  perfil text not null,
+  citas text[] not null check (cardinality(citas) >= 1),
+  confirmo text, contradijo text, sorpresa text,
+  consentimiento boolean not null check (consentimiento),   -- without consent, the row does not go in
+  created_at timestamptz not null default now()
+);</pre>
+  <p><b>The research is evidence, so it lives in the database.</b> Postgres cannot put a foreign key on
+    an array, so an end-to-end test guarantees that every risk's evidence id exists.</p>
+</section>
+
+<!-- ============ 9. PROMPT LOG ============ -->
+<section>
+  <h2>9 · Prompt log — 10 prompts (minimum 5)</h2>
+  <p class="lead">What I asked, what came back, and the judgment I applied on top.</p>
+  <div class="prompt"><div class="h">1 · Verify before planning &nbsp;·&nbsp; <span class="mono">e3f65d3</span></div>
+    <div class="q">"Before building, check what research already exists in the master document and verify every data point at its source."</div>
+    <div class="j"><b>My judgment:</b> open the source, never the search summary. It changed the thesis: the gap is Mexico, not the language.</div></div>
+  <div class="prompt"><div class="h">2 · The packet, before the code &nbsp;·&nbsp; <span class="mono">e3f65d3</span></div>
+    <div class="q">"Write the Build Discipline Packet on the verified research and commit it before touching code."</div>
+    <div class="j"><b>My judgment:</b> the most important scope cut was not letting the AI search the internet.</div></div>
+  <div class="prompt"><div class="h">3 · Migration and seeded data &nbsp;·&nbsp; <span class="mono">1d0f355</span></div>
+    <div class="q">"Seed only what is in the research document, with URL and date. The validation table is not seeded."</div>
+    <div class="j"><b>My judgment:</b> consent is enforced by the database, not only by the interface.</div></div>
+  <div class="prompt"><div class="h">4 · A contract that forbids invented sources &nbsp;·&nbsp; <span class="mono">1d0f355</span></div>
+    <div class="q">"If the report cites an id that does not exist, reject it entirely."</div>
+    <div class="j"><b>My judgment:</b> the prompt asks; the contract enforces. Temperature 0.2: the same evidence should give the same answer.</div></div>
+  <div class="prompt"><div class="h">5 · The page &nbsp;·&nbsp; <span class="mono">1d0f355</span></div>
+    <div class="q">"Build /research: panel from the database, question, 5 examples, Mexico, table, risk map, validation, discarded."</div>
+    <div class="j"><b>My judgment:</b> search ignores accents; validation says "Pending" instead of faking it.</div></div>
+  <div class="prompt"><div class="h">6 · Watch the tests fail before trusting them &nbsp;·&nbsp; <span class="mono">1d0f355</span></div>
+    <div class="q">"Sabotage the code on purpose and check that the important tests fail for the right reason."</div>
+    <div class="j"><b>My judgment:</b> a test you have never seen fail proves nothing.</div></div>
+  <div class="prompt"><div class="h">7 · Reproduce the failure outside the browser &nbsp;·&nbsp; <span class="mono">bb9ac53</span></div>
+    <div class="q">"Don't change anything yet. Reproduce the call with the same question and data, and show me the raw response."</div>
+    <div class="j"><b>My judgment:</b> diagnose before fixing. The raw response showed a 503 — the question was fine.</div></div>
+  <div class="prompt"><div class="h">8 · Measure before adding a backup model &nbsp;·&nbsp; <span class="mono">23abff3</span></div>
+    <div class="q">"Does the SDK allow a timeout? Is the lighter model answering while the main one isn't?"</div>
+    <div class="j"><b>My judgment:</b> fall back only on provider failures; a bad request must not be hidden by switching models.</div></div>
+  <div class="prompt"><div class="h">9 · Prompt v2 from a real run &nbsp;·&nbsp; <span class="mono">46a1e64</span></div>
+    <div class="q">"The report said 'there are no local competitors' when the source says 'none of the ones reviewed'. Add the rule and repeat the same question."</div>
+    <div class="j"><b>My judgment:</b> no contract catches a sentence that over-generalizes. A person has to read it.</div></div>
+  <div class="prompt"><div class="h">10 · Read the screen of the failure, not just the message &nbsp;·&nbsp; <span class="mono">11f1e28</span></div>
+    <div class="q">"Run the full suite against production. If something fails, don't call it flaky until you read what was on the screen."</div>
+    <div class="j"><b>My judgment:</b> the bug that mattered was not the one that failed the test, but one sitting in its screenshot.</div></div>
+</section>
+
+<!-- ============ 10. TESTS ============ -->
+<section class="brk">
+  <h2>10 · Test evidence</h2>
+  <h3>Three live runs against closetai.lat/research (minimum 3)</h3>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:44mm">Question</th><th style="width:34mm">Expected</th><th>Actual</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>"Are there competitors built for Mexico, or only translated apps?"</td><td>Cite the Mexico sources and keep their limits</td><td>2.9 s · cites 2 sources · <b>over-generalized</b>: "there are no local competitors", when the source says "none of the ones reviewed" → prompt v2</td></tr>
+      <tr><td>1 (v2)</td><td>The same</td><td>No longer claims "there are none"</td><td>4.9 s · "The Spanish-language closet apps <b>reviewed</b> do not present Mexican sizes, stores or prices" ✓</td></tr>
+      <tr><td>2</td><td>"How big is online clothing shopping in Mexico, and how satisfied are people?"</td><td>Exact figures, not rounded</td><td>3.3 s · cites the 3 AMVO data points · 77 M, 37 M (2018), 59%, over 50% and 35%, copied exactly ✓</td></tr>
+      <tr><td>3</td><td>"How many people in Guadalajara use apps to organize their clothes?" — outside the data, on purpose</td><td>Admit it does not know</td><td>2.3 s · "The verified data is not enough to answer this" · <b>0 citations, 0 invented figures</b> · suggests a local survey ✓</td></tr>
+    </tbody>
+  </table>
+  <div class="two">
+    <figure><img src="corrida-1.png" alt=""><figcaption>Run 1 (v1): note "Falta validar" admits what the answer then over-states.</figcaption></figure>
+    <figure><img src="corrida-3.png" alt=""><figcaption>Run 3: outside the data — no citations, no invented numbers.</figcaption></figure>
+  </div>
+
+  <h3>Automated tests</h3>
+  <p><b>50 unit tests</b> (27 new this week): the report contract — including <b>rejecting the whole report if
+    it cites a source that does not exist</b> —, accent-insensitive search, risk ranking, and provider-failure
+    handling with the literal 503 text from production. The key ones were verified by <b>sabotaging the code
+    to watch them fail</b> for the right reason.</p>
+  <p><b>End-to-end, against production, on phone and desktop:</b> <code>/research</code> <b>14 of 14</b>. Full suite on
+    Sep 18: <b>67 pass</b>; 1 intermittent stylist test (4 of 4 when run alone); 4 skipped by design or in chain.
+    That run also uncovered a real bug — see §12.</p>
+</section>
+
+<!-- ============ 11. VALIDATION ============ -->
+<section>
+  <h2>11 · Human validation conversation</h2>
+  <p class="lead">In person, on September 21, with consent to use it without a name — in this document
+    and on the public page. Two limits, stated on the page itself: she is my mother, and at 57 she is
+    outside my core 18–35 segment.</p>
+  <table>
+    <thead><tr><th style="width:36mm"></th><th>What she said or did</th></tr></thead>
+    <tbody>
+      <tr><td>The problem</td><td>“Entre tanta ropa que tengo no sé qué ponerme, entonces me termino poniendo el mismo pantalón negro de siempre y solo le cambio la parte de arriba.” — <i>With all the clothes I have, I don't know what to wear, so I end up in the same black trousers and only change the top.</i> It took her 20 minutes.</td></tr>
+      <tr><td>What she already owns</td><td>“Un vestido hermoso en Mango hace 1 mes, no lo he usado… y además luego se me olvida.” — <i>A beautiful dress from Mango a month ago; I haven't worn it… and then I forget about it.</i></td></tr>
+      <tr><td>Photographing clothes</td><td>“Puede ser que después de la prenda 40 ya sea muy tedioso.” — <i>After the 40th item it might get too tedious.</i></td></tr>
+      <tr><td>Privacy</td><td>“Evitaría que saliera mi cara. Con cara lo pensaría 2 veces, por miedo a que las fotos salgan.” — <i>I'd keep my face out. With my face I'd think twice, for fear the photos get out.</i></td></tr>
+      <tr><td>Paying</td><td>She has never used a closet app. She pays for Disney+ every month (339 MXN).</td></tr>
+      <tr><td>Using /core</td><td>She did it alone, without help.</td></tr>
+    </tbody>
+  </table>
+  <h3>What it changed</h3>
+  <ul>
+    <li><b>Try-on has to accept a photo without a face.</b> She would upload a full-body photo, but not with her face.</li>
+    <li><b>The photographing threshold is not 10 items.</b> Ten is still the minimum to give value; 40 is where it gets tedious for her.</li>
+    <li><b>The one-time price is unproven.</b> She already pays a monthly subscription, and this conversation did not test whether she would pay for ClosetAI. That is the next conversation — with someone aged 18 to 35.</li>
+  </ul>
+  <p>The quotes on the page were checked one by one against her answers before being published.</p>
+  <figure>
+    <img src="07-validacion.jpg" alt="">
+    <figcaption>How it appears on closetai.lat/research. The summary panel now reads “1 real conversation”; the
+      end-to-end test for this section checks that it shows the conversation and no longer says “Pending”.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 12. ITERATION ============ -->
+<section class="brk">
+  <h2>12 · Iteration log — what changed after testing</h2>
+  <table>
+    <thead><tr><th style="width:44mm">What testing found</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td>The search engine summarized two figures wrong</td><td>Every data point verified at its source; what could not be opened was discarded</td></tr>
+      <tr><td>The migration had 6 backticks that would break last week's method of applying it</td><td>Sent as escaped JSON; checked identical (13,547 characters) before running; verified against the database after</td></tr>
+      <tr><td><b>A 503 from Gemini told the person to rephrase their question</b></td><td>Provider failures classified (429 vs 503) in the retry and in <code>/core</code> and <code>/research</code> — last week's defect with another error code</td></tr>
+      <tr><td>Retrying a saturated model made people wait: measured 503, 503, and a 200 after <b>86 s</b>; the lighter model answered in 0.5 s</td><td>25 s per attempt, then the lighter model — only on provider failures. The model that answered is recorded</td></tr>
+      <tr><td>"22 pass, 0 fail" — but the 4 skipped were exactly the ones testing the fix</td><td>The quota gate checks both models; the 4 now run and pass. A green with skips is not a green</td></tr>
+      <tr><td>The report over-generalized "none of the ones reviewed" into "there are none" — while its own "to validate" line admitted the doubt</td><td>Prompt v2: keep the limit of the data. Same question, fixed</td></tr>
+      <tr><td>The 11th report from one IP was blocked</td><td>The per-IP limit works in production; tests now skip with that reason instead of failing</td></tr>
+      <tr><td><b>Every new account was born with the city mis-encoded</b> ("Ciudad de M√©xico") since Week 0 — found in the screenshot of an unrelated flaky test</td><td>Migration 007 fixes the database default and repairs the rows; verified byte by byte; a new test creates a fresh account and checks it. In Week 1 I had fixed the symptom by hand, not the cause</td></tr>
+    </tbody>
+  </table>
+  <p>One correction of my own along the way: my first script to verify prompt v2 read the question instead
+    of the answer and reported "does not generalize ✓". A check that passes without looking at what it claims
+    to check. It was repeated reading the answer from the database.</p>
+</section>
+
+<!-- ============ 13. VIDEO ============ -->
+<section>
+  <h2>13 · Demo video</h2>
+  <p class="lead"><b>2:30</b>, recorded against the live site, hosted on the product's own domain:
+    <a href="https://closetai.lat/demo/semana-2"><b>closetai.lat/demo/semana-2</b></a>, narrated by me.</p>
+  <figure class="media" style="max-width:150mm">
+    <a href="https://closetai.lat/demo/semana-2"><img src="11-demo.jpg" alt=""></a>
+    <figcaption>The video page. Click it to play the video.</figcaption>
+  </figure>
+  <p>In order: the research page with no account; the summary panel; a question asked live and answered
+    in seconds, citing only verified sources and saying “none of the ones reviewed”; the 5 global examples;
+    Mexico; the table with the type filter and an accent-free search; the risk map; the real conversation;
+    what was discarded; and the GitHub history, with the packet committed before the code.</p>
+</section>
+
+<!-- ============ 14. DECISION NOTE ============ -->
+<section>
+  <h2>14 · Human Decision Note</h2>
+  <div class="note">
+    <p>This week I had to prove the problem is real, so I started by checking my own research. I opened every source instead of trusting a search summary, and nine claims in my master document did not survive. The one that hurt most was my thesis: I believed there was no closet app in Spanish, and there are several. The gap is not the language; it is Mexico — sizes, stores and prices in pesos. I also found an app already called "Closet AI".</p>
+    <p>The decision I defend is that the AI can only reason over data a person verified. I rejected letting it search the internet: in this same research, the search engine got two figures wrong. And when a report said "there are no local competitors" while its source said "none of the ones reviewed", I rewrote the prompt.</p>
+    <p>My real conversation was with my mother, 57 — outside my 18–35 segment, and the page says so. She still changed two things: she would photograph up to 40 garments, not the 10 I assumed, and she would upload a full-body photo only without her face, so try-on has to accept that. She pays monthly for Disney+, so my belief that people only accept one-time payments is unproven. That is my next conversation.</p>
+    <p>Testing also found a bug from Week 0 that I had once fixed by hand without looking for its cause. This time I fixed the cause.</p>
+    <div class="wc">240 words · approved by Tamara Muñoz Delgadillo, September 21, 2026</div>
+  </div>
+</section>
+
+<!-- ============ GATES ============ -->
+<section class="avoid">
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>e3f65d3</code>, 14 minutes before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§6 · 15 commits · §7 · 14 production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§10–12 · 5 defects found by testing, each fixed and redeployed</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§13 · 2:30 video · §14 · 240 words</td></tr>
+    </tbody>
+  </table>
+</section>
+
