@@ -66,6 +66,37 @@ export default function PrivacidadPage() {
           </section>
 
           <section>
+            <h2 className="font-display text-xl font-semibold">Las páginas que no piden cuenta</h2>
+            <p className="mt-2 text-pretty">
+              <Link href="/core" className="text-accent underline underline-offset-4">
+                El núcleo de estilo
+              </Link>
+              ,{" "}
+              <Link href="/research" className="text-accent underline underline-offset-4">
+                la investigación
+              </Link>{" "}
+              y{" "}
+              <Link href="/pricing" className="text-accent underline underline-offset-4">
+                el simulador de precios
+              </Link>{" "}
+              funcionan sin registrarte. Ahí guardamos:
+            </p>
+            <ul className="mt-3 space-y-2 text-pretty">
+              <li>
+                <strong>Lo que escribes</strong> —tu párrafo de estilo, tu pregunta de
+                investigación, el nombre que le pones a un escenario—. El resultado se publica en
+                esas páginas; tu texto original no se muestra y desde el 6 de octubre de 2026 la
+                base de datos impide leerlo desde fuera. No escribas datos personales ahí.
+              </li>
+              <li>
+                <strong>Una huella de tu conexión</strong>, para que nadie use el servicio miles de
+                veces y lo tire. Es un hash de tu dirección IP, no la dirección: sirve para
+                distinguir, no para identificarte. Antes se guardaba entera; lo corregimos.
+              </li>
+            </ul>
+          </section>
+
+          <section>
             <h2 className="font-display text-xl font-semibold">Con quién se comparten</h2>
             <p className="mt-2 text-pretty">
               Para que la app funcione, tus fotos pasan por proveedores de inteligencia artificial

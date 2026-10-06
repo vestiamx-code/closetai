@@ -1,12 +1,12 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { generarInforme } from "@/lib/ai/gemini";
 import { parseResearchReport, type ResearchReport } from "@/lib/ai/schemas";
 import type { FuenteParaInforme, RiesgoParaInforme } from "@/lib/research";
+import { huellaDeQuienPide } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -33,19 +33,14 @@ export type EstadoInvestigacion =
 const TOPE_POR_HORA = 10;
 const OPERACION = "research_report";
 
-async function ipDeQuienPide(): Promise<string> {
-  const h = await headers();
-  return (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || "desconocida";
-}
-
-async function pasaElLimite(ip: string): Promise<boolean> {
+async function pasaElLimite(huella: string): Promise<boolean> {
   const admin = createAdminClient();
   const desde = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const { count } = await admin
     .from("api_costs")
     .select("id", { count: "exact", head: true })
     .eq("operation", OPERACION)
-    .eq("provider", `ip:${ip}`)
+    .eq("provider", `ip:${huella}`)
     .gte("created_at", desde);
   return (count ?? 0) < TOPE_POR_HORA;
 }
@@ -71,8 +66,8 @@ export async function generarInvestigacion(
     return { estado: "error", mensaje: pregunta.error.issues[0]?.message ?? "Revisa la pregunta." };
   }
 
-  const ip = await ipDeQuienPide();
-  if (!(await pasaElLimite(ip))) {
+  const huella = await huellaDeQuienPide();
+  if (!(await pasaElLimite(huella))) {
     return {
       estado: "error",
       mensaje: "Ya generaste varios informes en la última hora. Espera un rato e inténtalo de nuevo.",
@@ -92,7 +87,7 @@ export async function generarInvestigacion(
   // El costo se registra pase lo que pase: es el contador del límite por IP.
   const admin = createAdminClient();
   await admin.from("api_costs").insert({
-    provider: `ip:${ip}`,
+    provider: `ip:${huella}`,
     operation: OPERACION,
     est_cost_usd: resultado.estCostUsd,
   });

@@ -1,11 +1,11 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { extraerNucleo } from "@/lib/ai/gemini";
 import type { StyleCore } from "@/lib/ai/schemas";
+import { huellaDeQuienPide } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -32,20 +32,14 @@ export type EstadoCore =
 /** Generaciones permitidas por IP en una hora. */
 const TOPE_POR_HORA = 10;
 
-async function ipDeQuienPide(): Promise<string> {
-  const h = await headers();
-  // Detrás del proxy de Vercel la IP real llega en x-forwarded-for.
-  return (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || "desconocida";
-}
-
-async function pasaElLimite(ip: string): Promise<boolean> {
+async function pasaElLimite(huella: string): Promise<boolean> {
   const admin = createAdminClient();
   const desde = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const { count } = await admin
     .from("api_costs")
     .select("id", { count: "exact", head: true })
     .eq("operation", "extract_core")
-    .eq("provider", `ip:${ip}`)
+    .eq("provider", `ip:${huella}`)
     .gte("created_at", desde);
   return (count ?? 0) < TOPE_POR_HORA;
 }
@@ -56,8 +50,8 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
     return { estado: "error", mensaje: datos.error.issues[0]?.message ?? "Revisa lo que escribiste." };
   }
 
-  const ip = await ipDeQuienPide();
-  if (!(await pasaElLimite(ip))) {
+  const huella = await huellaDeQuienPide();
+  if (!(await pasaElLimite(huella))) {
     return {
       estado: "error",
       mensaje: "Ya generaste varios núcleos en la última hora. Espera un rato e inténtalo de nuevo.",
@@ -70,7 +64,7 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
   // y sin él una llamada fallida saldría gratis del presupuesto.
   const admin = createAdminClient();
   await admin.from("api_costs").insert({
-    provider: `ip:${ip}`,
+    provider: `ip:${huella}`,
     operation: "extract_core",
     est_cost_usd: resultado.estCostUsd,
   });
