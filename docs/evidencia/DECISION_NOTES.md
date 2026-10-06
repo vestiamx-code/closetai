@@ -181,3 +181,30 @@ Las pruebas también encontraron un bug de la Semana 0 que yo había corregido a
 causa. Esta vez corregí la causa.
 
 **Aprobada por Tamara Muñoz Delgadillo el 21 de septiembre de 2026.**
+
+---
+
+## Semana 3 — [2026-10-06] — Un precio que todavía no sé
+
+This week I had to put a price on my product, and the honest answer was that I don't know yet what
+people will pay.
+
+So I made a decision: the three plans on the page are the ones I already decided — free, one payment
+of 100 pesos, and a credit top-up — and the subscription stays out. It lives inside the simulator as
+a scenario instead. The evidence cuts both ways: Stylebook has survived seventeen years on a
+one-time price, Style DNA makes about three million dollars a year on subscriptions, and the only
+real person I interviewed already pays monthly for Disney+. Putting a price on the page is a claim.
+Putting it in the simulator is a question, and I only have a question.
+
+I also rejected modelling customer retention. It would make every number bigger, and I have zero
+paying customers to learn a real rate from. The simulator models one typical month and says so on
+the page.
+
+The number I did not expect: with my base assumptions, 520 sign-ups a month and 3% paying, ClosetAI
+makes 1,267 pesos a month. If only 1 in 100 pays, it's 357. That is what one payment of 100 pesos
+really means, and it is why the subscription question matters more than I thought.
+
+Finally, I corrected myself. Asking what data my app collects uncovered that anyone could read what
+people wrote on my style page, and that I was storing full IP addresses. Both are fixed.
+
+**231 palabras · aprobada por Tamara Muñoz Delgadillo el 6 de octubre de 2026.**
