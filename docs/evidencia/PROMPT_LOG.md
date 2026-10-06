@@ -229,3 +229,69 @@ M√©xico". Una cuenta temporal confirmó que la base le asignaba ese valor a t
 **Juicio humano:** el error que importaba no era el que hizo fallar la prueba, sino uno que estaba
 en la captura, al lado. Y en la Semana 1 ya se había visto: se corrigió el síntoma y no la causa.
 **Commit:** (ver commit de la migración 007)
+
+---
+
+# Semana 3 · `/product` y `/pricing`
+
+## [2026-10-06] — Sesión 1 · Dos decisiones antes del plan
+**Prompt:** "Esto es lo que toca esta semana, hazlo." (con el assignment, los macro-prompts y el
+overview del curso)
+**Resultado:** antes de escribir una línea, dos preguntas a Tamara, porque eran decisiones de
+negocio y no del agente: qué tres planes mostrar y qué dos segmentos comparar.
+**Juicio humano:** Tamara eligió **no subir la suscripción a plan**. La deja como escenario del
+simulador: la evidencia de la Semana 2 apunta a los dos lados —Stylebook lleva 17 años con un pago
+único; Style DNA factura ~3 M USD al año con suscripción— y la única conversación real fue con
+alguien que ya paga suscripciones. Poner un precio en la página es afirmar; ponerlo en el simulador
+es preguntar.
+**Commit:** 2679c14
+
+## [2026-10-06] — Sesión 2 · El packet, antes del código
+**Prompt:** "Escribe el Build Discipline Packet de /product y /pricing, con criterios de aceptación
+comprobables, y commitéalo antes de tocar código."
+**Resultado:** `docs/SEMANA-3-PACKET.md` y el wireframe, commit `2679c14` a las 16:07. El primer
+archivo de código entró después, en `f226ac8`.
+**Juicio humano:** el recorte más fuerte fue **no modelar abandono**. Un modelo de churn con un
+número inventado da proyecciones más grandes y menos ciertas; el simulador modela un mes típico y
+lo dice en la pantalla.
+**Commit:** 2679c14
+
+## [2026-10-06] — Sesión 3 · La aritmética, sola y probada
+**Prompt:** "La cuenta va en src/lib/precios.ts: función pura, sin React, sin red y sin IA. Que el
+navegador y el servidor llamen a la misma."
+**Resultado:** `calcular(supuestos)` con precios y costos como constantes, cada una con su fila en
+`pricing_assumptions`.
+**Juicio humano:** que esta semana **no lleve IA** es una decisión, no un olvido. Un número que
+cambia cada vez que se pregunta no sirve para decidir un precio, y además costaría dinero por
+consulta.
+**Commit:** f226ac8
+
+## [2026-10-06] — Sesión 4 · Las pruebas de precios, vistas fallar
+**Prompt:** "Dos pruebas de lógica: que una venta de 100 deje margen aunque se quemen los 30
+créditos, y que optimista ≥ base ≥ conservador. Y hazlas fallar a propósito antes de creerles."
+**Resultado:** 6 pruebas en `src/lib/precios.test.ts`. Sabotaje comprobado: subir el costo del
+render a 0.30 USD pone roja la primera; bajar el factor optimista a 0.2 pone roja la segunda.
+**Juicio humano:** una de las pruebas que yo misma pedí estaba mal escrita —afirmaba que el ingreso
+por comprador no cambia entre escenarios, olvidando que el escenario también mueve las recargas—.
+Se corrigió la afirmación, no el código. Y el plan decía "conversión 0 ⇒ ingreso 0 y costo 0": al
+escribirlo se vio que los usuarios gratis **sí cuestan**, y la prueba quedó fijando el modelo real.
+**Commit:** f226ac8
+
+## [2026-10-06] — Sesión 5 · Que el navegador no dicte lo que se guarda
+**Prompt:** "Al guardar un escenario, que el servidor recalcule y guarde su resultado, no el que
+mandó el navegador. Y que el límite por hora no guarde la IP."
+**Resultado:** Server Action con zod + `calcular()` del lado del servidor, y hash con sal de la IP
+en `src/lib/ip.ts`, compartido con `/core` y `/research`.
+**Juicio humano:** la pregunta "¿qué datos pide ClosetAI y los necesita todos?" destapó que las IP
+se guardaban enteras y sin fecha de borrado, y que `core_outputs` se podía leer desde fuera con la
+llave pública. Las dos cosas se corrigieron esta semana: la nueva tabla nace con hash, y la
+migración 009 cierra la lectura pública de la vieja.
+**Commit:** f226ac8
+
+## [2026-10-06] — Sesión 6 · Probar contra producción
+**Prompt:** "Tres pruebas de software contra el sitio real: que cargue, que recalcule y que lo
+guardado sea lo del servidor. Y que /product no marque todo como 'en vivo'."
+**Resultado:** `e2e/precios.spec.ts`, 5 pruebas.
+**Juicio humano:** la prueba del mapa de funciones comprueba que **haya funciones marcadas como no
+construidas**. Un mapa donde todo está en vivo es publicidad; la prueba lo impide.
+**Commit:** (ver historial de la semana)
