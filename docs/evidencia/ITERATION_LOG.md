@@ -364,3 +364,58 @@ confirmó todo lo que suponíamos.
 
 **Proceso:** las citas se revisaron contra sus respuestas antes de publicarlas, y solo se publicaron
 las que coinciden con lo que ella dijo.
+
+---
+
+# Semana 3 · `/product` y `/pricing`
+
+## [2026-10-06] — El plan pedía una prueba falsa
+**Observado:** el Build Discipline Packet, escrito antes del código, decía que una de las pruebas
+sería "conversión 0% ⇒ ingreso 0 y **costo 0**".
+**Diagnóstico:** la segunda mitad es falsa. Una persona en el plan gratis cuesta ~0.01 USD al mes
+—catalogación, almacenamiento— así que un mes sin una sola venta no sale en ceros: sale en números
+rojos. Con los supuestos iniciales, −98 MXN.
+**Cambio:** la prueba quedó afirmando el modelo real: ingreso bruto 0, comisiones 0 y neto negativo
+**exactamente** por el costo de los usuarios gratis.
+**Lo que esto vale:** el plan se escribió antes de hacer la cuenta, y la cuenta lo corrigió. Si la
+prueba se hubiera adaptado al plan en vez de al revés, la página diría que regalar el producto es
+gratis para nosotros.
+
+## [2026-10-06] — Una prueba mía estaba mal escrita
+**Observado:** la prueba del orden de escenarios fallaba: 107.84 ≠ 101.96.
+**Diagnóstico:** yo había afirmado que el ingreso por comprador es el mismo en los tres escenarios,
+porque "el escenario mueve la conversión, no el precio". Pero el escenario también mueve cuántas
+**recargas** compra cada persona, así que el ingreso por comprador sí cambia. El código estaba bien;
+la afirmación estaba mal.
+**Cambio:** la prueba ahora mide lo que de verdad no puede cambiar —el precio del plan— poniendo las
+recargas en cero.
+**Lo que esto vale:** una prueba roja no siempre acusa al código.
+
+## [2026-10-06] — Las pruebas, vistas fallar a propósito
+**Observado:** dos pruebas nuevas en verde no prueban que sirvan.
+**Cambio:** se saboteó el código para verlas fallar por el motivo correcto. Subir el costo del
+render de 0.075 a 0.30 USD pone roja la del margen (esperaba 42.46 de costo, recibió 169.83). Bajar
+el factor del escenario optimista de 2 a 0.2 pone roja la del orden. Las dos volvieron a verde al
+revertir.
+
+## [2026-10-06] — `/product` servía una copia de cuando no había datos
+**Observado:** con las tablas ya creadas y verificadas por REST, `closetai.lat/product` seguía
+mostrando "El mapa del producto no está disponible".
+**Diagnóstico:** la página se había prerenderizado en el despliegue anterior a la migración, con
+`revalidate = 300`. La copia en caché traía el aviso de error, y se seguía sirviendo.
+**Cambio:** `force-dynamic`, igual que `/research` y `/pricing`.
+**Lo que esto vale:** el aviso de error estaba bien escrito y funcionó —eso se vio en producción—,
+pero una página que lee datos no debería poder quedarse congelada en su peor momento.
+
+## [2026-10-06] — Lo que encontró la pregunta "¿qué datos pides?"
+**Observado:** al responder esa pregunta se revisó la base y aparecieron dos cosas: `core_outputs`
+tenía lectura pública, y las IP de las páginas sin cuenta se guardaban enteras y sin fecha de
+borrado.
+**Diagnóstico:** la migración 005 dejó `select using (true)` con un comentario que decía que la
+columna del texto "se protege en la vista". No era cierto: con la llave pública, que viaja en el
+navegador, se podían leer los 15 textos completos. Se comprobó haciendo la petición.
+**Cambio:** migración 009 (cierra la lectura pública; la página ya leía con la llave de servicio),
+`src/lib/ip.ts` (hash con sal, compartido por `/core`, `/research` y `/pricing`), y el aviso de
+privacidad ahora lo dice. La tabla nueva de escenarios nace con hash y sin lectura pública.
+**Lo que esto vale:** la regla que queda escrita es "una tabla se abre a la llave pública solo si
+**todas** sus columnas son públicas".

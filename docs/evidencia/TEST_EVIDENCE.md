@@ -337,3 +337,58 @@ rama: que se vea la conversación y que ya no diga "Pendiente".
 | 1 falla del estilista (celular) + 2 saltadas detrás | Intermitente: sola, en serie, **4 de 4 pasan** |
 | Lo que destapó esa falla | **Un bug real**: toda cuenta nueva nacía con la ciudad mal codificada (ver Iteration Log) |
 | Tras la migración 007 | ✅ 0 perfiles rotos · cuenta nueva correcta · prueba nueva `datos.spec.ts` en verde |
+
+---
+
+# Semana 3 · `/product` y `/pricing`
+
+## Pruebas de lógica de precios (`src/lib/precios.test.ts`)
+
+| # | Qué afirma | Resultado |
+|---|---|---|
+| 1 | Una venta de 100 MXN deja margen aunque se usen los 30 créditos: comisión 7.66, créditos 42.46, neto 49.89 por venta, margen ≥ 50% | verde |
+| 2 | Optimista ≥ base ≥ conservador en ingreso neto, y el precio del plan no cambia entre escenarios | verde |
+| 3 | Sin nadie que pague: ingreso 0, comisiones 0 y neto negativo exactamente por el costo de los usuarios gratis | verde |
+| 4 | El año son doce meses del mismo mes típico | verde |
+| 5 | El escenario optimista no convierte a más del 100% de los registros | verde |
+| 6 | El total es la suma de los dos segmentos | verde |
+
+**Vistas fallar antes de creerles:** con el costo del render en 0.30 USD (en vez de 0.075), la
+prueba 1 falla con «expected 169.83 to be close to 42.46». Con el factor optimista en 0.2, falla la
+2. Al revertir, las seis vuelven a verde.
+
+## Pruebas de software contra producción (`e2e/precios.spec.ts`)
+
+| # | Qué afirma | Resultado |
+|---|---|---|
+| 1 | `/pricing` carga sin sesión, con 3 planes, los 2 segmentos y la tabla de supuestos distinguiendo verificado de supuesto | verde |
+| 2 | Mover un supuesto sube el ingreso; cambiar a conservador lo baja; a optimista lo sube | verde |
+| 3 | Lo guardado en la base es el número del servidor, coincide con la pantalla, y `ip_hash` tiene 64 hexadecimales | verde |
+| 4 | Con 0 registros, el escenario guardado tiene ingreso 0: el navegador no dicta el resultado | verde |
+| 5 | `/product` no marca todo como «en vivo», y cada ruta marcada en vivo responde 200 | verde |
+
+10 de 10 en los dos perfiles (teléfono y escritorio), el 6 de octubre de 2026.
+
+## Migración 008, verificada contra la base (no contra la pantalla)
+
+| Comprobación | Resultado |
+|---|---|
+| El SQL que se pegó es el mismo del repositorio | sha256 `84d7a474…`, 14,182 bytes, idéntico |
+| `pricing_plans` | 3 filas |
+| `pricing_features` | 16 filas |
+| `pricing_assumptions` | 15 filas |
+| `pricing_scenarios` | 0 filas, y **no se puede leer con la llave pública** (401) |
+
+## Migración 009 — la corrección de privacidad, comprobada atacándola
+
+| Comprobación | Antes | Después |
+|---|---|---|
+| `core_outputs` con la llave pública (la que viaja en el navegador) | 200, 15 textos legibles | **401** |
+| `core_outputs` con la llave de servicio (la que usa la página) | 200 | 200, la página sigue igual |
+
+## Suite completa — 6 de octubre de 2026
+
+56 pruebas unitarias en verde (6 nuevas). End-to-end contra producción: 77 en verde, 3 saltadas por
+diseño, y **1 roja**: la del estilista que arma tres outfits. Corrida sola, pasa. Es la misma
+intermitencia anotada desde el 18 de septiembre —una carrera de tiempos cuando la suite corre en
+paralelo contra producción—, y sigue sin causa identificada. Queda escrita, no escondida.
