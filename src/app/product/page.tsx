@@ -10,7 +10,11 @@ export const metadata: Metadata = {
     "Qué hace ClosetAI, función por función: lo que ya está en vivo, lo que se construyó esta semana y lo que todavía no existe.",
 };
 
-export const revalidate = 300;
+// Se leyó de la base en cada visita, como /research y /pricing. Con caché de 5
+// minutos, el primer render quedó congelado del despliegue anterior —cuando las
+// tablas todavía no existían— y la página siguió mostrando el aviso de error
+// aunque los datos ya estaban. Un mapa que miente por caché no sirve.
+export const dynamic = "force-dynamic";
 
 type Plan = { id: string; nombre: string; precio_mxn: number; cobro: string; resumen: string };
 
