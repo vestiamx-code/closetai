@@ -1,0 +1,514 @@
+<section class="cover">
+  <p class="kicker">Week 3 · Product architecture + pricing simulator</p>
+  <h1>What should it cost?<br><em>With the arithmetic shown.</em></h1>
+  <p class="sub">A public product map for ClosetAI — what works today, what was built this week and what
+     does not exist yet — and a revenue simulator where every assumption says whether it is verified
+     or a guess.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat/product"><span class="lbl">Live page</span><span class="url">closetai.lat/product</span></a>
+    <a href="https://closetai.lat/pricing"><span class="lbl">Live page</span><span class="url">closetai.lat/pricing</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+    <a href="https://closetai.lat/demo/semana-3"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/semana-3</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE WEEK IN ONE LINE.</b> I built the simulator to defend my price, and it told me something
+    I did not want to hear: with my own base assumptions, one payment of 100 pesos makes
+    <b>1,267 pesos a month</b>. The number is on the page, with every assumption labelled
+    verified or guessed, because a pricing page that hides its arithmetic is just an opinion
+    with a currency sign.
+  </div>
+</section>
+
+<!-- ============ 1. RUBRIC ============ -->
+<section>
+  <h2>1 · The rubric, category by category</h2>
+  <table>
+    <thead><tr><th style="width:42mm">Category</th><th style="width:11mm">Pts</th><th>Evidence</th><th style="width:12mm">§</th></tr></thead>
+    <tbody>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed at 16:07 (<code>2679c14</code>); first line of code at 16:18 (<code>f226ac8</code>). Public history</td><td>2</td></tr>
+      <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Wireframe with implementation notes, scope cut, and what changed between the wireframe and the build</td><td>3</td></tr>
+      <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>11 requirements, each with a checkable criterion and where it is tested</td><td>4</td></tr>
+      <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, the double calculation, and why there is no AI on these pages</td><td>5</td></tr>
+      <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/product</code> and <code>/pricing</code> load with no session; <b>10 of 10</b> end-to-end tests pass against production</td><td>6, 10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>8 commits</b> (min. 5) · <b>8 deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>6–9</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 pricing tests</b> required, 6 written · <b>3 software tests</b> required, 5 written · each one watched failing on purpose · 5 defects and corrections documented</td><td>10–11</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Two business decisions made by me before the plan; a privacy bug found in my own database and fixed; decision note, 231 words</td><td>2, 12, 14</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>2:19 walkthrough recorded against production <span class="pendiente">[PENDING: my narration]</span></td><td>13</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Product feature map</td><td><code>/product</code> — 16 features in 5 groups, each with its plan and its real state</td></tr>
+      <tr><td>3 pricing tiers</td><td><code>/pricing</code> — Free, Complete (100 MXN once), Top-up (49 MXN / 20 credits)</td></tr>
+      <tr><td>2 customer segments</td><td>Core 18–35 and 36+, calculated separately and summed</td></tr>
+      <tr><td>Revenue calculator</td><td>Monthly and twelve-month net, with cost and margin</td></tr>
+      <tr><td>Scenario toggle</td><td>Conservative / Base / Optimistic — changes conversion, never price</td></tr>
+      <tr><td>Assumptions table</td><td>15 assumptions, each marked <b>verified</b> (with source and date) or <b>guess</b></td></tr>
+      <tr><td>Saved pricing scenarios</td><td><code>pricing_scenarios</code> table; the public list shows what the server computed</td></tr>
+      <tr><td>Create /product page · create /pricing page · build calculator inputs · calculate monthly/annual revenue · save scenarios · display saved scenarios</td><td>All live, all tested against production</td></tr>
+      <tr><td>2 pricing logic tests + 3 software tests</td><td>6 and 5 respectively (§10)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. PLAN ============ -->
+<section class="brk">
+  <h2>2 · The plan, written before the code</h2>
+  <p class="lead">Full text in <code>docs/SEMANA-3-PACKET.md</code>, committed 11 minutes before the first
+    code commit.</p>
+
+  <h3>Two decisions I made before the agent wrote anything</h3>
+  <p>Both are business decisions, so they are mine, and they are written in the commit message:</p>
+  <ul>
+    <li><b>The three plans are the ones I already decided</b> — free, 100 pesos once, and a credit
+      top-up. The subscription does <b>not</b> become a plan; it lives inside the simulator as a
+      scenario. Putting a price on the page is a claim; putting it in the simulator is a question,
+      and a question is all I have.</li>
+    <li><b>The two segments are core 18–35 and 36+</b>, the profile of the one real conversation I
+      had in Week 2. They are the only two I have any evidence about.</li>
+  </ul>
+
+  <h3>Problem</h3>
+  <p>ClosetAI's price was decided, but nobody could check it. It lived in a private markdown table:
+    no customer could see what each plan includes, and nobody could see whether the price covers what
+    the product costs to serve. And the try-on <b>costs money every time</b> — about 0.075 USD per
+    render. A bad price does not show up on screen; it shows up in the bank account.</p>
+
+  <h3>User</h3>
+  <p>Me, deciding with numbers instead of hope. Whoever evaluates ClosetAI, who should see the
+    arithmetic rather than a claim. And the customer, who should see what is free forever and what
+    is not.</p>
+
+  <h3>What had to work by the end of the week</h3>
+  <p>Both pages public, the map honest about what does not exist, the calculator recomputing live,
+    the scenarios ordered, every assumption sourced, and saving writing to Supabase — with the
+    arithmetic reproducible from what is printed on the page.</p>
+
+  <h3>Scope cut — what looked good and was not built</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Left out</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Charging for new plans</td><td>Stripe already charges the Complete plan. Touching real money for a pricing exercise risks real money</td></tr>
+      <tr><td>Subscription as a live plan</td><td>Nobody has said they would pay for one</td></tr>
+      <tr><td>Accounts to save scenarios</td><td>The page is public, like <code>/research</code>. Saving is protected by a rate limit, not a login</td></tr>
+      <tr><td>A charting library</td><td>Three bars in CSS do the comparison and weigh nothing</td></tr>
+      <tr><td>36-month projection</td><td>Twelve months already forces a decision; beyond that is fiction with decimals</td></tr>
+      <tr><td>Churn modelling</td><td>With zero paying customers, a retention rate would be a number I invented and then believed</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX concept</h2>
+  <p class="lead">The wireframe was drawn before the build, and it carries its implementation notes
+    inside the drawing.</p>
+  <figure>
+    <img src="09-wireframe.png" alt="">
+    <figcaption>The wireframe of <code>/pricing</code>: plans with their cost, movable assumptions,
+      the result beside them, where each number comes from, and the saved scenarios.</figcaption>
+  </figure>
+
+  <h3>What changed between the wireframe and the live page</h3>
+  <ul>
+    <li><b>The conversion fields split in two</b>, one per segment. In the wireframe there was a
+      single percentage for both; while building it, two segments with identical conversion made the
+      comparison pointless. Now each segment has its own, and they start at the same value so the
+      asymmetry is something you test, not something I assumed.</li>
+    <li><b>Each input got a slider and a number box.</b> The slider is for exploring, the box for
+      typing an exact figure.</li>
+    <li><b>The bar chart legend changed.</b> The wireframe labelled the bars by segment and by
+      scenario at the same time, which read as if the bars were segments. On the page each bar is a
+      scenario and the caption says it sums both segments.</li>
+  </ul>
+
+  <div class="two">
+    <figure><img src="01-planes.jpg" alt=""><figcaption>The three plans, each with what it costs us to serve.</figcaption></figure>
+    <figure><img src="08-celular.jpg" alt=""><figcaption>On a phone: zero horizontal overflow, verified in the test run.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 4. SPEC ============ -->
+<section class="brk">
+  <h2>4 · Product spec and acceptance criteria</h2>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:38mm">Requirement</th><th>Acceptance criterion (checkable)</th><th style="width:14mm">Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Public pages</td><td><code>GET /product</code> and <code>GET /pricing</code> return 200 with no session cookies</td><td class="ok">● done</td></tr>
+      <tr><td>2</td><td>Feature map</td><td>Features grouped, each marked live / this week / planned</td><td class="ok">● done</td></tr>
+      <tr><td>3</td><td>3 plans</td><td>Each with what it includes and what it costs us to serve</td><td class="ok">● done</td></tr>
+      <tr><td>4</td><td>2 segments</td><td>Core 18–35 and 36+ calculated separately, plus the total</td><td class="ok">● done</td></tr>
+      <tr><td>5</td><td>Calculator</td><td>Sign-ups, both conversion rates and credits used; changing any one recomputes without reloading</td><td class="ok">● done</td></tr>
+      <tr><td>6</td><td>Monthly and annual</td><td>Gross, commissions, variable cost, net and margin, per month and over twelve</td><td class="ok">● done</td></tr>
+      <tr><td>7</td><td>Scenario toggle</td><td>Optimistic ≥ base ≥ conservative in net income — fixed by a test, not by opinion</td><td class="ok">● done</td></tr>
+      <tr><td>8</td><td>Assumptions table</td><td>Each assumption shows value, origin, and whether it is verified (with date) or a guess</td><td class="ok">● done</td></tr>
+      <tr><td>9</td><td>Save scenario</td><td>Writes a row to <code>pricing_scenarios</code> with the <b>server's</b> result and appears without reloading</td><td class="ok">● done</td></tr>
+      <tr><td>10</td><td>Saved scenarios</td><td>Public list with name, scenario, monthly net and date</td><td class="ok">● done</td></tr>
+      <tr><td>11</td><td>Privacy and limit</td><td>The hourly limit stores a salted hash, never the IP; max 20 per hour</td><td class="ok">● done</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="media">
+    <img src="06-mapa.jpg" alt="">
+    <figcaption>The feature map. Twelve features live, two built this week, two that say out loud
+      that they do not exist yet.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 5. ARCHITECTURE ============ -->
+<section class="brk">
+  <h2>5 · Architecture and stack</h2>
+  <pre>Browser (/product, /pricing — no session)
+   │
+   │  Server Component: reads plans, features and assumptions from Postgres
+   ▼
+Next.js 16 (App Router, Vercel)
+   │
+   ├── /product  — feature map, straight from the database
+   ├── /pricing  — plans + simulator (client) + saved scenarios
+   │        │
+   │        │  The arithmetic lives in src/lib/precios.ts — no React, no network:
+   │        │  assumptions in, results out. That function is what the logic tests test.
+   │        │
+   │        ▼
+   │   Server Action `guardarEscenario`
+   │        │  zod · RECALCULATES on the server · salted IP hash · 20/hour
+   │        ▼
+   └──> Supabase Postgres
+          ├── pricing_plans        (3 rows, public read)
+          ├── pricing_features     (16 rows, public read)
+          ├── pricing_assumptions  (15 rows, public read)
+          └── pricing_scenarios    (server only — not even public read)</pre>
+
+  <h3>The design decision of the week: the sum is computed twice</h3>
+  <p>Once in the browser, so the number moves while you move the slider. Once on the server, before
+    saving. If someone edits the JavaScript and sends an income of a million, what gets stored is
+    still the result of those assumptions. The screen asks; the server decides. A test proves it:
+    with zero sign-ups, the saved income is zero no matter what the browser sends.</p>
+
+  <h3>Why there is no AI on these two pages</h3>
+  <p>It is a decision, not an omission. A number that changes every time you ask it cannot be used
+    to set a price, it cannot be reproduced by whoever reads the page, and it would cost money per
+    question. The pricing logic is 190 lines of TypeScript with its own tests.</p>
+
+  <table>
+    <thead><tr><th style="width:34mm">Piece</th><th style="width:38mm">Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Framework</td><td>Next.js 16, App Router</td><td>Already in use; Server Components read the database with no API in between</td></tr>
+      <tr><td>Arithmetic</td><td>Plain TypeScript, one file</td><td>Tested in milliseconds; the same function runs in the browser and on the server</td></tr>
+      <tr><td>Chart</td><td>CSS <code>flex</code> + height</td><td>Three bars do not justify a library</td></tr>
+      <tr><td>Database</td><td>Supabase Postgres + RLS</td><td>Public read for content, writes only with the service key</td></tr>
+      <tr><td>Validation</td><td>zod</td><td>Same contract pattern as <code>/core</code> and <code>/research</code></td></tr>
+      <tr><td>Tests</td><td>Vitest + Playwright</td><td>Logic in Vitest, the real site in Playwright</td></tr>
+      <tr><td>AI</td><td><b>none</b></td><td>See above</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 6. COMMITS ============ -->
+<section class="brk">
+  <h2>6 · GitHub commits — 8 this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:16mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">2679c14</td><td>Oct 6, 16:07</td><td>docs: Build Discipline Packet and wireframe, before writing code</td></tr>
+      <tr><td class="mono">f226ac8</td><td>Oct 6, 16:18</td><td>feat: <code>/product</code> and <code>/pricing</code> — feature map and pricing simulator</td></tr>
+      <tr><td class="mono">6f259ad</td><td>Oct 6, 16:19</td><td>test: <code>/product</code> and <code>/pricing</code> against production</td></tr>
+      <tr><td class="mono">d83f44c</td><td>Oct 6, 16:19</td><td>docs: the week's prompt log, with the judgment behind each one</td></tr>
+      <tr><td class="mono">3c1fe3b</td><td>Oct 6, 16:25</td><td>fix: <code>/product</code> was serving a cached copy from before the data existed</td></tr>
+      <tr><td class="mono">d5d36c5</td><td>Oct 6, 16:28</td><td>docs: test and iteration evidence</td></tr>
+      <tr><td class="mono">db9b712</td><td>Oct 6, 16:30</td><td>fix: the free plan read “Gratis / Gratis”</td></tr>
+      <tr><td class="mono">472b4e2</td><td>Oct 6, 17:44</td><td>feat: demo video page at <code>/demo/semana-3</code> and the approved decision note</td></tr>
+    </tbody>
+  </table>
+  <figure>
+    <img src="07-commits.jpg" alt="">
+    <figcaption>The public repository. The plan is the first commit of the week, and every commit
+      carries a green CI run.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 7. DEPLOYS ============ -->
+<section>
+  <h2>7 · Vercel deployments — 8 this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready, with exact times read from Vercel.</p>
+  <table>
+    <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
+    <tbody>
+      <tr><td>Oct 6, 16:07</td><td class="ok">● Ready</td><td>The packet and the wireframe</td></tr>
+      <tr><td>Oct 6, 16:18</td><td class="ok">● Ready</td><td><code>/product</code> and <code>/pricing</code>, with the pages showing their “no data” notice until the migration ran</td></tr>
+      <tr><td>Oct 6, 16:19</td><td class="ok">● Ready</td><td>The end-to-end tests</td></tr>
+      <tr><td>Oct 6, 16:19</td><td class="ok">● Ready</td><td>The prompt log</td></tr>
+      <tr><td>Oct 6, 16:25</td><td class="ok">● Ready</td><td>Fix: the cached product map</td></tr>
+      <tr><td>Oct 6, 16:28</td><td class="ok">● Ready</td><td>Test and iteration evidence</td></tr>
+      <tr><td>Oct 6, 16:30</td><td class="ok">● Ready</td><td>Fix: the duplicated label on the free plan</td></tr>
+      <tr><td>Oct 6, 17:45</td><td class="ok">● Ready</td><td>The demo video page and the decision note</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 8. SUPABASE ============ -->
+<section>
+  <h2>8 · Supabase evidence</h2>
+  <p class="lead">Two migrations, both applied with my explicit permission and both checked against the
+    database rather than against the screen.</p>
+
+  <h3>Migration 008 — the pricing tables</h3>
+  <table>
+    <thead><tr><th style="width:80mm">What was checked</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>The SQL pasted into the editor is the one in the repository</td><td class="ok">sha256 84d7a474…, 14,182 bytes, identical</td></tr>
+      <tr><td><code>pricing_plans</code></td><td class="ok">3 rows</td></tr>
+      <tr><td><code>pricing_features</code></td><td class="ok">16 rows</td></tr>
+      <tr><td><code>pricing_assumptions</code></td><td class="ok">15 rows</td></tr>
+      <tr><td><code>pricing_scenarios</code> readable with the public key</td><td class="ok">401 — it is not</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Migration 009 — a privacy bug of my own, found this week</h3>
+  <p>Answering the question “what data does your app ask for, and do you need all of it?” I checked my
+    own database. Week 1's table, <code>core_outputs</code>, had been left with public read and a
+    comment claiming the column with people's text “is protected in the view”. It was not true: with
+    the public key — the one that travels inside every browser — the fifteen texts could be read in
+    full. I proved it by making that request.</p>
+  <table>
+    <thead><tr><th style="width:80mm">Check</th><th style="width:26mm">Before</th><th>After</th></tr></thead>
+    <tbody>
+      <tr><td><code>core_outputs</code> with the public key</td><td>200, 15 texts readable</td><td class="ok">401</td></tr>
+      <tr><td><code>core_outputs</code> with the service key (what the page uses)</td><td>200</td><td class="ok">200 — the page is unaffected</td></tr>
+      <tr><td>IP addresses stored for the hourly limits</td><td>Stored in full, with no deletion date</td><td class="ok">Salted hash, in <code>/core</code>, <code>/research</code> and <code>/pricing</code></td></tr>
+      <tr><td>Privacy notice</td><td>Said nothing about either</td><td class="ok">Says both, at closetai.lat/privacidad</td></tr>
+    </tbody>
+  </table>
+  <p>The rule this leaves written in the migration: <b>a table is opened to the public key only if
+    every one of its columns is public.</b> If one is not, none of them are.</p>
+</section>
+
+<!-- ============ 9. PROMPTS ============ -->
+<section class="brk">
+  <h2>9 · Coding-agent prompts — 6 this week (minimum 5)</h2>
+  <p class="lead">Full log in <code>docs/evidencia/PROMPT_LOG.md</code>. What matters in each one is not
+    the instruction, it is the judgment attached to it.</p>
+
+  <div class="prompt">
+    <p class="h">1 · Two decisions before the plan</p>
+    <p class="q">“This is what we have to do this week. Do it.”</p>
+    <p class="r">Before a single line: two questions back, because they were business decisions, not
+      the agent's. Which three plans, and which two segments.</p>
+    <p class="j"><b>MY JUDGMENT.</b> The subscription stays out of the page and inside the simulator.</p>
+  </div>
+
+  <div class="prompt">
+    <p class="h">2 · The packet, before the code</p>
+    <p class="q">“Write the Build Discipline Packet for /product and /pricing, with checkable acceptance
+      criteria, and commit it before touching code.”</p>
+    <p class="r"><code>2679c14</code> at 16:07; first code at 16:18.</p>
+    <p class="j"><b>MY JUDGMENT.</b> No churn modelling. It would make every number bigger and none of
+      them truer.</p>
+  </div>
+
+  <div class="prompt">
+    <p class="h">3 · The arithmetic, alone and testable</p>
+    <p class="q">“The maths goes in src/lib/precios.ts: a pure function, no React, no network, no AI.
+      The browser and the server call the same one.”</p>
+    <p class="r">190 lines, every constant with its row in <code>pricing_assumptions</code>.</p>
+    <p class="j"><b>MY JUDGMENT.</b> No AI here. A number that changes every time you ask it is useless
+      for a price.</p>
+  </div>
+
+  <div class="prompt">
+    <p class="h">4 · The pricing tests, watched failing</p>
+    <p class="q">“Two logic tests: that a 100-peso sale keeps its margin even if all 30 credits are
+      burned, and that optimistic ≥ base ≥ conservative. Break the code on purpose before trusting
+      them.”</p>
+    <p class="r">6 tests. Sabotage: render cost 0.075 → 0.30 turns the first red; optimistic factor
+      2 → 0.2 turns the second red.</p>
+    <p class="j"><b>MY JUDGMENT.</b> One of the tests I asked for was wrong, and the code was right.
+      I fixed the claim, not the code.</p>
+  </div>
+
+  <div class="prompt">
+    <p class="h">5 · The browser does not get to decide what is stored</p>
+    <p class="q">“When a scenario is saved, the server recalculates and stores its own result. And the
+      hourly limit must not store the IP.”</p>
+    <p class="r">Server Action with zod and a second calculation; <code>src/lib/ip.ts</code> with a
+      salted hash, shared with <code>/core</code> and <code>/research</code>.</p>
+    <p class="j"><b>MY JUDGMENT.</b> This came out of a question about my own data, not out of the
+      assignment.</p>
+  </div>
+
+  <div class="prompt">
+    <p class="h">6 · Test against the real site</p>
+    <p class="q">“Three software tests against production: that it loads, that it recomputes, and that
+      what is saved is the server's number. And that /product does not mark everything as live.”</p>
+    <p class="r">5 tests in <code>e2e/precios.spec.ts</code>, 10 of 10 across phone and desktop.</p>
+    <p class="j"><b>MY JUDGMENT.</b> The map test requires features marked as <i>not built</i>. A map
+      where everything is finished is advertising.</p>
+  </div>
+</section>
+
+<!-- ============ 10. TESTS ============ -->
+<section class="brk">
+  <h2>10 · Testing — 2 pricing tests required, 6 written; 3 software tests required, 5 written</h2>
+
+  <h3>Pricing logic (<code>src/lib/precios.test.ts</code>)</h3>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th>What it asserts</th><th style="width:14mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>A 100-peso sale survives the worst case: 7.66 to Stripe, 42.46 of credits, 49.89 net per sale, margin ≥ 50%</td><td class="ok">● pass</td></tr>
+      <tr><td>2</td><td>Optimistic ≥ base ≥ conservative in net income, and the plan price does not change between scenarios</td><td class="ok">● pass</td></tr>
+      <tr><td>3</td><td>With nobody paying: income 0, commissions 0, and the month costs exactly what the free users cost</td><td class="ok">● pass</td></tr>
+      <tr><td>4</td><td>The year is twelve of the same typical month</td><td class="ok">● pass</td></tr>
+      <tr><td>5</td><td>The optimistic scenario cannot convert more than 100% of sign-ups</td><td class="ok">● pass</td></tr>
+      <tr><td>6</td><td>The total is the sum of the two segments, not a separate calculation</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Software, against production (<code>e2e/precios.spec.ts</code>)</h3>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th>What it asserts</th><th style="width:14mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>/pricing</code> loads with no session, with 3 plans, both segments, and an assumptions table that shows <i>both</i> verified and guessed</td><td class="ok">● pass</td></tr>
+      <tr><td>2</td><td>Raising an assumption raises the income; conservative lowers it; optimistic raises it again</td><td class="ok">● pass</td></tr>
+      <tr><td>3</td><td>What is stored matches the screen, and <code>ip_hash</code> is 64 hex characters</td><td class="ok">● pass</td></tr>
+      <tr><td>4</td><td>With zero sign-ups the stored income is zero: the browser does not dictate the result</td><td class="ok">● pass</td></tr>
+      <tr><td>5</td><td><code>/product</code> does not mark everything live, and every route it marks live returns 200</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+  <p>10 of 10 across both profiles — phone and desktop — on October 6, 2026.</p>
+
+  <h3>Each new test was watched failing, for the right reason</h3>
+  <p>A green test proves nothing until you have seen it go red. Raising the try-on cost from 0.075 to
+    0.30 USD turns test 1 red with <code>expected 169.83 to be close to 42.46</code>. Dropping the
+    optimistic factor from 2 to 0.2 turns test 2 red. Both go green again on revert.</p>
+
+  <h3>Full suite</h3>
+  <p>56 unit tests pass (6 new). End-to-end against production: 77 pass, 3 skipped by design, and
+    <b>1 red</b> — the stylist test that builds three outfits. Run alone, it passes. It is the same
+    intermittency recorded since September 18, still without an identified cause. It is written here
+    rather than hidden.</p>
+</section>
+
+<!-- ============ 11. ITERATION ============ -->
+<section class="brk">
+  <h2>11 · Iteration log — what changed after testing</h2>
+  <table>
+    <thead><tr><th style="width:62mm">What was found</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td>My own plan asked for a false test: “0% conversion ⇒ income 0 <b>and cost 0</b>”</td><td>Free users cost ~0.01 USD a month, so a month with no sales is −98 pesos, not zero. The test now fixes the real model</td></tr>
+      <tr><td>A test I asked for was wrong: it claimed income per buyer is identical across scenarios</td><td>The scenario also changes how many top-ups each buyer makes. The claim was corrected; the code was right</td></tr>
+      <tr><td><code>/product</code> kept showing “not available” with the tables already created and verified</td><td>It had been prerendered before the migration with a 5-minute cache. Now it reads on every visit, like the other public pages</td></tr>
+      <tr><td>The free plan card read “Gratis / Gratis”</td><td>The price now shows “$0 · para siempre”</td></tr>
+      <tr><td>Asking what data ClosetAI collects: public read on <code>core_outputs</code>, and full IP addresses stored with no deletion date</td><td>Migration 009, a shared salted-hash helper, and a privacy notice that now says both</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 12. WHAT IT SAYS ============ -->
+<section>
+  <h2>12 · What the simulator actually says</h2>
+  <p class="lead">This is the part I did not plan for: the tool I built to defend my price is the one
+    that questioned it.</p>
+
+  <figure class="media">
+    <img src="02-simulador.jpg" alt="">
+    <figcaption>The simulator with my base assumptions: 400 sign-ups a month in the core segment,
+      120 in 36+, 3% buying the Complete plan, 8% buying a top-up, 6 credits used a month.</figcaption>
+  </figure>
+
+  <table>
+    <thead><tr><th style="width:52mm">Scenario (520 sign-ups a month)</th><th>Net per month</th><th>Over twelve months</th></tr></thead>
+    <tbody>
+      <tr><td>Conservative — half the conversion</td><td>$571 MXN</td><td>$6,852 MXN</td></tr>
+      <tr><td><b>Base</b> — my assumptions as written</td><td><b>$1,267 MXN</b></td><td><b>$15,206 MXN</b></td></tr>
+      <tr><td>Optimistic — double the conversion</td><td>$2,741 MXN</td><td>$32,892 MXN</td></tr>
+      <tr><td>If only 1 in 100 pays</td><td>$357 MXN</td><td>$4,284 MXN</td></tr>
+    </tbody>
+  </table>
+
+  <p>Even tripling sign-ups to 1,200 a month in the core segment, the base scenario reaches $3,217 a
+    month and the optimistic one $6,958. The margin is healthy — around 85% — because the product is
+    cheap to serve. The problem is not the margin. <b>It is that one payment of 100 pesos, paid once
+    per customer forever, does not add up to a business at this scale.</b></p>
+
+  <p>What I am <i>not</i> doing with that: switching to a subscription this week because a spreadsheet
+    told me to. The simulator uses guessed conversion rates — they are labelled as guesses on the
+    page — so what it proves is not “subscriptions win”. It proves that the question is worth real
+    evidence, and that evidence is a conversation with someone aged 18 to 35, which is the next one.</p>
+
+  <figure class="media">
+    <img src="03-supuestos.jpg" alt="">
+    <figcaption>Where each number comes from. Verified ones carry a source and a date; the rest say
+      plainly that nobody has paid yet.</figcaption>
+  </figure>
+
+  <figure class="media">
+    <img src="04-guardados.jpg" alt="">
+    <figcaption>Saved scenarios, public and with no account. Each number is the one the server
+      computed, not the one the browser displayed.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 13. VIDEO ============ -->
+<section class="brk">
+  <h2>13 · Demo video</h2>
+  <p class="lead"><b>2:19</b>, recorded against the live site, hosted on the product's own domain:
+    <a href="https://closetai.lat/demo/semana-3"><b>closetai.lat/demo/semana-3</b></a>
+    <span class="pendiente">[PENDING: my narration]</span></p>
+  <p>In order: the product map with no account; the sixteen features and their real state; the three
+    plans with their cost; the simulator and its two segments; an assumption moved live and the income
+    moving with it; the three scenarios compared; the assumptions table; saving a scenario; the public
+    list; and the commit history in GitHub.</p>
+  <figure class="media">
+    <img src="05-producto.jpg" alt="">
+    <figcaption>The first screen of the video: <code>closetai.lat/product</code>.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 14. DECISION NOTE ============ -->
+<section>
+  <h2>14 · Human decision note</h2>
+  <div class="note">
+    <p>This week I had to put a price on my product, and the honest answer was that I don't know yet
+      what people will pay.</p>
+    <p>So I made a decision: the three plans on the page are the ones I already decided — free, one
+      payment of 100 pesos, and a credit top-up — and the subscription stays out. It lives inside the
+      simulator as a scenario instead. The evidence cuts both ways: Stylebook has survived seventeen
+      years on a one-time price, Style DNA makes about three million dollars a year on subscriptions,
+      and the only real person I interviewed already pays monthly for Disney+. Putting a price on the
+      page is a claim. Putting it in the simulator is a question, and I only have a question.</p>
+    <p>I also rejected modelling customer retention. It would make every number bigger, and I have
+      zero paying customers to learn a real rate from. The simulator models one typical month and says
+      so on the page.</p>
+    <p>The number I did not expect: with my base assumptions, 520 sign-ups a month and 3% paying,
+      ClosetAI makes 1,267 pesos a month. If only 1 in 100 pays, it's 357. That is what one payment of
+      100 pesos really means, and it is why the subscription question matters more than I thought.</p>
+    <p>Finally, I corrected myself. Asking what data my app collects uncovered that anyone could read
+      what people wrote on my style page, and that I was storing full IP addresses. Both are fixed.</p>
+    <p class="wc">231 words · approved by Tamara Muñoz Delgadillo, October 6, 2026</p>
+  </div>
+</section>
+
+<!-- ============ 15. GATES ============ -->
+<section>
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>2679c14</code>, 11 minutes before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§6 · 8 commits · §7 · 8 production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§10–11 · 5 defects and corrections, each fixed and redeployed</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§13 · 2:19 video · §14 · 231 words</td></tr>
+    </tbody>
+  </table>
+</section>
