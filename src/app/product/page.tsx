@@ -108,8 +108,12 @@ export default async function Producto() {
             <div key={p.id} className="rounded-xl border border-border bg-surface p-5">
               <p className="font-display text-lg font-semibold">{p.nombre}</p>
               <p className="mt-1 font-medium tabular-nums">
-                {p.precio_mxn === 0 ? "Gratis" : pesos(p.precio_mxn)}
-                {p.cobro === "unico" ? " · una sola vez" : p.cobro === "recarga" ? " · por recarga" : ""}
+                {p.precio_mxn === 0 ? "$0" : pesos(p.precio_mxn)}
+                {p.cobro === "unico"
+                  ? " · una sola vez"
+                  : p.cobro === "recarga"
+                    ? " · por recarga"
+                    : " · para siempre"}
               </p>
               <p className="mt-2 text-sm text-text-muted">{p.resumen}</p>
             </div>
