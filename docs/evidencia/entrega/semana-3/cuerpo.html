@@ -39,7 +39,7 @@
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/product</code> and <code>/pricing</code> load with no session; <b>10 of 10</b> end-to-end tests pass against production</td><td>6, 10</td></tr>
       <tr><td>Coding/build evidence</td><td>1.0</td><td><b>10 commits</b> (min. 5) · <b>10 deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>6–9</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 pricing tests</b> required, 6 written · <b>3 software tests</b> required, 5 written · each one watched failing on purpose · 5 defects and corrections documented</td><td>10–11</td></tr>
-      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Two business decisions made by me before the plan; a privacy bug found in my own database and fixed; decision note, 231 words</td><td>2, 12, 14</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Two business decisions made by me before the plan; a privacy bug found in my own database and fixed; decision note, 240 words</td><td>2, 12, 14</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:19 walkthrough recorded against production, narrated by me</td><td>13</td></tr>
     </tbody>
   </table>
@@ -495,19 +495,17 @@ Next.js 16 (App Router, Vercel)
       what people will pay.</p>
     <p>So I made a decision: the three plans on the page are the ones I already decided — free, one
       payment of 100 pesos, and a credit top-up — and the subscription stays out. It lives inside the
-      simulator as a scenario instead. The evidence cuts both ways: Stylebook has survived seventeen
-      years on a one-time price, Style DNA makes about three million dollars a year on subscriptions,
+      simulator as a scenario instead. The evidence cuts both ways: Stylebook has lived seventeen years
+      on one payment, Style DNA makes about three million dollars a year on subscriptions,
       and the only real person I interviewed already pays monthly for Disney+. Putting a price on the
       page is a claim. Putting it in the simulator is a question, and I only have a question.</p>
-    <p>I also rejected modelling customer retention. It would make every number bigger, and I have
-      zero paying customers to learn a real rate from. The simulator models one typical month and says
+    <p>I also rejected modelling customer retention. I have zero paying customers to learn a real rate from. The simulator models one typical month and says
       so on the page.</p>
     <p>The number I did not expect: with my base assumptions, 520 sign-ups a month and 3% paying,
       ClosetAI makes 1,267 pesos a month. If only 1 in 100 pays, it's 357. That is what one payment of
-      100 pesos really means, and it is why the subscription question matters more than I thought.</p>
-    <p>Finally, I corrected myself. Asking what data my app collects uncovered that anyone could read
-      what people wrote on my style page, and that I was storing full IP addresses. Both are fixed.</p>
-    <p class="wc">231 words · approved by Tamara Muñoz Delgadillo, October 6, 2026</p>
+      100 pesos really means, and why the subscription question matters more than I thought.</p>
+    <p>Finally, I corrected myself. Asking what data my app collects uncovered that anyone could read what people wrote on my style page, and that I was storing full IP addresses. Both are fixed.</p>
+    <p class="wc">240 words · approved by Tamara Muñoz Delgadillo, October 6, 2026</p>
   </div>
 </section>
 
@@ -520,7 +518,7 @@ Next.js 16 (App Router, Vercel)
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>2679c14</code>, 11 minutes before the first code commit</td></tr>
       <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§6 · 10 commits · §7 · 10 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§10–11 · 5 defects and corrections, each fixed and redeployed</td></tr>
-      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§13 · 2:19 video · §14 · 231 words</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§13 · 2:19 video · §14 · 240 words</td></tr>
     </tbody>
   </table>
 </section>
