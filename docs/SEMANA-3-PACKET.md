@@ -60,8 +60,13 @@ precio mal puesto no se nota en la pantalla; se nota cuando cada venta pierde di
 
 ## 🖼️ Concepto de UX
 
-Wireframe en `docs/evidencia/mockups/08-pricing-wireframe.png`, mockup generado con imagen
-en `docs/evidencia/mockups/09-pricing-mockup.png`. Decisiones:
+Wireframe en `docs/evidencia/mockups/08-pricing-wireframe.png`. Decisiones:
+
+> **Lo que se planeó y no se pudo hacer.** Este plan decía que además habría un mockup generado con
+> imagen, como el de la Semana 2. El 9 de octubre se intentó con los cuatro modelos de imagen de
+> Gemini y los cuatro respondieron **429, cuota excedida**: la generación de imágenes no tiene nivel
+> gratuito y la facturación de la cuenta no está activa. El criterio de la rúbrica pide "mockup **o**
+> wireframe", así que la entrega va con el wireframe, y esto queda escrito en vez de callado.
 
 - **Una sola columna**, como `/research`. La calculadora arriba, el resultado inmediatamente
   debajo: quien mueve un número tiene que ver el efecto sin desplazarse.
