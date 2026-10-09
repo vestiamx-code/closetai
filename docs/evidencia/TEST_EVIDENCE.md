@@ -392,3 +392,13 @@ prueba 1 falla con «expected 169.83 to be close to 42.46». Con el factor optim
 diseño, y **1 roja**: la del estilista que arma tres outfits. Corrida sola, pasa. Es la misma
 intermitencia anotada desde el 18 de septiembre —una carrera de tiempos cuando la suite corre en
 paralelo contra producción—, y sigue sin causa identificada. Queda escrita, no escondida.
+
+## [2026-10-09] — Re-verificación del día de entrega
+
+56 unitarias en verde. La suite de `/product` y `/pricing` contra producción, corrida tres veces: la
+primera dio **1 roja** —el perfil de teléfono de la prueba 1— y las dos siguientes, 10 de 10. Corrió
+dos minutos después de un despliegue, así que un arranque en frío es la causa probable, pero no se
+comprobó. Queda escrito como lo que es: una roja sin explicar en la primera de tres corridas.
+
+El video narrado, verificado en el archivo publicado: 139.04 s, con pista de audio, −16.4 dB de
+volumen medio en el tramo de prueba.

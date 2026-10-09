@@ -7,7 +7,7 @@
 
   <div class="byline">
     <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
-    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+    Submitted October 9, 2026 · Product live at <b>closetai.lat</b>
   </div>
 
   <div class="links">
@@ -37,10 +37,10 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>11 requirements, each with a checkable criterion and where it is tested</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, the double calculation, and why there is no AI on these pages</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/product</code> and <code>/pricing</code> load with no session; <b>10 of 10</b> end-to-end tests pass against production</td><td>6, 10</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>8 commits</b> (min. 5) · <b>8 deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>6–9</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>10 commits</b> (min. 5) · <b>10 deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>6–9</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 pricing tests</b> required, 6 written · <b>3 software tests</b> required, 5 written · each one watched failing on purpose · 5 defects and corrections documented</td><td>10–11</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Two business decisions made by me before the plan; a privacy bug found in my own database and fixed; decision note, 231 words</td><td>2, 12, 14</td></tr>
-      <tr><td>Demo clarity</td><td>0.5</td><td>2:19 walkthrough recorded against production <span class="pendiente">[PENDING: my narration]</span></td><td>13</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>2:19 walkthrough recorded against production, narrated by me</td><td>13</td></tr>
     </tbody>
   </table>
 
@@ -217,7 +217,7 @@ Next.js 16 (App Router, Vercel)
 
 <!-- ============ 6. COMMITS ============ -->
 <section class="brk">
-  <h2>6 · GitHub commits — 8 this week (minimum 5)</h2>
+  <h2>6 · GitHub commits — 10 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:16mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -229,6 +229,8 @@ Next.js 16 (App Router, Vercel)
       <tr><td class="mono">d5d36c5</td><td>Oct 6, 16:28</td><td>docs: test and iteration evidence</td></tr>
       <tr><td class="mono">db9b712</td><td>Oct 6, 16:30</td><td>fix: the free plan read “Gratis / Gratis”</td></tr>
       <tr><td class="mono">472b4e2</td><td>Oct 6, 17:44</td><td>feat: demo video page at <code>/demo/semana-3</code> and the approved decision note</td></tr>
+      <tr><td class="mono">48a4929</td><td>Oct 6, 17:49</td><td>docs: the packet source, so the document can be rebuilt with one command</td></tr>
+      <tr><td class="mono">421aafd</td><td>Oct 9, 17:09</td><td>feat: the demo video now carries my own narration</td></tr>
     </tbody>
   </table>
   <figure>
@@ -240,7 +242,7 @@ Next.js 16 (App Router, Vercel)
 
 <!-- ============ 7. DEPLOYS ============ -->
 <section>
-  <h2>7 · Vercel deployments — 8 this week (minimum 2)</h2>
+  <h2>7 · Vercel deployments — 10 this week (minimum 2)</h2>
   <p class="lead">All Production, all Ready, with exact times read from Vercel.</p>
   <table>
     <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
@@ -253,6 +255,8 @@ Next.js 16 (App Router, Vercel)
       <tr><td>Oct 6, 16:28</td><td class="ok">● Ready</td><td>Test and iteration evidence</td></tr>
       <tr><td>Oct 6, 16:30</td><td class="ok">● Ready</td><td>Fix: the duplicated label on the free plan</td></tr>
       <tr><td>Oct 6, 17:45</td><td class="ok">● Ready</td><td>The demo video page and the decision note</td></tr>
+      <tr><td>Oct 6, 17:49</td><td class="ok">● Ready</td><td>The packet source</td></tr>
+      <tr><td>Oct 9, 17:09</td><td class="ok">● Ready</td><td>The demo video with my narration</td></tr>
     </tbody>
   </table>
 </section>
@@ -386,6 +390,10 @@ Next.js 16 (App Router, Vercel)
     </tbody>
   </table>
   <p>10 of 10 across both profiles — phone and desktop — on October 6, 2026.</p>
+  <p><b>Re-verified on submission day, October 9:</b> 56 unit tests green, and the production suite run
+    three times. The first run had one red — the phone profile of test 1 — and the next two were 10 of 10.
+    It ran two minutes after a deployment, so a cold start is the likely cause, but I did not prove it,
+    so it is written here as what it is: one unexplained red on the first of three runs.</p>
 
   <h3>Each new test was watched failing, for the right reason</h3>
   <p>A green test proves nothing until you have seen it go red. Raising the try-on cost from 0.075 to
@@ -463,8 +471,12 @@ Next.js 16 (App Router, Vercel)
 <section class="brk">
   <h2>13 · Demo video</h2>
   <p class="lead"><b>2:19</b>, recorded against the live site, hosted on the product's own domain:
-    <a href="https://closetai.lat/demo/semana-3"><b>closetai.lat/demo/semana-3</b></a>
-    <span class="pendiente">[PENDING: my narration]</span></p>
+    <a href="https://closetai.lat/demo/semana-3"><b>closetai.lat/demo/semana-3</b></a>, narrated by me.</p>
+  <p><b>How the narration was synchronised:</b> I read the script against the silent recording, and before
+    mixing, the timing was checked two ways — the audio's energy envelope and a timestamped transcription.
+    Nine of the ten blocks land within two seconds of their scene; the simulator line runs four seconds
+    early. The recording was not cut: re-timing block by block would have pushed the rest further from
+    their marks than leaving it whole.</p>
   <p>In order: the product map with no account; the sixteen features and their real state; the three
     plans with their cost; the simulator and its two segments; an assumption moved live and the income
     moving with it; the three scenarios compared; the assumptions table; saving a scenario; the public
@@ -506,7 +518,7 @@ Next.js 16 (App Router, Vercel)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>2679c14</code>, 11 minutes before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§6 · 8 commits · §7 · 8 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§6 · 10 commits · §7 · 10 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§10–11 · 5 defects and corrections, each fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§13 · 2:19 video · §14 · 231 words</td></tr>
     </tbody>
