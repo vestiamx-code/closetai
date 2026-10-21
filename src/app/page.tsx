@@ -281,10 +281,13 @@ export default async function Home() {
       {/* ---------- 7 · Empezar ---------- */}
       <section data-seccion="empezar" className="mx-auto w-full max-w-6xl px-6 py-24 text-center sm:py-36">
         <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
-          Ya tienes qué ponerte.
+          {/* No puede repetir ninguno de los dos titulares del experimento: quien ve
+              la variante A leería la frase de B aquí abajo, y la comparación quedaría
+              contaminada. Era «Ya tienes qué ponerte», justo el titular B. */}
+          Tu ropa ya está ahí.
           <br />{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            Solo falta verlo.
+            Solo falta verla.
           </span>
         </h2>
         <Link
