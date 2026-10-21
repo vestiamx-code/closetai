@@ -1,14 +1,17 @@
-# Semana 4 · Contenido de lanzamiento — para aprobación de Tamara
+# Semana 4 · Contenido de lanzamiento
 
-> Redactado con IA el 21 de octubre de 2026. **No se publica nada hasta que Tamara lo apruebe.**
+> Redactado con IA el 21 de octubre de 2026 y **aprobado por Tamara Muñoz Delgadillo el mismo día**,
+> con un cambio: el post 5 original se retiró (ver abajo).
 > Regla de redacción: solo se usan los datos de `src/lib/marketing.ts` (`DATOS_VERIFICADOS`),
 > cada uno con su fuente. No hay testimonios, ni «miles de usuarias», ni la cita de la entrevista:
 > el permiso de la Semana 2 fue para la página de investigación y el documento, no para publicidad.
 >
-> ⚠️ **Pendiente de comprobar:** el post 5 dice que la prueba virtual funciona sin tu cara. El
-> validador de fotos ya acepta fotos sin cara (prompt v3), pero nadie ha probado el resultado con una
-> foto así. Hasta que Tamara suba una foto suya del cuello para abajo en `/probar` y vea el resultado,
-> ese post no se publica.
+> **Lo que se retiró antes de aprobar.** El post 5 original decía que la prueba virtual funciona
+> sin tu cara. El validador de fotos ya acepta fotos sin cara (prompt v3), pero nadie ha visto un
+> resultado con una foto así. Para comprobarlo había que pedirle a Tamara una foto de su cuerpo, que
+> además gasta un crédito y pasa por un proveedor externo, solo para poder publicar una frase. Se
+> decidió al revés: el marketing dice lo que ya está comprobado. El post se cambió por uno de
+> privacidad que sale del aviso de privacidad, y el mapa de producto dejó de prometerlo.
 
 ---
 
@@ -78,11 +81,11 @@ para siempre: nunca te vamos a cobrar por el trabajo que ya hiciste.
 **Texto:** Fuentes: AMVO, y Milenio con datos de AMVO. Cada dato, con su enlace, en closetai.lat/research
 **Hashtags:** #ClosetAI #ModaMexicana #ComprasEnLínea
 
-### 5 · Instagram · post — «Sin tu cara» ⚠️ pendiente de comprobar
-¿Probarte ropa sin subir tu cara? La prueba virtual de ClosetAI funciona con una foto de cuerpo
-completo, sin que salga tu cara. Tu foto vive en un espacio privado y se borra de verdad cuando la
-quitas.
-**Hashtags:** #ClosetAI #Privacidad #PruebaVirtual
+### 5 · Instagram · post — «Tus fotos son tuyas»
+Tus fotos viven en un espacio privado al que nadie más entra. Se borran de verdad cuando las quitas
+o borras tu cuenta. No vendemos tus datos y en ClosetAI no hay anuncios.
+**Texto:** Todo, con detalle, en closetai.lat/privacidad
+**Hashtags:** #ClosetAI #Privacidad
 
 ### 6 · TikTok · video — «POV: el clóset lleno» → guion 2
 **Texto:** POV: tienes el clóset lleno y nada que ponerte. Spoiler: sí tienes. closetai.lat
@@ -161,6 +164,6 @@ clóset sigue siendo gratis para siempre.
 | 9 | TikTok | Post 8 · guion 3 | El uso diario |
 | 10 | Instagram | Post 7 · «Antes de comprar otra blusa» | El plan Completo |
 | 11 | Instagram | Post 9 · «¿Por qué no hay mensualidad?» | El precio, explicado |
-| 12 | Instagram | Post 5 · «Sin tu cara» — **solo si ya se comprobó**; si no, el post 1 en historias | Privacidad |
+| 12 | Instagram | Post 5 · «Tus fotos son tuyas» | Privacidad |
 | 13 | — | Descanso | Revisar el A/B de la portada |
 | 14 | TikTok | El guion que más se vio, regrabado | Repetir lo que funcionó, decidido con datos |
