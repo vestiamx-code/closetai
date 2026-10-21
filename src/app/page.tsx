@@ -115,6 +115,9 @@ export default async function Home() {
             <span className="entra block" style={{ animationDelay: "0.12s" }}>
               {linea1}
             </span>
+            {/* Las líneas son bloques, así que se ven separadas; pero sin este espacio el
+                texto del titular es «Ya tienesqué ponerte.» para un lector de pantalla y
+                para un buscador. La portada anterior tenía el mismo error. */}{" "}
             <span className="entra block italic" style={{ animationDelay: "0.24s", color: "var(--barro)" }}>
               {linea2}
             </span>
@@ -279,7 +282,7 @@ export default async function Home() {
       <section data-seccion="empezar" className="mx-auto w-full max-w-6xl px-6 py-24 text-center sm:py-36">
         <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
           Ya tienes qué ponerte.
-          <br />
+          <br />{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
             Solo falta verlo.
           </span>
