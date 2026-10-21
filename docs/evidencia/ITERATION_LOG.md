@@ -419,3 +419,59 @@ navegador, se podían leer los 15 textos completos. Se comprobó haciendo la pet
 privacidad ahora lo dice. La tabla nueva de escenarios nace con hash y sin lectura pública.
 **Lo que esto vale:** la regla que queda escrita es "una tabla se abre a la llave pública solo si
 **todas** sus columnas son públicas".
+
+---
+
+# Semana 4 · Portada y `/marketing`
+
+## [2026-10-21] — Dos experimentos que se habrían contradicho siempre
+**Observado:** la prueba de independencia —dos experimentos simultáneos deberían coincidir la mitad
+de las veces— dio **0 coincidencias en 10,000**.
+**Diagnóstico:** la variante salía de `fnv1a % 2`, que solo mira el último bit. En FNV-1a ese bit es
+la paridad de las letras del texto: multiplicar por un primo impar no lo cambia. Dos experimentos
+con nombres de distinta paridad quedaban perfectamente opuestos: quien viera el titular A habría
+visto siempre el botón B, y nunca se habría podido separar el efecto de uno del otro. La prueba de
+reparto 50/50 pasaba igual, porque los ids al azar sí tienen paridad pareja.
+**Cambio:** el mezclador final de MurmurHash3 después de FNV-1a, y se toma el bit más alto.
+**Lo que esto vale:** el error no se habría visto en la pantalla jamás; solo en un resultado A/B
+equivocado meses después.
+
+## [2026-10-21] — La portada vieja prometía dos cosas que no se podían sostener
+**Observado:** al mejorar la portada se releyó la anterior frase por frase.
+**Cambio:** se quitaron «A las dos semanas ya no te propone lo que odias» (nunca se midió) y «Diez
+prendas bastan para empezar» (la única conversación real puso el límite en 40). Una prueba e2e
+comprueba que no vuelvan.
+
+## [2026-10-21] — Una promesa sin evidencia, en el mapa y en un post
+**Observado:** el mapa de producto de la Semana 3 decía que la prueba virtual «funciona sin que salga
+tu cara», y el borrador del post 5 lo repetía. Nadie lo había probado: el validador de fotos ni
+siquiera lo mencionaba.
+**Diagnóstico:** se había escrito como hecho lo que era una intención, salida de la entrevista de la
+Semana 2.
+**Cambio:** el validador ahora acepta explícitamente fotos sin cara (prompt v3); el post 5 se cambió
+por uno de privacidad verificado; la migración 011 quitó la promesa del mapa. Para comprobarlo había
+que pedirle a Tamara una foto de su cuerpo, que gasta un crédito y pasa por un proveedor externo,
+solo para publicar una frase. Se decidió al revés: el marketing dice lo comprobado.
+
+## [2026-10-21] — Al titular le faltaba un espacio, desde la Semana 0
+**Observado:** la prueba de la portada comparaba el texto plano del titular y falló:
+«Ya tienesqué ponerte.».
+**Diagnóstico:** las dos líneas del titular son bloques y en pantalla se ven separadas, pero en el
+HTML no había espacio entre ellas. Así lo leían un lector de pantalla y un buscador. La portada
+anterior tenía el mismo error («Tu estilista,en tu bolsillo.»).
+**Cambio:** un espacio entre las líneas, y la prueba exige el texto con espacio.
+
+## [2026-10-21] — Las pruebas «contra producción» no iban contra producción
+**Observado:** el informe de una prueba fallida mostró un botón «Open Next.js Dev Tools», que solo
+existe en el servidor de desarrollo.
+**Diagnóstico:** sin `PLAYWRIGHT_BASE_URL`, Playwright va a `localhost:3000`, y en la Mac había un
+`next dev` corriendo **desde el 2 de septiembre**, que Playwright reusaba en silencio. Ese servidor
+usa la base de datos de producción, así que todo parecía real, pero el sitio probado era el código
+local. Desde la re-verificación de la Semana 2 (25-sep) y durante toda la Semana 3, los documentos
+dijeron «contra producción» sin serlo.
+**Cambio:** `pnpm test:e2e:prod` apunta a https://closetai.lat, y la configuración imprime en cada
+corrida `[e2e] contra …`. Se corrió todo contra el sitio real: **47 de 47** —portada, marketing,
+precios e investigación—, con 3 saltadas por diseño.
+**Lo que esto vale:** los resultados de la Semana 3 se confirman hoy sobre el sitio real, pero la
+afirmación de entonces no estaba probada. El documento entregado de la Semana 3 no se puede cambiar;
+esta corrección queda aquí y en el documento de la Semana 4.

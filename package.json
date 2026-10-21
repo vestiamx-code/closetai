@@ -11,6 +11,7 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:prod": "PLAYWRIGHT_BASE_URL=https://closetai.lat playwright test",
     "db:push": "supabase db push",
     "test:vivas": "PRUEBAS_VIVAS=1 vitest run"
   },

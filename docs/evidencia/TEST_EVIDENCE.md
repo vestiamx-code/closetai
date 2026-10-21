@@ -402,3 +402,55 @@ comprobó. Queda escrito como lo que es: una roja sin explicar en la primera de 
 
 El video narrado, verificado en el archivo publicado: 139.04 s, con pista de audio, −16.4 dB de
 volumen medio en el tramo de prueba.
+
+---
+
+# Semana 4 · Portada y `/marketing`
+
+## Corrección sobre las semanas anteriores
+
+Las corridas e2e del 25 de septiembre (re-verificación de la Semana 2) y del 6 y 9 de octubre (Semana
+3) **no fueron contra producción**: fueron contra un `next dev` local que corría desde el 2 de
+septiembre, conectado a la base de producción. Ver ITERATION_LOG, 21-oct-2026. Desde hoy:
+`pnpm test:e2e:prod`, y cada corrida imprime contra qué sitio va.
+
+## Pruebas A/B (`src/lib/ab.test.ts`) — las 2 que pide la semana, en 7 casos
+
+| # | Qué afirma | Resultado |
+|---|---|---|
+| 1a | El mismo visitante ve siempre la misma variante, y 10,000 visitantes se reparten entre 48% y 52% | verde |
+| 1b | Dos experimentos simultáneos son independientes (coinciden entre 47% y 53%) | verde — **encontró un error real** |
+| 2a | Con 30 visitantes por lado, 10% contra 40% no es ganador | verde |
+| 2b | Con muestra suficiente y diferencia chica, tampoco | verde |
+| 2c | 10% contra 20% con 500 por lado gana B, y al revés gana A | verde |
+| 2d | El valor p coincide con la prueba z hecha a mano (z = 1.963, p = 0.0497) | verde |
+| 2e | El mínimo de muestra es 100, el que dice la página | verde |
+
+**Vistas fallar a propósito:** con la asignación fija en «a», fallan 1a y 1b. Con la muestra mínima
+en 10, fallan 2a y 2e. Al revertir, las siete vuelven a verde.
+
+## El guardia del marketing (`src/lib/marketing.test.ts`) — 10 casos
+
+Deja pasar las cifras verificadas escritas como las escribe una persona (77 millones, 59 %, $100);
+atrapa «3 de cada 4», «80%», «10,000 usuarias» y «#Top10Outfits»; lee miles y decimales como un solo
+número; cada dato tiene fuente; rechaza JSON roto o incompleto; y exporta el calendario en orden con
+las comas escapadas. Todo el contenido aprobado pasó por el mismo guardia antes de sembrarse.
+
+## Pruebas de software contra https://closetai.lat (`e2e/marketing.spec.ts`)
+
+| # | Qué afirma | Resultado |
+|---|---|---|
+| 1 | `/marketing` carga sin sesión con 10 posts, 3 guiones y 14 días; la persona tiene datos **y** hipótesis | verde |
+| 2 | Exportar el calendario descarga un CSV con encabezado y 14 filas; copiar el post 1 pone su texto | verde |
+| 3 | La portada muestra un solo titular, con espacio, el mismo en 3 recargas; el tráfico de prueba no deja eventos | verde |
+| 4 | Una visita real **sí** se cuenta: una vista aunque recargue, un clic, con la misma variante | verde |
+| 5 | El generador escribe un post sin cifras inventadas y lo guarda como «generado con IA, sin revisar» | verde |
+| 6 | La portada tiene las siete secciones en orden, y las dos frases retiradas no volvieron | verde |
+
+La 3 y la 4 se necesitan juntas: la 3 sola pasaría también si el contador estuviera roto y no contara
+nada. La 4 usa un navegador sin la marca de prueba y borra sus propios eventos al terminar; después de
+correrla, el experimento quedó en 0 eventos.
+
+**Corrida completa contra el sitio real, 21-oct-2026:** portada, marketing, precios e investigación,
+**47 de 47**, 3 saltadas por diseño. Confirmado que la corrida resolvió a `https://closetai.lat` y
+sin servidor local.

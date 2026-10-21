@@ -125,6 +125,98 @@ test.describe("Marketing y portada", () => {
     expect(await eventosDe(visitante)).toBe(0);
   });
 
+  test("una visita real sí se cuenta: una vista y un clic, una sola vez aunque recargue", async ({ browser }) => {
+    // La prueba anterior demuestra que el tráfico de pruebas NO se cuenta. Sola,
+    // pasaría igual si el contador estuviera roto y no contara nada. Esta es la
+    // contraria: un navegador SIN la cabecera de prueba, como el de cualquier
+    // persona. Al final borra sus propios eventos para no ensuciar el experimento.
+    const contexto = await browser.newContext({ extraHTTPHeaders: {} });
+    const page = await contexto.newPage();
+    let visitante = "";
+    try {
+      await page.goto("/");
+      await expect
+        .poll(async () => (await contexto.cookies()).find((c) => c.name === "cai_visitante")?.value ?? "")
+        .toMatch(/^[0-9a-f-]{36}$/);
+      visitante = (await contexto.cookies()).find((c) => c.name === "cai_visitante")!.value;
+
+      const eventos = async () => {
+        const { data } = await admin()
+          .from("ab_events")
+          .select("evento, variante")
+          .eq("visitante_hash", huella(visitante));
+        return data ?? [];
+      };
+
+      await expect.poll(async () => (await eventos()).map((e) => e.evento).sort()).toEqual(["vista"]);
+
+      // Recargar no suma otra vista: la unidad es la persona.
+      await page.reload();
+      await page.reload();
+      await page.waitForTimeout(1500);
+      expect((await eventos()).filter((e) => e.evento === "vista")).toHaveLength(1);
+
+      // Y el clic en «Empezar gratis» se registra, con la misma variante que vio.
+      const variante = await page.getByRole("heading", { level: 1 }).getAttribute("data-variante");
+      await page.locator('[data-cta="empezar"]').click();
+      await expect(page).toHaveURL(/\/registro$/);
+      await expect.poll(async () => (await eventos()).map((e) => e.evento).sort()).toEqual(["clic", "vista"]);
+      expect(new Set((await eventos()).map((e) => e.variante))).toEqual(new Set([variante]));
+    } finally {
+      if (visitante) await admin().from("ab_events").delete().eq("visitante_hash", huella(visitante));
+      await contexto.close();
+    }
+  });
+
+  test("el generador escribe un post sin cifras inventadas y lo guarda como «sin revisar»", async ({ page }) => {
+    // Una sola llamada al modelo por corrida: basta con un perfil.
+    test.skip(test.info().project.name !== "desktop-chrome", "Llama a la IA: corre en un solo perfil");
+    test.setTimeout(90_000);
+
+    await page.goto("/marketing#generador");
+    await page.locator("#tema").fill("Qué ponerse un lunes de lluvia con lo que ya tienes");
+    await page.getByRole("button", { name: "Generar post" }).click();
+
+    const resultado = page.getByTestId("resultado-generador");
+    await expect(resultado.locator('[data-testid="post-generado"], [role="alert"]')).toBeVisible({ timeout: 60_000 });
+    // Se decide qué salió sin esperar: textContent() sobre un aviso que no existe
+    // se queda esperando hasta agotar el tiempo de la prueba.
+    const aviso = (await resultado.getByTestId("post-generado").isVisible())
+      ? null
+      : await resultado.getByRole("alert").textContent();
+    test.skip(Boolean(aviso && /saturado|varios posts/i.test(aviso)), `El proveedor no respondió: ${aviso}`);
+
+    // Si el modelo inventó una cifra, el rechazo es el comportamiento correcto, no
+    // un fallo: se anota y se acepta. Lo que no puede pasar es que la muestre.
+    if (aviso && /no están en los datos verificados/.test(aviso)) {
+      test.info().annotations.push({ type: "rechazo", description: aviso });
+      return;
+    }
+
+    const post = page.getByTestId("post-generado");
+    await expect(post).toContainText("Generado con IA · sin revisar");
+    const titulo = (await post.locator("h3").textContent())!.trim();
+
+    await post.getByRole("button", { name: "Guardar" }).click();
+    await expect(post.getByRole("button", { name: "Guardado" })).toBeVisible({ timeout: 20_000 });
+
+    const { data } = await admin()
+      .from("marketing_assets")
+      .select("id, origen, aprobado, titulo, cuerpo")
+      .eq("titulo", titulo)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+    try {
+      expect(data!.origen).toBe("generado_ia");
+      expect(data!.aprobado).toBe(false);
+      await page.reload();
+      await expect(page.locator(`[data-generado="${data!.id}"]`)).toBeVisible();
+    } finally {
+      if (data?.id) await admin().from("marketing_assets").delete().eq("id", data.id);
+    }
+  });
+
   test("la portada tiene las siete secciones del plan, en orden", async ({ page }) => {
     await page.goto("/");
     const orden = await page.locator("[data-seccion]").evaluateAll((s) => s.map((e) => e.getAttribute("data-seccion")));

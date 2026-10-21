@@ -2,6 +2,12 @@ import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 
+// Se dice en voz alta contra qué se prueba. Sin esta línea, entre el 2 de
+// septiembre y el 21 de octubre de 2026 la suite corrió contra un servidor de
+// desarrollo local —conectado a la base de producción— mientras los documentos
+// decían «contra producción». Nada en la salida lo delataba.
+console.log(`[e2e] contra ${baseURL}${process.env.PLAYWRIGHT_BASE_URL ? "" : " (local: para el sitio real usa pnpm test:e2e:prod)"}`);
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
