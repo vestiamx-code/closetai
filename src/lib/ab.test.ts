@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { describe, expect, it } from "vitest";
 
-import { MUESTRA_MINIMA, resultado, varianteDe } from "./ab";
+import { MUESTRA_MINIMA, resultado, traficoAutomatico, varianteDe } from "./ab";
 
 /**
  * Las dos pruebas A/B de la Semana 4.
@@ -85,5 +85,21 @@ describe("Prueba A/B 2 · el ganador", () => {
     expect(MUESTRA_MINIMA).toBe(100);
     const justo = resultado({ vistas: 100, clics: 10 }, { vistas: 99, clics: 30 });
     expect(justo.ganador).toBeNull();
+  });
+});
+
+describe("Tráfico automático", () => {
+  it("descarta navegadores automáticos, buscadores y vistas previas de enlaces", () => {
+    expect(traficoAutomatico("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36")).toBe("navegador-automatico");
+    expect(traficoAutomatico("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")).toBe("buscador");
+    expect(traficoAutomatico("WhatsApp/2.23.20.0")).toBe("vista-previa");
+    expect(traficoAutomatico("vercel-screenshot/1.0")).toBe("vercel");
+    expect(traficoAutomatico(null)).toBe("sin-user-agent");
+  });
+
+  it("deja pasar a una persona en su celular o su computadora", () => {
+    expect(traficoAutomatico("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1")).toBeNull();
+    expect(traficoAutomatico("Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36")).toBeNull();
+    expect(traficoAutomatico("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")).toBeNull();
   });
 });

@@ -132,3 +132,29 @@ export function resultado(a: Conteo, b: Conteo): Resultado {
     motivo: `Gana la variante ${ganador.toUpperCase()}, con p = ${p.toFixed(3)}.`,
   };
 }
+
+/**
+ * ¿Esta visita la hizo una máquina?
+ *
+ * El experimento cuenta personas. Después de cada despliegue, Vercel abre la
+ * portada con un navegador automático para tomar su captura, y ese navegador
+ * ejecuta JavaScript: sin este filtro, cada despliegue sumaba visitantes que no
+ * son de nadie. El 21-oct-2026 aparecieron 10 vistas en pares, una de ellas 26
+ * segundos después de un despliegue. Mismo riesgo con buscadores y con las
+ * vistas previas de enlaces de WhatsApp o Facebook.
+ *
+ * Devuelve la categoría para poder registrarla, o null si parece una persona.
+ */
+export function traficoAutomatico(userAgent: string | null): string | null {
+  if (!userAgent || userAgent.trim() === "") return "sin-user-agent";
+  const ua = userAgent.toLowerCase();
+  const reglas: [string, RegExp][] = [
+    ["navegador-automatico", /headlesschrome|headless|playwright|puppeteer|phantomjs|selenium|lighthouse/],
+    ["vercel", /vercel/],
+    ["vista-previa", /whatsapp|facebookexternalhit|slackbot|twitterbot|discordbot|telegrambot|linkedinbot/],
+    ["buscador", /googlebot|bingbot|duckduckbot|yandex|baiduspider|applebot|slurp/],
+    ["bot", /bot\b|crawler|spider|preview|screenshot/],
+  ];
+  for (const [categoria, patron] of reglas) if (patron.test(ua)) return categoria;
+  return null;
+}
