@@ -224,6 +224,13 @@ test.describe("Marketing y portada", () => {
 
     // La prueba con datos enlaza a la investigación, donde está cada fuente.
     await expect(page.locator('[data-seccion="prueba"] a[href="/research"]')).toBeVisible();
+    // El resto de la página no repite ninguno de los dos titulares: si lo hiciera,
+    // cada grupo vería también la variante del otro.
+    const fueraDelTitular = await page
+      .locator('[data-seccion]:not([data-seccion="titular"])')
+      .evaluateAll((s) => s.map((e) => e.textContent ?? "").join(" "));
+    expect(fueraDelTitular).not.toMatch(/Ya tienes qué ponerte|Tu estilista, en tu bolsillo/);
+
     // Y las dos frases que se quitaron no volvieron.
     await expect(page.getByText("A las dos semanas")).toHaveCount(0);
     await expect(page.getByText("Diez prendas bastan")).toHaveCount(0);

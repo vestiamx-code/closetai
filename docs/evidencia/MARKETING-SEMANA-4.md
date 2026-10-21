@@ -2,6 +2,11 @@
 
 > Redactado con IA el 21 de octubre de 2026 y **aprobado por Tamara Muñoz Delgadillo el mismo día**,
 > con un cambio: el post 5 original se retiró (ver abajo).
+>
+> **Cambio posterior, aprobado por Tamara el mismo día.** El cierre de la portada decía «Ya tienes
+> qué ponerte. Solo falta verlo.», que es el titular B del experimento. Quien veía la variante A
+> también leía la frase de B al final, y la comparación quedaba contaminada. Se cambió por uno que
+> no se parece a ninguno de los dos titulares (migración 012).
 > Regla de redacción: solo se usan los datos de `src/lib/marketing.ts` (`DATOS_VERIFICADOS`),
 > cada uno con su fuente. No hay testimonios, ni «miles de usuarias», ni la cita de la entrevista:
 > el permiso de la Semana 2 fue para la página de investigación y el documento, no para publicidad.
@@ -46,7 +51,7 @@ mensualidad. *Ver la cuenta completa en closetai.lat/pricing.*
 **Tus fotos son tuyas.** Viven en un espacio privado al que nadie más entra. Se borran de verdad
 cuando las quitas o borras tu cuenta. No vendemos tus datos y no hay anuncios.
 
-**Cierre.** Ya tienes qué ponerte. Solo falta verlo. · Botón: Crear mi clóset gratis
+**Cierre.** Tu ropa ya está ahí. Solo falta verla. · Botón: Crear mi clóset gratis
 
 ---
 
