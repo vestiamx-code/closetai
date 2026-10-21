@@ -31,3 +31,12 @@ export function huellaDeIp(ip: string): string {
 export async function huellaDeQuienPide(): Promise<string> {
   return huellaDeIp(await ipDeQuienPide());
 }
+
+/**
+ * La misma huella con sal, para cualquier identificador —no solo una IP—.
+ * La usa el experimento A/B con el id al azar de cada visitante: aunque ese id
+ * no identifica a nadie, se guarda su hash por la misma regla.
+ */
+export function huella(texto: string): string {
+  return huellaDeIp(texto);
+}

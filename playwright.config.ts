@@ -12,6 +12,10 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    // La suite corre contra producción, donde vive el experimento A/B de la
+    // portada. Esta cabecera marca cada petición como prueba para que no se cuente:
+    // sin ella, cada corrida le sumaría decenas de visitas que no son de nadie.
+    extraHTTPHeaders: { "x-cai-prueba": "1" },
   },
   // ClosetAI es mobile-first: la suite corre en móvil por defecto (§3.1).
   projects: [

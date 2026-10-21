@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 /**
  * Lo que el marketing de ClosetAI tiene permitido decir (Semana 4).
  *
@@ -61,9 +63,9 @@ export const DATOS_VERIFICADOS: DatoVerificado[] = [
     cifras: ["49", "20"],
   },
   {
-    id: "sin-cara",
-    texto: "La prueba virtual funciona con una foto de cuerpo completo, sin que salga tu cara.",
-    fuente: "Cómo funciona ClosetAI, closetai.lat/probar",
+    id: "privacidad",
+    texto: "Las fotos viven en un espacio privado, se borran de verdad al quitarlas y ClosetAI no vende datos ni tiene anuncios.",
+    fuente: "Aviso de privacidad, closetai.lat/privacidad",
     cifras: [],
   },
   {
@@ -163,8 +165,140 @@ export const PERSONA = {
     { texto: "Vive en el celular: Instagram para ver, TikTok para aprender", tipo: "hipotesis" },
     { texto: "Tiene más ropa de la que usa y repite lo mismo por costumbre", tipo: "hipotesis", fuente: "Lo dijo la única persona entrevistada, que está fuera de este segmento" },
     { texto: "Le importa más no gastar de más que la sostenibilidad", tipo: "hipotesis", fuente: "Documento Maestro §1; sin entrevista que lo confirme" },
-    { texto: "No subiría una foto con su cara a una app que no conoce", tipo: "hipotesis", fuente: "Lo dijo la persona entrevistada; por eso la prueba virtual funciona sin cara" },
+    { texto: "No subiría una foto con su cara a una app que no conoce", tipo: "hipotesis", fuente: "Lo dijo la persona entrevistada; por eso el validador de fotos acepta fotos sin cara" },
   ] satisfies Rasgo[],
   quiere: "Abrir el clóset en la mañana y saber qué ponerse en un minuto.",
   frena: "Fotografiar toda su ropa le da flojera, y no confía en apps que piden su cara.",
 };
+
+// ---------------------------------------------------------------------------
+// El contrato del generador
+// ---------------------------------------------------------------------------
+
+
+export const postGeneradoSchema = z.object({
+  titulo: z.string().trim().min(3).max(80),
+  cuerpo: z.string().trim().min(40).max(700),
+  hashtags: z
+    .array(z.string().trim().regex(/^#[\p{L}\p{N}_]+$/u))
+    .min(1)
+    .max(6),
+  formato: z.enum(["post", "carrusel", "video"]),
+});
+
+export type RevisionDePost =
+  | { ok: true; post: PostGenerado }
+  | { ok: false; motivo: "formato" | "cifras"; mensaje: string; cifras?: string[] };
+
+/**
+ * Revisa un post antes de mostrarlo o guardarlo. Se llama dos veces: cuando el
+ * modelo responde, y otra vez en el servidor al guardar, porque lo que llega a
+ * guardar viene del navegador y el navegador se puede editar.
+ */
+export function revisarPost(raw: unknown): RevisionDePost {
+  const parseado = postGeneradoSchema.safeParse(typeof raw === "string" ? intentarJson(raw) : raw);
+  if (!parseado.success) {
+    return { ok: false, motivo: "formato", mensaje: "El post no vino completo. Vuelve a intentarlo." };
+  }
+  const post = parseado.data;
+  const cifras = cifrasInventadas(`${post.titulo} ${post.cuerpo} ${post.hashtags.join(" ")}`);
+  if (cifras.length > 0) {
+    return {
+      ok: false,
+      motivo: "cifras",
+      cifras,
+      mensaje: `El post traía ${cifras.length === 1 ? "una cifra" : "cifras"} que no están en los datos verificados (${cifras.join(", ")}), así que no se muestra. Vuelve a intentarlo.`,
+    };
+  }
+  return { ok: true, post };
+}
+
+function intentarJson(texto: string): unknown {
+  try {
+    return JSON.parse(texto);
+  } catch {
+    return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Exportar: lo que se descarga desde /marketing
+// ---------------------------------------------------------------------------
+
+export type Toma = { toma: string; se_ve: string; texto: string; voz: string };
+
+export type Recurso = {
+  id: string;
+  tipo: "landing" | "post" | "guion" | "dia";
+  canal: Canal | null;
+  formato: "post" | "carrusel" | "video" | null;
+  titulo: string;
+  cuerpo: string;
+  detalle: {
+    laminas?: string[];
+    texto?: string;
+    hashtags?: string[];
+    guion?: string;
+    duracion?: string;
+    tomas?: Toma[];
+    dia?: number;
+    pieza?: string;
+    para_que?: string;
+  };
+  origen: "redactado_ia_aprobado" | "generado_ia";
+  aprobado: boolean;
+  created_at: string;
+};
+
+const CANAL_LEGIBLE: Record<Canal, string> = { instagram: "Instagram", tiktok: "TikTok" };
+
+export const canalLegible = (c: Canal | null) => (c ? CANAL_LEGIBLE[c] : "—");
+
+/** El texto de un post tal como se pega en la red social. */
+export function textoParaPegar(r: Recurso): string {
+  const partes = [r.detalle.laminas?.length ? r.detalle.laminas.join("\n\n") : r.cuerpo];
+  if (r.detalle.texto) partes.push(r.detalle.texto);
+  if (r.detalle.hashtags?.length) partes.push(r.detalle.hashtags.join(" "));
+  return partes.filter(Boolean).join("\n\n");
+}
+
+export function postsMarkdown(posts: Recurso[]): string {
+  return [
+    "# ClosetAI · Posts de lanzamiento",
+    "",
+    ...posts.flatMap((p, i) => [
+      `## ${i + 1} · ${canalLegible(p.canal)} · ${p.formato ?? "post"} — ${p.titulo}`,
+      "",
+      textoParaPegar(p),
+      "",
+    ]),
+  ].join("\n");
+}
+
+export function guionesMarkdown(guiones: Recurso[]): string {
+  return [
+    "# ClosetAI · Guiones de video corto",
+    "",
+    ...guiones.flatMap((g, i) => [
+      `## Guion ${i + 1} · ${g.titulo} · ${g.detalle.duracion ?? ""}`.trimEnd(),
+      "",
+      "| Toma | Qué se ve | Texto en pantalla | Voz |",
+      "|---|---|---|---|",
+      ...(g.detalle.tomas ?? []).map((t) => `| ${t.toma} | ${t.se_ve} | ${t.texto || "—"} | ${t.voz || "—"} |`),
+      "",
+    ]),
+  ].join("\n");
+}
+
+/** Una celda de CSV: entre comillas si trae coma, comilla o salto de línea. */
+function celda(v: string | number): string {
+  const s = String(v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+export function calendarioCsv(dias: Recurso[]): string {
+  const filas = [...dias]
+    .sort((a, b) => (a.detalle.dia ?? 0) - (b.detalle.dia ?? 0))
+    .map((d) => [d.detalle.dia ?? "", d.canal ? CANAL_LEGIBLE[d.canal] : "", d.titulo, d.detalle.para_que ?? ""]);
+  return [["dia", "canal", "pieza", "para_que"], ...filas].map((f) => f.map(celda).join(",")).join("\n") + "\n";
+}

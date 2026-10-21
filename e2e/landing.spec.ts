@@ -8,7 +8,8 @@ cargarEnv();
 test.describe("Landing", () => {
   test("carga y comunica la promesa del producto", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Tu estilista");
+    // El titular es un experimento A/B: puede ser cualquiera de los dos, pero uno.
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/Tu estilista|Ya tienes/);
     await expect(page).toHaveTitle(/ClosetAI/);
   });
 
@@ -19,7 +20,7 @@ test.describe("Landing", () => {
 
   test("hace visible la promesa de que el clóset es gratis", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText(/gratis e ilimitado/i)).toBeVisible();
+    await expect(page.getByText(/Tu clóset, gratis para siempre/i)).toBeVisible();
   });
 });
 
@@ -45,11 +46,11 @@ test.describe("La landing deja entrar", () => {
 
     // La portada repite el llamado a la acción arriba y al cierre, a propósito:
     // quien baja leyendo no debería tener que subir para entrar.
-    await page.getByRole("link", { name: "Arma tu clóset gratis" }).first().click();
+    await page.getByRole("link", { name: "Empezar gratis" }).first().click();
     await expect(page).toHaveURL(/\/registro$/);
 
     await page.goto("/");
-    await page.getByRole("link", { name: "Ya tengo cuenta" }).first().click();
+    await page.getByRole("link", { name: "Entrar", exact: true }).first().click();
     await expect(page).toHaveURL(/\/entrar$/);
   });
 });
@@ -71,7 +72,7 @@ test.describe("Navegación en teléfono", () => {
     // se puede llegar a él desde la portada, no cumple su función: fue el mismo
     // error que la app entera tuvo en la Semana 0.
     await page.goto("/");
-    await page.getByRole("link", { name: "Extraer mi núcleo" }).click();
+    await page.getByRole("link", { name: "Probar sin cuenta" }).click();
     await expect(page).toHaveURL(/\/core$/);
     await expect(page.getByLabel(/Cómo te gusta vestirte/i)).toBeVisible();
   });

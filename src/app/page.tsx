@@ -1,69 +1,71 @@
+import { randomUUID } from "node:crypto";
+import { cookies } from "next/headers";
 import Link from "next/link";
 
+import { varianteDe, type Variante } from "@/lib/ab";
+
+import { BotonEmpezar, Experimento } from "./experimento";
+
 /**
- * Portada.
+ * Portada — Semana 4.
  *
- * La versión anterior era un documento: titular, párrafo, cuatro bloques de
- * texto iguales. Correcta y fría. Esta apuesta por composición — una obertura
- * a pantalla completa, contraste de escala entre el titular y todo lo demás,
- * paneles de color que dan profundidad, y entradas escalonadas.
+ * La de la Semana 0 tenía buena composición y poco argumento: un titular, cuatro
+ * capacidades y una promesa. Esta conserva la composición y ordena el argumento
+ * de arriba abajo, como lo leería alguien que no conoce ClosetAI: qué es → el
+ * problema → cómo funciona → por qué creerle → cuánto cuesta → qué pasa con sus
+ * fotos → empezar.
  *
- * Todo el movimiento vive en `globals.css` y se apaga con
- * `prefers-reduced-motion`.
+ * Dos frases de la versión anterior se quitaron porque no se podían sostener:
+ * «A las dos semanas ya no te propone lo que odias» nunca se midió, y «Diez
+ * prendas bastan para empezar» choca con la conversación de la Semana 2, donde
+ * el límite antes de cansarse fueron 40.
+ *
+ * El titular es un experimento A/B (`src/lib/ab.ts`). La variante se elige aquí,
+ * en el servidor, y no en `proxy.ts`: ahí vive la sesión, que ya se rompió una
+ * vez en producción con un cambio menor.
+ *
+ * Todo el movimiento vive en `globals.css` y se apaga con `prefers-reduced-motion`.
  */
 
-const CAPACIDADES = [
-  {
-    n: "01",
-    titulo: "Tu clóset, digital",
-    cuerpo:
-      "Fotografía tus prendas por lotes. La IA las recorta, las cataloga y las deja listas para combinar. Diez prendas bastan para empezar.",
-  },
-  {
-    n: "02",
-    titulo: "Qué me pongo hoy",
-    cuerpo:
-      "Tres outfits armados con la ropa que ya tienes, según el clima de tu ciudad y la ocasión. Cada uno te explica por qué funciona.",
-  },
-  {
-    n: "03",
-    titulo: "Pruébatelo sin probártelo",
-    cuerpo:
-      "Mira el outfit puesto sobre tu propia foto antes de decidir. Sin espejo, sin desvestirte, sin adivinar.",
-  },
-  {
-    n: "04",
-    titulo: "Aprende tu estilo",
-    cuerpo:
-      "Cada vez que aceptas o rechazas algo, ClosetAI entiende mejor qué te gusta. A las dos semanas ya no te propone lo que odias.",
-  },
+const TITULARES: Record<Variante, [string, string]> = {
+  a: ["Tu estilista,", "en tu bolsillo."],
+  b: ["Ya tienes", "qué ponerte."],
+};
+
+const CORRIDO = ["playeras", "vestidos", "jeans", "blazers", "tenis", "abrigos", "faldas", "sudaderas", "botas", "camisas"];
+
+const PASOS = [
+  { n: "01", titulo: "Fotografía tu ropa", cuerpo: "La IA llena el tipo, los colores y la temporada de cada prenda." },
+  { n: "02", titulo: "Arma tu clóset", cuerpo: "Todo en tu celular, con el fondo recortado." },
+  { n: "03", titulo: "Te dice qué ponerte", cuerpo: "Outfits con lo que ya tienes, para el clima de tu ciudad." },
 ];
 
-const CORRIDO = [
-  "playeras",
-  "vestidos",
-  "jeans",
-  "blazers",
-  "tenis",
-  "abrigos",
-  "faldas",
-  "sudaderas",
-  "botas",
-  "camisas",
+const DATOS = [
+  { cifra: "77 M", texto: "personas compraron en línea en México en 2025." },
+  { cifra: "59%", texto: "de ellas compra ropa." },
+  { cifra: "35%", texto: "quedó muy satisfecha con su compra de moda en línea." },
 ];
 
-const PROMESAS = [
-  "Tu clóset es gratis e ilimitado. Para siempre.",
-  "Cero anuncios.",
-  "Nunca cobramos por algo que ya construiste.",
-  "Tus fotos son privadas y las puedes borrar de verdad.",
+const FOTOS = [
+  "Viven en un espacio privado al que nadie más entra.",
+  "Se borran de verdad cuando las quitas o borras tu cuenta.",
+  "No vendemos tus datos y no hay anuncios.",
 ];
 
-export default function Home() {
+export default async function Home() {
+  const jar = await cookies();
+  const guardado = jar.get("cai_visitante")?.value;
+  const valido = Boolean(guardado && /^[0-9a-f-]{36}$/i.test(guardado));
+  const visitante = valido ? guardado! : randomUUID();
+  const variante = varianteDe(visitante, "titular");
+  const [linea1, linea2] = TITULARES[variante];
+
   return (
     <main className="flex-1">
-      {/* ---------- Obertura ---------- */}
-      <section className="relative flex min-h-[92svh] flex-col overflow-hidden bg-hueso">
+      <Experimento visitante={visitante} variante={variante} nuevo={!valido} />
+
+      {/* ---------- 1 · Titular ---------- */}
+      <section data-seccion="titular" className="relative flex min-h-[92svh] flex-col overflow-hidden bg-hueso">
         {/* Dos manchas de color muy difusas. Dan profundidad sin competir con el texto. */}
         <div
           aria-hidden
@@ -78,12 +80,12 @@ export default function Home() {
 
         <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
           <span className="font-display text-xl font-semibold tracking-tight">ClosetAI</span>
-          <div className="flex items-center gap-2">
-            <Link
-              href="/core"
-              className="rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text"
-            >
-              Núcleo de estilo
+          <nav aria-label="Principal" className="flex items-center gap-1 sm:gap-2">
+            <Link href="/product" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+              Producto
+            </Link>
+            <Link href="/pricing" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+              Precios
             </Link>
             <Link
               href="/entrar"
@@ -91,7 +93,7 @@ export default function Home() {
             >
               Entrar
             </Link>
-          </div>
+          </nav>
         </header>
 
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 pb-16">
@@ -106,48 +108,45 @@ export default function Home() {
           </p>
 
           {/* La escala es el argumento. El titular tiene que dominar la pantalla. */}
-          <h1 className="mt-6 font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.88] font-semibold tracking-[-0.035em]">
+          <h1
+            data-variante={variante}
+            className="mt-6 font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.88] font-semibold tracking-[-0.035em]"
+          >
             <span className="entra block" style={{ animationDelay: "0.12s" }}>
-              Tu estilista,
+              {linea1}
             </span>
-            <span
-              className="entra block italic"
-              style={{ animationDelay: "0.24s", color: "var(--barro)" }}
-            >
-              en tu bolsillo.
+            <span className="entra block italic" style={{ animationDelay: "0.24s", color: "var(--barro)" }}>
+              {linea2}
             </span>
           </h1>
 
-          <div
-            aria-hidden
-            className="linea-crece mt-9 h-px w-full"
-            style={{ background: "var(--border)" }}
-          />
+          <div aria-hidden className="linea-crece mt-9 h-px w-full" style={{ background: "var(--border)" }} />
 
           <div className="mt-9 flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-between">
             <p
               className="entra max-w-md text-lg leading-relaxed text-text-muted text-pretty"
               style={{ animationDelay: "0.36s" }}
             >
-              Fotografía tu ropa, arma tu clóset digital y deja que la inteligencia
-              artificial te diga qué ponerte — y te lo muestre puesto, sobre tu propia foto.
+              Fotografía tu ropa, ClosetAI la ordena por ti y cada mañana te dice qué ponerte con lo que ya
+              tienes.
             </p>
 
             <div
               className="entra flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center"
               style={{ animationDelay: "0.48s" }}
             >
-              <Link
-                href="/registro"
+              <BotonEmpezar
+                visitante={visitante}
+                variante={variante}
                 className="inline-flex items-center justify-center rounded-full bg-text px-8 py-4 text-base font-medium text-bg transition hover:opacity-90"
               >
-                Arma tu clóset gratis
-              </Link>
+                Empezar gratis
+              </BotonEmpezar>
               <Link
-                href="/entrar"
+                href="/core"
                 className="inline-flex items-center justify-center px-2 py-4 text-base text-text-muted underline underline-offset-8 transition hover:text-text"
               >
-                Ya tengo cuenta
+                Probar sin cuenta
               </Link>
             </div>
           </div>
@@ -173,98 +172,143 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- Capacidades ---------- */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
-        <h2 className="max-w-2xl font-display text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">
-          No es un catálogo de tu ropa. Es alguien que te la sabe combinar.
+      {/* ---------- 2 · El problema ---------- */}
+      <section data-seccion="problema" className="mx-auto w-full max-w-6xl px-6 pt-24 sm:pt-32">
+        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">El problema</p>
+        <h2 className="mt-5 max-w-3xl font-display text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl">
+          Tienes el clóset lleno y te pones lo mismo.
         </h2>
+        <p className="mt-6 max-w-xl text-xl leading-relaxed text-text-muted text-pretty">
+          No te falta ropa: te falta verla toda junta.
+        </p>
+      </section>
 
-        <div className="mt-16 grid gap-x-14 gap-y-14 sm:grid-cols-2">
-          {CAPACIDADES.map((c) => (
-            <article key={c.n} className="border-t border-border pt-6">
-              <span
-                className="font-display text-sm tracking-widest"
-                style={{ color: "var(--barro)" }}
-              >
-                {c.n}
+      {/* ---------- 3 · Cómo funciona ---------- */}
+      <section data-seccion="como-funciona" className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
+        <h2 className="max-w-2xl font-display text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">
+          Cómo funciona
+        </h2>
+        <ol className="mt-12 grid gap-x-14 gap-y-12 sm:grid-cols-3">
+          {PASOS.map((p) => (
+            <li key={p.n} className="border-t border-border pt-6">
+              <span className="font-display text-sm tracking-widest" style={{ color: "var(--barro)" }}>
+                {p.n}
               </span>
-              <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">
-                {c.titulo}
-              </h3>
-              <p className="mt-3 leading-relaxed text-text-muted text-pretty">{c.cuerpo}</p>
-            </article>
+              <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight">{p.titulo}</h3>
+              <p className="mt-3 leading-relaxed text-text-muted text-pretty">{p.cuerpo}</p>
+            </li>
           ))}
+        </ol>
+      </section>
+
+      {/* ---------- 4 · Prueba: datos con su fuente ---------- */}
+      <section data-seccion="prueba" style={{ background: "var(--arena)" }}>
+        <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-28">
+          <p className="text-xs tracking-[0.22em] text-text-muted uppercase">Lo que dicen los datos</p>
+          <dl className="mt-10 grid gap-10 sm:grid-cols-3">
+            {DATOS.map((d) => (
+              <div key={d.cifra} className="border-t pt-6" style={{ borderColor: "var(--border)" }}>
+                <dt className="font-display text-5xl font-semibold tracking-tight sm:text-6xl">{d.cifra}</dt>
+                <dd className="mt-3 leading-relaxed text-pretty">{d.texto}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-12 max-w-2xl font-display text-2xl leading-snug tracking-tight text-balance sm:text-3xl">
+            Comprar no es el problema.{" "}
+            <span className="italic" style={{ color: "var(--barro)" }}>
+              Saber qué combinar, sí.
+            </span>
+          </p>
+          <p className="mt-6 text-sm text-text-muted">
+            Fuente: AMVO y Milenio con datos de AMVO.{" "}
+            <Link href="/research" className="underline underline-offset-4 hover:text-text">
+              Cada dato enlaza a su fuente en la investigación
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
-      {/* ---------- Promesas ---------- */}
-      <section style={{ background: "var(--tinta)", color: "var(--hueso)" }}>
+      {/* ---------- 5 · Precio ---------- */}
+      <section data-seccion="precio" className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
+        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">Precio</p>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-surface p-8">
+            <p className="font-display text-5xl font-semibold tracking-tight">$0</p>
+            <p className="mt-3 text-lg">Tu clóset, gratis para siempre.</p>
+            <p className="mt-2 text-text-muted">Nunca te cobramos por el trabajo que ya hiciste.</p>
+          </div>
+          <div className="rounded-2xl border-2 bg-surface p-8" style={{ borderColor: "var(--barro)" }}>
+            <p className="font-display text-5xl font-semibold tracking-tight">$100</p>
+            <p className="mt-3 text-lg">ClosetAI Completo, una sola vez.</p>
+            <p className="mt-2 text-text-muted">Sin mensualidad.</p>
+          </div>
+        </div>
+        <p className="mt-6 text-sm text-text-muted">
+          <Link href="/pricing" className="underline underline-offset-4 hover:text-text">
+            Ver la cuenta completa
+          </Link>{" "}
+          · qué incluye cada plan y cuánto nos cuesta servirlo.
+        </p>
+      </section>
+
+      {/* ---------- 6 · Privacidad ---------- */}
+      <section data-seccion="privacidad" style={{ background: "var(--tinta)", color: "var(--hueso)" }}>
         <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
           <p className="text-xs tracking-[0.22em] uppercase" style={{ opacity: 0.55 }}>
-            Lo que no vamos a hacer
+            Tus fotos son tuyas
           </p>
           <ul className="mt-12 space-y-8">
-            {PROMESAS.map((promesa) => (
+            {FOTOS.map((f) => (
               <li
-                key={promesa}
+                key={f}
                 className="border-b pb-8 font-display text-2xl leading-snug tracking-tight text-balance sm:text-4xl"
                 style={{ borderColor: "rgba(253,250,246,0.16)" }}
               >
-                {promesa}
+                {f}
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      {/* ---------- Puerta a /core ---------- */}
-      <section className="mx-auto w-full max-w-6xl px-6 pb-8">
-        <div
-          className="rounded-2xl px-8 py-12 sm:px-14 sm:py-16"
-          style={{ background: "var(--arena)" }}
-        >
-          <p className="text-xs tracking-[0.2em] text-text-muted uppercase">
-            ¿Todavía no quieres subir fotos?
-          </p>
-          <h2 className="mt-5 max-w-2xl font-display text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">
-            Cuéntame cómo te gusta vestirte y te digo cuál es tu núcleo de estilo.
-          </h2>
-          <p className="mt-4 max-w-xl leading-relaxed text-text-muted text-pretty">
-            Sin cuenta y sin fotografiar una sola prenda. Un minuto.
-          </p>
-          <Link
-            href="/core"
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-text px-8 py-3.5 text-base font-medium text-bg transition hover:opacity-90"
-          >
-            Extraer mi núcleo
+          <Link href="/privacidad" className="mt-10 inline-block text-sm underline underline-offset-4" style={{ opacity: 0.7 }}>
+            El aviso de privacidad completo
           </Link>
         </div>
       </section>
 
-      {/* ---------- Cierre ---------- */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-24 text-center sm:py-36">
+      {/* ---------- 7 · Empezar ---------- */}
+      <section data-seccion="empezar" className="mx-auto w-full max-w-6xl px-6 py-24 text-center sm:py-36">
         <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
-          Empieza con diez prendas.
+          Ya tienes qué ponerte.
           <br />
           <span className="italic" style={{ color: "var(--barro)" }}>
-            El resto lo pongo yo.
+            Solo falta verlo.
           </span>
         </h2>
         <Link
           href="/registro"
           className="mt-12 inline-flex items-center justify-center rounded-full bg-text px-10 py-4.5 text-base font-medium text-bg transition hover:opacity-90"
         >
-          Arma tu clóset gratis
+          Crear mi clóset gratis
         </Link>
-        <p className="mt-5 text-sm text-text-muted">No pedimos tarjeta.</p>
+        <p className="mt-5 text-sm text-text-muted">
+          No pedimos tarjeta. ¿Todavía no quieres subir fotos?{" "}
+          <Link href="/core" className="underline underline-offset-4 hover:text-text">
+            Descubre tu núcleo de estilo sin cuenta
+          </Link>
+          .
+        </p>
       </section>
 
       <footer className="border-t border-border">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 py-8 text-sm text-text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-8 text-sm text-text-muted sm:flex-row sm:items-center sm:justify-between">
           <span className="font-display text-base text-text">ClosetAI</span>
-          <Link href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
-            Aviso de privacidad
-          </Link>
+          <nav aria-label="Pie" className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link href="/product" className="underline-offset-4 hover:text-text hover:underline">Producto</Link>
+            <Link href="/pricing" className="underline-offset-4 hover:text-text hover:underline">Precios</Link>
+            <Link href="/research" className="underline-offset-4 hover:text-text hover:underline">Investigación</Link>
+            <Link href="/marketing" className="underline-offset-4 hover:text-text hover:underline">Marketing</Link>
+            <Link href="/privacidad" className="underline-offset-4 hover:text-text hover:underline">Aviso de privacidad</Link>
+          </nav>
         </div>
       </footer>
     </main>
