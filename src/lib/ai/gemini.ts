@@ -6,6 +6,7 @@ import { AVATAR_PROMPT, AVATAR_PROMPT_VERSION } from "./prompts/avatar";
 import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
+import { MARKETING_PROMPT, MARKETING_PROMPT_VERSION } from "./prompts/marketing";
 import { RESEARCH_PROMPT, RESEARCH_PROMPT_VERSION } from "./prompts/research";
 import { clasificarFalloDelProveedor, conModeloDeRespaldo, esTiempoAgotado } from "./fallos";
 import {
@@ -28,6 +29,7 @@ import {
   type ResearchReportResult,
   type StyleCoreResult,
 } from "./schemas";
+import { revisarPost, type Canal, type PostGenerado } from "@/lib/marketing";
 import { datosParaElPrompt, type FuenteParaInforme, type RiesgoParaInforme } from "@/lib/research";
 
 /**
@@ -71,6 +73,7 @@ export const EST_COST_USD = {
   updateStyleProfile: 0.0005,
   extractCore: 0.0006,
   researchReport: 0.0008,
+  marketingPost: 0.0004,
 } as const;
 
 /**
@@ -656,6 +659,91 @@ export async function generarInforme(
       message: proveedorCaido
         ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
         : "No pudimos generar el informe ahora. Inténtalo en un momento.",
+      estCostUsd,
+      model,
+      promptVersion,
+    };
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+// Semana 4 · Generador de posts de /marketing
+// ---------------------------------------------------------------------------
+
+const ESQUEMA_POST = {
+  type: "object",
+  properties: {
+    titulo: { type: "string" },
+    cuerpo: { type: "string" },
+    hashtags: { type: "array", items: { type: "string" } },
+    formato: { type: "string", enum: ["post", "carrusel", "video"] },
+  },
+  required: ["titulo", "cuerpo", "hashtags", "formato"],
+} as const;
+
+export type ResultadoPostMarketing =
+  | { ok: true; post: PostGenerado; estCostUsd: number; model: string; promptVersion: number }
+  | {
+      ok: false;
+      reason: "unavailable" | "unparseable" | "cifras";
+      message: string;
+      estCostUsd: number;
+      model: string;
+      promptVersion: number;
+    };
+
+export async function generarPostMarketing(tema: string, canal: Canal): Promise<ResultadoPostMarketing> {
+  const estCostUsd = EST_COST_USD.marketingPost;
+  const model = MODELS.reasoning();
+  const promptVersion = MARKETING_PROMPT_VERSION;
+
+  try {
+    const { resultado: response, modelo } = await conModeloDeRespaldo(
+      { principal: model, respaldo: MODELS.reasoningFallback() },
+      (m, senal) =>
+        getClient().models.generateContent({
+          model: m,
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: `${MARKETING_PROMPT}\n\nCANAL: ${canal}\nTEMA:\n"""\n${tema}\n"""` }],
+            },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema: ESQUEMA_POST,
+            temperature: 0.7,
+            abortSignal: senal,
+          },
+        }),
+    );
+
+    const revision = revisarPost(response.text ?? "");
+    if (!revision.ok) {
+      if (revision.motivo === "cifras") {
+        console.warn(`[marketing] ${modelo} inventó cifras: ${revision.cifras?.join(", ")}`);
+      }
+      return {
+        ok: false,
+        reason: revision.motivo === "cifras" ? "cifras" : "unparseable",
+        message: revision.mensaje,
+        estCostUsd,
+        model: modelo,
+        promptVersion,
+      };
+    }
+    return { ok: true, post: revision.post, estCostUsd, model: modelo, promptVersion };
+  } catch (error) {
+    console.error("[marketing] falló la llamada al modelo", error);
+    const texto = error instanceof Error ? error.message : String(error);
+    const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
+    return {
+      ok: false,
+      reason: proveedorCaido ? "unavailable" : "unparseable",
+      message: proveedorCaido
+        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
+        : "No pudimos generar el post ahora. Inténtalo en un momento.",
       estCostUsd,
       model,
       promptVersion,
