@@ -293,7 +293,9 @@ export default async function Marketing() {
                 ) : (
                   <p className="mt-3 flex-1 text-sm leading-relaxed">{p.cuerpo}</p>
                 )}
-                {p.detalle.texto ? <p className="mt-3 text-sm text-text-muted">{p.detalle.texto}</p> : null}
+                {p.detalle.texto && p.detalle.texto !== p.cuerpo ? (
+                  <p className="mt-3 text-sm text-text-muted">{p.detalle.texto}</p>
+                ) : null}
                 {p.detalle.hashtags?.length ? (
                   <p className="mt-2 text-sm text-text-muted">{p.detalle.hashtags.join(" ")}</p>
                 ) : null}

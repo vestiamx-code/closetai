@@ -100,4 +100,13 @@ describe("Exportar", () => {
     };
     expect(textoParaPegar(post)).toBe("Una\n\nDos\n\nPie\n\n#ClosetAI");
   });
+
+  it("en un video, donde el cuerpo es el mismo pie, el texto no sale dos veces", () => {
+    const video: Recurso = {
+      id: "post-03", tipo: "post", canal: "tiktok", formato: "video", titulo: "Cómo funciona",
+      cuerpo: "Le tomas foto a tu ropa.", detalle: { texto: "Le tomas foto a tu ropa.", hashtags: ["#ClosetAI"] },
+      origen: "redactado_ia_aprobado", aprobado: true, created_at: "",
+    };
+    expect(textoParaPegar(video)).toBe("Le tomas foto a tu ropa.\n\n#ClosetAI");
+  });
 });
