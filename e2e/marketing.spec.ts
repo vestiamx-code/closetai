@@ -130,7 +130,13 @@ test.describe("Marketing y portada", () => {
     // pasaría igual si el contador estuviera roto y no contara nada. Esta es la
     // contraria: un navegador SIN la cabecera de prueba, como el de cualquier
     // persona. Al final borra sus propios eventos para no ensuciar el experimento.
-    const contexto = await browser.newContext({ extraHTTPHeaders: {} });
+    // Y con el user-agent de un Chrome normal: Playwright se identifica como
+    // HeadlessChrome, que el experimento descarta con razón (ver traficoAutomatico).
+    const contexto = await browser.newContext({
+      extraHTTPHeaders: {},
+      userAgent:
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    });
     const page = await contexto.newPage();
     let visitante = "";
     try {

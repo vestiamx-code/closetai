@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 
-import { varianteDe } from "@/lib/ab";
+import { traficoAutomatico, varianteDe } from "@/lib/ab";
 import { huella } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -19,6 +19,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
  *  3. El tráfico de las pruebas automáticas lleva la cabecera `x-cai-prueba` y no
  *     se cuenta (ver playwright.config.ts). Sin esto, cada corrida de la suite
  *     contra producción ensuciaría el experimento con visitas que no son de nadie.
+ *  4. Tampoco cuentan los navegadores automáticos ni los bots (ver
+ *     `traficoAutomatico`): Vercel abre la portada después de cada despliegue, y
+ *     cada vez sumaba visitantes. Se registra en el log qué tipo se descartó —solo
+ *     la categoría, nunca el user-agent completo— para poder confirmarlo.
  */
 
 const EVENTO = z.object({
@@ -34,6 +38,11 @@ export async function registrarEvento(datos: z.infer<typeof EVENTO>): Promise<vo
 
   const h = await headers();
   if (h.get("x-cai-prueba") === "1") return;
+  const automatico = traficoAutomatico(h.get("user-agent"));
+  if (automatico) {
+    console.info(`[ab] visita descartada: ${automatico}`);
+    return;
+  }
 
   const { experimento, variante, visitante, evento } = e.data;
   if (varianteDe(visitante, experimento) !== variante) return;
