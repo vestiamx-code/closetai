@@ -257,7 +257,8 @@ export const canalLegible = (c: Canal | null) => (c ? CANAL_LEGIBLE[c] : "—");
 /** El texto de un post tal como se pega en la red social. */
 export function textoParaPegar(r: Recurso): string {
   const partes = [r.detalle.laminas?.length ? r.detalle.laminas.join("\n\n") : r.cuerpo];
-  if (r.detalle.texto) partes.push(r.detalle.texto);
+  // En los videos el cuerpo ES el pie; sin esta comparación se pegaba dos veces.
+  if (r.detalle.texto && r.detalle.texto !== partes[0]) partes.push(r.detalle.texto);
   if (r.detalle.hashtags?.length) partes.push(r.detalle.hashtags.join(" "));
   return partes.filter(Boolean).join("\n\n");
 }
