@@ -454,3 +454,10 @@ correrla, el experimento quedó en 0 eventos.
 **Corrida completa contra el sitio real, 21-oct-2026:** portada, marketing, precios e investigación,
 **47 de 47**, 3 saltadas por diseño. Confirmado que la corrida resolvió a `https://closetai.lat` y
 sin servidor local.
+
+## Tráfico automático (`src/lib/ab.test.ts`, 2 casos más)
+
+Descarta HeadlessChrome, Googlebot, la vista previa de WhatsApp, un user-agent de Vercel y una visita
+sin user-agent; deja pasar un iPhone, un Android y una Mac. Confirmado en producción: después del
+despliegue del filtro, el log mostró dos visitas descartadas como «navegador-automatico» y el
+experimento no sumó ninguna. Las 10 vistas automáticas anteriores se borraron con permiso de Tamara.

@@ -475,3 +475,17 @@ precios e investigación—, con 3 saltadas por diseño.
 **Lo que esto vale:** los resultados de la Semana 3 se confirman hoy sobre el sitio real, pero la
 afirmación de entonces no estaba probada. El documento entregado de la Semana 3 no se puede cambiar;
 esta corrección queda aquí y en el documento de la Semana 4.
+
+## [2026-10-21] — El experimento contaba las capturas automáticas de Vercel
+**Observado:** con la portada nueva en vivo hacía un par de horas, el experimento tenía 10 vistas,
+siempre en pares y en el mismo segundo, y ningún clic.
+**Diagnóstico:** primero se descartaron las pruebas propias: cada una se corrió sola contando los
+eventos antes y después, y ninguna dejaba residuos; la marca de prueba funcionaba en producción (con
+ella, 0 eventos; sin ella, 1). Un par había llegado 26 segundos después de un despliegue: el patrón de
+la captura que Vercel toma de cada despliegue con un navegador automático, que ejecuta JavaScript.
+**Cambio:** `traficoAutomatico()` descarta navegadores automáticos, buscadores, vistas previas de
+enlaces y bots, y registra en el log solo la categoría. **Confirmación:** en el siguiente despliegue
+el log mostró exactamente dos «visita descartada: navegador-automatico», y el conteo no se movió. Con
+permiso de Tamara se borraron las 10 vistas anteriores al filtro; el experimento quedó en 0.
+**Lo que esto vale:** sin el filtro, cada despliegue habría sumado dos «visitantes», y en una semana
+con diez despliegues el experimento habría medido a Vercel.
