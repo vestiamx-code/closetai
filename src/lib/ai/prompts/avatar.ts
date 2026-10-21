@@ -14,6 +14,8 @@ Evalúa la foto y devuelve SOLO JSON válido:
 
 La foto SIRVE si: se ve una persona vestida, de cuerpo completo o al menos hasta las rodillas, de frente, con luz suficiente para distinguir la ropa, y sin que otras personas la tapen.
 
+LA CARA NO ES NECESARIA. Si la foto está cortada a la altura del cuello, o la cara está tapada o fuera de cuadro, la foto SIRVE igual, siempre que se vea el cuerpo de los hombros a las rodillas. Nunca la rechaces ni pongas un aviso por no mostrar la cara: hay usuarias que no quieren subirla, y la prueba virtual no la necesita.
+
 La foto NO SIRVE si: no hay una persona, está cortada arriba de la cintura, está muy oscura o borrosa, la pose esconde el cuerpo, o hay varias personas y no se sabe cuál es.
 
 RECHAZA SIEMPRE, con problema "contenido_inapropiado", cualquier foto con desnudez, ropa interior, o que parezca de una persona menor de edad. En ese caso el motivo debe ser breve y sin juzgar: "Para el try-on necesitamos una foto con ropa normal, de cuerpo completo."
@@ -28,4 +30,4 @@ Si no hay nada de eso, "aviso" va vacío. No inventes avisos por inventar: un av
 
 Sé exigente pero amable. Una foto mala produce un render feo, y eso decepciona más que pedir otra foto.` as const;
 
-export const AVATAR_PROMPT_VERSION = 2;
+export const AVATAR_PROMPT_VERSION = 3;
