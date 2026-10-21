@@ -295,3 +295,55 @@ guardado sea lo del servidor. Y que /product no marque todo como 'en vivo'."
 **Juicio humano:** la prueba del mapa de funciones comprueba que **haya funciones marcadas como no
 construidas**. Un mapa donde todo está en vivo es publicidad; la prueba lo impide.
 **Commit:** (ver historial de la semana)
+
+---
+
+# Semana 4 · Portada y `/marketing`
+
+## [2026-10-21] — Sesión 1 · Cuatro decisiones de marca antes del plan
+**Prompt:** "Ahora hagamos lo de esta semana." (con el assignment, los macro-prompts, el overview y la rúbrica)
+**Resultado:** cuatro preguntas a Tamara antes de escribir nada: qué titulares competir, quién es la
+persona, en qué redes, y quién escribe el contenido.
+**Juicio humano:** Tamara puso a competir el titular actual contra «Ya tienes qué ponerte.», la frase
+que sale del lenguaje de una clienta real.
+**Commit:** 660dc07
+
+## [2026-10-21] — Sesión 2 · El packet, antes del código
+**Prompt:** "Escribe el Build Discipline Packet de la portada y /marketing y commitéalo antes de tocar código."
+**Resultado:** `docs/SEMANA-4-PACKET.md` y el wireframe, commit `660dc07` a las 13:26.
+**Juicio humano:** la variante A/B no se asigna en `proxy.ts`, donde vive la sesión que ya se rompió
+una vez. Y el agente agregó una regla que nadie pidió: no usar la cita de la entrevista en redes,
+porque el permiso fue para la web y el documento, no para publicidad.
+**Commit:** 660dc07
+
+## [2026-10-21] — Sesión 3 · La lógica A/B, sola y probada
+**Prompt:** "Asignación por hash y prueba z de dos proporciones, en funciones puras. Dos pruebas: que
+reparta bien y que no declare un ganador falso."
+**Resultado:** `src/lib/ab.ts` y 7 casos.
+**Juicio humano:** la prueba de independencia, que nadie pidió, encontró que dos experimentos se
+habrían contradicho siempre. Se arregló el hash, no la prueba.
+**Commit:** 060c841
+
+## [2026-10-21] — Sesión 4 · Que el marketing no invente números
+**Prompt:** "Una lista cerrada de datos verificados con su fuente, y un guardia que rechace cualquier
+cifra fuera de ella. El contenido y el generador pasan por él."
+**Resultado:** `src/lib/marketing.ts`, el borrador del contenido y el contrato del generador.
+**Juicio humano:** el borrador incluía un post que prometía que la prueba virtual funciona sin cara.
+Comprobarlo exigía una foto del cuerpo de Tamara; se retiró la promesa en vez de pedirle la foto.
+**Commit:** 060c841, 9f73646
+
+## [2026-10-21] — Sesión 5 · La portada y /marketing
+**Prompt:** "Portada con el argumento en orden y el titular A/B; /marketing con marca, persona,
+contenido, copiar y exportar, resultados A/B y el generador."
+**Resultado:** las dos páginas, la acción que registra eventos y el generador con respaldo.
+**Juicio humano:** la portada vieja tenía dos frases que no se podían sostener; se quitaron.
+**Commit:** 74fb66f
+
+## [2026-10-21] — Sesión 6 · Probar contra el sitio real, de verdad
+**Prompt:** "Tres pruebas de software contra producción: que cargue, que exporte y que el A/B cuente
+bien. Y una que demuestre que sí cuenta, no solo que no cuenta."
+**Resultado:** `e2e/marketing.spec.ts`, 6 pruebas.
+**Juicio humano:** el informe de un fallo mostró que la suite llevaba siete semanas corriendo contra un
+servidor local. Se corrigió la configuración, se volvió a correr todo contra closetai.lat y se
+escribió la corrección en vez de esconderla.
+**Commit:** (ver historial de la semana)
