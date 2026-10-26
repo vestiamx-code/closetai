@@ -62,7 +62,7 @@ test.describe("La sesión sobrevive", () => {
       // Lo que importa: seguimos donde pedimos, no en /entrar.
       await expect(page, `la sesión se cayó al ir a ${ruta}`).toHaveURL(new RegExp(`${ruta}$`));
       // Y no hay campo de contraseña, que es como se veía la falla.
-      await expect(page.getByLabel("Contraseña")).toHaveCount(0);
+      await expect(page.getByLabel("Password")).toHaveCount(0);
     }
   });
 
@@ -75,7 +75,7 @@ test.describe("La sesión sobrevive", () => {
 
     await page.goto("/perfil");
     await expect(page).toHaveURL(/\/perfil$/);
-    await expect(page.getByLabel("Contraseña")).toHaveCount(0);
+    await expect(page.getByLabel("Password")).toHaveCount(0);
   });
   /**
    * Esta es la prueba que de verdad fija la falla.
@@ -135,6 +135,6 @@ test.describe("La sesión sobrevive", () => {
 
     await page.goto("/perfil");
     await expect(page).toHaveURL(/\/perfil$/);
-    await expect(page.getByLabel("Contraseña")).toHaveCount(0);
+    await expect(page.getByLabel("Password")).toHaveCount(0);
   });
 });

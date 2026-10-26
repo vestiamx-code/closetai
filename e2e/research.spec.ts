@@ -30,7 +30,7 @@ test.describe("Investigación (/research)", () => {
     expect(r?.status()).toBe(200);
     await expect(page).toHaveURL(/\/research$/);
 
-    await expect(page.getByRole("region", { name: /resumen de la investigación/i })).toBeVisible();
+    await expect(page.getByRole("region", { name: /research summary/i })).toBeVisible();
 
     const referentes = page.getByTestId("referente");
     await expect(referentes).toHaveCount(5);
@@ -45,7 +45,7 @@ test.describe("Investigación (/research)", () => {
   test("buscar «mexico» sin tilde encuentra México, y algo que no existe muestra el aviso", async ({ page }) => {
     await page.goto("/research");
     const tabla = page.getByTestId("tabla-competidores");
-    const buscador = page.getByRole("searchbox", { name: /buscar competidores/i });
+    const buscador = page.getByRole("searchbox", { name: /search competitors/i });
 
     // Primero se afirma que Whering SÍ está: si no, que desaparezca después no prueba nada.
     await expect(tabla.getByText("Whering", { exact: true })).toBeVisible();
@@ -55,7 +55,7 @@ test.describe("Investigación (/research)", () => {
     await expect(tabla.getByText("Whering", { exact: true })).toHaveCount(0);
 
     await buscador.fill("zzzz-no-existe");
-    await expect(page.getByText(/ningún competidor ni sustituto coincide/i)).toBeVisible();
+    await expect(page.getByText(/no competitor or substitute matches/i)).toBeVisible();
     await expect(page.getByTestId("tabla-competidores")).toHaveCount(0);
   });
 
@@ -66,8 +66,8 @@ test.describe("Investigación (/research)", () => {
     const antes = await tabla.locator("tbody tr").evaluateAll((trs) => trs.map((t) => t.getAttribute("data-tipo")));
     expect(new Set(antes)).toEqual(new Set(["competidor", "sustituto"]));
 
-    await page.getByRole("button", { name: "Sustitutos", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Sustitutos", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Substitutes", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Substitutes", exact: true })).toHaveAttribute("aria-pressed", "true");
 
     const despues = await tabla.locator("tbody tr").evaluateAll((trs) => trs.map((t) => t.getAttribute("data-tipo")));
     expect(despues.length).toBeGreaterThan(0);
@@ -104,19 +104,19 @@ test.describe("Investigación (/research)", () => {
     await page.goto("/research");
     const seccion = page.getByTestId("validacion");
     if ((count ?? 0) === 0) {
-      await expect(seccion.getByText(/pendiente/i)).toBeVisible();
+      await expect(seccion.getByText(/pending/i)).toBeVisible();
       await expect(seccion.locator("blockquote")).toHaveCount(0);
     } else {
       await expect(seccion.locator("blockquote").first()).toBeVisible();
-      await expect(seccion.getByText(/pendiente/i)).toHaveCount(0);
+      await expect(seccion.getByText(/pending/i)).toHaveCount(0);
     }
   });
 
   test("rechaza una pregunta demasiado corta sin gastar una llamada al modelo", async ({ page }) => {
     await page.goto("/research");
-    await page.getByLabel(/pregunta de investigación/i).fill("¿competencia?");
-    await page.getByRole("button", { name: "Investigar", exact: true }).click();
-    await expect(page.getByText(/escribe la pregunta completa/i)).toBeVisible({ timeout: 15_000 });
+    await page.getByLabel(/research question/i).fill("competition?");
+    await page.getByRole("button", { name: "Research", exact: true }).click();
+    await expect(page.getByText(/write the full question/i)).toBeVisible({ timeout: 15_000 });
     await expect(page.getByTestId("informe")).toHaveCount(0);
   });
 
@@ -129,15 +129,15 @@ test.describe("Investigación (/research)", () => {
 
     await page.goto("/research");
     await page
-      .getByLabel(/pregunta de investigación/i)
-      .fill("¿La gente paga por apps para organizar su clóset, y cuánto?");
-    await page.getByRole("button", { name: "Investigar", exact: true }).click();
+      .getByLabel(/research question/i)
+      .fill("Do people pay for apps to organize their closet, and how much?");
+    await page.getByRole("button", { name: "Research", exact: true }).click();
 
     const informe = page.getByTestId("informe");
-    const saturado = page.getByText(/El modelo está saturado/i);
+    const saturado = page.getByText(/The model is overloaded/i);
     // El límite de 10 informes por IP por hora es una función, no un fallo: correr
     // la suite varias veces seguidas desde la misma computadora lo alcanza.
-    const limite = page.getByText(/Ya generaste varios informes/i);
+    const limite = page.getByText(/You have generated several reports/i);
     await expect(informe.or(saturado).or(limite)).toBeVisible({ timeout: 90_000 });
     test.skip(await saturado.isVisible(), "Gemini sin cuota a media prueba (429)");
     test.skip(await limite.isVisible(), "Límite de 10 informes por IP por hora alcanzado: no se pudo comprobar");
@@ -151,8 +151,8 @@ test.describe("Investigación (/research)", () => {
       expect(ids.has(id ?? ""), `el informe cita «${id}», que no existe`).toBe(true);
     }
 
-    await informe.getByRole("button", { name: /guardar este informe/i }).click();
-    await expect(informe.getByText(/^Guardado\./)).toBeVisible({ timeout: 30_000 });
+    await informe.getByRole("button", { name: /save this report/i }).click();
+    await expect(informe.getByText(/^Saved\./)).toBeVisible({ timeout: 30_000 });
 
     const { count: despues } = await a.from("research_outputs").select("id", { count: "exact", head: true });
     expect(despues ?? 0, "no se escribió la fila en research_outputs").toBeGreaterThan(antes ?? 0);

@@ -95,9 +95,9 @@ export async function esperarCookieDeSesion(page: Page) {
 /** Entrar y no devolver el control hasta que la sesión esté aplicada. */
 export async function entrarConSesionLista(page: Page, correo: string, contrasena: string) {
   await page.goto("/entrar");
-  await page.getByLabel("Correo").fill(correo);
-  await page.getByLabel("Contraseña").fill(contrasena);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  await page.getByLabel("Email").fill(correo);
+  await page.getByLabel("Password").fill(contrasena);
+  await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/\/closet/);
   await esperarCookieDeSesion(page);
 }

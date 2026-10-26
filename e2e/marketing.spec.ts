@@ -27,7 +27,7 @@ const hay = Boolean(URL_SUPABASE && LLAVE);
 const admin = () =>
   createClient(URL_SUPABASE!, LLAVE!, { auth: { autoRefreshToken: false, persistSession: false } });
 
-const TITULARES = /Tu estilista,\s*en tu bolsillo\.|Ya tienes\s*qué ponerte\./;
+const TITULARES = /Your stylist,\s*in your pocket\.|You already have\s*something to wear\./;
 
 /** El mismo hash con sal que usa el servidor (src/lib/ip.ts). */
 const huella = (texto: string) => createHash("sha256").update(`${LLAVE}:${texto}`).digest("hex");
@@ -58,7 +58,7 @@ test.describe("Marketing y portada", () => {
     expect(await persona.locator('[data-rasgo="hipotesis"]').count()).toBeGreaterThan(0);
 
     // Y el experimento dice su veredicto, sea cual sea.
-    await expect(page.getByTestId("ab-veredicto")).toContainText(/ganador|Gana la variante/);
+    await expect(page.getByTestId("ab-veredicto")).toContainText(/winner|wins/);
   });
 
   test("exportar el calendario descarga un CSV con encabezado y 14 filas; copiar un post pone su texto", async ({
@@ -75,7 +75,7 @@ test.describe("Marketing y portada", () => {
     expect(descarga.suggestedFilename()).toBe("closetai-calendario.csv");
     const csv = readFileSync((await descarga.path())!, "utf8").replace(/^﻿/, "");
     const lineas = csv.trim().split("\n");
-    expect(lineas[0]).toBe("dia,canal,pieza,para_que");
+    expect(lineas[0]).toBe("day,channel,piece,purpose");
     expect(lineas).toHaveLength(15);
     expect(lineas[1]).toMatch(/^1,Instagram,/);
 
@@ -84,9 +84,9 @@ test.describe("Marketing y portada", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     const primero = page.locator('[data-post="post-01"]');
     await primero.locator("[data-copiar]").click();
-    await expect(primero.locator("[data-copiar]")).toHaveText("Copiado");
+    await expect(primero.locator("[data-copiar]")).toHaveText("Copied");
     const pegado = await page.evaluate(() => navigator.clipboard.readText());
-    expect(pegado).toContain("Ya tienes qué ponerte.");
+    expect(pegado).toContain("You already have something to wear.");
     expect(pegado).toContain("#ClosetAI");
   });
 
@@ -101,7 +101,7 @@ test.describe("Marketing y portada", () => {
     // El texto plano del titular, que es lo que leen un lector de pantalla y un
     // buscador: tiene que llevar espacio entre las dos líneas.
     const texto = (await h1.textContent())!.replace(/\s+/g, " ").trim();
-    expect(texto).toMatch(/^(Tu estilista, en tu bolsillo\.|Ya tienes qué ponerte\.)$/);
+    expect(texto).toMatch(/^(Your stylist, in your pocket\.|You already have something to wear\.)$/);
 
     // La cookie se guarda en el navegador y la siguiente visita ve lo mismo.
     await expect
@@ -180,8 +180,8 @@ test.describe("Marketing y portada", () => {
     test.setTimeout(90_000);
 
     await page.goto("/marketing#generador");
-    await page.locator("#tema").fill("Qué ponerse un lunes de lluvia con lo que ya tienes");
-    await page.getByRole("button", { name: "Generar post" }).click();
+    await page.locator("#tema").fill("What to wear on a rainy Monday with what you already own");
+    await page.getByRole("button", { name: "Generate post" }).click();
 
     const resultado = page.getByTestId("resultado-generador");
     await expect(resultado.locator('[data-testid="post-generado"], [role="alert"]')).toBeVisible({ timeout: 60_000 });
@@ -190,21 +190,21 @@ test.describe("Marketing y portada", () => {
     const aviso = (await resultado.getByTestId("post-generado").isVisible())
       ? null
       : await resultado.getByRole("alert").textContent();
-    test.skip(Boolean(aviso && /saturado|varios posts/i.test(aviso)), `El proveedor no respondió: ${aviso}`);
+    test.skip(Boolean(aviso && /overloaded|several posts/i.test(aviso)), `El proveedor no respondió: ${aviso}`);
 
     // Si el modelo inventó una cifra, el rechazo es el comportamiento correcto, no
     // un fallo: se anota y se acepta. Lo que no puede pasar es que la muestre.
-    if (aviso && /no están en los datos verificados/.test(aviso)) {
+    if (aviso && /not in the verified facts/.test(aviso)) {
       test.info().annotations.push({ type: "rechazo", description: aviso });
       return;
     }
 
     const post = page.getByTestId("post-generado");
-    await expect(post).toContainText("Generado con IA · sin revisar");
+    await expect(post).toContainText("Generated with AI · not reviewed");
     const titulo = (await post.locator("h3").textContent())!.trim();
 
-    await post.getByRole("button", { name: "Guardar" }).click();
-    await expect(post.getByRole("button", { name: "Guardado" })).toBeVisible({ timeout: 20_000 });
+    await post.getByRole("button", { name: "Save" }).click();
+    await expect(post.getByRole("button", { name: "Saved" })).toBeVisible({ timeout: 20_000 });
 
     const { data } = await admin()
       .from("marketing_assets")
@@ -235,10 +235,10 @@ test.describe("Marketing y portada", () => {
     const fueraDelTitular = await page
       .locator('[data-seccion]:not([data-seccion="titular"])')
       .evaluateAll((s) => s.map((e) => e.textContent ?? "").join(" "));
-    expect(fueraDelTitular).not.toMatch(/Ya tienes qué ponerte|Tu estilista, en tu bolsillo/);
+    expect(fueraDelTitular).not.toMatch(/You already have something to wear|Your stylist, in your pocket/);
 
     // Y las dos frases que se quitaron no volvieron.
-    await expect(page.getByText("A las dos semanas")).toHaveCount(0);
-    await expect(page.getByText("Diez prendas bastan")).toHaveCount(0);
+    await expect(page.getByText("Two weeks later")).toHaveCount(0);
+    await expect(page.getByText("Ten garments are enough")).toHaveCount(0);
   });
 });

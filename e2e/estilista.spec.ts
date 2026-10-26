@@ -76,14 +76,14 @@ test.describe("Estilista", () => {
     await iniciarSesion(page);
 
     await page.goto("/hoy");
-    await expect(page.getByRole("heading", { name: "Qué me pongo hoy" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "What to wear today" })).toBeVisible();
 
-    await page.getByRole("button", { name: /Armar mis outfits/ }).click();
-    await expect(page.getByRole("button", { name: /Me lo pongo/ }).first()).toBeVisible({
+    await page.getByRole("button", { name: /Build today’s outfits/ }).click();
+    await expect(page.getByRole("button", { name: /I’ll wear it/ }).first()).toBeVisible({
       timeout: 120_000,
     });
 
-    const outfits = await page.locator("main ul > li").filter({ has: page.getByRole("button", { name: "Me lo pongo" }) }).count();
+    const outfits = await page.locator("main ul > li").filter({ has: page.getByRole("button", { name: "I’ll wear it" }) }).count();
     expect(outfits).toBeGreaterThan(0);
 
     // Cada outfit explica su razón: es la promesa del producto, no un adorno.
@@ -105,9 +105,9 @@ test.describe("Estilista", () => {
     await iniciarSesion(page);
     await page.goto("/hoy");
 
-    await page.getByRole("button", { name: "No, gracias" }).first().click();
-    await page.getByRole("button", { name: "No es mi estilo" }).first().click();
-    await expect(page.getByText(/No te vuelvo a proponer/)).toBeVisible();
+    await page.getByRole("button", { name: "No, thanks" }).first().click();
+    await page.getByRole("button", { name: "It's not my style" }).first().click();
+    await expect(page.getByText(/I won't suggest something like that again/)).toBeVisible();
 
     const { data } = await admin()
       .from("feedback_events")
@@ -116,7 +116,7 @@ test.describe("Estilista", () => {
       .eq("type", "reject");
 
     expect(data?.length).toBeGreaterThan(0);
-    expect((data![0].payload as Record<string, string>).motivo).toBe("No es mi estilo");
+    expect((data![0].payload as Record<string, string>).motivo).toBe("It's not my style");
   });
 
   test("el costo de cada llamada al estilista queda registrado", async () => {
@@ -156,9 +156,9 @@ test.describe("Estilista", () => {
 
     await iniciarSesion(page);
     await page.goto("/hoy");
-    await page.getByRole("button", { name: "No, gracias" }).first().click();
-    await page.getByRole("button", { name: "No es mi estilo" }).first().click();
-    await expect(page.getByText(/No te vuelvo a proponer/)).toBeVisible();
+    await page.getByRole("button", { name: "No, thanks" }).first().click();
+    await page.getByRole("button", { name: "It's not my style" }).first().click();
+    await expect(page.getByText(/I won't suggest something like that again/)).toBeVisible();
 
     // Lo que se afirma es que la actualización SE DISPARÓ al reaccionar, no que
     // Gemini haya devuelto un buen perfil. Son cosas distintas: el modelo puede

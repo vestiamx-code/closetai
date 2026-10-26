@@ -71,22 +71,22 @@ test.describe("Clóset digital", () => {
 
   test("no revela si un correo tiene cuenta o no", async ({ page }) => {
     await page.goto("/entrar");
-    await page.getByLabel("Correo").fill("no-existe-jamas@closetai.lat");
-    await page.getByLabel("Contraseña").fill("loquesea123");
-    await page.getByRole("button", { name: "Entrar" }).click();
+    await page.getByLabel("Email").fill("no-existe-jamas@closetai.lat");
+    await page.getByLabel("Password").fill("loquesea123");
+    await page.getByRole("button", { name: "Sign in" }).click();
     // El mismo mensaje que con contraseña incorrecta: no se filtra qué correos existen.
     // (No se usa getByRole("alert"): Next añade su propio anunciador de rutas con ese rol.)
-    await expect(page.getByText("Correo o contraseña incorrectos.")).toBeVisible();
+    await expect(page.getByText("Wrong email or password.")).toBeVisible();
   });
 
   test("entrar, subir una prenda y verla catalogada", async ({ page }) => {
     test.setTimeout(120_000);
 
     await iniciarSesion(page);
-    await expect(page.getByRole("heading", { name: "Mi clóset" })).toBeVisible();
-    await expect(page.getByText("Empieza con diez prendas")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "My closet" })).toBeVisible();
+    await expect(page.getByText("Start with ten garments")).toBeVisible();
 
-    await page.getByRole("link", { name: /Subir mis primeras fotos|Agregar prendas/ }).first().click();
+    await page.getByRole("link", { name: /Upload my first photos|Add garments/ }).first().click();
     await expect(page).toHaveURL(/\/closet\/subir/);
 
     await page.locator('input[type="file"]').setInputFiles(
@@ -94,14 +94,14 @@ test.describe("Clóset digital", () => {
     );
 
     // La IA tarda: compresión, subida y catalogación.
-    await expect(page.getByText("✓ Lista")).toBeVisible({ timeout: 90_000 });
+    await expect(page.getByText("✓ Ready")).toBeVisible({ timeout: 90_000 });
 
-    await page.getByRole("link", { name: /Ver mi clóset/ }).click();
+    await page.getByRole("link", { name: /See my closet/ }).click();
     await expect(page).toHaveURL(/\/closet$/);
 
     // La prenda quedó catalogada en español de México.
-    await expect(page.getByText(/playera/i).first()).toBeVisible();
-    await expect(page.getByText("1 prenda")).toBeVisible();
+    await expect(page.getByText(/t-shirt|tee|shirt/i).first()).toBeVisible();
+    await expect(page.getByText("1 garment")).toBeVisible();
   });
 
   test("corregir el nombre de una prenda deja rastro para el aprendizaje", async ({ page }) => {
@@ -109,9 +109,9 @@ test.describe("Clóset digital", () => {
     await page.locator("ul li a").first().click();
 
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await page.getByLabel("Nombre de la prenda").fill("playera de rayas marinera");
-    await page.getByRole("button", { name: "Guardar cambios" }).click();
-    await expect(page.getByText("Guardado.")).toBeVisible();
+    await page.getByLabel("Garment name").fill("breton striped t-shirt");
+    await page.getByRole("button", { name: "Save changes" }).click();
+    await expect(page.getByText("Saved.")).toBeVisible();
 
     // La corrección tiene que haber generado un feedback_event de tipo tag_fix:
     // es la materia prima del aprendizaje de gustos (M4), no solo un dato editado.

@@ -18,9 +18,9 @@ const LLAVE = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const hay = Boolean(URL_SUPABASE && LLAVE && process.env.GEMINI_API_KEY);
 
 const TEXTO =
-  "Me gusta andar cómoda pero que se note que me arreglé. Uso mucho negro y beige, jeans anchos " +
-  "y tenis blancos. No me gusta la ropa entallada ni los estampados grandes. Para la oficina le " +
-  "pongo un saco encima y ya la hice.";
+  "I like to be comfortable but still look put together. I wear a lot of black and beige, wide-leg " +
+  "jeans and white sneakers. I don't like tight clothes or big prints. For the office I throw a " +
+  "blazer on top and I'm done.";
 
 const admin = () =>
   createClient(URL_SUPABASE!, LLAVE!, { auth: { autoRefreshToken: false, persistSession: false } });
@@ -44,15 +44,15 @@ test.describe("Núcleo de estilo (/core)", () => {
     const r = await page.goto("/core");
     expect(r?.status()).toBe(200);
     await expect(page).toHaveURL(/\/core$/);
-    await expect(page.getByLabel(/Cómo te gusta vestirte/i)).toBeVisible();
-    await expect(page.getByRole("button", { name: /Extraer mi núcleo/i })).toBeVisible();
+    await expect(page.getByLabel(/How do you like to dress/i)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Extract my core/i })).toBeVisible();
   });
 
   test("rechaza un texto demasiado corto antes de gastar una llamada al modelo", async ({ page }) => {
     await page.goto("/core");
-    await page.getByLabel(/Cómo te gusta vestirte/i).fill("me gusta el negro");
-    await page.getByRole("button", { name: /Extraer mi núcleo/i }).click();
-    await expect(page.getByText(/Escribe un poco más/i)).toBeVisible({ timeout: 15_000 });
+    await page.getByLabel(/How do you like to dress/i).fill("I like black");
+    await page.getByRole("button", { name: /Extract my core/i }).click();
+    await expect(page.getByText(/Write a little more/i)).toBeVisible({ timeout: 15_000 });
   });
 
   test("genera un núcleo con los cinco bloques y lo guarda", async ({ page }) => {
@@ -71,8 +71,8 @@ test.describe("Núcleo de estilo (/core)", () => {
       .select("id", { count: "exact", head: true });
 
     await page.goto("/core");
-    await page.getByLabel(/Cómo te gusta vestirte/i).fill(TEXTO);
-    await page.getByRole("button", { name: /Extraer mi núcleo/i }).click();
+    await page.getByLabel(/How do you like to dress/i).fill(TEXTO);
+    await page.getByRole("button", { name: /Extract my core/i }).click();
 
     // La tarjeta: esencia, principios, paleta, siluetas, evitar y la regla.
     // Las aserciones van ancladas a la tarjeta, no a la página.
@@ -82,7 +82,7 @@ test.describe("Núcleo de estilo (/core)", () => {
     // paleta", así que coincidía sin que la generación hubiera ocurrido. Una
     // aserción que puede cumplirse con la página recién cargada no prueba nada.
     const tarjeta = page.locator("article").first();
-    const saturado = page.getByText(/El modelo está saturado/i);
+    const saturado = page.getByText(/The model is overloaded/i);
 
     // La cuota se comprobó al empezar, pero el nivel gratuito son 20 llamadas
     // por minuto y la suite corre en paralelo: se puede agotar entre la
@@ -90,20 +90,20 @@ test.describe("Núcleo de estilo (/core)", () => {
     // letras, y saltarse con ese motivo es lo honesto — fallar acusaría al
     // código de algo que hizo Google.
     // El límite de 10 por IP por hora es una función, no un fallo.
-    const limite = page.getByText(/Ya generaste varios núcleos/i);
+    const limite = page.getByText(/You have generated several cores/i);
     await expect(tarjeta.or(saturado).or(limite)).toBeVisible({ timeout: 90_000 });
     test.skip(await saturado.isVisible(), "Gemini sin cuota a media prueba (429)");
     test.skip(await limite.isVisible(), "Límite de 10 núcleos por IP por hora alcanzado: no se pudo comprobar");
 
     await expect(tarjeta).toBeVisible();
 
-    await expect(tarjeta.getByText(/^principios$/i)).toBeVisible();
-    await expect(tarjeta.getByText(/^paleta$/i)).toBeVisible();
-    await expect(tarjeta.getByText(/^tu regla$/i)).toBeVisible();
-    await expect(tarjeta.getByText(/Qué tan seguro estoy/i)).toBeVisible();
+    await expect(tarjeta.getByText(/^principles$/i)).toBeVisible();
+    await expect(tarjeta.getByText(/^palette$/i)).toBeVisible();
+    await expect(tarjeta.getByText(/^your rule$/i)).toBeVisible();
+    await expect(tarjeta.getByText(/How sure I am/i)).toBeVisible();
 
-    await tarjeta.getByRole("button", { name: /Guardar este núcleo/i }).click();
-    await expect(tarjeta.getByText(/^Guardado\./)).toBeVisible({ timeout: 30_000 });
+    await tarjeta.getByRole("button", { name: /Save this core/i }).click();
+    await expect(tarjeta.getByText(/^Saved\./)).toBeVisible({ timeout: 30_000 });
 
     const { count: despues } = await a
       .from("core_outputs")
@@ -124,6 +124,6 @@ test.describe("Núcleo de estilo (/core)", () => {
     // `entrada` puede ser muy personal. La página muestra el núcleo, no la confesión.
     await page.goto("/core");
     const cuerpo = await page.locator("body").innerText();
-    expect(cuerpo).not.toContain("la oficina le pongo un saco encima y ya la hice");
+    expect(cuerpo).not.toContain("For the office I throw a blazer on top");
   });
 });

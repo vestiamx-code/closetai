@@ -42,8 +42,8 @@ test.describe("Producto y precios", () => {
     // Y la tabla de supuestos distingue lo verificado de lo supuesto: si todo
     // dijera "verificado", la tabla no serviría de nada.
     const tabla = page.getByTestId("tabla-supuestos");
-    await expect(tabla.getByText("verificado").first()).toBeVisible();
-    await expect(tabla.getByText("supuesto").first()).toBeVisible();
+    await expect(tabla.getByText("verified", { exact: true }).first()).toBeVisible();
+    await expect(tabla.getByText("assumption", { exact: true }).first()).toBeVisible();
   });
 
   test("mover un supuesto y cambiar de escenario cambia el resultado", async ({ page }) => {
@@ -76,7 +76,7 @@ test.describe("Producto y precios", () => {
     const enPantalla = aNumero(await page.getByTestId("neto-mensual").innerText());
 
     await page.locator("#nombre").fill(nombre);
-    await page.getByRole("button", { name: "Guardar", exact: true }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
 
     // Aparece en la lista sin recargar.
     await expect(page.getByTestId("lista-escenarios").getByText(nombre)).toBeVisible({ timeout: 20_000 });
@@ -109,7 +109,7 @@ test.describe("Producto y precios", () => {
     await page.locator("#registros-mayores").fill("0");
     await page.locator("#registros-nucleo").blur();
     await page.locator("#nombre").fill(nombre);
-    await page.getByRole("button", { name: "Guardar", exact: true }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByTestId("lista-escenarios").getByText(nombre)).toBeVisible({ timeout: 20_000 });
 
     const { data } = await admin()
