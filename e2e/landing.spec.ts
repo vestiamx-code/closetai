@@ -47,11 +47,11 @@ test.describe("La landing deja entrar", () => {
     // La portada repite el llamado a la acción arriba y al cierre, a propósito:
     // quien baja leyendo no debería tener que subir para entrar.
     await page.getByRole("link", { name: "Start for free" }).first().click();
-    await expect(page).toHaveURL(/\/registro$/);
+    await expect(page).toHaveURL(/\/sign-up$/);
 
     await page.goto("/");
     await page.getByRole("link", { name: "Sign in", exact: true }).first().click();
-    await expect(page).toHaveURL(/\/entrar$/);
+    await expect(page).toHaveURL(/\/sign-in$/);
   });
 });
 
@@ -60,7 +60,7 @@ test.describe("Navegación en teléfono", () => {
   // en dos líneas y "Salir" se salía de la pantalla. En una app que se usa
   // desde el celular, eso no es un detalle estético.
   test("el encabezado no desborda a lo ancho", async ({ page }) => {
-    await page.goto("/entrar");
+    await page.goto("/sign-in");
     const desborda = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     );
@@ -75,5 +75,24 @@ test.describe("Navegación en teléfono", () => {
     await page.getByRole("link", { name: "Try it without an account" }).click();
     await expect(page).toHaveURL(/\/core$/);
     await expect(page.getByLabel(/How do you like to dress/i)).toBeVisible();
+  });
+
+  test("the old Spanish addresses still lead to the English pages", async ({ request }) => {
+    // Emails already sent and earlier weeks' submissions link to the old routes.
+    const casos: Array<[string, string]> = [
+      ["/entrar", "/sign-in"],
+      ["/registro/revisa-tu-correo", "/sign-up/check-email"],
+      ["/privacidad", "/privacy"],
+      ["/demo/semana-3", "/demo/week-3"],
+      ["/hoy", "/today"],
+    ];
+    for (const [viejo, nuevo] of casos) {
+      const r = await request.get(viejo, { maxRedirects: 0 });
+      expect(r.status(), viejo).toBe(308);
+      expect(new URL(r.headers()["location"], "https://x").pathname, viejo).toBe(nuevo);
+    }
+    // And the new ones answer on their own, without bouncing anywhere.
+    const directo = await request.get("/privacy", { maxRedirects: 0 });
+    expect(directo.status()).toBe(200);
   });
 });

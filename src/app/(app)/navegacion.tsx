@@ -14,15 +14,15 @@ import { usePathname } from "next/navigation";
  * is that it covers the end of the page, so the layout reserves that space.
  */
 const ENLACES = [
-  { href: "/hoy", texto: "Today", icono: SolIcono },
+  { href: "/today", texto: "Today", icono: SolIcono },
   { href: "/closet", texto: "Closet", icono: PerchaIcono },
-  { href: "/probar", texto: "Try on", icono: EspejoIcono },
-  { href: "/estilo", texto: "Style", icono: EstrellaIcono },
-  { href: "/perfil", texto: "Profile", icono: PersonaIcono },
+  { href: "/try-on", texto: "Try on", icono: EspejoIcono },
+  { href: "/style", texto: "Style", icono: EstrellaIcono },
+  { href: "/profile", texto: "Profile", icono: PersonaIcono },
 ];
 
 function esActivo(ruta: string, href: string) {
-  // `/closet/subir` and `/closet/[id]` are the closet too.
+  // `/closet/add` and `/closet/[id]` are the closet too.
   return ruta === href || ruta.startsWith(`${href}/`);
 }
 

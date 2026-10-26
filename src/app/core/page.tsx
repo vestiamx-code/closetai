@@ -51,7 +51,7 @@ export default async function Core() {
           ClosetAI
         </Link>
         <Link
-          href="/registro"
+          href="/sign-up"
           className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
         >
           Create an account
@@ -104,7 +104,7 @@ export default async function Core() {
 
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
           Sounds like you?{" "}
-          <Link href="/registro" className="underline underline-offset-4 transition hover:text-text">
+          <Link href="/sign-up" className="underline underline-offset-4 transition hover:text-text">
             Build your closet for free
           </Link>{" "}
           and the stylist starts out already knowing this.

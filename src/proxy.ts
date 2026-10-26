@@ -13,14 +13,14 @@ import { supabaseConfigured } from "@/lib/supabase/env";
  * Hace dos cosas:
  *   1. Refresca el token de la sesión antes de renderizar (los Server Components
  *      no pueden escribir cookies, así que este es el único lugar donde se puede).
- *   2. Manda a `/entrar` a quien no tenga sesión y quiera entrar a la app.
+ *   2. Manda a `/sign-in` a quien no tenga sesión y quiera entrar a la app.
  */
 
 /** Rutas que exigen sesión iniciada. */
-const RUTAS_PRIVADAS = ["/closet", "/hoy", "/estilo", "/perfil", "/probar", "/comprar", "/admin"];
+const RUTAS_PRIVADAS = ["/closet", "/today", "/style", "/profile", "/try-on", "/buy", "/admin"];
 
 /** Rutas de autenticación: si ya tienes sesión, no tiene sentido volver a ellas. */
-const RUTAS_DE_ENTRADA = ["/entrar", "/registro"];
+const RUTAS_DE_ENTRADA = ["/sign-in", "/sign-up"];
 
 export async function proxy(request: NextRequest) {
   const { pathname: rutaPedida } = request.nextUrl;
@@ -95,7 +95,7 @@ export async function proxy(request: NextRequest) {
 
   if (!user && RUTAS_PRIVADAS.some((ruta) => pathname.startsWith(ruta))) {
     const url = request.nextUrl.clone();
-    url.pathname = "/entrar";
+    url.pathname = "/sign-in";
     // Para regresarla a donde iba después de iniciar sesión.
     url.searchParams.set("destino", pathname);
     return redirigirConSesion(url);

@@ -13,14 +13,14 @@ export async function GET(request: NextRequest) {
   const destino = siguiente?.startsWith("/") ? siguiente : "/closet";
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/entrar?error=enlace-invalido`);
+    return NextResponse.redirect(`${origin}/sign-in?error=enlace-invalido`);
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(`${origin}/entrar?error=enlace-expirado`);
+    return NextResponse.redirect(`${origin}/sign-in?error=enlace-expirado`);
   }
 
   return NextResponse.redirect(`${origin}${destino}`);

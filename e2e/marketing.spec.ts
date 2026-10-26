@@ -116,7 +116,7 @@ test.describe("Marketing y portada", () => {
 
     // Y el clic en «Empezar gratis» lleva al registro.
     await page.locator('[data-cta="empezar"]').click();
-    await expect(page).toHaveURL(/\/registro$/);
+    await expect(page).toHaveURL(/\/sign-up$/);
 
     // Cuatro cargas y un clic, y de este visitante no quedó ni un evento: todo
     // llevaba la cabecera de prueba. Se mira su hash exacto, no el total, para que
@@ -165,7 +165,7 @@ test.describe("Marketing y portada", () => {
       // Y el clic en «Empezar gratis» se registra, con la misma variante que vio.
       const variante = await page.getByRole("heading", { level: 1 }).getAttribute("data-variante");
       await page.locator('[data-cta="empezar"]').click();
-      await expect(page).toHaveURL(/\/registro$/);
+      await expect(page).toHaveURL(/\/sign-up$/);
       await expect.poll(async () => (await eventos()).map((e) => e.evento).sort()).toEqual(["clic", "vista"]);
       expect(new Set((await eventos()).map((e) => e.variante))).toEqual(new Set([variante]));
     } finally {

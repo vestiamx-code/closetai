@@ -88,7 +88,7 @@ export default async function Home() {
               Pricing
             </Link>
             <Link
-              href="/entrar"
+              href="/sign-in"
               className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
             >
               Sign in
@@ -272,7 +272,7 @@ export default async function Home() {
               </li>
             ))}
           </ul>
-          <Link href="/privacidad" className="mt-10 inline-block text-sm underline underline-offset-4" style={{ opacity: 0.7 }}>
+          <Link href="/privacy" className="mt-10 inline-block text-sm underline underline-offset-4" style={{ opacity: 0.7 }}>
             The full privacy notice
           </Link>
         </div>
@@ -290,7 +290,7 @@ export default async function Home() {
           </span>
         </h2>
         <Link
-          href="/registro"
+          href="/sign-up"
           className="mt-12 inline-flex items-center justify-center rounded-full bg-text px-10 py-4.5 text-base font-medium text-bg transition hover:opacity-90"
         >
           Create my closet for free
@@ -312,7 +312,7 @@ export default async function Home() {
             <Link href="/pricing" className="underline-offset-4 hover:text-text hover:underline">Pricing</Link>
             <Link href="/research" className="underline-offset-4 hover:text-text hover:underline">Research</Link>
             <Link href="/marketing" className="underline-offset-4 hover:text-text hover:underline">Marketing</Link>
-            <Link href="/privacidad" className="underline-offset-4 hover:text-text hover:underline">Privacy notice</Link>
+            <Link href="/privacy" className="underline-offset-4 hover:text-text hover:underline">Privacy notice</Link>
           </nav>
         </div>
       </footer>

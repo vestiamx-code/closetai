@@ -64,13 +64,13 @@ test.describe("Clóset digital", () => {
 
   test("una ruta privada manda a iniciar sesión", async ({ page }) => {
     await page.goto("/closet");
-    await expect(page).toHaveURL(/\/entrar/);
+    await expect(page).toHaveURL(/\/sign-in/);
     // Y recuerda a dónde iba, para regresarla ahí después.
     await expect(page).toHaveURL(/destino=%2Fcloset/);
   });
 
   test("no revela si un correo tiene cuenta o no", async ({ page }) => {
-    await page.goto("/entrar");
+    await page.goto("/sign-in");
     await page.getByLabel("Email").fill("no-existe-jamas@closetai.lat");
     await page.getByLabel("Password").fill("loquesea123");
     await page.getByRole("button", { name: "Sign in" }).click();
@@ -87,7 +87,7 @@ test.describe("Clóset digital", () => {
     await expect(page.getByText("Start with ten garments")).toBeVisible();
 
     await page.getByRole("link", { name: /Upload my first photos|Add garments/ }).first().click();
-    await expect(page).toHaveURL(/\/closet\/subir/);
+    await expect(page).toHaveURL(/\/closet\/add/);
 
     await page.locator('input[type="file"]').setInputFiles(
       path.join(__dirname, "..", "src", "tests", "fixtures", "playera-rayas.png"),

@@ -58,7 +58,7 @@ export function BotonEmpezar({
 }) {
   return (
     <Link
-      href="/registro"
+      href="/sign-up"
       data-cta="empezar"
       onClick={() => void registrarEvento({ experimento: EXPERIMENTO, variante, visitante, evento: "clic" })}
       className={className}

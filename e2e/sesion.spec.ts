@@ -26,7 +26,7 @@ const hayCredenciales = Boolean(URL_SUPABASE && LLAVE_SERVICIO);
 const CORREO = `e2e-sesion-${Date.now()}@closetai.lat`;
 const CONTRASENA = "Prueba-Sesion-2026!";
 
-const RUTAS_PRIVADAS = ["/closet", "/hoy", "/estilo", "/probar", "/comprar", "/perfil"];
+const RUTAS_PRIVADAS = ["/closet", "/today", "/style", "/try-on", "/buy", "/profile"];
 
 test.describe.configure({ mode: "serial" });
 
@@ -70,11 +70,11 @@ test.describe("La sesión sobrevive", () => {
     await entrarConSesionLista(page, CORREO, CONTRASENA);
 
     // Esta es la redirección que borraba las cookies refrescadas.
-    await page.goto("/entrar");
+    await page.goto("/sign-in");
     await expect(page).toHaveURL(/\/closet/);
 
-    await page.goto("/perfil");
-    await expect(page).toHaveURL(/\/perfil$/);
+    await page.goto("/profile");
+    await expect(page).toHaveURL(/\/profile$/);
     await expect(page.getByLabel("Password")).toHaveCount(0);
   });
   /**
@@ -119,10 +119,10 @@ test.describe("La sesión sobrevive", () => {
       if (r.status() >= 300 && r.status() < 400) redirecciones.push(r);
     });
 
-    await page.goto("/entrar");
+    await page.goto("/sign-in");
     await expect(page).toHaveURL(/\/closet/);
 
-    const laRedireccion = redirecciones.find((r) => new URL(r.url()).pathname === "/entrar");
+    const laRedireccion = redirecciones.find((r) => new URL(r.url()).pathname === "/sign-in");
     expect(laRedireccion, "no hubo redirección desde /entrar").toBeTruthy();
     const cabeceras = await laRedireccion!.headersArray();
     const traeSesion = cabeceras.some(
@@ -133,8 +133,8 @@ test.describe("La sesión sobrevive", () => {
       "la redirección se fue sin la cookie refrescada: el navegador se queda con el token anulado",
     ).toBe(true);
 
-    await page.goto("/perfil");
-    await expect(page).toHaveURL(/\/perfil$/);
+    await page.goto("/profile");
+    await expect(page).toHaveURL(/\/profile$/);
     await expect(page.getByLabel("Password")).toHaveCount(0);
   });
 });

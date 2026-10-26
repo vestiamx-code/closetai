@@ -49,7 +49,7 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
           </p>
         </div>
         <Link
-          href="/closet/subir"
+          href="/closet/add"
           className="rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
         >
           Add garments
@@ -146,7 +146,7 @@ function ClosetVacio() {
         put together outfits worth wearing.
       </p>
       <Link
-        href="/closet/subir"
+        href="/closet/add"
         className="mt-6 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
       >
         Upload my first photos

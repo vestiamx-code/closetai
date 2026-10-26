@@ -75,7 +75,7 @@ test.describe("Estilista", () => {
     test.setTimeout(180_000);
     await iniciarSesion(page);
 
-    await page.goto("/hoy");
+    await page.goto("/today");
     await expect(page.getByRole("heading", { name: "What to wear today" })).toBeVisible();
 
     await page.getByRole("button", { name: /Build today’s outfits/ }).click();
@@ -103,7 +103,7 @@ test.describe("Estilista", () => {
 
   test("rechazar un outfit deja constancia para el aprendizaje", async ({ page }) => {
     await iniciarSesion(page);
-    await page.goto("/hoy");
+    await page.goto("/today");
 
     await page.getByRole("button", { name: "No, thanks" }).first().click();
     await page.getByRole("button", { name: "It's not my style" }).first().click();
@@ -155,7 +155,7 @@ test.describe("Estilista", () => {
     );
 
     await iniciarSesion(page);
-    await page.goto("/hoy");
+    await page.goto("/today");
     await page.getByRole("button", { name: "No, thanks" }).first().click();
     await page.getByRole("button", { name: "It's not my style" }).first().click();
     await expect(page.getByText(/I won't suggest something like that again/)).toBeVisible();

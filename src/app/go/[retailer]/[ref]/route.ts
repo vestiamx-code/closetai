@@ -19,7 +19,7 @@ export async function GET(
   const { retailer, ref } = await params;
 
   if (!esTiendaValida(retailer)) {
-    return NextResponse.redirect(new URL("/comprar/recomendaciones", request.url));
+    return NextResponse.redirect(new URL("/buy/recommendations", request.url));
   }
 
   const busqueda = decodeURIComponent(ref).slice(0, 120);

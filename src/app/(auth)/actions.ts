@@ -70,7 +70,7 @@ export async function registrarse(
     return { error: "We couldn't create your account. Please try again." };
   }
 
-  redirect("/registro/revisa-tu-correo");
+  redirect("/sign-up/check-email");
 }
 
 export async function entrar(
@@ -116,7 +116,7 @@ export async function pedirRecuperacion(
 
   const supabase = await createClient();
   await supabase.auth.resetPasswordForEmail(datos.data.email, {
-    redirectTo: `${await urlDelSitio()}/auth/callback?siguiente=/nueva-contrasena`,
+    redirectTo: `${await urlDelSitio()}/auth/callback?siguiente=/new-password`,
   });
 
   // Always the same message, whether the account exists or not: if we said "that

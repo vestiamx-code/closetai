@@ -37,7 +37,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       <footer className="mt-16 border-t border-border pb-[calc(env(safe-area-inset-bottom)+4.5rem)] sm:pb-0">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>Your closet is free and unlimited. Your photos are yours and you can delete them.</p>
-          <Link href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
+          <Link href="/privacy" className="underline underline-offset-4 transition hover:text-text">
             Privacy notice
           </Link>
         </div>

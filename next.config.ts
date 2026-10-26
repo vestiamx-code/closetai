@@ -1,6 +1,33 @@
 import type { NextConfig } from "next";
 
+/**
+ * The routes were in Spanish until Oct 26, 2026, when the course required the
+ * whole product in English. The old addresses keep working: emails already sent,
+ * earlier weeks' submissions and anyone's bookmarks point at them. The most
+ * specific paths go first.
+ */
+const RUTAS_ANTERIORES: Array<[string, string]> = [
+  ["/registro/revisa-tu-correo", "/sign-up/check-email"],
+  ["/registro", "/sign-up"],
+  ["/entrar", "/sign-in"],
+  ["/recuperar", "/forgot-password"],
+  ["/nueva-contrasena", "/new-password"],
+  ["/hoy", "/today"],
+  ["/closet/subir", "/closet/add"],
+  ["/probar", "/try-on"],
+  ["/comprar/recomendaciones", "/buy/recommendations"],
+  ["/comprar/gracias", "/buy/thanks"],
+  ["/comprar", "/buy"],
+  ["/estilo", "/style"],
+  ["/perfil", "/profile"],
+  ["/privacidad", "/privacy"],
+  ["/demo/semana-:n", "/demo/week-:n"],
+];
+
 const nextConfig: NextConfig = {
+  async redirects() {
+    return RUTAS_ANTERIORES.map(([source, destination]) => ({ source, destination, permanent: true }));
+  },
   images: {
     remotePatterns: [
       {

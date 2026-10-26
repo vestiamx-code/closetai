@@ -1,0 +1,209 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+import { requireUser } from "@/lib/auth";
+import { validarFotoBase } from "@/lib/ai/gemini";
+import { cobrar, saldo } from "@/lib/credits";
+import { categoriaParaTryon, COSTO_USD, probarPrenda } from "@/lib/fal";
+import { estadoTryon } from "@/lib/gasto";
+import { revisarLimite } from "@/lib/limites";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+
+const rutaSchema = z
+  .string()
+  .regex(/^[0-9a-f-]{36}\/[A-Za-z0-9._-]+$/, "invalid path");
+
+/** URL firmada larga: fal necesita poder descargar la imagen mientras renderiza. */
+const TTL_PARA_FAL = 60 * 20;
+
+export type ResultadoAvatar = { ok: true } | { ok: false; motivo: string };
+
+/**
+ * Registra y valida la foto base de la usuaria.
+ * Se valida ANTES de permitir cualquier render: un crédito gastado en una foto
+ * mala es dinero perdido y una decepción.
+ */
+export async function registrarFotoBase(rutaImagen: string): Promise<ResultadoAvatar> {
+  const user = await requireUser();
+
+  const ruta = rutaSchema.safeParse(rutaImagen);
+  if (!ruta.success || !ruta.data.startsWith(`${user.id}/`)) {
+    return { ok: false, motivo: "That image isn't yours." };
+  }
+
+  const supabase = await createClient();
+  const { data: archivo } = await supabase.storage.from("avatars").download(ruta.data);
+  if (!archivo) return { ok: false, motivo: "We couldn't read the photo. Upload it again." };
+
+  const base64 = Buffer.from(await archivo.arrayBuffer()).toString("base64");
+  const validacion = await validarFotoBase(base64, archivo.type || "image/webp");
+
+  const admin = createAdminClient();
+  await admin.from("api_costs").insert({
+    user_id: user.id,
+    provider: "google",
+    operation: "validate_avatar",
+    est_cost_usd: validacion.estCostUsd,
+  });
+
+  if (!validacion.sirve) {
+    // La foto rechazada se borra en el momento. Si es contenido inapropiado,
+    // no puede quedarse ni un minuto en el bucket.
+    await supabase.storage.from("avatars").remove([ruta.data]);
+    return { ok: false, motivo: validacion.motivo };
+  }
+
+  // Solo una foto base activa a la vez: la nueva reemplaza a la anterior.
+  await supabase.from("avatar_photos").update({ is_primary: false }).eq("user_id", user.id);
+
+  const { error } = await supabase.from("avatar_photos").insert({
+    user_id: user.id,
+    image_path: ruta.data,
+    is_primary: true,
+    validation: "ok",
+    // El aviso importa más que el elogio: es lo que la usuaria puede accionar
+    // para que el próximo render salga mejor.
+    validation_note: validacion.aviso || validacion.motivo,
+  });
+
+  if (error) return { ok: false, motivo: "We couldn't save your photo." };
+
+  revalidatePath("/try-on");
+  return { ok: true };
+}
+
+export type ResultadoTryon =
+  | { ok: true; renderId: string; saldoRestante: number }
+  | { ok: false; motivo: string; sinSaldo?: boolean };
+
+/**
+ * Prueba una prenda sobre la foto base.
+ *
+ * Orden deliberado: se valida todo, se renderiza, y **solo si el render salió
+ * bien se cobra el crédito**. Cobrar antes sería cobrarle a la usuaria por un
+ * error nuestro; el documento lo exige así (§3.3 M5: débito exactamente al éxito).
+ */
+export async function probar(garmentId: string): Promise<ResultadoTryon> {
+  const user = await requireUser();
+
+  const id = z.string().uuid().safeParse(garmentId);
+  if (!id.success) return { ok: false, motivo: "Invalid garment." };
+
+  // El freno de gasto va primero: antes de tocar la base o llamar a fal.
+  const estado = await estadoTryon();
+  if (!estado.habilitado) return { ok: false, motivo: estado.motivo };
+
+  const limite = await revisarLimite(user.id, "tryon");
+  if (!limite.permitido) return { ok: false, motivo: limite.motivo };
+
+  const supabase = await createClient();
+
+  const [{ data: prenda }, { data: avatar }] = await Promise.all([
+    supabase
+      .from("garments")
+      .select("id, image_path, clean_image_path, category, subcategory, ai_meta")
+      .eq("id", id.data)
+      .single(),
+    supabase
+      .from("avatar_photos")
+      .select("id, image_path")
+      .eq("is_primary", true)
+      .eq("validation", "ok")
+      .single(),
+  ]);
+
+  if (!prenda) return { ok: false, motivo: "We couldn't find that garment." };
+  if (!avatar) return { ok: false, motivo: "First upload a full-body photo of yourself." };
+
+  const categoria = categoriaParaTryon(prenda.category);
+  if (!categoria) {
+    return {
+      ok: false,
+      motivo: `I can't try ${prenda.subcategory ?? "this garment"} on you virtually yet. For now it works with clothes: tops, pants and dresses.`,
+    };
+  }
+
+  // Se revisa el saldo antes de gastar en el render, pero el cobro va después.
+  if ((await saldo(user.id)) < 1) {
+    return { ok: false, motivo: "You're out of credits.", sinSaldo: true };
+  }
+
+  // Cómo leer la foto de la prenda lo dijo el catalogador al mirarla. Si es una
+  // prenda vieja sin ese dato, se asume "puesta": es la suposición conservadora
+  // que el propio prompt indica ante la duda.
+  const metadatos = prenda.ai_meta as { tipo_de_foto?: string } | null;
+  const prendaSola = metadatos?.tipo_de_foto === "prenda_sola";
+
+  const rutaPrenda = prenda.clean_image_path ?? prenda.image_path;
+  const [firmadaAvatar, firmadaPrenda] = await Promise.all([
+    supabase.storage.from("avatars").createSignedUrl(avatar.image_path, TTL_PARA_FAL),
+    supabase.storage.from("garments").createSignedUrl(rutaPrenda, TTL_PARA_FAL),
+  ]);
+
+  if (!firmadaAvatar.data?.signedUrl || !firmadaPrenda.data?.signedUrl) {
+    return { ok: false, motivo: "We couldn't prepare the images." };
+  }
+
+  const admin = createAdminClient();
+  const { data: render } = await admin
+    .from("tryon_renders")
+    .insert({
+      user_id: user.id,
+      garment_ids: [prenda.id],
+      avatar_photo_id: avatar.id,
+      provider: "fashn",
+      mode: "tryon",
+      credits_charged: 0,
+      status: "processing",
+    })
+    .select("id")
+    .single();
+
+  if (!render) return { ok: false, motivo: "We couldn't start the render." };
+
+  const resultado = await probarPrenda({
+    fotoUsuaria: firmadaAvatar.data.signedUrl,
+    fotoPrenda: firmadaPrenda.data.signedUrl,
+    categoria,
+    prendaSola,
+  });
+
+  await admin.from("api_costs").insert({
+    user_id: user.id,
+    provider: "fal",
+    operation: "tryon",
+    est_cost_usd: COSTO_USD.tryon,
+  });
+
+  if (!resultado.ok || !resultado.datos.images?.[0]?.url) {
+    await admin.from("tryon_renders").update({ status: "failed" }).eq("id", render.id);
+    // Sin cobrar: el fallo es nuestro, no de la usuaria.
+    return { ok: false, motivo: "The render didn't come out well. We didn't charge you the credit." };
+  }
+
+  // Guardar la imagen en nuestro Storage: la URL de fal expira.
+  const imagen = await fetch(resultado.datos.images[0].url).then((r) => r.arrayBuffer());
+  const rutaRender = `${user.id}/${render.id}.png`;
+  await admin.storage
+    .from("renders")
+    .upload(rutaRender, imagen, { contentType: "image/png", upsert: true });
+
+  // Ahora sí: el render existe, se cobra. `ref` es el id del render, y como es
+  // único en el ledger, un reintento no puede cobrar dos veces.
+  const cobro = await cobrar(user.id, 1, "tryon", render.id);
+  if (!cobro.ok) {
+    await admin.from("tryon_renders").update({ status: "failed" }).eq("id", render.id);
+    return { ok: false, motivo: "You're out of credits.", sinSaldo: true };
+  }
+
+  await admin
+    .from("tryon_renders")
+    .update({ status: "done", image_path: rutaRender, credits_charged: 1 })
+    .eq("id", render.id);
+
+  revalidatePath("/try-on");
+  return { ok: true, renderId: render.id, saldoRestante: cobro.saldoRestante };
+}

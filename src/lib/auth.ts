@@ -19,7 +19,7 @@ export async function requireUser(): Promise<User> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/entrar");
+  if (!user) redirect("/sign-in");
   return user;
 }
 

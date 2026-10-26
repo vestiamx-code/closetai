@@ -71,7 +71,7 @@ export async function hayCuotaDeRazonamiento(): Promise<boolean> {
  * Al entrar, la URL cambia a `/closet` **antes** de que la cookie esté aplicada:
  * la navegación la hace el router con la carga que viene en la misma respuesta de
  * la Server Action, y las cabeceras `Set-Cookie` se procesan por su lado. El hueco
- * dura unos 300 ms. Navegar dentro de ese hueco devuelve 307 a `/entrar` y se ve
+ * dura unos 300 ms. Navegar dentro de ese hueco devuelve 307 a `/sign-in` y se ve
  * idéntico a una sesión caída — que es justo el bug que estas pruebas vigilan.
  *
  * Ninguna persona alcanza a hacer clic en ese hueco; Playwright sí.
@@ -94,7 +94,7 @@ export async function esperarCookieDeSesion(page: Page) {
 
 /** Entrar y no devolver el control hasta que la sesión esté aplicada. */
 export async function entrarConSesionLista(page: Page, correo: string, contrasena: string) {
-  await page.goto("/entrar");
+  await page.goto("/sign-in");
   await page.getByLabel("Email").fill(correo);
   await page.getByLabel("Password").fill(contrasena);
   await page.getByRole("button", { name: "Sign in" }).click();
