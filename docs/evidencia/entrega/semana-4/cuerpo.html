@@ -14,7 +14,7 @@
     <a href="https://closetai.lat"><span class="lbl">Homepage</span><span class="url">closetai.lat</span></a>
     <a href="https://closetai.lat/marketing"><span class="lbl">Live page</span><span class="url">closetai.lat/marketing</span></a>
     <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
-    <a href="https://closetai.lat/demo/semana-4"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/semana-4</span></a>
+    <a href="https://closetai.lat/demo/week-4"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/week-4</span></a>
   </div>
 
   <div class="gate">
@@ -32,14 +32,14 @@
   <table>
     <thead><tr><th style="width:42mm">Category</th><th style="width:11mm">Pts</th><th>Evidence</th><th style="width:12mm">§</th></tr></thead>
     <tbody>
-      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed at 13:26 (<code>660dc07</code>); first code at 13:31 (<code>060c841</code>). Four brand decisions made by me first</td><td>2</td></tr>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed at 13:26 (<code>3e44b5a</code>); first code at 13:31 (<code>f953439</code>). Four brand decisions made by me first</td><td>2</td></tr>
       <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Wireframe with implementation notes, scope cut, and what changed from the drawing to the live page</td><td>3</td></tr>
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>13 requirements, each with a checkable criterion</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, why the A/B variant is not assigned where the session lives, and the four filters on what counts as a visitor</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat</code> and <code>/marketing</code> live; end-to-end tests pass against the real site, confirmed by the URL each run prints</td><td>6–7, 12</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b><span class="pendiente">[PENDING: n]</span> commits</b> (min. 5) · <b><span class="pendiente">[PENDING: n]</span> deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
-      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 8 iterations documented</td><td>12–13</td></tr>
-      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Four brand decisions; one post rejected before approval; three corrections, one of them about my own earlier weeks; decision note, 213 words</td><td>2, 13–15, 17</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>26 commits</b> (min. 5) · <b>27 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 10 iterations documented</td><td>12–13</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Four brand decisions; one post rejected before approval; three corrections, one of them about my own earlier weeks; the whole product moved to English without mixing the experiment's data; decision note, 213 words</td><td>2, 13–15, 17–18</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:32 walkthrough recorded against production <span class="pendiente">[PENDING: my narration]</span></td><td>16</td></tr>
     </tbody>
   </table>
@@ -71,8 +71,9 @@
 
   <h3>Four brand decisions I made before the agent wrote anything</h3>
   <ul>
-    <li><b>The headline test:</b> my current brand headline, «Tu estilista, en tu bolsillo», against
-      «Ya tienes qué ponerte», which comes from what a real customer told me in Week 2. I would rather
+    <li><b>The headline test:</b> my current brand headline, “Your stylist, in your pocket”, against
+      “You already have something to wear”, which comes from what a real customer told me in Week 2
+      (both were in Spanish until October 26; see §18). I would rather
       learn which one works than keep the one I like.</li>
     <li><b>The persona:</b> a woman aged 24 to 30 in Mexico City — explicitly a hypothesis, because I
       have not interviewed anyone with that profile yet.</li>
@@ -117,10 +118,10 @@
 
   <h3>What changed between the wireframe and the live page</h3>
   <ul>
-    <li><b>The closing line of the homepage.</b> The approved copy ended with «Ya tienes qué ponerte»,
-      which is headline B: people in group A would read it too, contaminating the test. I approved a
-      neutral line instead — «Tu ropa ya está ahí» — and a test checks that nothing outside the headline
-      repeats either variant.</li>
+    <li><b>The closing line of the homepage.</b> The approved copy ended with “You already have something
+      to wear”, which is headline B: people in group A would read it too, contaminating the test. I approved
+      a neutral line instead — “Your clothes are already there. You just have to see them.” — and a test
+      checks that nothing outside the headline repeats either variant.</li>
     <li><b>One post was replaced before approval</b> (§13): it promised the try-on works without your face.</li>
     <li><b>The generator only saves after a second check on the server</b>, because what arrives to be
       saved comes from the browser.</li>
@@ -159,7 +160,7 @@
    │      reads the cai_visitante cookie; if missing, creates a random id
    │      variant = hash(id + experiment) → top bit     ← pure function, tested
    │      └── &lt;Experimento&gt; (client): saves the cookie, records the view,
-   │                                   records the click on “Empezar gratis”
+   │                                   records the click on “Start for free”
    │
    ├── /marketing (Server Component)
    │      brand, persona, content and A/B results from Postgres
@@ -205,14 +206,14 @@ Supabase Postgres
   <h2>6 · The homepage, upgraded</h2>
   <p class="lead">Each visitor sees one of two headlines, chosen on the server, and keeps it on every return.</p>
   <div class="two">
-    <figure><img src="01-portada-a.jpg" alt=""><figcaption>Variant A: «Tu estilista, en tu bolsillo.»</figcaption></figure>
-    <figure><img src="01-portada-b.jpg" alt=""><figcaption>Variant B: «Ya tienes qué ponerte.»</figcaption></figure>
+    <figure><img src="01-portada-a.jpg" alt=""><figcaption>Variant A: “Your stylist, in your pocket.”</figcaption></figure>
+    <figure><img src="01-portada-b.jpg" alt=""><figcaption>Variant B: “You already have something to wear.”</figcaption></figure>
   </div>
   <p>Below the headline the page reads as an argument: the problem, how it works in three steps, the data
     with its source (linked to <code>/research</code>), the price — free forever or 100 pesos once, linked to
     <code>/pricing</code> — and what happens to your photos.</p>
-  <p><b>Two sentences from the old homepage were removed</b> because they could not be defended: «A las dos
-    semanas ya no te propone lo que odias» was never measured, and «Diez prendas bastan para empezar»
+  <p><b>Two sentences from the old homepage were removed</b> because they could not be defended: “Two weeks
+    in, it stops suggesting what you hate” was never measured, and “Ten garments are enough to start”
     contradicts the Week 2 interview, where the limit before getting tired was 40. A test checks they do
     not come back.</p>
   <div class="two">
@@ -265,51 +266,78 @@ Supabase Postgres
 
 <!-- ============ 8. COMMITS ============ -->
 <section class="brk">
-  <h2>8 · GitHub commits — <span class="pendiente">[PENDING: n]</span> this week (minimum 5)</h2>
+  <h2>8 · GitHub commits — 26 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
-      <tr><td class="mono">660dc07</td><td>Oct 21, 13:26</td><td>docs: Build Discipline Packet and wireframe, before writing code</td></tr>
-      <tr><td class="mono">060c841</td><td>Oct 21, 13:31</td><td>feat: the A/B logic, the facts marketing may use, and the content draft</td></tr>
-      <tr><td class="mono">9f73646</td><td>Oct 21, 14:26</td><td>feat: marketing migrations and the approved content</td></tr>
-      <tr><td class="mono">74fb66f</td><td>Oct 21, 14:28</td><td>feat: the new homepage with the A/B headline, and <code>/marketing</code></td></tr>
-      <tr><td class="mono">bbfe81d</td><td>Oct 21, 14:30</td><td>fix: the headline was missing a space between its two lines</td></tr>
-      <tr><td class="mono">2445f93</td><td>Oct 21, 14:39</td><td>test: tests against the real site, and the trap that prevented it</td></tr>
-      <tr><td class="mono">8874da6</td><td>Oct 21, 14:40</td><td>fix: TikTok post text appeared twice</td></tr>
-      <tr><td class="mono">07bdc32</td><td>Oct 21, 17:19</td><td>fix: the homepage closing repeated headline B</td></tr>
-      <tr><td class="mono">ce137cc</td><td>Oct 21, 17:24</td><td>fix: the experiment counted automated browsers as visitors</td></tr>
-      <tr><td class="mono">bf135e6</td><td>Oct 21, 17:51</td><td>docs: diagnosis and cleanup of Vercel's screenshots in the experiment</td></tr>
-      <tr><td class="mono">a6a857c</td><td>Oct 26, 11:19</td><td>docs: decision note approved by me</td></tr>
-      <tr><td class="mono">126fa58</td><td>Oct 26, 11:20</td><td>fix: the decision note had been saved without its text</td></tr>
-      <!-- MAS-COMMITS -->
+      <tr><td class="mono">3e44b5a</td><td>Oct 21, 13:26</td><td>docs: build discipline packet and wireframe, before writing code</td></tr>
+      <tr><td class="mono">f953439</td><td>Oct 21, 13:31</td><td>feat: A/B logic, the facts marketing may use, and the content draft</td></tr>
+      <tr><td class="mono">55d50a2</td><td>Oct 21, 14:26</td><td>feat: marketing migrations and the approved content</td></tr>
+      <tr><td class="mono">7b6d22c</td><td>Oct 21, 14:28</td><td>feat: the new homepage with an A/B headline, and /marketing</td></tr>
+      <tr><td class="mono">83e0a78</td><td>Oct 21, 14:30</td><td>fix: the headline was missing a space between its two lines</td></tr>
+      <tr><td class="mono">b1c7079</td><td>Oct 21, 14:39</td><td>test: tests against the real site, and the trap that prevented it</td></tr>
+      <tr><td class="mono">2d0293d</td><td>Oct 21, 14:40</td><td>fix: TikTok posts showed their text twice</td></tr>
+      <tr><td class="mono">b4101f0</td><td>Oct 21, 17:19</td><td>fix: the homepage closing repeated headline B of the experiment</td></tr>
+      <tr><td class="mono">f38fe91</td><td>Oct 21, 17:24</td><td>fix: the experiment counted automated browsers as visitors</td></tr>
+      <tr><td class="mono">10667bc</td><td>Oct 21, 17:51</td><td>docs: the experiment was counting Vercel&#x27;s screenshots; diagnosis and cleanup</td></tr>
+      <tr><td class="mono">0c51526</td><td>Oct 26, 11:19</td><td>docs: decision note approved by Tamara</td></tr>
+      <tr><td class="mono">f7d6c84</td><td>Oct 26, 11:20</td><td>fix: the decision note had been saved without its text</td></tr>
+      <tr><td class="mono">e3fa8e8</td><td>Oct 26, 11:26</td><td>feat: demo video page and the submission packet source</td></tr>
+      <tr><td class="mono">3acd4e4</td><td>Oct 26, 11:47</td><td>feat: homepage, /marketing and every AI prompt in English</td></tr>
+      <tr><td class="mono">77a9f4b</td><td>Oct 26, 11:49</td><td>feat: /pricing and /product in English</td></tr>
+      <tr><td class="mono">01c8ca3</td><td>Oct 26, 11:53</td><td>feat: /research and /core in English</td></tr>
+      <tr><td class="mono">1e7aca1</td><td>Oct 26, 11:55</td><td>feat: migration 013, every public database row in English</td></tr>
+      <tr><td class="mono">eb2f9a8</td><td>Oct 26, 12:02</td><td>feat: privacy notice, demo pages and sign-in/sign-up screens in English</td></tr>
+      <tr><td class="mono">d1c1f86</td><td>Oct 26, 12:08</td><td>feat: logged-in app screens in English</td></tr>
+      <tr><td class="mono">45e7f4e</td><td>Oct 26, 12:10</td><td>test: assert on the English interface</td></tr>
+      <tr><td class="mono">ba8a395</td><td>Oct 26, 13:12</td><td>fix: spell out the style-profile JSON shape (profile prompt v3)</td></tr>
+      <tr><td class="mono">0aec5c2</td><td>Oct 26, 13:17</td><td>feat: migration 014, Demo account data and new-account city in English</td></tr>
+      <tr><td class="mono">85d5abd</td><td>Oct 26, 13:20</td><td>feat: English URLs, with permanent redirects from the Spanish ones</td></tr>
+      <tr><td class="mono">f4ad50b</td><td>Oct 26, 13:24</td><td>docs: packet and evidence logs in English</td></tr>
+      <tr><td class="mono">3998146</td><td>Oct 26, 13:25</td><td>docs: wireframe redrawn in English, with its HTML source</td></tr>
+      <tr><td class="mono">1a7878d</td><td>Oct 26, 13:31</td><td>chore: recording script targets the English product</td></tr>
     </tbody>
   </table>
   <figure>
     <img src="11-commits.jpg" alt="">
-    <figcaption>The public repository. Every commit's CI run passed except <code>a6a857c</code>, whose run was <i>cancelled</i>, not failed: the next commit — the fix for its own missing text — arrived 15 seconds later, and the workflow cancels a run when a newer one starts.</figcaption>
+    <figcaption>The public repository, with English commit messages. One CI run failed: <code>3acd4e4</code>, the first translation commit, which changed screens before their tests were updated; the commits after it passed. One run, <code>a6a857c</code> (a hash from before the rewrite), was <i>cancelled</i>, not failed, because a newer push started 15 seconds later. Every other run passed.</figcaption>
   </figure>
 </section>
 
 <!-- ============ 9. DEPLOYS ============ -->
 <section>
-  <h2>9 · Vercel deployments — <span class="pendiente">[PENDING: n]</span> this week (minimum 2)</h2>
-  <p class="lead">All Production, all Ready, with exact times read from Vercel. One per commit.</p>
+  <h2>9 · Vercel deployments — 27 this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready, with exact times read from Vercel and generated by <code>tablas.py</code>, not typed. One per commit, plus one: when this week's history was pushed again with English commit messages, Vercel redeployed its newest commit, <code>e3fa8e8</code>. Deployments made before the rewrite are shown with the commit's new hash.</p>
   <table>
     <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
     <tbody>
-      <tr><td>Oct 21, 13:26</td><td class="ok">● Ready</td><td>The packet and the wireframe</td></tr>
-      <tr><td>Oct 21, 13:31</td><td class="ok">● Ready</td><td>A/B logic and the marketing guard</td></tr>
-      <tr><td>Oct 21, 14:26</td><td class="ok">● Ready</td><td>The migrations, before the code that needs them</td></tr>
-      <tr><td>Oct 21, 14:28</td><td class="ok">● Ready</td><td>The new homepage and <code>/marketing</code></td></tr>
-      <tr><td>Oct 21, 14:30</td><td class="ok">● Ready</td><td>Fix: the space in the headline</td></tr>
-      <tr><td>Oct 21, 14:39</td><td class="ok">● Ready</td><td>Tests against the real site</td></tr>
-      <tr><td>Oct 21, 14:40</td><td class="ok">● Ready</td><td>Fix: duplicated TikTok text</td></tr>
-      <tr><td>Oct 21, 17:19</td><td class="ok">● Ready</td><td>Fix: the neutral closing line</td></tr>
-      <tr><td>Oct 21, 17:24</td><td class="ok">● Ready</td><td>Fix: robots no longer count as visitors</td></tr>
-      <tr><td>Oct 21, 17:51</td><td class="ok">● Ready</td><td>The diagnosis, documented</td></tr>
-      <tr><td>Oct 26, 11:19</td><td class="ok">● Ready</td><td>The decision note</td></tr>
-      <tr><td>Oct 26, 11:20</td><td class="ok">● Ready</td><td>The decision note, with its text</td></tr>
-      <!-- MAS-DEPLOYS -->
+      <tr><td>Oct 21, 13:26</td><td class="ok">● Ready</td><td><span class="mono">3e44b5a</span> · docs: build discipline packet and wireframe, before writing code</td></tr>
+      <tr><td>Oct 21, 13:31</td><td class="ok">● Ready</td><td><span class="mono">f953439</span> · feat: A/B logic, the facts marketing may use, and the content draft</td></tr>
+      <tr><td>Oct 21, 14:26</td><td class="ok">● Ready</td><td><span class="mono">55d50a2</span> · feat: marketing migrations and the approved content</td></tr>
+      <tr><td>Oct 21, 14:28</td><td class="ok">● Ready</td><td><span class="mono">7b6d22c</span> · feat: the new homepage with an A/B headline, and /marketing</td></tr>
+      <tr><td>Oct 21, 14:30</td><td class="ok">● Ready</td><td><span class="mono">83e0a78</span> · fix: the headline was missing a space between its two lines</td></tr>
+      <tr><td>Oct 21, 14:39</td><td class="ok">● Ready</td><td><span class="mono">b1c7079</span> · test: tests against the real site, and the trap that prevented it</td></tr>
+      <tr><td>Oct 21, 14:40</td><td class="ok">● Ready</td><td><span class="mono">2d0293d</span> · fix: TikTok posts showed their text twice</td></tr>
+      <tr><td>Oct 21, 17:19</td><td class="ok">● Ready</td><td><span class="mono">b4101f0</span> · fix: the homepage closing repeated headline B of the experiment</td></tr>
+      <tr><td>Oct 21, 17:24</td><td class="ok">● Ready</td><td><span class="mono">f38fe91</span> · fix: the experiment counted automated browsers as visitors</td></tr>
+      <tr><td>Oct 21, 17:51</td><td class="ok">● Ready</td><td><span class="mono">10667bc</span> · docs: the experiment was counting Vercel&#x27;s screenshots; diagnosis and cleanup</td></tr>
+      <tr><td>Oct 26, 11:19</td><td class="ok">● Ready</td><td><span class="mono">0c51526</span> · docs: decision note approved by Tamara</td></tr>
+      <tr><td>Oct 26, 11:20</td><td class="ok">● Ready</td><td><span class="mono">f7d6c84</span> · fix: the decision note had been saved without its text</td></tr>
+      <tr><td>Oct 26, 11:26</td><td class="ok">● Ready</td><td><span class="mono">e3fa8e8</span> · feat: demo video page and the submission packet source</td></tr>
+      <tr><td>Oct 26, 11:39</td><td class="ok">● Ready</td><td><span class="mono">e3fa8e8</span> · feat: demo video page and the submission packet source</td></tr>
+      <tr><td>Oct 26, 11:47</td><td class="ok">● Ready</td><td><span class="mono">3acd4e4</span> · feat: homepage, /marketing and every AI prompt in English</td></tr>
+      <tr><td>Oct 26, 11:50</td><td class="ok">● Ready</td><td><span class="mono">77a9f4b</span> · feat: /pricing and /product in English</td></tr>
+      <tr><td>Oct 26, 11:53</td><td class="ok">● Ready</td><td><span class="mono">01c8ca3</span> · feat: /research and /core in English</td></tr>
+      <tr><td>Oct 26, 11:55</td><td class="ok">● Ready</td><td><span class="mono">1e7aca1</span> · feat: migration 013, every public database row in English</td></tr>
+      <tr><td>Oct 26, 12:02</td><td class="ok">● Ready</td><td><span class="mono">eb2f9a8</span> · feat: privacy notice, demo pages and sign-in/sign-up screens in English</td></tr>
+      <tr><td>Oct 26, 12:08</td><td class="ok">● Ready</td><td><span class="mono">d1c1f86</span> · feat: logged-in app screens in English</td></tr>
+      <tr><td>Oct 26, 12:10</td><td class="ok">● Ready</td><td><span class="mono">45e7f4e</span> · test: assert on the English interface</td></tr>
+      <tr><td>Oct 26, 13:12</td><td class="ok">● Ready</td><td><span class="mono">ba8a395</span> · fix: spell out the style-profile JSON shape (profile prompt v3)</td></tr>
+      <tr><td>Oct 26, 13:17</td><td class="ok">● Ready</td><td><span class="mono">0aec5c2</span> · feat: migration 014, Demo account data and new-account city in English</td></tr>
+      <tr><td>Oct 26, 13:20</td><td class="ok">● Ready</td><td><span class="mono">85d5abd</span> · feat: English URLs, with permanent redirects from the Spanish ones</td></tr>
+      <tr><td>Oct 26, 13:24</td><td class="ok">● Ready</td><td><span class="mono">f4ad50b</span> · docs: packet and evidence logs in English</td></tr>
+      <tr><td>Oct 26, 13:25</td><td class="ok">● Ready</td><td><span class="mono">3998146</span> · docs: wireframe redrawn in English, with its HTML source</td></tr>
+      <tr><td>Oct 26, 13:31</td><td class="ok">● Ready</td><td><span class="mono">1a7878d</span> · chore: recording script targets the English product</td></tr>
     </tbody>
   </table>
 </section>
@@ -317,7 +345,7 @@ Supabase Postgres
 <!-- ============ 10. SUPABASE ============ -->
 <section class="brk">
   <h2>10 · Supabase evidence</h2>
-  <p class="lead">Three migrations, each applied with my explicit permission, each loaded from the public
+  <p class="lead">Five migrations, each applied with my explicit permission, each loaded from the public
     repository and checked byte for byte before running, and each verified against the database.</p>
   <table>
     <thead><tr><th style="width:80mm">What was checked</th><th>Result</th></tr></thead>
@@ -327,8 +355,10 @@ Supabase Postgres
       <tr><td><code>ab_events</code> with the public key</td><td class="ok">401 — not readable from outside</td></tr>
       <tr><td>011 — generated from the approved document, not typed by hand</td><td class="ok">sha256 87eb7852…, 14,918 bytes</td></tr>
       <tr><td><code>marketing_assets</code> after 011</td><td class="ok">28 rows: 1 homepage, 10 posts, 3 scripts, 14 days — all approved</td></tr>
-      <tr><td>The product map's unproven promise</td><td class="ok">Removed: “funciona sin que salga tu cara” is gone</td></tr>
+      <tr><td>The product map's unproven promise</td><td class="ok">Removed: “works without showing your face” is gone</td></tr>
       <tr><td>012 — the neutral closing line, in the database too</td><td class="ok">sha256 d7c7719a…; old line gone, new line present</td></tr>
+      <tr><td>013 — every public row in English (research, pricing, product map, marketing); the Spanish experiment closed and <code>headline</code> opened</td><td class="ok">sha256 96219c15…, 32,164 bytes; 0 Spanish rows left in the 7 public tables; <code>titular</code> inactive, <code>headline</code> active</td></tr>
+      <tr><td>014 — the Demo account's garments, outfits, recommendations and learned profile in English; new accounts default to “Mexico City”</td><td class="ok">sha256 4479d98a…, 24 updates, each by id; read back through REST with no Spanish left; a new test account is born with “Mexico City”, byte by byte</td></tr>
     </tbody>
   </table>
   <p>Migration 011 is generated by <code>scripts/contenido-semana-4.py</code> from
@@ -339,7 +369,7 @@ Supabase Postgres
 
 <!-- ============ 11. PROMPTS ============ -->
 <section>
-  <h2>11 · Coding-agent prompts — 6 this week (minimum 5)</h2>
+  <h2>11 · Coding-agent prompts — 8 this week (minimum 5)</h2>
   <p class="lead">Full log in <code>docs/evidencia/PROMPT_LOG.md</code>.</p>
   <div class="prompt"><p class="h">1 · Four brand decisions before the plan</p>
     <p class="q">“Now let's do this week's work.”</p>
@@ -359,6 +389,12 @@ Supabase Postgres
   <div class="prompt"><p class="h">6 · Test against the real site, for real</p>
     <p class="q">“Three software tests against production — and one that proves real visits ARE counted, not only that test visits are not.”</p>
     <p class="j"><b>MY JUDGMENT.</b> When a failure report showed the suite had been running against my laptop, the correction went into the document instead of being hidden.</p></div>
+  <div class="prompt"><p class="h">7 · Everything in English, now</p>
+    <p class="q">My professor's message — everything in English from Module 4, or zero — and “Change it now.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Translate the whole product, data included, and rewrite this week's commit messages, rather than only the parts a grader sees first.</p></div>
+  <div class="prompt"><p class="h">8 · Do everything that's needed</p>
+    <p class="q">“Do everything that's needed, I approve everything.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> The failing AI tests were not blamed on the quota until a live call proved which part was quota and which part was a real bug.</p></div>
 </section>
 
 <!-- ============ 12. TESTS ============ -->
@@ -390,8 +426,8 @@ Supabase Postgres
     go red; with the minimum sample lowered to 10, the “no winner” cases go red. All green again on revert.</p>
 
   <h3>The marketing guard (<code>src/lib/marketing.test.ts</code>) — 11 cases</h3>
-  <p>Lets through the verified figures written the way a person writes them; catches “3 de cada 4”,
-    “80%”, “10,000 usuarias” and “#Top10Outfits”; reads thousands and decimals as one number; every fact has
+  <p>Lets through the verified figures written the way a person writes them; catches “3 out of 4”,
+    “80%”, “10,000 users” and “#Top10Outfits”; reads thousands and decimals as one number; every fact has
     a source; rejects broken or incomplete output; exports the calendar in order with commas escaped; and
     does not duplicate a video post's text. All approved content went through the same guard before being
     seeded.</p>
@@ -409,7 +445,14 @@ Supabase Postgres
     </tbody>
   </table>
   <p>Tests 3 and 4 only mean something together: test 3 alone would also pass if the counter were broken
-    and counted nothing. <span class="pendiente">[PENDING: final run]</span></p>
+    and counted nothing.</p>
+  <h3>After the move to English (October 26)</h3>
+  <p>Every selector and expected text was changed to the English interface. Against the live site — each run
+    printing <code>[e2e] contra https://closetai.lat</code> — everything that does not call the AI passed:
+    <b>62 of 62</b>, 4 skipped by design, including a new test that every old Spanish address answers 308 to
+    its English one. The tests that call Gemini hit the free tier's daily limit of 20 requests mid-run;
+    they passed before the translation, and the generator worked against the English site while recording
+    the video. <span class="pendiente">[PENDING: AI tests re-run after the quota resets]</span></p>
 </section>
 
 <!-- ============ 13. ITERATION ============ -->
@@ -421,11 +464,13 @@ Supabase Postgres
       <tr><td>The independence test: two experiments agreed <b>0 times in 10,000</b>. With <code>fnv1a % 2</code> the last bit is the parity of the letters, so experiments with names of different parity were perfect opposites</td><td>MurmurHash3's finalizer after FNV-1a, taking the top bit. The 50/50 split test had passed anyway — it would never have shown on screen</td></tr>
       <tr><td>The old homepage claimed two things that could not be defended</td><td>Removed; a test checks they do not return</td></tr>
       <tr><td>The product map (since Week 3) and a draft post promised the try-on works without your face. Never tested</td><td>The photo validator now accepts photos without a face; the post was replaced; migration 011 removed the promise. Testing it would have required a photo of my body just to publish a sentence</td></tr>
-      <tr><td>The headline's plain text was «Ya tienesqué ponerte» — no space between its two lines, since Week 0</td><td>A space between the lines; the test requires it. That is how screen readers and search engines read it</td></tr>
+      <tr><td>The headline's plain text had no space between its two lines, since Week 0</td><td>A space between the lines; the test requires it. That is how screen readers and search engines read it</td></tr>
       <tr><td>TikTok post text appeared twice, on the page and when copied</td><td>Body and caption compared before joining; a unit test</td></tr>
       <tr><td>The homepage closing repeated headline B</td><td>A neutral line I approved, in the page, the document and the database</td></tr>
       <tr><td><b>The test suite was not running against production</b> (§15)</td><td><code>pnpm test:e2e:prod</code>, and every run prints its target</td></tr>
       <tr><td><b>Vercel's screenshots counted as visitors</b>: 10 views in pairs, one pair 26 seconds after a deployment. Each test run alone was ruled out first, counting before and after</td><td>Automated traffic is discarded and only its category logged. Confirmed on the next deployment: exactly two discards, no new events. The 10 fake views were deleted with my permission</td></tr>
+      <tr><td><b>The course moved to English</b>, and the headlines were the experiment's stimulus. English views added to Spanish ones would compare different sentences</td><td>The Spanish experiment was closed and a new one, <code>headline</code>, started from zero on October 26 with the English variants (§18)</td></tr>
+      <tr><td><b>Translating a prompt broke the learning loop, silently.</b> After the translation the log showed “the model did not return a valid profile”. The profile prompt never named its JSON keys, so in English the model could guess English ones and every profile failed validation</td><td>Prompt v3 spells out the exact shape. Verified with a live call before and after: the old prompt's reply failed, the new one's passed. The other six prompts already name their keys</td></tr>
     </tbody>
   </table>
 </section>
@@ -437,7 +482,8 @@ Supabase Postgres
     <img src="05-ab.jpg" alt="">
     <figcaption>The live results on <code>/marketing</code>.</figcaption>
   </figure>
-  <p><span class="pendiente">[PENDING: numbers on submission day]</span></p>
+  <p>The <code>headline</code> experiment started on October 26, when the product moved to English. On that day:
+    variant A, 1 visitor and 0 clicks; variant B, 0 visitors. <span class="pendiente">[PENDING: numbers on submission day]</span></p>
   <p>It needs 100 visitors per headline and a difference significant at 95% before naming a winner. Until
     then, the page says “no winner yet” instead of showing a percentage that looks like a decision and is
     really noise. Publishing the method without a fake winner is the honest result for one week of traffic.</p>
@@ -462,7 +508,7 @@ Supabase Postgres
   <h2>16 · Demo video</h2>
   <p class="lead"><b>2:32</b>, recorded against the live site with the test header — so recording it added
     no visits to the experiment — and hosted on the product's own domain:
-    <a href="https://closetai.lat/demo/semana-4"><b>closetai.lat/demo/semana-4</b></a>
+    <a href="https://closetai.lat/demo/week-4"><b>closetai.lat/demo/week-4</b></a>
     <span class="pendiente">[PENDING: my narration]</span></p>
   <p>In order: headline A and headline B for two visitors; the homepage argument; <code>/marketing</code> with the
     brand, the persona and the live A/B results; the posts and a copy; the scripts and the calendar export;
@@ -474,12 +520,35 @@ Supabase Postgres
   <h2>17 · Human decision note</h2>
   <div class="note">
     <p>This week I had to market a product, and the hardest part was not saying more than I can prove.</p>
-    <p>I chose to test my own brand headline, "Tu estilista, en tu bolsillo", against a phrase that comes from a real customer: "Ya tienes qué ponerte." I would rather learn which one works than keep the one I like.</p>
+    <p>I chose to test my own brand headline, "Your stylist, in your pocket", against a phrase that comes from a real customer: "You already have something to wear." I would rather learn which one works than keep the one I like.</p>
     <p>I rejected a post that said the virtual try-on works without your face. It had never been tested, and checking it meant uploading a photo of my body just to publish one sentence. I removed the post and corrected the product page, which had made the same promise since week three.</p>
     <p>I also corrected three mistakes. My tests had not been running against the live site since September; now they are, and they pass. Vercel's screenshots after every deployment were counting as visitors in my experiment; I filtered them and deleted ten fake visits. And the closing line of the homepage repeated headline B, so people in group A were reading it too.</p>
     <p>The tradeoff: my experiment will probably not have a winner by the deadline. It needs a hundred visitors per headline, so the page says "no winner yet" instead of showing a percentage that looks like a decision and is really noise.</p>
-    <p class="wc">213 words · approved by Tamara Muñoz Delgadillo, October 26, 2026</p>
+    <p class="wc">213 words · approved by Tamara Muñoz Delgadillo, October 26, 2026 · the headlines are quoted in English, as the experiment now runs</p>
   </div>
+</section>
+
+<!-- ============ 18. ENGLISH ============ -->
+<section class="brk">
+  <h2>18 · Moving the whole product to English</h2>
+  <p class="lead">On October 26 the course announced that from Module 4 everything must be in English — the live
+    product, mockups, this document, commit messages and the video — or the work scores zero. ClosetAI was
+    built entirely in Mexican Spanish. I chose to translate all of it, not only what a grader sees first.</p>
+  <table>
+    <thead><tr><th style="width:52mm">What</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td>Every screen</td><td>Homepage, <code>/marketing</code>, <code>/pricing</code>, <code>/product</code>, <code>/research</code>, <code>/core</code>, privacy notice, sign-in and sign-up, and every logged-in screen, with their error messages and server logs</td></tr>
+      <tr><td>Addresses</td><td>English routes — <code>/sign-in</code>, <code>/today</code>, <code>/try-on</code>, <code>/privacy</code>… — and every old Spanish address answers 308 to its new one, so emails already sent and earlier submissions keep working</td></tr>
+      <tr><td>The AI</td><td>All seven prompts write in English. Stored codes (categories, styles, seasons) stay as they are and are shown with English labels, so no saved data had to change shape</td></tr>
+      <tr><td>The data</td><td>Migrations 013 and 014: every public row, and the Demo account's own garments, outfits and learned profile (§10)</td></tr>
+      <tr><td>The experiment</td><td>Closed and restarted as <code>headline</code>: views of a Spanish sentence cannot be added to views of an English one</td></tr>
+      <tr><td>Commit messages</td><td>This week's 13 Spanish commit messages were rewritten in English with their dates and content unchanged; the hashes in this document are the new ones</td></tr>
+      <tr><td>Mockup, video, documents</td><td>The wireframe was redrawn in English, the video re-recorded against the English site, and the plan and evidence logs translated, with a note wherever the translation changed something</td></tr>
+    </tbody>
+  </table>
+  <p><b>What it cost, honestly:</b> translating is not cosmetic when the text is also an instruction to a model.
+    It broke the style-profile prompt without any visible error, and only the tests found it (§13). Earlier
+    weeks' documents stay as they were submitted, in Spanish.</p>
 </section>
 
 <!-- ============ GATES ============ -->
@@ -488,9 +557,9 @@ Supabase Postgres
   <table>
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
-      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>660dc07</code>, five minutes before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · <span class="pendiente">[PENDING: n]</span> commits · §9 · <span class="pendiente">[PENDING: n]</span> production deployments</td></tr>
-      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · eight defects and corrections, each fixed and redeployed</td></tr>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>3e44b5a</code>, five minutes before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · 26 commits · §9 · 27 production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · ten defects and corrections, each fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§16 · 2:32 video · §17 · 213 words</td></tr>
     </tbody>
   </table>
