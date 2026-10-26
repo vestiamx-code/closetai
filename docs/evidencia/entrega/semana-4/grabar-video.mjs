@@ -1,21 +1,22 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 
-// Video demo de la Semana 4, grabado contra https://closetai.lat.
-// Lleva la cabecera de prueba: grabar el video no le suma visitas al experimento.
+// Week 4 demo video, recorded against https://closetai.lat.
+// It carries the test header: recording the video adds no visits to the experiment.
 //
-// Uso (desde la raíz del repo, para que resuelva @playwright/test):
+// Usage (from the repo root, so @playwright/test resolves):
 //   cp docs/evidencia/entrega/semana-4/grabar-video.mjs ./grabar-tmp.mjs
-//   node grabar-tmp.mjs <carpeta-de-salida> && rm grabar-tmp.mjs
+//   node grabar-tmp.mjs <output-folder> && rm grabar-tmp.mjs
 //
-// Las marcas que produjo la grabación entregada están en marcas-video.json.
+// The scene marks of the submitted recording are in marcas-video.json.
+// Re-recorded on Oct 26, 2026 against the English product.
 
 const OUT = process.argv[2];
-// Dos visitantes de ejemplo: el primero cae en la variante A, el segundo en la B
-// (calculado con varianteDe de src/lib/ab.ts).
+// Two sample visitors: the first lands in variant A, the second in B of the
+// `headline` experiment (computed with varianteDe from src/lib/ab.ts).
 const VISITANTE = {
-  a: "8b7f1b4d-e535-4e33-aff4-fc05c213d9b4",
-  b: "4055237a-bece-462e-a3d9-bebf2e6b40fd",
+  a: "de540b17-7d9f-4959-a79b-1dece3efae1e",
+  b: "192325e8-414d-4438-b3ab-0e7a21801819",
 };
 const SITIO = "https://closetai.lat";
 
@@ -122,20 +123,20 @@ marca("generador");
 await irA("#generador");
 await esperar(1500);
 await p.locator("#tema").click();
-await p.keyboard.type("Qué ponerse un lunes de lluvia", { delay: 55 });
+await p.keyboard.type("What to wear on a rainy Monday", { delay: 55 });
 await esperar(800);
 for (let intento = 1; intento <= 2; intento++) {
-  await p.getByRole("button", { name: "Generar post" }).click();
+  await p.getByRole("button", { name: "Generate post" }).click();
   const salida = p.getByTestId("resultado-generador");
   await salida.locator('[data-testid="post-generado"], [role="alert"]').first().waitFor({ timeout: 90_000 });
   if (await salida.getByTestId("post-generado").isVisible()) break;
-  console.log(`   aviso en el intento ${intento}: «${await salida.getByRole("alert").textContent()}»`);
-  if (intento === 2) throw new Error("dos intentos sin post");
+  console.log(`   notice on attempt ${intento}: "${await salida.getByRole("alert").textContent()}"`);
+  if (intento === 2) throw new Error("two attempts without a post");
 }
 marca("post-generado");
 await esperar(6000);
-await p.getByTestId("post-generado").getByRole("button", { name: "Guardar" }).click();
-await p.getByTestId("post-generado").getByRole("button", { name: "Guardado" }).waitFor({ timeout: 20_000 });
+await p.getByTestId("post-generado").getByRole("button", { name: "Save" }).click();
+await p.getByTestId("post-generado").getByRole("button", { name: "Saved" }).waitFor({ timeout: 20_000 });
 await esperar(2500);
 
 marca("guardados");
