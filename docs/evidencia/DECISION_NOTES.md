@@ -212,5 +212,23 @@ people wrote on my style page, and that I was storing full IP addresses. Both ar
 
 ## Semana 4 — [2026-10-26] — No decir más de lo que puedo probar
 
+This week I had to market a product, and the hardest part was not saying more than I can prove.
+
+I chose to test my own brand headline, "Tu estilista, en tu bolsillo", against a phrase that comes
+from a real customer: "Ya tienes qué ponerte." I would rather learn which one works than keep the
+one I like.
+
+I rejected a post that said the virtual try-on works without your face. It had never been tested,
+and checking it meant uploading a photo of my body just to publish one sentence. I removed the post
+and corrected the product page, which had made the same promise since week three.
+
+I also corrected three mistakes. My tests had not been running against the live site since
+September; now they are, and they pass. Vercel's screenshots after every deployment were counting as
+visitors in my experiment; I filtered them and deleted ten fake visits. And the closing line of the
+homepage repeated headline B, so people in group A were reading it too.
+
+The tradeoff: my experiment will probably not have a winner by the deadline. It needs a hundred
+visitors per headline, so the page says "no winner yet" instead of showing a percentage that looks
+like a decision and is really noise.
 
 **213 palabras · aprobada por Tamara Muñoz Delgadillo el 26 de octubre de 2026.**
