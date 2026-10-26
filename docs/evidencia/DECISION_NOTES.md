@@ -207,3 +207,10 @@ Finally, I corrected myself. Asking what data my app collects uncovered that any
 people wrote on my style page, and that I was storing full IP addresses. Both are fixed.
 
 **240 palabras · aprobada por Tamara Muñoz Delgadillo el 6 de octubre de 2026.**
+
+---
+
+## Semana 4 — [2026-10-26] — No decir más de lo que puedo probar
+
+
+**213 palabras · aprobada por Tamara Muñoz Delgadillo el 26 de octubre de 2026.**
