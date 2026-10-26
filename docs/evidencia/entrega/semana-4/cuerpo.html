@@ -1,0 +1,497 @@
+<section class="cover">
+  <p class="kicker">Week 4 · Marketing engine + content system</p>
+  <h1>Say only what you can prove.<br><em>Then measure it.</em></h1>
+  <p class="sub">A homepage that argues instead of decorates, a public marketing page with the brand, the
+     persona and the launch content, and an A/B test on the headline that counts people — not reloads,
+     not tests, not robots.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat"><span class="lbl">Homepage</span><span class="url">closetai.lat</span></a>
+    <a href="https://closetai.lat/marketing"><span class="lbl">Live page</span><span class="url">closetai.lat/marketing</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+    <a href="https://closetai.lat/demo/semana-4"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/semana-4</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE WEEK IN ONE LINE.</b> Marketing is where a product is most tempted to exaggerate, so every
+    number on the page comes from a closed list of verified facts, a code guard rejects any figure
+    outside it, and I removed one post that promised something nobody had tested. The A/B test
+    measures real people only — and while building it I found that my own test suite, and Vercel's
+    screenshots, were not what I thought they were.
+  </div>
+</section>
+
+<!-- ============ 1. RUBRIC ============ -->
+<section>
+  <h2>1 · The rubric, category by category</h2>
+  <table>
+    <thead><tr><th style="width:42mm">Category</th><th style="width:11mm">Pts</th><th>Evidence</th><th style="width:12mm">§</th></tr></thead>
+    <tbody>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed at 13:26 (<code>660dc07</code>); first code at 13:31 (<code>060c841</code>). Four brand decisions made by me first</td><td>2</td></tr>
+      <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Wireframe with implementation notes, scope cut, and what changed from the drawing to the live page</td><td>3</td></tr>
+      <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>13 requirements, each with a checkable criterion</td><td>4</td></tr>
+      <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, why the A/B variant is not assigned where the session lives, and the four filters on what counts as a visitor</td><td>5</td></tr>
+      <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat</code> and <code>/marketing</code> live; end-to-end tests pass against the real site, confirmed by the URL each run prints</td><td>6–7, 12</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b><span class="pendiente">[PENDING: n]</span> commits</b> (min. 5) · <b><span class="pendiente">[PENDING: n]</span> deployments</b> (min. 2) · <b>6</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 8 iterations documented</td><td>12–13</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Four brand decisions; one post rejected before approval; three corrections, one of them about my own earlier weeks; decision note, 213 words</td><td>2, 13–15, 17</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>2:32 walkthrough recorded against production <span class="pendiente">[PENDING: my narration]</span></td><td>16</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Homepage upgraded</td><td><code>closetai.lat</code> — seven sections in argument order (§6)</td></tr>
+      <tr><td>Brand system</td><td><code>/marketing</code> — colors with hex codes, fonts, voice do's and don'ts, the known brand risk</td></tr>
+      <tr><td>Target persona</td><td>Sofía, 27, Mexico City — each trait marked <b>data</b> (with source) or <b>hypothesis</b></td></tr>
+      <tr><td>Landing page copy</td><td>Live on the homepage, and on <code>/marketing</code> with a copy button</td></tr>
+      <tr><td>10 social posts</td><td>7 Instagram, 3 TikTok — stored in <code>marketing_assets</code>, approved by me</td></tr>
+      <tr><td>3 video scripts</td><td>Shot by shot: what you see, on-screen text, voice</td></tr>
+      <tr><td>14-day campaign calendar</td><td>11 publishing days and 3 rest days to read results; exports to CSV</td></tr>
+      <tr><td>A/B headline test</td><td>Running live on the homepage; results on <code>/marketing</code></td></tr>
+      <tr><td>Saved marketing assets</td><td>28 approved pieces in the database, plus the generator's saved posts</td></tr>
+      <tr><td>Upgrade homepage · create /marketing · content cards · A/B tester · copy/export buttons · save assets</td><td>All live, all tested against the real site</td></tr>
+      <tr><td>2 A/B tests + 3 software tests</td><td>9 A/B cases and 6 software tests (§12)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. PLAN ============ -->
+<section class="brk">
+  <h2>2 · The plan, written before the code</h2>
+  <p class="lead">Full text in <code>docs/SEMANA-4-PACKET.md</code>, committed five minutes before the first
+    code commit.</p>
+
+  <h3>Four brand decisions I made before the agent wrote anything</h3>
+  <ul>
+    <li><b>The headline test:</b> my current brand headline, «Tu estilista, en tu bolsillo», against
+      «Ya tienes qué ponerte», which comes from what a real customer told me in Week 2. I would rather
+      learn which one works than keep the one I like.</li>
+    <li><b>The persona:</b> a woman aged 24 to 30 in Mexico City — explicitly a hypothesis, because I
+      have not interviewed anyone with that profile yet.</li>
+    <li><b>The channels:</b> Instagram and TikTok.</li>
+    <li><b>The content:</b> the agent drafts it using only verified data; I approve it before it is
+      published, and the page says so.</li>
+  </ul>
+  <p>The agent added one rule nobody asked for: do not use the Week 2 interview quote in social media.
+    My mother's consent was for the research page and the document, not for advertising.</p>
+
+  <h3>Problem</h3>
+  <p>The old homepage said a nice phrase and little else: a visitor could not tell in ten seconds what
+    problem it solves, what it costs, or why to believe it — and nothing built in three weeks, the
+    sourced research, the pricing, the privacy work, appeared on it. ClosetAI also had nothing to go out
+    and find anyone with: no written voice, no persona, not one post. And its headline had been chosen
+    by taste, never measured.</p>
+
+  <h3>Scope cut — what looked good and was not built</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Left out</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Publishing to Instagram and TikTok from the page</td><td>Business accounts and API review; the copy button solves it this week</td></tr>
+      <tr><td>Generated images for the posts</td><td>Image generation has no free tier, and billing is not active</td></tr>
+      <tr><td>Editing content from the page</td><td>I approve the text; a public editor would be a way around that</td></tr>
+      <tr><td>Declaring an A/B winner this week</td><td>Current traffic will not reach a sufficient sample; the method is published, not a fake winner</td></tr>
+      <tr><td>Third-party analytics</td><td>A table of my own counts views and clicks without sending anyone's data to another company</td></tr>
+      <tr><td>Touching <code>proxy.ts</code> to assign the variant</td><td>That is where the session lives, and it broke once in production</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX concept</h2>
+  <p class="lead">Image generation is still unavailable without billing, so — as in Week 3 — the UX concept
+    is the wireframe, drawn before the build with its implementation notes inside.</p>
+  <figure>
+    <img src="14-wireframe.png" alt="">
+    <figcaption>Left: the homepage as an argument, top to bottom. Right: <code>/marketing</code> as a
+      workbench — every piece in a card with its channel, its status and its copy and export buttons.</figcaption>
+  </figure>
+
+  <h3>What changed between the wireframe and the live page</h3>
+  <ul>
+    <li><b>The closing line of the homepage.</b> The approved copy ended with «Ya tienes qué ponerte»,
+      which is headline B: people in group A would read it too, contaminating the test. I approved a
+      neutral line instead — «Tu ropa ya está ahí» — and a test checks that nothing outside the headline
+      repeats either variant.</li>
+    <li><b>One post was replaced before approval</b> (§13): it promised the try-on works without your face.</li>
+    <li><b>The generator only saves after a second check on the server</b>, because what arrives to be
+      saved comes from the browser.</li>
+  </ul>
+</section>
+
+<!-- ============ 4. SPEC ============ -->
+<section>
+  <h2>4 · Product spec and acceptance criteria</h2>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:36mm">Requirement</th><th>Acceptance criterion</th><th style="width:14mm">Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Homepage upgraded</td><td>Headline, problem, how it works (3 steps), sourced proof, price, privacy, start — in that order</td><td class="ok">● done</td></tr>
+      <tr><td>2</td><td>A/B headline</td><td>Each visitor sees one variant, the same one on reload</td><td class="ok">● done</td></tr>
+      <tr><td>3</td><td>Honest measurement</td><td>One view and one click per visitor, not per reload; test traffic is not counted</td><td class="ok">● done</td></tr>
+      <tr><td>4</td><td>Public page</td><td><code>GET /marketing</code> returns 200 with no session</td><td class="ok">● done</td></tr>
+      <tr><td>5</td><td>Brand system</td><td>Name, colors with codes, fonts, voice, known brand risk</td><td class="ok">● done</td></tr>
+      <tr><td>6</td><td>Persona</td><td>Each trait marked data (with source) or hypothesis</td><td class="ok">● done</td></tr>
+      <tr><td>7</td><td>Landing copy</td><td>The homepage text, with a copy button</td><td class="ok">● done</td></tr>
+      <tr><td>8</td><td>10 posts</td><td>10 cards with channel and format; each copies; all export</td><td class="ok">● done</td></tr>
+      <tr><td>9</td><td>3 scripts</td><td>Duration and shots; copy and export</td><td class="ok">● done</td></tr>
+      <tr><td>10</td><td>14-day calendar</td><td>14 days with channel and piece; CSV export</td><td class="ok">● done</td></tr>
+      <tr><td>11</td><td>A/B results</td><td>Views, clicks, conversion per variant; <b>no winner</b> without a sufficient sample and a significant difference</td><td class="ok">● done</td></tr>
+      <tr><td>12</td><td>Generator</td><td>Writes a post with AI; <b>rejects</b> any invented figure; saves as “generated with AI, not reviewed”</td><td class="ok">● done</td></tr>
+      <tr><td>13</td><td>Saved assets</td><td>The list shows origin and status</td><td class="ok">● done</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 5. ARCHITECTURE ============ -->
+<section class="brk">
+  <h2>5 · Architecture and stack</h2>
+  <pre>Browser (/ and /marketing — no session)
+   │
+   ├── /  (Server Component, dynamic)
+   │      reads the cai_visitante cookie; if missing, creates a random id
+   │      variant = hash(id + experiment) → top bit     ← pure function, tested
+   │      └── &lt;Experimento&gt; (client): saves the cookie, records the view,
+   │                                   records the click on “Empezar gratis”
+   │
+   ├── /marketing (Server Component)
+   │      brand, persona, content and A/B results from Postgres
+   │      └── copy / export in the browser (no server needed for a CSV)
+   │      └── generator → Server Action → Gemini (with fallback) → zod contract
+   │                       + rejection of invented figures → saved as “not reviewed”
+   ▼
+Supabase Postgres
+   ├── marketing_assets  (28 approved pieces + generated posts; public read)
+   ├── ab_experiments    (the experiment and its variants; public read)
+   └── ab_events         (one view and one click per visitor; server only — 401 to the public key)</pre>
+
+  <h3>What counts as a visitor: four filters, each from a real reason</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Filter</th><th>Why it exists</th></tr></thead>
+    <tbody>
+      <tr><td>The server recomputes the variant from the id and drops events that disagree</td><td>Otherwise anyone could inflate a variant by sending events by hand</td></tr>
+      <tr><td>One view and one click per visitor, enforced by a database constraint</td><td>Someone reloading ten times would otherwise move the result</td></tr>
+      <tr><td>Requests with the <code>x-cai-prueba</code> header are ignored</td><td>The test suite runs against production; every run would add dozens of visits that are nobody's</td></tr>
+      <tr><td>Automated browsers, crawlers and link previews are ignored</td><td>Vercel opens the homepage after every deployment to take a screenshot; each time it counted as two visitors (§13)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Why the variant is not assigned in <code>proxy.ts</code></h3>
+  <p>It is the natural place for the cookie, but it is also where the session is refreshed, and in Week 0
+    a small change there made sessions drop in production with every test green. The alternative costs
+    less: the first visit picks the variant on the server and the browser stores the cookie.</p>
+
+  <table>
+    <thead><tr><th style="width:34mm">Piece</th><th style="width:44mm">Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Assignment</td><td>FNV-1a + MurmurHash3 finalizer</td><td>Deterministic, no dependency — and the finalizer is not decoration (§13)</td></tr>
+      <tr><td>Significance</td><td>Two-proportion z-test</td><td>The standard test for comparing two conversion rates; 30 lines, no library</td></tr>
+      <tr><td>Generator</td><td>Gemini 3.5 Flash, Flash-Lite fallback</td><td>Already integrated, with the saturation handling from Week 2</td></tr>
+      <tr><td>Guard</td><td>A closed list of verified facts + a number scanner</td><td>The prompt asks; the code enforces</td></tr>
+      <tr><td>Export</td><td><code>Blob</code> in the browser</td><td>A CSV needs no server; a BOM so Excel reads the accents</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 6. HOMEPAGE ============ -->
+<section>
+  <h2>6 · The homepage, upgraded</h2>
+  <p class="lead">Each visitor sees one of two headlines, chosen on the server, and keeps it on every return.</p>
+  <div class="two">
+    <figure><img src="01-portada-a.jpg" alt=""><figcaption>Variant A: «Tu estilista, en tu bolsillo.»</figcaption></figure>
+    <figure><img src="01-portada-b.jpg" alt=""><figcaption>Variant B: «Ya tienes qué ponerte.»</figcaption></figure>
+  </div>
+  <p>Below the headline the page reads as an argument: the problem, how it works in three steps, the data
+    with its source (linked to <code>/research</code>), the price — free forever or 100 pesos once, linked to
+    <code>/pricing</code> — and what happens to your photos.</p>
+  <p><b>Two sentences from the old homepage were removed</b> because they could not be defended: «A las dos
+    semanas ya no te propone lo que odias» was never measured, and «Diez prendas bastan para empezar»
+    contradicts the Week 2 interview, where the limit before getting tired was 40. A test checks they do
+    not come back.</p>
+  <div class="two">
+    <figure><img src="02-prueba.jpg" alt=""><figcaption>The proof: three verified figures, with their source.</figcaption></figure>
+    <figure><img src="02-precio.jpg" alt=""><figcaption>The price, linked to the full arithmetic in <code>/pricing</code>.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 7. MARKETING ============ -->
+<section class="brk">
+  <h2>7 · /marketing</h2>
+  <figure>
+    <img src="03-marca.jpg" alt="">
+    <figcaption>The brand system. The known risk is written on the page: another app is already called
+      “Closet AI”, so the brand is always written as one word and never bought as an ad keyword.</figcaption>
+  </figure>
+  <figure>
+    <img src="04-persona.jpg" alt="">
+    <figcaption>Sofía is a composite, and the page says so. Two traits are data, with their source; four
+      are hypotheses.</figcaption>
+  </figure>
+</section>
+
+<section class="brk">
+  <figure>
+    <img src="06-posts-arriba.jpg" alt="">
+    <figcaption>The first six of the ten posts, each marked “written with AI · approved by Tamara”, each with a copy button.</figcaption>
+  </figure>
+  <div class="two">
+    <figure><img src="07-guiones.jpg" alt=""><figcaption>A video script, shot by shot.</figcaption></figure>
+    <figure><img src="08-calendario.jpg" alt=""><figcaption>The 14-day calendar, exportable to CSV.</figcaption></figure>
+  </div>
+</section>
+
+<section class="brk">
+  <figure>
+    <img src="09-generador.jpg" alt="">
+    <figcaption>The generator. It can only use a closed list of verified facts; any number outside that list
+      makes the post fail before it is shown.</figcaption>
+  </figure>
+  <figure class="media">
+    <img src="10-guardados.jpg" alt="">
+    <figcaption>Saved assets: generated posts are always “not reviewed”. Publishing is a person's decision.</figcaption>
+  </figure>
+  <div class="two">
+    <figure><img src="12-celular-portada.jpg" alt=""><figcaption>Homepage on a phone.</figcaption></figure>
+    <figure><img src="13-celular-marketing.jpg" alt=""><figcaption><code>/marketing</code> on a phone. Zero horizontal overflow on both.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 8. COMMITS ============ -->
+<section class="brk">
+  <h2>8 · GitHub commits — <span class="pendiente">[PENDING: n]</span> this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">660dc07</td><td>Oct 21, 13:26</td><td>docs: Build Discipline Packet and wireframe, before writing code</td></tr>
+      <tr><td class="mono">060c841</td><td>Oct 21, 13:31</td><td>feat: the A/B logic, the facts marketing may use, and the content draft</td></tr>
+      <tr><td class="mono">9f73646</td><td>Oct 21, 14:26</td><td>feat: marketing migrations and the approved content</td></tr>
+      <tr><td class="mono">74fb66f</td><td>Oct 21, 14:28</td><td>feat: the new homepage with the A/B headline, and <code>/marketing</code></td></tr>
+      <tr><td class="mono">bbfe81d</td><td>Oct 21, 14:30</td><td>fix: the headline was missing a space between its two lines</td></tr>
+      <tr><td class="mono">2445f93</td><td>Oct 21, 14:39</td><td>test: tests against the real site, and the trap that prevented it</td></tr>
+      <tr><td class="mono">8874da6</td><td>Oct 21, 14:40</td><td>fix: TikTok post text appeared twice</td></tr>
+      <tr><td class="mono">07bdc32</td><td>Oct 21, 17:19</td><td>fix: the homepage closing repeated headline B</td></tr>
+      <tr><td class="mono">ce137cc</td><td>Oct 21, 17:24</td><td>fix: the experiment counted automated browsers as visitors</td></tr>
+      <tr><td class="mono">bf135e6</td><td>Oct 21, 17:51</td><td>docs: diagnosis and cleanup of Vercel's screenshots in the experiment</td></tr>
+      <tr><td class="mono">a6a857c</td><td>Oct 26, 11:19</td><td>docs: decision note approved by me</td></tr>
+      <tr><td class="mono">126fa58</td><td>Oct 26, 11:20</td><td>fix: the decision note had been saved without its text</td></tr>
+      <!-- MAS-COMMITS -->
+    </tbody>
+  </table>
+  <figure>
+    <img src="11-commits.jpg" alt="">
+    <figcaption>The public repository. Every commit's CI run passed except <code>a6a857c</code>, whose run was <i>cancelled</i>, not failed: the next commit — the fix for its own missing text — arrived 15 seconds later, and the workflow cancels a run when a newer one starts.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 9. DEPLOYS ============ -->
+<section>
+  <h2>9 · Vercel deployments — <span class="pendiente">[PENDING: n]</span> this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready, with exact times read from Vercel. One per commit.</p>
+  <table>
+    <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
+    <tbody>
+      <tr><td>Oct 21, 13:26</td><td class="ok">● Ready</td><td>The packet and the wireframe</td></tr>
+      <tr><td>Oct 21, 13:31</td><td class="ok">● Ready</td><td>A/B logic and the marketing guard</td></tr>
+      <tr><td>Oct 21, 14:26</td><td class="ok">● Ready</td><td>The migrations, before the code that needs them</td></tr>
+      <tr><td>Oct 21, 14:28</td><td class="ok">● Ready</td><td>The new homepage and <code>/marketing</code></td></tr>
+      <tr><td>Oct 21, 14:30</td><td class="ok">● Ready</td><td>Fix: the space in the headline</td></tr>
+      <tr><td>Oct 21, 14:39</td><td class="ok">● Ready</td><td>Tests against the real site</td></tr>
+      <tr><td>Oct 21, 14:40</td><td class="ok">● Ready</td><td>Fix: duplicated TikTok text</td></tr>
+      <tr><td>Oct 21, 17:19</td><td class="ok">● Ready</td><td>Fix: the neutral closing line</td></tr>
+      <tr><td>Oct 21, 17:24</td><td class="ok">● Ready</td><td>Fix: robots no longer count as visitors</td></tr>
+      <tr><td>Oct 21, 17:51</td><td class="ok">● Ready</td><td>The diagnosis, documented</td></tr>
+      <tr><td>Oct 26, 11:19</td><td class="ok">● Ready</td><td>The decision note</td></tr>
+      <tr><td>Oct 26, 11:20</td><td class="ok">● Ready</td><td>The decision note, with its text</td></tr>
+      <!-- MAS-DEPLOYS -->
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 10. SUPABASE ============ -->
+<section class="brk">
+  <h2>10 · Supabase evidence</h2>
+  <p class="lead">Three migrations, each applied with my explicit permission, each loaded from the public
+    repository and checked byte for byte before running, and each verified against the database.</p>
+  <table>
+    <thead><tr><th style="width:80mm">What was checked</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>010 — the SQL pasted is the one in the repository</td><td class="ok">sha256 619b08df…, 5,382 bytes</td></tr>
+      <tr><td><code>ab_experiments</code></td><td class="ok">1 row, with my two headlines</td></tr>
+      <tr><td><code>ab_events</code> with the public key</td><td class="ok">401 — not readable from outside</td></tr>
+      <tr><td>011 — generated from the approved document, not typed by hand</td><td class="ok">sha256 87eb7852…, 14,918 bytes</td></tr>
+      <tr><td><code>marketing_assets</code> after 011</td><td class="ok">28 rows: 1 homepage, 10 posts, 3 scripts, 14 days — all approved</td></tr>
+      <tr><td>The product map's unproven promise</td><td class="ok">Removed: “funciona sin que salga tu cara” is gone</td></tr>
+      <tr><td>012 — the neutral closing line, in the database too</td><td class="ok">sha256 d7c7719a…; old line gone, new line present</td></tr>
+    </tbody>
+  </table>
+  <p>Migration 011 is generated by <code>scripts/contenido-semana-4.py</code> from
+    <code>docs/evidencia/MARKETING-SEMANA-4.md</code>, the document I approved. What reaches the database
+    is exactly what I approved, and if the content changes, the migration is regenerated instead of edited
+    in two places.</p>
+</section>
+
+<!-- ============ 11. PROMPTS ============ -->
+<section>
+  <h2>11 · Coding-agent prompts — 6 this week (minimum 5)</h2>
+  <p class="lead">Full log in <code>docs/evidencia/PROMPT_LOG.md</code>.</p>
+  <div class="prompt"><p class="h">1 · Four brand decisions before the plan</p>
+    <p class="q">“Now let's do this week's work.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> My brand headline against a customer's own words.</p></div>
+  <div class="prompt"><p class="h">2 · The packet, before the code</p>
+    <p class="q">“Write the Build Discipline Packet for the homepage and /marketing and commit it before touching code.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Do not assign the variant where the session lives.</p></div>
+  <div class="prompt"><p class="h">3 · The A/B logic, alone and tested</p>
+    <p class="q">“Hash assignment and a two-proportion z-test, as pure functions. Two tests: fair split, no fake winner.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> An independence test nobody asked for found a real bug; the hash was fixed, not the test.</p></div>
+  <div class="prompt"><p class="h">4 · Marketing that cannot invent numbers</p>
+    <p class="q">“A closed list of verified facts with their source, and a guard that rejects any figure outside it.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> A post with an untested promise was withdrawn instead of asking me for a photo of my body to test it.</p></div>
+  <div class="prompt"><p class="h">5 · The homepage and /marketing</p>
+    <p class="q">“The homepage as an argument with the A/B headline; /marketing with brand, persona, content, copy and export, results and the generator.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Two sentences on the old homepage could not be defended; they were removed.</p></div>
+  <div class="prompt"><p class="h">6 · Test against the real site, for real</p>
+    <p class="q">“Three software tests against production — and one that proves real visits ARE counted, not only that test visits are not.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> When a failure report showed the suite had been running against my laptop, the correction went into the document instead of being hidden.</p></div>
+</section>
+
+<!-- ============ 12. TESTS ============ -->
+<section class="brk">
+  <h2>12 · Testing — 2 A/B tests required, 3 software tests required</h2>
+
+  <h3>A/B test 1 — the assignment (<code>src/lib/ab.test.ts</code>)</h3>
+  <table>
+    <thead><tr><th>What it asserts</th><th style="width:20mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>The same visitor always sees the same variant; 10,000 visitors split between 48% and 52%</td><td class="ok">● pass</td></tr>
+      <tr><td>Two simultaneous experiments are independent (they agree between 47% and 53% of the time)</td><td class="ok">● pass — <b>found a real bug</b></td></tr>
+      <tr><td>Automated browsers, crawlers and link previews are discarded; a phone and a laptop are not (2 cases)</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+
+  <h3>A/B test 2 — the winner</h3>
+  <table>
+    <thead><tr><th>What it asserts</th><th style="width:20mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>30 visitors per side, 10% vs 40%: <b>no winner</b> — it looks decisive and is not</td><td class="ok">● pass</td></tr>
+      <tr><td>Enough sample but a small difference: no winner</td><td class="ok">● pass</td></tr>
+      <tr><td>10% vs 20% with 500 per side: B wins; reversed, A wins</td><td class="ok">● pass</td></tr>
+      <tr><td>The p-value matches a z-test worked by hand (z = 1.963, p = 0.0497)</td><td class="ok">● pass</td></tr>
+      <tr><td>The minimum sample is 100, the number the page states</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+  <p><b>Watched failing on purpose:</b> with the assignment fixed to “a”, the split and independence cases
+    go red; with the minimum sample lowered to 10, the “no winner” cases go red. All green again on revert.</p>
+
+  <h3>The marketing guard (<code>src/lib/marketing.test.ts</code>) — 11 cases</h3>
+  <p>Lets through the verified figures written the way a person writes them; catches “3 de cada 4”,
+    “80%”, “10,000 usuarias” and “#Top10Outfits”; reads thousands and decimals as one number; every fact has
+    a source; rejects broken or incomplete output; exports the calendar in order with commas escaped; and
+    does not duplicate a video post's text. All approved content went through the same guard before being
+    seeded.</p>
+
+  <h3>Software tests against https://closetai.lat (<code>e2e/marketing.spec.ts</code>)</h3>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th>What it asserts</th><th style="width:14mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>/marketing</code> loads with no session: 10 posts, 3 scripts, 14 days; the persona has data <i>and</i> hypotheses</td><td class="ok">● pass</td></tr>
+      <tr><td>2</td><td>The calendar exports a CSV with a header and 14 rows; copying post 1 puts its text on the clipboard</td><td class="ok">● pass</td></tr>
+      <tr><td>3</td><td>The homepage shows one headline, with its space, the same across reloads; test traffic leaves no events</td><td class="ok">● pass</td></tr>
+      <tr><td>4</td><td>A real visit <i>is</i> counted: one view despite reloads, one click, same variant — then it deletes its own events</td><td class="ok">● pass</td></tr>
+      <tr><td>5</td><td>The generator writes a post with no invented figures and saves it as “not reviewed”</td><td class="ok">● pass</td></tr>
+      <tr><td>6</td><td>The homepage has the seven sections in order; nothing outside the headline repeats a variant; the two removed sentences did not return</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+  <p>Tests 3 and 4 only mean something together: test 3 alone would also pass if the counter were broken
+    and counted nothing. <span class="pendiente">[PENDING: final run]</span></p>
+</section>
+
+<!-- ============ 13. ITERATION ============ -->
+<section class="brk">
+  <h2>13 · Iteration log — what changed after testing</h2>
+  <table>
+    <thead><tr><th style="width:64mm">What was found</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td>The independence test: two experiments agreed <b>0 times in 10,000</b>. With <code>fnv1a % 2</code> the last bit is the parity of the letters, so experiments with names of different parity were perfect opposites</td><td>MurmurHash3's finalizer after FNV-1a, taking the top bit. The 50/50 split test had passed anyway — it would never have shown on screen</td></tr>
+      <tr><td>The old homepage claimed two things that could not be defended</td><td>Removed; a test checks they do not return</td></tr>
+      <tr><td>The product map (since Week 3) and a draft post promised the try-on works without your face. Never tested</td><td>The photo validator now accepts photos without a face; the post was replaced; migration 011 removed the promise. Testing it would have required a photo of my body just to publish a sentence</td></tr>
+      <tr><td>The headline's plain text was «Ya tienesqué ponerte» — no space between its two lines, since Week 0</td><td>A space between the lines; the test requires it. That is how screen readers and search engines read it</td></tr>
+      <tr><td>TikTok post text appeared twice, on the page and when copied</td><td>Body and caption compared before joining; a unit test</td></tr>
+      <tr><td>The homepage closing repeated headline B</td><td>A neutral line I approved, in the page, the document and the database</td></tr>
+      <tr><td><b>The test suite was not running against production</b> (§15)</td><td><code>pnpm test:e2e:prod</code>, and every run prints its target</td></tr>
+      <tr><td><b>Vercel's screenshots counted as visitors</b>: 10 views in pairs, one pair 26 seconds after a deployment. Each test run alone was ruled out first, counting before and after</td><td>Automated traffic is discarded and only its category logged. Confirmed on the next deployment: exactly two discards, no new events. The 10 fake views were deleted with my permission</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 14. A/B STATUS ============ -->
+<section>
+  <h2>14 · Where the experiment stands</h2>
+  <figure class="media">
+    <img src="05-ab.jpg" alt="">
+    <figcaption>The live results on <code>/marketing</code>.</figcaption>
+  </figure>
+  <p><span class="pendiente">[PENDING: numbers on submission day]</span></p>
+  <p>It needs 100 visitors per headline and a difference significant at 95% before naming a winner. Until
+    then, the page says “no winner yet” instead of showing a percentage that looks like a decision and is
+    really noise. Publishing the method without a fake winner is the honest result for one week of traffic.</p>
+</section>
+
+<!-- ============ 15. CORRECTION ============ -->
+<section>
+  <h2>15 · A correction about my earlier weeks</h2>
+  <p>A failure report this week showed a “Next.js Dev Tools” button, which only exists on a development
+    server. The reason: without <code>PLAYWRIGHT_BASE_URL</code>, Playwright goes to <code>localhost:3000</code>,
+    and a development server had been running on my laptop since September 2, which Playwright reused
+    silently. That server uses the production database, so everything looked real, but the site under test
+    was the local code.</p>
+  <p>So the end-to-end runs I described as “against production” on September 25 (Week 2's re-verification)
+    and during Week 3 <b>were not</b>. The features were confirmed this week against the real site — research,
+    pricing, homepage and marketing together, <b>47 of 47</b> — but the claim at the time was not proven. The
+    Week 3 document cannot be changed after submission, so the correction is here.</p>
+</section>
+
+<!-- ============ 16. VIDEO ============ -->
+<section class="brk">
+  <h2>16 · Demo video</h2>
+  <p class="lead"><b>2:32</b>, recorded against the live site with the test header — so recording it added
+    no visits to the experiment — and hosted on the product's own domain:
+    <a href="https://closetai.lat/demo/semana-4"><b>closetai.lat/demo/semana-4</b></a>
+    <span class="pendiente">[PENDING: my narration]</span></p>
+  <p>In order: headline A and headline B for two visitors; the homepage argument; <code>/marketing</code> with the
+    brand, the persona and the live A/B results; the posts and a copy; the scripts and the calendar export;
+    the generator writing and saving a new post; and the commit history.</p>
+</section>
+
+<!-- ============ 17. NOTE ============ -->
+<section>
+  <h2>17 · Human decision note</h2>
+  <div class="note">
+    <p>This week I had to market a product, and the hardest part was not saying more than I can prove.</p>
+    <p>I chose to test my own brand headline, "Tu estilista, en tu bolsillo", against a phrase that comes from a real customer: "Ya tienes qué ponerte." I would rather learn which one works than keep the one I like.</p>
+    <p>I rejected a post that said the virtual try-on works without your face. It had never been tested, and checking it meant uploading a photo of my body just to publish one sentence. I removed the post and corrected the product page, which had made the same promise since week three.</p>
+    <p>I also corrected three mistakes. My tests had not been running against the live site since September; now they are, and they pass. Vercel's screenshots after every deployment were counting as visitors in my experiment; I filtered them and deleted ten fake visits. And the closing line of the homepage repeated headline B, so people in group A were reading it too.</p>
+    <p>The tradeoff: my experiment will probably not have a winner by the deadline. It needs a hundred visitors per headline, so the page says "no winner yet" instead of showing a percentage that looks like a decision and is really noise.</p>
+    <p class="wc">213 words · approved by Tamara Muñoz Delgadillo, October 26, 2026</p>
+  </div>
+</section>
+
+<!-- ============ GATES ============ -->
+<section>
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>660dc07</code>, five minutes before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · <span class="pendiente">[PENDING: n]</span> commits · §9 · <span class="pendiente">[PENDING: n]</span> production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · eight defects and corrections, each fixed and redeployed</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§16 · 2:32 video · §17 · 213 words</td></tr>
+    </tbody>
+  </table>
+</section>

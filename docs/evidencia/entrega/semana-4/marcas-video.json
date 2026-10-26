@@ -1,0 +1,17 @@
+[
+  { "escena": "portada-a", "segundo": 0.0 },
+  { "escena": "portada-b", "segundo": 9.6 },
+  { "escena": "argumento", "segundo": 16.9 },
+  { "escena": "marketing", "segundo": 45.1 },
+  { "escena": "marca", "segundo": 52.5 },
+  { "escena": "persona", "segundo": 60.1 },
+  { "escena": "ab", "segundo": 69.8 },
+  { "escena": "posts", "segundo": 80.4 },
+  { "escena": "guiones", "segundo": 94.7 },
+  { "escena": "calendario", "segundo": 102.3 },
+  { "escena": "generador", "segundo": 111.5 },
+  { "escena": "post-generado", "segundo": 120.1 },
+  { "escena": "guardados", "segundo": 130.4 },
+  { "escena": "github", "segundo": 138.1 },
+  { "escena": "fin", "segundo": 152.2 }
+]
