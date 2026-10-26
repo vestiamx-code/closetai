@@ -13,9 +13,9 @@ test.describe("Landing", () => {
     await expect(page).toHaveTitle(/ClosetAI/);
   });
 
-  test("declara español de México para lectores de pantalla y SEO", async ({ page }) => {
+  test("declares English for screen readers and SEO", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("html")).toHaveAttribute("lang", "es-MX");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
 
   test("hace visible la promesa de que el clóset es gratis", async ({ page }) => {

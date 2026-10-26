@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
   if (!userId || !productoId || !(productoId in PRODUCTOS)) {
     // Se responde 200 a propósito: reintentar no va a arreglar unos metadatos
     // que nunca llegaron. Queda en el log para revisarlo a mano.
-    console.error("[webhook] pago sin metadata utilizable", {
+    console.error("[webhook] payment without usable metadata", {
       session: sesion.id,
       metadata: sesion.metadata,
     });

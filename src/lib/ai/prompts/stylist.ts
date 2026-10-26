@@ -38,8 +38,17 @@ Rules:
 - At most 40 entries in total across all lists: keep the ones with the highest confidence.
 - Every inference carries its evidence: which events support it, in one sentence.
 - Write the values in English.
+- The JSON keys are internal codes the app reads: never translate them. Only the values are in English. The shape is exactly:
+{ "estilos_preferidos": [E], "estilos_rechazados": [E], "colores_favoritos": [E], "colores_vetados": [E],
+  "combinaciones_exitosas": [E], "ocasiones_frecuentes": [E], "notas_libres": "string" }
+  where every E is { "valor": "string", "confianza": number from 0 to 1, "evidencia": "string" }
 
 Return ONLY valid JSON.` as const;
 
-/** v2 (Oct 26, 2026): values in English. */
-export const PROFILE_PROMPT_VERSION = 2;
+/**
+ * v2 (Oct 26, 2026): values in English.
+ * v3 (Oct 26, 2026): the exact JSON shape is spelled out. Before, nothing listed the
+ * keys and the model guessed them; with an English prompt it guessed English ones
+ * ("value", "evidence"), and every profile failed validation.
+ */
+export const PROFILE_PROMPT_VERSION = 3;

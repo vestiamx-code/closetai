@@ -133,7 +133,7 @@ test.describe("Estilista", () => {
     // El sondeo tiene que caber dentro del tiempo de la prueba. Con el timeout
     // por defecto, la falla salía como "Test timeout" en vez del mensaje escrito
     // abajo — y un fallo real se veía igual que una prueba mal hecha.
-    test.setTimeout(120_000);
+    test.setTimeout(180_000);
     // Esta es la regla del documento (§3.3 M4): cada 5 eventos o 24 horas.
     // Vivía solo dentro del cron de las 8am, así que "cada 5 eventos" en la
     // práctica quería decir "mañana". Alguien que se registraba y reaccionaba a
@@ -168,8 +168,12 @@ test.describe("Estilista", () => {
     //
     // La huella de que corrió es el costo registrado: `perfil-estilo.ts` lo
     // escribe siempre, haya devuelto perfil o no.
+    //
+    // The window covers the server's retries: when Gemini is out of quota it
+    // waits 45 s twice before giving up, and only then records the cost. With a
+    // 40 s window the update landed a minute after the test had already failed.
     let intentos = 0;
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 65; i++) {
       await page.waitForTimeout(2000);
       const { data } = await a
         .from("api_costs")
