@@ -43,7 +43,7 @@ export async function estadoTryon(): Promise<EstadoTryon> {
     return {
       habilitado: false,
       automatico: false,
-      motivo: "La prueba virtual está en pausa por mantenimiento. Vuelve más tarde.",
+      motivo: "Virtual try-on is paused for maintenance. Come back later.",
     };
   }
 
@@ -53,7 +53,7 @@ export async function estadoTryon(): Promise<EstadoTryon> {
       habilitado: false,
       automatico: true,
       motivo:
-        "Alcanzamos el límite de pruebas virtuales de hoy. Mañana vuelve a estar disponible y no se te cobró ningún crédito.",
+        "We reached today's virtual try-on limit. It will be available again tomorrow, and no credit was charged.",
     };
   }
 

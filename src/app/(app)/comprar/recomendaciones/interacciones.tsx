@@ -30,7 +30,7 @@ export function BotonAnalizar({ texto }: { texto: string }) {
         }
         className="w-full rounded-lg bg-accent px-5 py-3 font-medium text-accent-contrast transition hover:opacity-90 disabled:opacity-60"
       >
-        {pendiente ? "Revisando tu clóset…" : texto}
+        {pendiente ? "Looking at your closet…" : texto}
       </button>
     </div>
   );

@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { estadoTryon, gastoDeHoy, topeDiarioUsd } from "@/lib/gasto";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export const metadata: Metadata = { title: "Panel" };
+export const metadata: Metadata = { title: "Admin" };
 
 /** Quién puede entrar. Lista blanca por correo, en variable de entorno (§3.3 M8). */
 function esAdmin(email: string | undefined): boolean {
@@ -78,16 +78,16 @@ export default async function AdminPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-10">
-      <h1 className="font-display text-3xl font-semibold tracking-tight">Panel</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Admin</h1>
       <p className="mt-1 text-text-muted">
-        {new Date().toLocaleDateString("es-MX", { dateStyle: "full" })}
+        {new Date().toLocaleDateString("en-US", { dateStyle: "full" })}
       </p>
 
       <section className="mt-8 rounded-xl border border-border bg-surface p-5">
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="font-display text-lg font-semibold">Gasto de hoy</h2>
+          <h2 className="font-display text-lg font-semibold">Today’s spend</h2>
           <span className="font-display text-2xl font-semibold">
-            ${gasto.toFixed(4)} <span className="text-sm text-text-muted">de ${tope} USD</span>
+            ${gasto.toFixed(4)} <span className="text-sm text-text-muted">of ${tope} USD</span>
           </span>
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface-2">
@@ -97,12 +97,12 @@ export default async function AdminPage() {
           />
         </div>
         <p className="mt-3 text-sm">
-          Prueba virtual:{" "}
+          Virtual try-on:{" "}
           {estado.habilitado ? (
-            <span className="text-accent">activa</span>
+            <span className="text-accent">on</span>
           ) : (
             <span className="text-red-600 dark:text-red-400">
-              apagada — {estado.automatico ? "por límite de gasto" : "a mano"}
+              off — {estado.automatico ? "spend limit reached" : "turned off by hand"}
             </span>
           )}
         </p>
@@ -112,30 +112,30 @@ export default async function AdminPage() {
       </section>
 
       <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <Metrica titulo="Usuarias" valor={usuarias} />
-        <Metrica titulo="Prendas" valor={prendas} hoy={prendasHoy} />
+        <Metrica titulo="Users" valor={usuarias} />
+        <Metrica titulo="Garments" valor={prendas} hoy={prendasHoy} />
         <Metrica titulo="Outfits" valor={outfits} hoy={outfitsHoy} />
         <Metrica titulo="Renders" valor={renders} hoy={rendersHoy} />
-        <Metrica titulo="Créditos vendidos" valor={vendidos} />
-        <Metrica titulo="Créditos usados" valor={quemados} />
-        <Metrica titulo="Clics a tiendas" valor={(clics ?? []).length} />
+        <Metrica titulo="Credits sold" valor={vendidos} />
+        <Metrica titulo="Credits used" valor={quemados} />
+        <Metrica titulo="Store clicks" valor={(clics ?? []).length} />
       </section>
 
       <section className="mt-8 rounded-xl border border-border bg-surface p-5">
-        <h2 className="font-display text-lg font-semibold">Abonar créditos a mano</h2>
+        <h2 className="font-display text-lg font-semibold">Add credits by hand</h2>
         <p className="mt-1 text-sm text-text-muted text-pretty">
-          Para soporte: cuando a alguien le falló un render y hay que devolverle el crédito.
+          For support: when someone’s render failed and the credit has to be returned.
         </p>
         <AbonarCreditos />
       </section>
 
       <section className="mt-8">
-        <h2 className="font-display text-lg font-semibold">Apagar la prueba virtual</h2>
+        <h2 className="font-display text-lg font-semibold">Turn off virtual try-on</h2>
         <p className="mt-1 text-sm leading-relaxed text-text-muted text-pretty">
-          Se apaga sola al llegar a ${tope} USD de gasto en el día. Para apagarla a mano, pon{" "}
+          It turns itself off when the day’s spend reaches ${tope} USD. To turn it off by hand, set{" "}
           <code className="rounded bg-surface-2 px-1.5 py-0.5 text-xs">TRYON_KILL_SWITCH=true</code>{" "}
-          en Vercel y redespliega — tarda un par de minutos, y por eso el corte automático es el
-          freno que de verdad importa.
+          in Vercel and redeploy — it takes a couple of minutes, which is why the automatic cutoff is
+          the brake that really matters.
         </p>
       </section>
     </div>
@@ -147,7 +147,7 @@ function Metrica({ titulo, valor, hoy }: { titulo: string; valor: number; hoy?: 
     <div className="rounded-xl border border-border bg-surface p-4">
       <p className="text-xs text-text-muted">{titulo}</p>
       <p className="mt-1 font-display text-2xl font-semibold">{valor}</p>
-      {hoy !== undefined ? <p className="text-xs text-text-muted">+{hoy} hoy</p> : null}
+      {hoy !== undefined ? <p className="text-xs text-text-muted">+{hoy} today</p> : null}
     </div>
   );
 }

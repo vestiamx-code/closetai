@@ -14,7 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 
 const rutaSchema = z
   .string()
-  .regex(/^[0-9a-f-]{36}\/[A-Za-z0-9._-]+$/, "ruta inválida");
+  .regex(/^[0-9a-f-]{36}\/[A-Za-z0-9._-]+$/, "invalid path");
 
 /** URL firmada larga: fal necesita poder descargar la imagen mientras renderiza. */
 const TTL_PARA_FAL = 60 * 20;
@@ -31,12 +31,12 @@ export async function registrarFotoBase(rutaImagen: string): Promise<ResultadoAv
 
   const ruta = rutaSchema.safeParse(rutaImagen);
   if (!ruta.success || !ruta.data.startsWith(`${user.id}/`)) {
-    return { ok: false, motivo: "Esa imagen no es tuya." };
+    return { ok: false, motivo: "That image isn't yours." };
   }
 
   const supabase = await createClient();
   const { data: archivo } = await supabase.storage.from("avatars").download(ruta.data);
-  if (!archivo) return { ok: false, motivo: "No pudimos leer la foto. Vuelve a subirla." };
+  if (!archivo) return { ok: false, motivo: "We couldn't read the photo. Upload it again." };
 
   const base64 = Buffer.from(await archivo.arrayBuffer()).toString("base64");
   const validacion = await validarFotoBase(base64, archivo.type || "image/webp");
@@ -69,7 +69,7 @@ export async function registrarFotoBase(rutaImagen: string): Promise<ResultadoAv
     validation_note: validacion.aviso || validacion.motivo,
   });
 
-  if (error) return { ok: false, motivo: "No pudimos guardar tu foto." };
+  if (error) return { ok: false, motivo: "We couldn't save your photo." };
 
   revalidatePath("/probar");
   return { ok: true };
@@ -90,7 +90,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   const user = await requireUser();
 
   const id = z.string().uuid().safeParse(garmentId);
-  if (!id.success) return { ok: false, motivo: "Prenda inválida." };
+  if (!id.success) return { ok: false, motivo: "Invalid garment." };
 
   // El freno de gasto va primero: antes de tocar la base o llamar a fal.
   const estado = await estadoTryon();
@@ -115,20 +115,20 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
       .single(),
   ]);
 
-  if (!prenda) return { ok: false, motivo: "No encontramos esa prenda." };
-  if (!avatar) return { ok: false, motivo: "Primero sube una foto tuya de cuerpo completo." };
+  if (!prenda) return { ok: false, motivo: "We couldn't find that garment." };
+  if (!avatar) return { ok: false, motivo: "First upload a full-body photo of yourself." };
 
   const categoria = categoriaParaTryon(prenda.category);
   if (!categoria) {
     return {
       ok: false,
-      motivo: `Todavía no puedo probarte ${prenda.subcategory ?? "esta prenda"} virtualmente. Por ahora funciona con ropa: tops, pantalones y vestidos.`,
+      motivo: `I can't try ${prenda.subcategory ?? "this garment"} on you virtually yet. For now it works with clothes: tops, pants and dresses.`,
     };
   }
 
   // Se revisa el saldo antes de gastar en el render, pero el cobro va después.
   if ((await saldo(user.id)) < 1) {
-    return { ok: false, motivo: "Te quedaste sin créditos.", sinSaldo: true };
+    return { ok: false, motivo: "You're out of credits.", sinSaldo: true };
   }
 
   // Cómo leer la foto de la prenda lo dijo el catalogador al mirarla. Si es una
@@ -144,7 +144,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   ]);
 
   if (!firmadaAvatar.data?.signedUrl || !firmadaPrenda.data?.signedUrl) {
-    return { ok: false, motivo: "No pudimos preparar las imágenes." };
+    return { ok: false, motivo: "We couldn't prepare the images." };
   }
 
   const admin = createAdminClient();
@@ -162,7 +162,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
     .select("id")
     .single();
 
-  if (!render) return { ok: false, motivo: "No pudimos iniciar el render." };
+  if (!render) return { ok: false, motivo: "We couldn't start the render." };
 
   const resultado = await probarPrenda({
     fotoUsuaria: firmadaAvatar.data.signedUrl,
@@ -181,7 +181,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   if (!resultado.ok || !resultado.datos.images?.[0]?.url) {
     await admin.from("tryon_renders").update({ status: "failed" }).eq("id", render.id);
     // Sin cobrar: el fallo es nuestro, no de la usuaria.
-    return { ok: false, motivo: "El render no salió bien. No te cobramos el crédito." };
+    return { ok: false, motivo: "The render didn't come out well. We didn't charge you the credit." };
   }
 
   // Guardar la imagen en nuestro Storage: la URL de fal expira.
@@ -196,7 +196,7 @@ export async function probar(garmentId: string): Promise<ResultadoTryon> {
   const cobro = await cobrar(user.id, 1, "tryon", render.id);
   if (!cobro.ok) {
     await admin.from("tryon_renders").update({ status: "failed" }).eq("id", render.id);
-    return { ok: false, motivo: "Te quedaste sin créditos.", sinSaldo: true };
+    return { ok: false, motivo: "You're out of credits.", sinSaldo: true };
   }
 
   await admin

@@ -5,7 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { saldo } from "@/lib/credits";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "ClosetAI Completo" };
+export const metadata: Metadata = { title: "ClosetAI Complete" };
 
 export default async function ComprarPage() {
   const user = await requireUser();
@@ -28,27 +28,27 @@ export default async function ComprarPage() {
   return (
     <div className="mx-auto w-full max-w-lg px-6 py-10">
       <h1 className="font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-        {yaCompro ? "Ya tienes ClosetAI Completo" : "Tu clóset siempre será gratis"}
+        {yaCompro ? "You have ClosetAI Complete" : "Your closet will always be free"}
       </h1>
       <p className="mt-2 text-text-muted">
         {yaCompro
-          ? `Te quedan ${creditos} ${creditos === 1 ? "crédito" : "créditos"} de prueba virtual.`
-          : "Esto es lo que se paga una sola vez."}
+          ? `You have ${creditos} virtual try-on ${creditos === 1 ? "credit" : "credits"} left.`
+          : "This is what you pay for, just once."}
       </p>
 
       {!yaCompro ? (
         <div className="mt-8 rounded-xl border border-border bg-surface p-6">
           <p className="flex items-baseline gap-2">
             <span className="font-display text-5xl font-semibold text-accent">$100</span>
-            <span className="text-sm text-text-muted">MXN · pago único</span>
+            <span className="text-sm text-text-muted">MXN · one payment</span>
           </p>
 
           <ul className="mt-6 space-y-3">
             {[
-              "Estilista IA ilimitado",
-              "30 créditos de prueba virtual",
-              "Analiza qué le falta a tu clóset",
-              "Sin mensualidades, para siempre",
+              "Unlimited AI stylist",
+              "30 virtual try-on credits",
+              "Finds what your closet is missing",
+              "No monthly fee, forever",
             ].map((linea) => (
               <li key={linea} className="flex gap-3">
                 <span aria-hidden className="text-accent">
@@ -60,24 +60,24 @@ export default async function ComprarPage() {
           </ul>
 
           <div className="mt-6">
-            <BotonComprar producto="lifetime" texto="Desbloquear ClosetAI Completo" />
+            <BotonComprar producto="lifetime" texto="Unlock ClosetAI Complete" />
           </div>
         </div>
       ) : null}
 
       <div className="mt-6 rounded-xl border border-border bg-surface p-6">
-        <h2 className="font-display text-lg font-semibold">Recarga de créditos</h2>
+        <h2 className="font-display text-lg font-semibold">Credit top-up</h2>
         <p className="mt-1 text-sm text-text-muted">
-          20 pruebas virtuales más, por <strong>$49 MXN</strong>.
+          20 more virtual try-ons, for <strong>MX$49</strong>.
         </p>
         <div className="mt-4">
-          <BotonComprar producto="credits_20" texto="Recargar 20 créditos" variante="secundario" />
+          <BotonComprar producto="credits_20" texto="Top up 20 credits" variante="secundario" />
         </div>
       </div>
 
       {movimientos && movimientos.length > 0 ? (
         <section className="mt-10">
-          <h2 className="font-display text-lg font-semibold">Tus movimientos</h2>
+          <h2 className="font-display text-lg font-semibold">Your activity</h2>
           <ul className="mt-3 divide-y divide-border border-t border-border">
             {movimientos.map((m) => (
               <li key={m.id} className="flex items-baseline justify-between gap-4 py-2.5 text-sm">
@@ -95,20 +95,20 @@ export default async function ComprarPage() {
       ) : null}
 
       <p className="mt-10 text-center text-sm text-text-muted text-pretty">
-        Tus prendas y tus fotos siguen siendo tuyas, pagues o no. El clóset es gratis e ilimitado
-        para siempre.
+        Your garments and your photos stay yours, whether you pay or not. The closet is free and
+        unlimited forever.
       </p>
     </div>
   );
 }
 
-/** Los motivos se guardan en clave; a la usuaria se le muestran en su idioma. */
+/** Reasons are stored as codes; the user sees them in plain English. */
 const NOMBRE_MOVIMIENTO: Record<string, string> = {
-  "compra:lifetime": "Desbloqueo de ClosetAI Completo",
-  "compra:credits_20": "Recarga de 20 créditos",
-  tryon: "Prueba virtual",
+  "compra:lifetime": "ClosetAI Complete unlocked",
+  "compra:credits_20": "20-credit top-up",
+  tryon: "Virtual try-on",
 };
 
 function fecha(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-MX", { day: "numeric", month: "short" });
+  return new Date(iso).toLocaleDateString("en-US", { day: "numeric", month: "short" });
 }

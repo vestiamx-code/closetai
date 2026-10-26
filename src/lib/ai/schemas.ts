@@ -249,7 +249,7 @@ export function parseResearchReport(raw: string, fuentesValidas: ReadonlySet<str
     return {
       ok: false,
       reason: "invented_source",
-      message: `El informe cita fuentes que no están verificadas: ${inventadas.join(", ")}.`,
+      message: `The report cites sources that are not verified: ${inventadas.join(", ")}.`,
     };
   }
 

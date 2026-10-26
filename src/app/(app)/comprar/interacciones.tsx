@@ -42,7 +42,7 @@ export function BotonComprar({
         }
         className={`w-full rounded-lg px-5 py-3 font-medium transition disabled:opacity-60 ${estilos}`}
       >
-        {pendiente ? "Abriendo el pago…" : texto}
+        {pendiente ? "Opening checkout…" : texto}
       </button>
     </div>
   );

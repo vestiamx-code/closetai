@@ -19,7 +19,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             <NavegacionEscritorio />
             <form action={salir}>
               <button type="submit" className="text-text-muted transition hover:text-text">
-                Salir
+                Sign out
               </button>
             </form>
           </div>
@@ -28,17 +28,17 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       <main className="flex-1">{children}</main>
 
       {/*
-        Ancla la página. Sin él, las secciones cortas —Comprar, Tu estilo,
-        Perfil— dejaban media pantalla en blanco y se veían a medio terminar.
-        Y el aviso de privacidad hoy solo se alcanzaba desde la portada: si
-        tratamos fotos del cuerpo como dato sensible, tiene que estar a mano
-        desde dentro de la app, no solo desde fuera.
+        Anchors the page. Without it, the short sections —Shop, Your style,
+        Profile— left half the screen blank and looked unfinished.
+        And the privacy notice was only reachable from the homepage: if we
+        treat body photos as sensitive data, it has to be at hand from
+        inside the app, not only from outside.
       */}
       <footer className="mt-16 border-t border-border pb-[calc(env(safe-area-inset-bottom)+4.5rem)] sm:pb-0">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>Tu clóset es gratis e ilimitado. Tus fotos son tuyas y las puedes borrar.</p>
+          <p>Your closet is free and unlimited. Your photos are yours and you can delete them.</p>
           <Link href="/privacidad" className="underline underline-offset-4 transition hover:text-text">
-            Aviso de privacidad
+            Privacy notice
           </Link>
         </div>
       </footer>

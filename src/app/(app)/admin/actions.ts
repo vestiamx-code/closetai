@@ -25,7 +25,7 @@ function esAdmin(email: string | undefined): boolean {
  */
 export async function abonarManual(formData: FormData): Promise<{ error?: string; ok?: string }> {
   const user = await requireUser();
-  if (!esAdmin(user.email)) return { error: "No tienes permiso." };
+  if (!esAdmin(user.email)) return { error: "You don't have permission." };
 
   const datos = z
     .object({
@@ -39,7 +39,7 @@ export async function abonarManual(formData: FormData): Promise<{ error?: string
       nota: formData.get("nota") || undefined,
     });
 
-  if (!datos.success) return { error: "Revisa el correo y la cantidad (1 a 100)." };
+  if (!datos.success) return { error: "Check the email and the amount (1 to 100)." };
 
   const admin = createAdminClient();
   const { data: lista } = await admin.auth.admin.listUsers();
@@ -47,17 +47,17 @@ export async function abonarManual(formData: FormData): Promise<{ error?: string
     (u) => u.email?.toLowerCase() === datos.data.correo.toLowerCase(),
   );
 
-  if (!destino) return { error: "No existe una cuenta con ese correo." };
+  if (!destino) return { error: "There is no account with that email." };
 
   const resultado = await abonar(
     destino.id,
     datos.data.cantidad,
-    `soporte:${datos.data.nota ?? "sin nota"}`,
+    `soporte:${datos.data.nota ?? "no note"}`,
     `manual:${destino.id}:${Date.now()}`,
   );
 
-  if (!resultado.ok) return { error: "No se pudo abonar." };
+  if (!resultado.ok) return { error: "Credits could not be added." };
 
   revalidatePath("/admin");
-  return { ok: `Abonados ${datos.data.cantidad} créditos a ${datos.data.correo}.` };
+  return { ok: `Added ${datos.data.cantidad} credits to ${datos.data.correo}.` };
 }

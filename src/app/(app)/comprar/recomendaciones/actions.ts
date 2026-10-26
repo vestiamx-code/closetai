@@ -30,7 +30,7 @@ export async function analizarClosetc(): Promise<ResultadoHuecos> {
   if (!prendas || prendas.length < MINIMO_PRENDAS) {
     return {
       ok: false,
-      motivo: `Con ${prendas?.length ?? 0} prendas todavía no puedo decirte qué te falta sin inventar. Sube al menos ${MINIMO_PRENDAS}.`,
+      motivo: `With ${prendas?.length ?? 0} garments I can't yet tell you what you're missing without making it up. Upload at least ${MINIMO_PRENDAS}.`,
     };
   }
 
@@ -65,12 +65,12 @@ export async function analizarClosetc(): Promise<ResultadoHuecos> {
     est_cost_usd: estCostUsd,
   });
 
-  if (!huecos) return { ok: false, motivo: "No pudimos analizar tu clóset. Intenta de nuevo." };
+  if (!huecos) return { ok: false, motivo: "We couldn't analyze your closet. Please try again." };
 
   if (huecos.length === 0) {
     return {
       ok: false,
-      motivo: "Tu clóset está bien cubierto. No te voy a inventar cosas que comprar.",
+      motivo: "Your closet is well covered. I'm not going to make up things for you to buy.",
     };
   }
 

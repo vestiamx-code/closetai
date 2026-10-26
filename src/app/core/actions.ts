@@ -47,7 +47,7 @@ async function pasaElLimite(huella: string): Promise<boolean> {
 export async function generarNucleo(_previo: EstadoCore, formData: FormData): Promise<EstadoCore> {
   const datos = entradaSchema.safeParse(formData.get("texto"));
   if (!datos.success) {
-    return { estado: "error", mensaje: datos.error.issues[0]?.message ?? "Revisa lo que escribiste." };
+    return { estado: "error", mensaje: datos.error.issues[0]?.message ?? "Check what you wrote." };
   }
 
   const huella = await huellaDeQuienPide();
@@ -91,7 +91,7 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
 
 export async function guardarNucleo(formData: FormData): Promise<{ error?: string }> {
   const payload = formData.get("payload");
-  if (typeof payload !== "string") return { error: "No hay nada que guardar." };
+  if (typeof payload !== "string") return { error: "There is nothing to save." };
 
   let datos: { core: StyleCore; entrada: string; modelo: string; versionPrompt: number };
   try {
@@ -115,7 +115,7 @@ export async function guardarNucleo(formData: FormData): Promise<{ error?: strin
   });
 
   if (error) {
-    console.error("[core] no se pudo guardar", error);
+    console.error("[core] could not save", error);
     return { error: "We couldn't save it. Please try again." };
   }
 

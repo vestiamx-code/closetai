@@ -44,7 +44,7 @@ export function parseGaps(raw: string, idsValidos: Set<string>): Hueco[] | null 
  */
 export const TIENDAS = {
   amazon: {
-    nombre: "Amazon México",
+    nombre: "Amazon Mexico",
     url: (q: string) => {
       const base = `https://www.amazon.com.mx/s?k=${encodeURIComponent(q)}`;
       const tag = process.env.AMAZON_AFFILIATE_TAG;

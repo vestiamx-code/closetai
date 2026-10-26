@@ -23,7 +23,7 @@ export const COSTO_USD = {
 
 function llave(): string {
   const valor = process.env.FAL_KEY;
-  if (!valor) throw new Error("Falta FAL_KEY");
+  if (!valor) throw new Error("FAL_KEY is missing");
   return valor;
 }
 
@@ -49,14 +49,14 @@ async function ejecutar<T>(modelo: string, entrada: unknown, topeMs = 90_000): P
     });
     encolado = await respuesta.json();
     if (!respuesta.ok) {
-      return { ok: false, motivo: encolado?.detail ?? `fal respondió ${respuesta.status}` };
+      return { ok: false, motivo: encolado?.detail ?? `fal responded ${respuesta.status}` };
     }
   } catch (error) {
-    return { ok: false, motivo: error instanceof Error ? error.message : "no se pudo contactar a fal" };
+    return { ok: false, motivo: error instanceof Error ? error.message : "could not reach fal" };
   }
 
   if (!encolado.status_url || !encolado.response_url) {
-    return { ok: false, motivo: "fal no devolvió las URLs del trabajo" };
+    return { ok: false, motivo: "fal did not return the job URLs" };
   }
 
   const limite = Date.now() + topeMs;
@@ -74,7 +74,7 @@ async function ejecutar<T>(modelo: string, entrada: unknown, topeMs = 90_000): P
       if (datos && typeof datos === "object" && "detail" in datos) {
         const detalle = (datos as { detail?: unknown }).detail;
         const mensaje = Array.isArray(detalle)
-          ? String((detalle[0] as { msg?: string })?.msg ?? "el modelo rechazó la imagen")
+          ? String((detalle[0] as { msg?: string })?.msg ?? "the model rejected the image")
           : String(detalle);
         return { ok: false, motivo: mensaje };
       }
@@ -82,11 +82,11 @@ async function ejecutar<T>(modelo: string, entrada: unknown, topeMs = 90_000): P
       return { ok: true, datos: datos as T };
     }
     if (estado.status === "FAILED" || estado.error) {
-      return { ok: false, motivo: "el modelo no pudo procesar la imagen" };
+      return { ok: false, motivo: "the model could not process the image" };
     }
   }
 
-  return { ok: false, motivo: "el render tardó demasiado" };
+  return { ok: false, motivo: "the render took too long" };
 }
 
 /**

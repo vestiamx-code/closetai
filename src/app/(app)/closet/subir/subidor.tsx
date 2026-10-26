@@ -19,11 +19,11 @@ type Item = {
 };
 
 const TEXTO: Record<Estado, string> = {
-  comprimiendo: "Preparando la foto…",
-  subiendo: "Subiendo…",
-  catalogando: "La IA la está mirando…",
-  lista: "Lista",
-  fallida: "No se pudo",
+  comprimiendo: "Preparing the photo…",
+  subiendo: "Uploading…",
+  catalogando: "AI is looking at it…",
+  lista: "Ready",
+  fallida: "Couldn't do it",
 };
 
 export function Subidor({ userId }: { userId: string }) {
@@ -46,7 +46,7 @@ export function Subidor({ userId }: { userId: string }) {
         .from("garments")
         .upload(ruta, webp, { contentType: "image/webp" });
 
-      if (errorSubida) throw new Error("No se pudo subir la foto");
+      if (errorSubida) throw new Error("The photo could not be uploaded");
 
       actualizar(id, { estado: "catalogando" });
       const resultado = await catalogarPrenda(ruta);
@@ -59,7 +59,7 @@ export function Subidor({ userId }: { userId: string }) {
     } catch (error) {
       actualizar(id, {
         estado: "fallida",
-        error: error instanceof Error ? error.message : "Algo salió mal",
+        error: error instanceof Error ? error.message : "Something went wrong",
       });
     }
   }
@@ -77,8 +77,8 @@ export function Subidor({ userId }: { userId: string }) {
     event.target.value = "";
 
     iniciar(async () => {
-      // De una en una a propósito: en paralelo se dispara el límite de peticiones
-      // por minuto de Gemini y fallan varias de golpe.
+      // One at a time on purpose: in parallel, Gemini's requests-per-minute limit
+      // trips and several fail at once.
       for (let i = 0; i < archivos.length; i++) {
         await procesar(archivos[i], nuevos[i].id);
       }
@@ -100,10 +100,10 @@ export function Subidor({ userId }: { userId: string }) {
           disabled={enProceso}
         />
         <span className="font-display text-lg font-semibold">
-          {enProceso ? "Trabajando…" : "Elegir fotos"}
+          {enProceso ? "Working…" : "Choose photos"}
         </span>
         <span className="mt-1 block text-sm text-text-muted">
-          Puedes seleccionar varias a la vez
+          You can select several at once
         </span>
       </label>
 
@@ -131,7 +131,7 @@ export function Subidor({ userId }: { userId: string }) {
                 }`}
                 title={item.error}
               >
-                {item.estado === "lista" ? "✓ Lista" : TEXTO[item.estado]}
+                {item.estado === "lista" ? "✓ Ready" : TEXTO[item.estado]}
               </span>
             </li>
           ))}
@@ -156,7 +156,7 @@ export function Subidor({ userId }: { userId: string }) {
           href="/closet"
           className="mt-6 block rounded-lg bg-accent px-4 py-2.5 text-center text-base font-medium text-accent-contrast transition hover:opacity-90"
         >
-          Ver mi clóset ({listas} {listas === 1 ? "prenda nueva" : "prendas nuevas"})
+          See my closet ({listas} {listas === 1 ? "new garment" : "new garments"})
         </Link>
       ) : null}
     </div>

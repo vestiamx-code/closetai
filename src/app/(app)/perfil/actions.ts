@@ -9,7 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 const perfilSchema = z.object({
-  display_name: z.string().trim().min(1, "¿Cómo te llamas?").max(60),
+  display_name: z.string().trim().min(1, "What's your name?").max(60),
   city: z.string().trim().max(80).optional(),
   size_top: z.string().trim().max(12).optional(),
   size_bottom: z.string().trim().max(12).optional(),
@@ -20,12 +20,12 @@ export async function guardarPerfil(formData: FormData): Promise<{ error?: strin
   const user = await requireUser();
 
   const datos = perfilSchema.safeParse(Object.fromEntries(formData));
-  if (!datos.success) return { error: datos.error.issues[0]?.message ?? "Revisa los datos." };
+  if (!datos.success) return { error: datos.error.issues[0]?.message ?? "Check the details." };
 
   const supabase = await createClient();
   const { error } = await supabase.from("profiles").update(datos.data).eq("id", user.id);
 
-  if (error) return { error: "No pudimos guardar los cambios." };
+  if (error) return { error: "We couldn't save the changes." };
 
   revalidatePath("/perfil");
   return { ok: true };
@@ -42,8 +42,8 @@ export async function borrarCuenta(formData: FormData): Promise<{ error?: string
   const user = await requireUser();
 
   const confirmacion = String(formData.get("confirmacion") ?? "").trim().toUpperCase();
-  if (confirmacion !== "BORRAR") {
-    return { error: 'Escribe BORRAR para confirmar.' };
+  if (confirmacion !== "DELETE") {
+    return { error: "Type DELETE to confirm." };
   }
 
   const admin = createAdminClient();
@@ -56,7 +56,7 @@ export async function borrarCuenta(formData: FormData): Promise<{ error?: string
 
   // Borrar la usuaria de auth arrastra en cascada profiles y todo lo que cuelga.
   const { error } = await admin.auth.admin.deleteUser(user.id);
-  if (error) return { error: "No pudimos borrar la cuenta. Escríbenos y lo hacemos a mano." };
+  if (error) return { error: "We couldn't delete the account. Write to us and we'll do it by hand." };
 
   const supabase = await createClient();
   await supabase.auth.signOut();

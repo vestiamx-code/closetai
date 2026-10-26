@@ -15,10 +15,10 @@ import { createAdminClient } from "./supabase/admin";
  */
 
 const LIMITES = {
-  catalog_garment: { cantidad: 40, ventanaHoras: 1, mensaje: "Subiste muchas prendas muy rápido. Espera una hora y sigue." },
-  suggest_outfits: { cantidad: 15, ventanaHoras: 24, mensaje: "Ya pediste muchos outfits hoy. Mañana te propongo más." },
-  analyze_gaps: { cantidad: 5, ventanaHoras: 24, mensaje: "Ya analizamos tu clóset varias veces hoy. Mañana otra vez." },
-  tryon: { cantidad: 30, ventanaHoras: 24, mensaje: "Llegaste al máximo de pruebas virtuales por día." },
+  catalog_garment: { cantidad: 40, ventanaHoras: 1, mensaje: "You uploaded a lot of garments very fast. Wait an hour and keep going." },
+  suggest_outfits: { cantidad: 15, ventanaHoras: 24, mensaje: "You've asked for a lot of outfits today. I'll suggest more tomorrow." },
+  analyze_gaps: { cantidad: 5, ventanaHoras: 24, mensaje: "We've analyzed your closet several times today. Again tomorrow." },
+  tryon: { cantidad: 30, ventanaHoras: 24, mensaje: "You've reached the daily maximum of virtual try-ons." },
 } as const;
 
 export type Operacion = keyof typeof LIMITES;

@@ -22,12 +22,12 @@ export const PRODUCTOS = {
   lifetime: {
     price: () => process.env.STRIPE_PRICE_LIFETIME,
     creditos: 30,
-    nombre: "ClosetAI Completo",
+    nombre: "ClosetAI Complete",
   },
   credits_20: {
     price: () => process.env.STRIPE_PRICE_CREDITS_20,
     creditos: 20,
-    nombre: "Recarga de 20 créditos",
+    nombre: "20-credit top-up",
   },
 } as const;
 

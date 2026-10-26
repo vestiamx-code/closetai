@@ -7,7 +7,7 @@ import { firmarRutas } from "@/lib/closet/storage";
 import { NOMBRE_CATEGORIA, type Prenda } from "@/lib/closet/tipos";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Mi clóset" };
+export const metadata: Metadata = { title: "My closet" };
 
 export default async function ClosetPage({ searchParams }: PageProps<"/closet">) {
   await requireUser();
@@ -26,7 +26,7 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
   const { data } = await consulta;
   const prendas = (data ?? []) as Prenda[];
 
-  // Para los filtros necesitamos las categorías reales, no las filtradas.
+  // The filters need the real categories, not the filtered ones.
   const { data: todas } = await supabase.from("garments").select("category").eq("status", "active");
   const categorias = [...new Set((todas ?? []).map((p) => p.category).filter(Boolean))] as string[];
 
@@ -40,25 +40,25 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-            Mi clóset
+            My closet
           </h1>
           <p className="mt-1 text-text-muted">
             {prendas.length === 0
-              ? "Todavía no hay nada aquí."
-              : `${prendas.length} ${prendas.length === 1 ? "prenda" : "prendas"}`}
+              ? "Nothing here yet."
+              : `${prendas.length} ${prendas.length === 1 ? "garment" : "garments"}`}
           </p>
         </div>
         <Link
           href="/closet/subir"
           className="rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
         >
-          Agregar prendas
+          Add garments
         </Link>
       </div>
 
       {categorias.length > 1 ? (
         <div className="mt-8 flex flex-wrap gap-2">
-          <Filtro activo={!categoria} href="/closet" texto="Todo" />
+          <Filtro activo={!categoria} href="/closet" texto="All" />
           {categorias.map((c) => (
             <Filtro
               key={c}
@@ -81,20 +81,20 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
                 className="group block overflow-hidden rounded-xl border border-border bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(20,17,15,0.18)]"
               >
                 {/*
-                  El encuadre depende de cómo esté fotografiada la prenda, dato
-                  que ya trae el catálogo.
+                  The framing depends on how the garment was photographed, which
+                  the catalog already records.
 
-                  Una prenda sola —extendida o en catálogo— se contiene entera:
-                  recortarla al cuadro le come las mangas. Una prenda puesta se
-                  encuadra al torso: si se contiene la foto de cuerpo completo, la
-                  prenda queda diminuta y no se distingue de las demás. Antes todo
-                  usaba `cover` y a las personas les cortaba la cabeza.
+                  A garment on its own —laid flat or product shot— is contained
+                  whole: cropping it to the square eats the sleeves. A worn garment
+                  is framed on the torso: containing the full-body photo makes the
+                  garment tiny and hard to tell apart. Everything used to use
+                  `cover`, and it cut people's heads off.
                 */}
                 <div className="relative aspect-square overflow-hidden bg-surface-2">
                   {urls.get(prenda.clean_image_path ?? prenda.image_path) ? (
                     <Image
                       src={urls.get(prenda.clean_image_path ?? prenda.image_path)!}
-                      alt={prenda.subcategory ?? "Prenda"}
+                      alt={prenda.subcategory ?? "Garment"}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       className={
@@ -107,7 +107,7 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
                 </div>
                 <div className="border-t border-border/60 px-3 py-2.5">
                   <p className="truncate text-sm font-medium first-letter:uppercase">
-                    {prenda.subcategory ?? "Prenda"}
+                    {prenda.subcategory ?? "Garment"}
                   </p>
                   <p className="mt-0.5 truncate text-xs text-text-muted first-letter:uppercase">
                     {prenda.colors.join(" · ")}
@@ -140,24 +140,24 @@ function Filtro({ activo, href, texto }: { activo: boolean; href: string; texto:
 function ClosetVacio() {
   return (
     <div className="mt-10 rounded-xl border border-dashed border-border px-6 py-16 text-center">
-      <h2 className="font-display text-xl font-semibold">Empieza con diez prendas</h2>
+      <h2 className="font-display text-xl font-semibold">Start with ten garments</h2>
       <p className="mx-auto mt-2 max-w-md leading-relaxed text-text-muted text-pretty">
-        No necesitas fotografiar todo tu clóset hoy. Con diez prendas ya se pueden armar
-        combinaciones que valgan la pena.
+        You don’t need to photograph your whole closet today. Ten garments are enough to
+        put together outfits worth wearing.
       </p>
       <Link
         href="/closet/subir"
         className="mt-6 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
       >
-        Subir mis primeras fotos
+        Upload my first photos
       </Link>
     </div>
   );
 }
 
 /**
- * ¿La foto muestra a alguien con la prenda puesta? Lo dijo el catalogador al
- * mirarla. Las prendas viejas no traen el dato; se asume que no.
+ * Does the photo show someone wearing the garment? The cataloger said so when
+ * it looked at it. Older garments don't have the field; assume not.
  */
 function esPuesta(meta: unknown): boolean {
   return (meta as { tipo_de_foto?: string } | null)?.tipo_de_foto === "puesta";

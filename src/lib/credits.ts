@@ -44,7 +44,7 @@ export async function cobrar(
 
   if (error) {
     if (error.message.includes("insufficient_credits")) return { ok: false, motivo: "sin_saldo" };
-    console.error("[creditos] falló el cobro", error);
+    console.error("[credits] charge failed", error);
     return { ok: false, motivo: "error" };
   }
 
@@ -72,7 +72,7 @@ export async function abonar(
     // 23505 = violación de índice único. Es el caso feliz de la idempotencia:
     // significa que este pago ya se había abonado.
     if (error.code === "23505") return { ok: true, duplicado: true };
-    console.error("[creditos] falló el abono", error);
+    console.error("[credits] top-up failed", error);
     return { ok: false };
   }
 

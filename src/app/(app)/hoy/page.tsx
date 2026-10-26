@@ -8,7 +8,7 @@ import { firmarRutas } from "@/lib/closet/storage";
 import type { Prenda } from "@/lib/closet/tipos";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Qué me pongo hoy" };
+export const metadata: Metadata = { title: "What to wear today" };
 
 type OutfitConPrendas = {
   id: string;
@@ -57,7 +57,7 @@ export default async function HoyPage() {
       ) : null}
 
       <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-        Qué me pongo hoy
+        What to wear today
       </h1>
 
       {lista.length === 0 ? (
@@ -65,7 +65,7 @@ export default async function HoyPage() {
       ) : (
         <>
           <p className="mt-2 text-text-muted">
-            {lista.length} {lista.length === 1 ? "propuesta" : "propuestas"} con lo que ya tienes.
+            {lista.length} {lista.length === 1 ? "suggestion" : "suggestions"} from what you already own.
           </p>
 
           <ul className="mt-8 space-y-8">
@@ -82,7 +82,7 @@ export default async function HoyPage() {
                         {urls.get(ruta) ? (
                           <Image
                             src={urls.get(ruta)!}
-                            alt={prenda.subcategory ?? "Prenda"}
+                            alt={prenda.subcategory ?? "Garment"}
                             fill
                             sizes="(max-width: 640px) 33vw, 200px"
                             className="object-contain p-2"
@@ -111,7 +111,7 @@ export default async function HoyPage() {
           </ul>
 
           <div className="mt-10 border-t border-border pt-8">
-            <BotonGenerar texto="Proponme otros tres" />
+            <BotonGenerar texto="Suggest three more" />
           </div>
         </>
       )}
@@ -123,16 +123,16 @@ function SinOutfits({ prendas }: { prendas: number }) {
   if (prendas < 4) {
     return (
       <div className="mt-8 rounded-xl border border-dashed border-border px-6 py-14 text-center">
-        <h2 className="font-display text-xl font-semibold">Falta un poco de clóset</h2>
+        <h2 className="font-display text-xl font-semibold">Your closet needs a bit more</h2>
         <p className="mx-auto mt-2 max-w-md leading-relaxed text-text-muted text-pretty">
-          Llevas {prendas} {prendas === 1 ? "prenda" : "prendas"}. Con cuatro o más ya puedo
-          armarte combinaciones que tengan sentido, no solo juntar ropa.
+          You have {prendas} {prendas === 1 ? "garment" : "garments"}. With four or more I can put
+          together outfits that make sense, not just throw clothes together.
         </p>
         <Link
           href="/closet/subir"
           className="mt-6 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
         >
-          Agregar más prendas
+          Add more garments
         </Link>
       </div>
     );
@@ -141,11 +141,11 @@ function SinOutfits({ prendas }: { prendas: number }) {
   return (
     <div className="mt-8">
       <p className="leading-relaxed text-text-muted text-pretty">
-        Tienes {prendas} prendas listas. Dame un momento y te armo tres outfits con el clima de
-        hoy y lo que he aprendido de tu estilo.
+        You have {prendas} garments ready. Give me a moment and I’ll put together three outfits for
+        today’s weather and what I’ve learned about your style.
       </p>
       <div className="mt-6">
-        <BotonGenerar texto="Armar mis outfits de hoy" />
+        <BotonGenerar texto="Build today’s outfits" />
       </div>
     </div>
   );

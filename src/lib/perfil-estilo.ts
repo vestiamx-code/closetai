@@ -100,9 +100,9 @@ export async function actualizarPerfilEnSegundoPlano(userId: string): Promise<vo
   try {
     const r = await actualizarPerfilSiToca(userId);
     if (!r.actualizado && r.motivo === "modelo_fallo") {
-      console.error("[perfil] el modelo no devolvió un perfil válido", { userId });
+      console.error("[profile] the model did not return a valid profile", { userId });
     }
   } catch (error) {
-    console.error("[perfil] falló la actualización en segundo plano", { userId, error });
+    console.error("[profile] background update failed", { userId, error });
   }
 }

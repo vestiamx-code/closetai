@@ -63,7 +63,7 @@ export async function generarInvestigacion(
 ): Promise<EstadoInvestigacion> {
   const pregunta = preguntaSchema.safeParse(formData.get("pregunta"));
   if (!pregunta.success) {
-    return { estado: "error", mensaje: pregunta.error.issues[0]?.message ?? "Revisa la pregunta." };
+    return { estado: "error", mensaje: pregunta.error.issues[0]?.message ?? "Check the question." };
   }
 
   const huella = await huellaDeQuienPide();
@@ -78,7 +78,7 @@ export async function generarInvestigacion(
   try {
     datos = await leerDatosVerificados();
   } catch (error) {
-    console.error("[research] no se pudieron leer los datos", error);
+    console.error("[research] could not read the data", error);
     return { estado: "error", mensaje: "I couldn't read the research data. Try again in a moment." };
   }
 
@@ -113,13 +113,13 @@ export async function generarInvestigacion(
 
 export async function guardarInvestigacion(formData: FormData): Promise<{ error?: string }> {
   const payload = formData.get("payload");
-  if (typeof payload !== "string") return { error: "No hay nada que guardar." };
+  if (typeof payload !== "string") return { error: "There is nothing to save." };
 
   let datos: { informe?: unknown; pregunta?: unknown; modelo?: unknown; versionPrompt?: unknown };
   try {
     datos = JSON.parse(payload);
   } catch {
-    return { error: "No pudimos leer el informe." };
+    return { error: "We couldn't read the report." };
   }
 
   const pregunta = preguntaSchema.safeParse(datos.pregunta);
@@ -146,7 +146,7 @@ export async function guardarInvestigacion(formData: FormData): Promise<{ error?
   });
 
   if (error) {
-    console.error("[research] no se pudo guardar", error);
+    console.error("[research] could not save", error);
     return { error: "We couldn't save it. Please try again." };
   }
 

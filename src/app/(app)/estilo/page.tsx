@@ -6,15 +6,15 @@ import { requireUser } from "@/lib/auth";
 import { PERFIL_VACIO, styleProfileSchema, type StyleProfile } from "@/lib/ai/outfits";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Tu estilo" };
+export const metadata: Metadata = { title: "Your style" };
 
 const SECCIONES = [
-  { clave: "estilos_preferidos", titulo: "Estilos que te gustan" },
-  { clave: "colores_favoritos", titulo: "Colores que te van" },
-  { clave: "combinaciones_exitosas", titulo: "Combinaciones que funcionan" },
-  { clave: "ocasiones_frecuentes", titulo: "Para qué te vistes más" },
-  { clave: "estilos_rechazados", titulo: "Estilos que evitas" },
-  { clave: "colores_vetados", titulo: "Colores que no te propongo" },
+  { clave: "estilos_preferidos", titulo: "Styles you like" },
+  { clave: "colores_favoritos", titulo: "Colors that suit you" },
+  { clave: "combinaciones_exitosas", titulo: "Combinations that work" },
+  { clave: "ocasiones_frecuentes", titulo: "What you dress for most" },
+  { clave: "estilos_rechazados", titulo: "Styles you avoid" },
+  { clave: "colores_vetados", titulo: "Colors I won’t suggest" },
 ] as const;
 
 export default async function EstiloPage() {
@@ -32,37 +32,37 @@ export default async function EstiloPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-10">
-      <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Tu estilo</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Your style</h1>
       <p className="mt-2 leading-relaxed text-text-muted text-pretty">
-        Esto es lo que ClosetAI ha aprendido de ti. Todo sale de lo que aceptas y rechazas —
-        nada de esto lo escribiste tú, y todo lo puedes corregir.
+        This is what ClosetAI has learned about you. It all comes from what you accept and reject —
+        you didn’t write any of it, and you can correct all of it.
       </p>
 
       {!tieneAlgo ? (
         <div className="mt-8 rounded-xl border border-dashed border-border px-6 py-12 text-center">
-          <h2 className="font-display text-lg font-semibold">Todavía no te conozco</h2>
+          <h2 className="font-display text-lg font-semibold">I don’t know you yet</h2>
           <p className="mx-auto mt-2 max-w-md leading-relaxed text-text-muted text-pretty">
             {eventos && eventos > 0
-              ? `Llevas ${eventos} ${eventos === 1 ? "reacción" : "reacciones"}. Con unas cuantas más empiezo a notar patrones.`
-              : "Acepta o rechaza algunos outfits y empiezo a entender qué te gusta."}
+              ? `You have ${eventos} ${eventos === 1 ? "reaction" : "reactions"}. With a few more I start to notice patterns.`
+              : "Accept or reject a few outfits and I’ll start to understand what you like."}
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/hoy"
               className="inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast transition hover:opacity-90"
             >
-              Ver mis outfits de hoy
+              See today’s outfits
             </Link>
             {/*
-              Esperar cinco reacciones es la ruta lenta. Quien no quiera esperar
-              puede escribir su estilo y tener un núcleo en un minuto — es
-              justo para lo que existe /core.
+              Waiting for five reactions is the slow route. Anyone who doesn't want
+              to wait can describe their style and get a core in a minute — that
+              is exactly what /core is for.
             */}
             <Link
               href="/core"
               className="inline-block rounded-lg border border-border px-5 py-2.5 text-sm transition hover:border-text"
             >
-              O cuéntamelo tú en un minuto
+              Or tell me yourself in a minute
             </Link>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default async function EstiloPage() {
 
           {perfil.notas_libres ? (
             <section className="mt-8">
-              <h2 className="font-display text-lg font-semibold">Otras cosas que noté</h2>
+              <h2 className="font-display text-lg font-semibold">Other things I noticed</h2>
               <p className="mt-2 leading-relaxed text-text-muted text-pretty">
                 {perfil.notas_libres}
               </p>
@@ -107,7 +107,7 @@ export default async function EstiloPage() {
           ) : null}
 
           <p className="mt-10 border-t border-border pt-6 text-xs text-text-muted">
-            Versión {fila?.version ?? 0} del perfil · se actualiza sola conforme reaccionas
+            Profile version {fila?.version ?? 0} · updates itself as you react
           </p>
         </>
       )}
@@ -122,7 +122,7 @@ function Confianza({ valor }: { valor: number }) {
       <div className="h-1 flex-1 overflow-hidden rounded-full bg-surface-2">
         <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
       </div>
-      <span className="shrink-0 text-xs text-text-muted">{pct}% seguro</span>
+      <span className="shrink-0 text-xs text-text-muted">{pct}% sure</span>
     </div>
   );
 }

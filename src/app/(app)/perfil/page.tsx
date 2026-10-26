@@ -4,7 +4,7 @@ import { FormularioPerfil } from "./formulario";
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Tu perfil" };
+export const metadata: Metadata = { title: "Your profile" };
 
 export default async function PerfilPage() {
   const user = await requireUser();
@@ -23,10 +23,10 @@ export default async function PerfilPage() {
 
   return (
     <div className="mx-auto w-full max-w-xl px-6 py-10">
-      <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Tu perfil</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Your profile</h1>
       <p className="mt-2 text-text-muted">
-        {user.email} · {count ?? 0} {count === 1 ? "prenda" : "prendas"} ·{" "}
-        {perfil?.plan === "lifetime" ? "ClosetAI Completo" : "Plan gratis"}
+        {user.email} · {count ?? 0} {count === 1 ? "garment" : "garments"} ·{" "}
+        {perfil?.plan === "lifetime" ? "ClosetAI Complete" : "Free plan"}
       </p>
 
       <FormularioPerfil

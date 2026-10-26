@@ -58,7 +58,7 @@ export async function generarOutfits(ocasion?: string): Promise<ResultadoOutfits
     .map((r) => String((r.payload as Record<string, unknown>)?.motivo ?? ""))
     .filter(Boolean);
 
-  const clima = await obtenerClima(perfilUsuaria?.city ?? "Ciudad de México");
+  const clima = await obtenerClima(perfilUsuaria?.city ?? "Mexico City");
 
   const resultado = await suggestOutfits({
     prendas: prendas.map(
@@ -87,7 +87,7 @@ export async function generarOutfits(ocasion?: string): Promise<ResultadoOutfits
   });
 
   if (!resultado.ok) {
-    return { ok: false, motivo: "El estilista no pudo armar nada esta vez. Intenta de nuevo." };
+    return { ok: false, motivo: "The stylist couldn't put anything together this time. Please try again." };
   }
 
   // Los outfits anteriores que siguen sin responder se archivan: la pantalla
@@ -152,7 +152,7 @@ export async function reaccionar(formData: FormData): Promise<{ error?: string }
     tipo: formData.get("tipo"),
     motivo: formData.get("motivo") || undefined,
   });
-  if (!datos.success) return { error: "Acción inválida." };
+  if (!datos.success) return { error: "Invalid action." };
 
   const supabase = await createClient();
 
@@ -163,8 +163,8 @@ export async function reaccionar(formData: FormData): Promise<{ error?: string }
     .eq("user_id", user.id);
 
   if (error) {
-    console.error("[reaccionar] no se pudo actualizar el outfit", error);
-    return { error: "No pudimos guardar tu respuesta." };
+    console.error("[react] could not update the outfit", error);
+    return { error: "We couldn't save your answer." };
   }
 
   const { error: errorEvento } = await supabase.from("feedback_events").insert({
@@ -176,8 +176,8 @@ export async function reaccionar(formData: FormData): Promise<{ error?: string }
 
   if (errorEvento) {
     // Sin este evento, M4 no aprende nada. Falla ruidosamente en el log.
-    console.error("[reaccionar] no se pudo registrar el feedback", errorEvento);
-    return { error: "Guardamos tu respuesta, pero no pudimos registrarla para el aprendizaje." };
+    console.error("[react] could not record the feedback", errorEvento);
+    return { error: "We saved your answer, but couldn't record it for learning." };
   }
 
   // El perfil se reescribe después de responderle a la usuaria: aprender no debe
@@ -197,7 +197,7 @@ export async function comentar(formData: FormData): Promise<{ error?: string }> 
     .object({ outfit_id: z.string().uuid(), texto: z.string().trim().min(1).max(500) })
     .safeParse({ outfit_id: formData.get("outfit_id"), texto: formData.get("texto") });
 
-  if (!datos.success) return { error: "Escribe algo primero." };
+  if (!datos.success) return { error: "Write something first." };
 
   const supabase = await createClient();
   await supabase.from("feedback_events").insert({

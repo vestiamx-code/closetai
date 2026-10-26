@@ -40,20 +40,20 @@ export function FormularioPerfil({ inicial }: { inicial: Inicial }) {
         }}
       >
         {error ? <Aviso>{error}</Aviso> : null}
-        {guardado ? <Aviso tipo="info">Guardado.</Aviso> : null}
+        {guardado ? <Aviso tipo="info">Saved.</Aviso> : null}
 
-        <Campo etiqueta="Tu nombre" name="display_name" defaultValue={inicial.display_name} required />
+        <Campo etiqueta="Your name" name="display_name" defaultValue={inicial.display_name} required />
         <Campo
-          etiqueta="Ciudad"
+          etiqueta="City"
           name="city"
           defaultValue={inicial.city}
-          ayuda="Para saber qué clima vas a tener cuando armemos tus outfits."
+          ayuda="So we know what weather you’ll have when we build your outfits."
         />
 
         <div className="grid grid-cols-3 gap-3">
-          <Campo etiqueta="Talla arriba" name="size_top" defaultValue={inicial.size_top} placeholder="M" />
-          <Campo etiqueta="Talla abajo" name="size_bottom" defaultValue={inicial.size_bottom} placeholder="28" />
-          <Campo etiqueta="Calzado" name="size_shoes" defaultValue={inicial.size_shoes} placeholder="24.5" />
+          <Campo etiqueta="Top size" name="size_top" defaultValue={inicial.size_top} placeholder="M" />
+          <Campo etiqueta="Bottom size" name="size_bottom" defaultValue={inicial.size_bottom} placeholder="28" />
+          <Campo etiqueta="Shoe size" name="size_shoes" defaultValue={inicial.size_shoes} placeholder="24.5" />
         </div>
 
         <button
@@ -61,15 +61,15 @@ export function FormularioPerfil({ inicial }: { inicial: Inicial }) {
           disabled={pendiente}
           className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-contrast transition hover:opacity-90 disabled:opacity-60"
         >
-          {pendiente ? "Guardando…" : "Guardar"}
+          {pendiente ? "Saving…" : "Save"}
         </button>
       </form>
 
       <div className="mt-12 border-t border-border pt-8">
-        <h2 className="font-display text-lg font-semibold">Borrar mi cuenta</h2>
+        <h2 className="font-display text-lg font-semibold">Delete my account</h2>
         <p className="mt-1 text-sm leading-relaxed text-text-muted text-pretty">
-          Se borra todo: tus prendas, tus fotos y tu cuenta. De verdad, no se archivan en ningún
-          lado. Esto no se puede deshacer.
+          Everything is deleted: your garments, your photos and your account. Really, nothing is
+          archived anywhere. This can’t be undone.
         </p>
 
         {!mostrarBorrado ? (
@@ -77,7 +77,7 @@ export function FormularioPerfil({ inicial }: { inicial: Inicial }) {
             onClick={() => setMostrarBorrado(true)}
             className="mt-4 text-sm text-red-600 underline underline-offset-4 dark:text-red-400"
           >
-            Quiero borrar mi cuenta
+            I want to delete my account
           </button>
         ) : (
           <form
@@ -90,9 +90,9 @@ export function FormularioPerfil({ inicial }: { inicial: Inicial }) {
             }}
           >
             <Campo
-              etiqueta="Escribe BORRAR para confirmar"
+              etiqueta="Type DELETE to confirm"
               name="confirmacion"
-              placeholder="BORRAR"
+              placeholder="DELETE"
               autoComplete="off"
               required
             />
@@ -101,7 +101,7 @@ export function FormularioPerfil({ inicial }: { inicial: Inicial }) {
               disabled={pendiente}
               className="w-full rounded-lg border border-red-500/40 px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-500/10 disabled:opacity-60 dark:text-red-400"
             >
-              {pendiente ? "Borrando…" : "Borrar mi cuenta para siempre"}
+              {pendiente ? "Deleting…" : "Delete my account forever"}
             </button>
           </form>
         )}

@@ -30,11 +30,11 @@ export async function iniciarCompra(formData: FormData): Promise<{ error?: strin
     .object({ producto: z.enum(["lifetime", "credits_20"]) })
     .safeParse({ producto: formData.get("producto") });
 
-  if (!parsed.success) return { error: "Producto inválido." };
+  if (!parsed.success) return { error: "Invalid product." };
 
   const producto = PRODUCTOS[parsed.data.producto as ProductoId];
   const price = producto.price();
-  if (!price) return { error: "Ese producto no está configurado todavía." };
+  if (!price) return { error: "That product isn't set up yet." };
 
   // Quien ya compró el desbloqueo no lo vuelve a comprar: se le venden recargas.
   if (parsed.data.producto === "lifetime") {
@@ -45,7 +45,7 @@ export async function iniciarCompra(formData: FormData): Promise<{ error?: strin
       .eq("id", user.id)
       .single();
     if (perfil?.plan === "lifetime") {
-      return { error: "Ya tienes ClosetAI Completo. Lo que puedes comprar son recargas." };
+      return { error: "You already have ClosetAI Complete. What you can buy is top-ups." };
     }
   }
 
@@ -59,7 +59,7 @@ export async function iniciarCompra(formData: FormData): Promise<{ error?: strin
       customer_email: user.email,
       success_url: `${base}/comprar/gracias?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${base}/comprar`,
-      locale: "es",
+      locale: "en",
       metadata: {
         user_id: user.id,
         producto: parsed.data.producto,
@@ -67,10 +67,10 @@ export async function iniciarCompra(formData: FormData): Promise<{ error?: strin
     });
     url = sesion.url;
   } catch (error) {
-    console.error("[comprar] no se pudo crear la sesión", error);
-    return { error: "No pudimos abrir el pago. Intenta de nuevo." };
+    console.error("[checkout] could not create the session", error);
+    return { error: "We couldn't open checkout. Please try again." };
   }
 
-  if (!url) return { error: "No pudimos abrir el pago. Intenta de nuevo." };
+  if (!url) return { error: "We couldn't open checkout. Please try again." };
   redirect(url);
 }

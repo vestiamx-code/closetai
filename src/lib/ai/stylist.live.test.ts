@@ -43,7 +43,7 @@ describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.GEMINI_API_KEY)("esti
     const r = await suggestOutfits({
       prendas: CLOSET,
       perfil: PERFIL_VACIO,
-      clima: { ciudad: "Ciudad de México", temperatura: 22, descripcion: "despejado" },
+      clima: { ciudad: "Mexico City", temperatura: 22, descripcion: "clear" },
       ocasion: null,
       feedbackReciente: [],
     });
@@ -75,7 +75,7 @@ describe.skipIf(!process.env.PRUEBAS_VIVAS || !process.env.GEMINI_API_KEY)("esti
           { valor: "romántico", confianza: 0.9, evidencia: "rechazó todo lo romántico" },
         ],
       },
-      clima: { ciudad: "Ciudad de México", temperatura: 22, descripcion: "despejado" },
+      clima: { ciudad: "Mexico City", temperatura: 22, descripcion: "clear" },
       ocasion: null,
       feedbackReciente: ["No es mi estilo"],
     });

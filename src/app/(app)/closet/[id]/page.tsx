@@ -6,10 +6,17 @@ import { notFound } from "next/navigation";
 import { FormularioPrenda } from "./formulario";
 import { requireUser } from "@/lib/auth";
 import { firmarRutas } from "@/lib/closet/storage";
-import type { Prenda } from "@/lib/closet/tipos";
+import {
+  NOMBRE_ESTILO,
+  NOMBRE_OCASION,
+  NOMBRE_PATRON,
+  NOMBRE_TEMPORADA,
+  etiquetas,
+  type Prenda,
+} from "@/lib/closet/tipos";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Prenda" };
+export const metadata: Metadata = { title: "Garment" };
 
 export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) {
   await requireUser();
@@ -27,7 +34,7 @@ export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-10">
       <Link href="/closet" className="text-sm text-text-muted underline underline-offset-4">
-        ← Volver al clóset
+        ← Back to the closet
       </Link>
 
       <div className="mt-6 grid gap-8 sm:grid-cols-2">
@@ -35,7 +42,7 @@ export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) 
           {urls.get(ruta) ? (
             <Image
               src={urls.get(ruta)!}
-              alt={prenda.subcategory ?? "Prenda"}
+              alt={prenda.subcategory ?? "Garment"}
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
               className="object-contain p-6"
@@ -45,16 +52,16 @@ export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) 
 
         <div>
           <h1 className="font-display text-2xl font-semibold tracking-tight">
-            {prenda.subcategory ?? "Prenda"}
+            {prenda.subcategory ?? "Garment"}
           </h1>
 
           <dl className="mt-5 space-y-3 text-sm">
-            <Dato titulo="Colores" valor={prenda.colors.join(", ")} />
-            <Dato titulo="Patrón" valor={prenda.pattern} />
+            <Dato titulo="Colors" valor={prenda.colors.join(", ")} />
+            <Dato titulo="Pattern" valor={prenda.pattern ? (NOMBRE_PATRON[prenda.pattern] ?? prenda.pattern) : null} />
             <Dato titulo="Material" valor={prenda.material} />
-            <Dato titulo="Estilos" valor={prenda.styles.join(", ")} />
-            <Dato titulo="Temporadas" valor={prenda.seasons.join(", ")} />
-            <Dato titulo="Ocasiones" valor={prenda.occasions.join(", ")} />
+            <Dato titulo="Styles" valor={etiquetas(prenda.styles, NOMBRE_ESTILO)} />
+            <Dato titulo="Seasons" valor={etiquetas(prenda.seasons, NOMBRE_TEMPORADA)} />
+            <Dato titulo="Occasions" valor={etiquetas(prenda.occasions, NOMBRE_OCASION)} />
           </dl>
 
           {prenda.styling_note ? (
@@ -65,7 +72,7 @@ export default async function PrendaPage({ params }: PageProps<"/closet/[id]">) 
 
           {confianza > 0 && confianza < 0.7 ? (
             <p className="mt-4 text-xs text-text-muted">
-              La IA no quedó muy segura con esta prenda. Si algo está mal, corrígelo abajo.
+              AI wasn’t very sure about this garment. If something is wrong, fix it below.
             </p>
           ) : null}
         </div>

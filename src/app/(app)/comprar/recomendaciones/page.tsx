@@ -6,7 +6,7 @@ import type { Hueco } from "@/lib/compras";
 import { TIENDAS } from "@/lib/compras";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Qué te falta" };
+export const metadata: Metadata = { title: "What you’re missing" };
 
 export default async function RecomendacionesPage() {
   await requireUser();
@@ -22,16 +22,16 @@ export default async function RecomendacionesPage() {
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-10">
       <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-        Qué le falta a tu clóset
+        What your closet is missing
       </h1>
       <p className="mt-2 leading-relaxed text-text-muted text-pretty">
-        Primero resuelvo con lo que ya tienes. Esto es lo que de verdad haría falta para
-        desbloquear combinaciones nuevas — nada más.
+        First I work with what you already own. This is what you’d really need to unlock new
+        outfits — nothing more.
       </p>
 
       {huecos.length === 0 ? (
         <div className="mt-8">
-          <BotonAnalizar texto="Analizar mi clóset" />
+          <BotonAnalizar texto="Analyze my closet" />
         </div>
       ) : (
         <>
@@ -58,7 +58,7 @@ export default async function RecomendacionesPage() {
                       rel="noopener noreferrer nofollow sponsored"
                       className="rounded-lg border border-border px-3.5 py-2 text-sm transition hover:border-accent/50"
                     >
-                      Buscar en {TIENDAS[tienda].nombre}
+                      Search on {TIENDAS[tienda].nombre}
                     </a>
                   ))}
                 </div>
@@ -67,14 +67,14 @@ export default async function RecomendacionesPage() {
           </ul>
 
           <div className="mt-8">
-            <BotonAnalizar texto="Volver a analizar" />
+            <BotonAnalizar texto="Analyze again" />
           </div>
         </>
       )}
 
       <p className="mt-10 border-t border-border pt-6 text-xs text-text-muted text-pretty">
-        ClosetAI puede ganar una comisión si compras por estos enlaces. Eso no cambia lo que te
-        recomiendo: la relevancia va primero y el afiliado solo desempata.
+        ClosetAI may earn a commission if you buy through these links. That doesn’t change what I
+        recommend: relevance comes first and the affiliate only breaks ties.
       </p>
     </div>
   );

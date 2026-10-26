@@ -35,7 +35,7 @@ export async function corregirInferencia(formData: FormData): Promise<{ error?: 
     })
     .safeParse({ lista: formData.get("lista"), valor: formData.get("valor") });
 
-  if (!datos.success) return { error: "Corrección inválida." };
+  if (!datos.success) return { error: "Invalid correction." };
 
   const supabase = await createClient();
   const { data: fila } = await supabase

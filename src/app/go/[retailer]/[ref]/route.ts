@@ -38,7 +38,7 @@ export async function GET(
       rec_id: recId && /^[0-9a-f-]{36}$/.test(recId) ? recId : null,
     });
   } catch (error) {
-    console.error("[go] no se registró el clic", error);
+    console.error("[go] the click was not recorded", error);
   }
 
   return NextResponse.redirect(destino);

@@ -4,29 +4,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * Navegación de la app, en dos formas.
+ * App navigation, in two forms.
  *
- * En escritorio, enlaces en el encabezado. En el teléfono no caben: con seis
- * secciones, "Tu estilo" se partía en dos líneas y "Salir" se salía de la
- * pantalla. Y esto es una app de teléfono antes que nada.
+ * On desktop, links in the header. On a phone they don't fit: with six
+ * sections, "Your style" wrapped onto two lines and "Sign out" ran off the
+ * screen. And this is a phone app first of all.
  *
- * Abajo va una barra fija, que además queda al alcance del pulgar. El precio es
- * que tapa el final de la página, así que el layout reserva ese espacio.
+ * At the bottom goes a fixed bar, which is also within thumb's reach. The cost
+ * is that it covers the end of the page, so the layout reserves that space.
  */
 const ENLACES = [
-  { href: "/hoy", texto: "Hoy", icono: SolIcono },
-  { href: "/closet", texto: "Clóset", icono: PerchaIcono },
-  { href: "/probar", texto: "Probar", icono: EspejoIcono },
-  { href: "/estilo", texto: "Estilo", icono: EstrellaIcono },
-  { href: "/perfil", texto: "Perfil", icono: PersonaIcono },
+  { href: "/hoy", texto: "Today", icono: SolIcono },
+  { href: "/closet", texto: "Closet", icono: PerchaIcono },
+  { href: "/probar", texto: "Try on", icono: EspejoIcono },
+  { href: "/estilo", texto: "Style", icono: EstrellaIcono },
+  { href: "/perfil", texto: "Profile", icono: PersonaIcono },
 ];
 
 function esActivo(ruta: string, href: string) {
-  // `/closet/subir` y `/closet/[id]` también son el clóset.
+  // `/closet/subir` and `/closet/[id]` are the closet too.
   return ruta === href || ruta.startsWith(`${href}/`);
 }
 
-/** Enlaces del encabezado. Se ocultan en móvil: ahí manda la barra de abajo. */
+/** Header links. Hidden on mobile: the bottom bar takes over there. */
 export function NavegacionEscritorio() {
   const ruta = usePathname();
 
@@ -45,7 +45,7 @@ export function NavegacionEscritorio() {
                 : "text-text-muted transition hover:text-text"
             }
           >
-            {texto === "Estilo" ? "Tu estilo" : texto}
+            {texto === "Style" ? "Your style" : texto}
           </Link>
         );
       })}
@@ -53,13 +53,13 @@ export function NavegacionEscritorio() {
   );
 }
 
-/** Barra inferior fija. Solo en teléfono. */
+/** Fixed bottom bar. Phone only. */
 export function NavegacionMovil() {
   const ruta = usePathname();
 
   return (
     <nav
-      aria-label="Secciones"
+      aria-label="Sections"
       className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-bg/95 backdrop-blur sm:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
@@ -86,7 +86,7 @@ export function NavegacionMovil() {
   );
 }
 
-/* Iconos: trazo simple, 20px, para que se lean a tamaño chico. */
+/* Icons: simple stroke, 20px, so they read at small size. */
 type P = { activo: boolean };
 const base = "h-5 w-5";
 const trazo = (activo: boolean) => (activo ? 1.9 : 1.5);

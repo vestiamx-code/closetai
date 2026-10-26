@@ -17,6 +17,7 @@ export type Clima = {
 /** Coordenadas de las ciudades más probables. Evita una llamada de geocoding. */
 const CIUDADES: Record<string, [number, number]> = {
   "ciudad de méxico": [19.43, -99.13],
+  "mexico city": [19.43, -99.13],
   cdmx: [19.43, -99.13],
   guadalajara: [20.67, -103.35],
   monterrey: [25.69, -100.32],
@@ -30,17 +31,17 @@ const CIUDADES: Record<string, [number, number]> = {
   león: [21.12, -101.68],
 };
 
-/** Códigos WMO de open-meteo, en palabras que una persona entiende. */
+/** open-meteo WMO codes, in words a person understands. */
 function describir(codigo: number): string {
-  if (codigo === 0) return "despejado";
-  if (codigo <= 2) return "medio nublado";
-  if (codigo === 3) return "nublado";
-  if (codigo <= 48) return "con neblina";
-  if (codigo <= 57) return "con llovizna";
-  if (codigo <= 67) return "lloviendo";
-  if (codigo <= 77) return "nevando";
-  if (codigo <= 82) return "con chubascos";
-  return "con tormenta";
+  if (codigo === 0) return "clear";
+  if (codigo <= 2) return "partly cloudy";
+  if (codigo === 3) return "cloudy";
+  if (codigo <= 48) return "foggy";
+  if (codigo <= 57) return "drizzle";
+  if (codigo <= 67) return "rain";
+  if (codigo <= 77) return "snow";
+  if (codigo <= 82) return "showers";
+  return "thunderstorm";
 }
 
 function coordenadas(ciudad: string): [number, number] {

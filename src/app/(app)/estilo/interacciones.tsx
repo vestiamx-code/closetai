@@ -15,7 +15,7 @@ export function BotonCorregir({ lista, valor }: { lista: string; valor: string }
   return (
     <button
       disabled={pendiente}
-      title="Esto no es cierto sobre mí"
+      title="This isn't true about me"
       onClick={() =>
         iniciar(async () => {
           const fd = new FormData();
@@ -28,7 +28,7 @@ export function BotonCorregir({ lista, valor }: { lista: string; valor: string }
       }
       className="shrink-0 text-xs text-text-muted underline underline-offset-4 transition hover:text-text disabled:opacity-60"
     >
-      {pendiente ? "…" : "No es cierto"}
+      {pendiente ? "…" : "Not true"}
     </button>
   );
 }

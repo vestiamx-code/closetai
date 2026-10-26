@@ -61,10 +61,10 @@ export async function conModeloDeRespaldo<T>(
     return { resultado, modelo: modelos.principal, usoRespaldo: false };
   } catch (error) {
     const texto = error instanceof Error ? error.message : String(error);
-    const motivo = clasificarFalloDelProveedor(texto) ?? (esTiempoAgotado(error) ? "tiempo agotado" : null);
+    const motivo = clasificarFalloDelProveedor(texto) ?? (esTiempoAgotado(error) ? "timed out" : null);
     if (!motivo) throw error;
 
-    console.warn(`[gemini] ${modelos.principal} no respondió (${motivo}); se usa ${modelos.respaldo}`);
+    console.warn(`[gemini] ${modelos.principal} did not respond (${motivo}); using ${modelos.respaldo}`);
     const resultado = await llamada(modelos.respaldo, AbortSignal.timeout(tiempoMaximoMs));
     return { resultado, modelo: modelos.respaldo, usoRespaldo: true };
   }

@@ -7,9 +7,9 @@ import { comentar, generarOutfits, reaccionar } from "./actions";
 import { Aviso } from "@/components/ui/aviso";
 
 const MOTIVOS = [
-  "No me gusta la combinación",
-  "No es mi estilo",
-  "No aplica al clima o la ocasión",
+  "I don't like the combination",
+  "It's not my style",
+  "Wrong for the weather or the occasion",
 ] as const;
 
 export function BotonGenerar({ texto }: { texto: string }) {
@@ -36,7 +36,7 @@ export function BotonGenerar({ texto }: { texto: string }) {
         }
         className="w-full rounded-lg bg-accent px-5 py-3 font-medium text-accent-contrast transition hover:opacity-90 disabled:opacity-60"
       >
-        {pendiente ? "Pensando en tu clóset…" : texto}
+        {pendiente ? "Thinking about your closet…" : texto}
       </button>
     </div>
   );
@@ -86,45 +86,45 @@ export function Acciones({ outfitId }: { outfitId: string }) {
       <div className="flex flex-wrap gap-2">
         <button
           disabled={pendiente}
-          onClick={() => enviar("accept", undefined, "Anotado. Que lo disfrutes.")}
+          onClick={() => enviar("accept", undefined, "Noted. Enjoy it.")}
           className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition hover:opacity-90 disabled:opacity-60"
         >
-          Me lo pongo
+          I’ll wear it
         </button>
         <button
           disabled={pendiente}
           onClick={() => setMostrarMotivos((v) => !v)}
           className="rounded-lg border border-border px-4 py-2 text-sm transition hover:bg-surface-2 disabled:opacity-60"
         >
-          No, gracias
+          No, thanks
         </button>
         <button
           disabled={pendiente}
-          onClick={() => enviar("favorite", undefined, "Guardado en favoritos.")}
+          onClick={() => enviar("favorite", undefined, "Saved to favorites.")}
           className="rounded-lg border border-border px-4 py-2 text-sm transition hover:bg-surface-2 disabled:opacity-60"
         >
-          Guardar
+          Save
         </button>
         <button
           disabled={pendiente}
           onClick={() => setMostrarComentario((v) => !v)}
           className="rounded-lg border border-border px-4 py-2 text-sm transition hover:bg-surface-2 disabled:opacity-60"
         >
-          Comentar
+          Comment
         </button>
       </div>
 
       {mostrarMotivos ? (
         <div className="mt-3 space-y-2">
           <p className="text-xs text-text-muted">
-            ¿Por qué no? Cada respuesta le enseña algo a ClosetAI.
+            Why not? Every answer teaches ClosetAI something.
           </p>
           {MOTIVOS.map((motivo) => (
             <button
               key={motivo}
               disabled={pendiente}
               onClick={() =>
-                enviar("reject", motivo, "Gracias. No te vuelvo a proponer algo así.")
+                enviar("reject", motivo, "Thanks. I won't suggest something like that again.")
               }
               className="block w-full rounded-lg border border-border px-3.5 py-2 text-left text-sm transition hover:border-accent/50 disabled:opacity-60"
             >
@@ -142,7 +142,7 @@ export function Acciones({ outfitId }: { outfitId: string }) {
             iniciar(async () => {
               const r = await comentar(fd);
               if (r?.error) setError(r.error);
-              else setListo("Gracias, eso me sirve mucho.");
+              else setListo("Thanks, that helps a lot.");
             });
           }}
         >
@@ -151,7 +151,7 @@ export function Acciones({ outfitId }: { outfitId: string }) {
             rows={3}
             required
             maxLength={500}
-            placeholder="Me encanta pero el saco me queda grande…"
+            placeholder="I love it but the blazer is too big on me…"
             className="w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           <button
@@ -159,7 +159,7 @@ export function Acciones({ outfitId }: { outfitId: string }) {
             disabled={pendiente}
             className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition hover:opacity-90 disabled:opacity-60"
           >
-            Enviar
+            Send
           </button>
         </form>
       ) : null}

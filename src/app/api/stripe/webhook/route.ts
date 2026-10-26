@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
   try {
     evento = stripe().webhooks.constructEvent(cuerpo, firma, secreto);
   } catch (error) {
-    console.error("[webhook] firma inválida", error);
-    return NextResponse.json({ error: "firma inválida" }, { status: 400 });
+    console.error("[webhook] invalid signature", error);
+    return NextResponse.json({ error: "invalid signature" }, { status: 400 });
   }
 
   if (evento.type !== "checkout.session.completed") {
@@ -70,14 +70,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ recibido: true, duplicado: true });
   }
   if (errorCompra) {
-    console.error("[webhook] no se pudo registrar la compra", errorCompra);
-    return NextResponse.json({ error: "no se registró" }, { status: 500 });
+    console.error("[webhook] could not record the purchase", errorCompra);
+    return NextResponse.json({ error: "not recorded" }, { status: 500 });
   }
 
   const abono = await abonar(userId, producto.creditos, `compra:${productoId}`, sesion.id);
   if (!abono.ok) {
-    console.error("[webhook] compra registrada pero créditos no abonados", { session: sesion.id });
-    return NextResponse.json({ error: "créditos no abonados" }, { status: 500 });
+    console.error("[webhook] purchase recorded but credits not added", { session: sesion.id });
+    return NextResponse.json({ error: "credits not added" }, { status: 500 });
   }
 
   if (productoId === "lifetime") {

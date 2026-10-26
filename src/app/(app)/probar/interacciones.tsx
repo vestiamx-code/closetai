@@ -33,9 +33,9 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
       // Vale más avisarlo antes de gastar un crédito.
       if ((await altoOriginal(archivo)) < ALTO_MINIMO_CUERPO) {
         setNota(
-          "Esta foto es de baja resolución, así que las pruebas van a salir algo borrosas. " +
-            "Si puedes, tómala directo con la cámara y súbela sin mandártela por WhatsApp — " +
-            "esas apps la comprimen mucho.",
+          "This photo is low resolution, so the try-ons will come out somewhat blurry. " +
+            "If you can, take it straight with the camera and upload it without sending it to yourself on WhatsApp — " +
+            "those apps compress it a lot.",
         );
       }
 
@@ -47,7 +47,7 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
         .from("avatars")
         .upload(ruta, webp, { contentType: "image/webp" });
 
-      if (errorSubida) throw new Error("No se pudo subir la foto");
+      if (errorSubida) throw new Error("The photo could not be uploaded");
 
       setEstado("revisando");
       iniciar(async () => {
@@ -60,20 +60,20 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
         }
       });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Algo salió mal");
+      setError(e instanceof Error ? e.message : "Something went wrong");
       setEstado("listo");
     }
   }
 
   const ocupado = estado !== "listo" || pendiente;
   const texto =
-    estado === "subiendo" ? "Subiendo…" : estado === "revisando" ? "Revisando tu foto…" : null;
+    estado === "subiendo" ? "Uploading…" : estado === "revisando" ? "Checking your photo…" : null;
 
   if (compacto) {
     return (
       <label className="mt-2 block cursor-pointer text-xs text-text-muted underline underline-offset-4 hover:text-text">
         <input type="file" accept="image/*" className="sr-only" onChange={alElegir} disabled={ocupado} />
-        {texto ?? "Cambiar foto"}
+        {texto ?? "Change photo"}
         {error ? <span className="mt-1 block text-red-600 dark:text-red-400">{error}</span> : null}
         {nota ? <span className="mt-1 block not-italic text-text-muted">{nota}</span> : null}
       </label>
@@ -94,7 +94,7 @@ export function SubirFotoBase({ userId, compacto }: { userId: string; compacto?:
       ) : null}
       <label className="block cursor-pointer rounded-lg bg-accent px-5 py-3 text-center font-medium text-accent-contrast transition hover:opacity-90">
         <input type="file" accept="image/*" className="sr-only" onChange={alElegir} disabled={ocupado} />
-        {texto ?? "Subir mi foto"}
+        {texto ?? "Upload my photo"}
       </label>
     </div>
   );
@@ -119,14 +119,14 @@ export function ProbadorPrendas({
     return (
       <div className="rounded-xl border border-dashed border-border px-5 py-10 text-center">
         <p className="leading-relaxed text-text-muted text-pretty">
-          No tienes prendas que se puedan probar todavía. Funciona con tops, pantalones y
-          vestidos — no con zapatos ni accesorios.
+          You don’t have garments that can be tried on yet. It works with tops, pants and
+          dresses — not with shoes or accessories.
         </p>
         <Link
           href="/closet/subir"
           className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
         >
-          Agregar prendas
+          Add garments
         </Link>
       </div>
     );
@@ -134,19 +134,19 @@ export function ProbadorPrendas({
 
   return (
     <div>
-      <h2 className="font-display text-lg font-semibold">Elige qué probarte</h2>
-      <p className="mt-1 text-sm text-text-muted">Cada prueba usa un crédito.</p>
+      <h2 className="font-display text-lg font-semibold">Choose what to try on</h2>
+      <p className="mt-1 text-sm text-text-muted">Each try-on uses one credit.</p>
 
       {sinSaldo ? (
         <div className="mt-4 rounded-lg border border-border bg-surface p-4">
           <p className="text-sm text-pretty">
-            Te quedaste sin créditos. Con una recarga de $49 MXN tienes 20 pruebas más.
+            You’re out of credits. A MX$49 top-up gets you 20 more try-ons.
           </p>
           <Link
             href="/comprar"
             className="mt-3 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition hover:opacity-90"
           >
-            Recargar créditos
+            Top up credits
           </Link>
         </div>
       ) : error ? (
@@ -189,7 +189,7 @@ export function ProbadorPrendas({
                 ) : null}
                 {probando === prenda.id ? (
                   <span className="absolute inset-0 flex items-center justify-center bg-bg/80 text-xs font-medium">
-                    Probando…
+                    Trying on…
                   </span>
                 ) : null}
               </div>
@@ -201,9 +201,9 @@ export function ProbadorPrendas({
 
       {creditos < 1 ? (
         <p className="mt-4 text-sm text-text-muted">
-          Necesitas créditos para probarte ropa.{" "}
+          You need credits to try clothes on.{" "}
           <Link href="/comprar" className="text-accent underline underline-offset-4">
-            Ver opciones
+            See options
           </Link>
         </p>
       ) : null}

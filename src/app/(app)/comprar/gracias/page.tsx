@@ -4,7 +4,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { saldo } from "@/lib/credits";
 
-export const metadata: Metadata = { title: "Gracias" };
+export const metadata: Metadata = { title: "Thank you" };
 
 export default async function GraciasPage() {
   const user = await requireUser();
@@ -13,21 +13,21 @@ export default async function GraciasPage() {
   return (
     <div className="mx-auto w-full max-w-lg px-6 py-20 text-center">
       <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-        Listo, ya eres parte
+        Done, you’re in
       </h1>
       <p className="mt-4 leading-relaxed text-text-muted text-pretty">
-        Tienes <strong className="text-text">{creditos} créditos</strong> de prueba virtual y el
-        estilista completo desbloqueado.
+        You have <strong className="text-text">{creditos} credits</strong> for virtual try-on and the
+        full stylist unlocked.
       </p>
       <p className="mt-3 text-sm text-text-muted text-pretty">
-        Si el saldo todavía dice cero, dale unos segundos y recarga: el pago se confirma con
-        Stripe y a veces tarda un momento en llegar.
+        If the balance still says zero, give it a few seconds and reload: the payment is confirmed by
+        Stripe and sometimes takes a moment to arrive.
       </p>
       <Link
         href="/hoy"
         className="mt-8 inline-block rounded-lg bg-accent px-6 py-3 font-medium text-accent-contrast transition hover:opacity-90"
       >
-        Ver mis outfits
+        See my outfits
       </Link>
     </div>
   );

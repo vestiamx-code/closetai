@@ -39,7 +39,7 @@ export async function comprimirAWebp(archivo: File, perfil: Perfil = "prenda"): 
   canvas.height = alto;
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Tu navegador no puede procesar imágenes");
+  if (!ctx) throw new Error("Your browser can't process images");
   ctx.drawImage(bitmap, 0, 0, ancho, alto);
   bitmap.close();
 
@@ -52,7 +52,7 @@ export async function comprimirAWebp(archivo: File, perfil: Perfil = "prenda"): 
     if (blob && (blob.size <= peso || calidad === calidades[calidades.length - 1])) return blob;
   }
 
-  throw new Error("No pudimos procesar esta imagen");
+  throw new Error("We couldn't process this image");
 }
 
 /**
