@@ -5,15 +5,15 @@ import { pesos } from "@/lib/precios";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = {
-  title: "Producto · ClosetAI",
+  title: "Product · ClosetAI",
   description:
-    "Qué hace ClosetAI, función por función: lo que ya está en vivo, lo que se construyó esta semana y lo que todavía no existe.",
+    "What ClosetAI does, feature by feature: what is already live, what was built this week and what does not exist yet.",
 };
 
-// Se leyó de la base en cada visita, como /research y /pricing. Con caché de 5
-// minutos, el primer render quedó congelado del despliegue anterior —cuando las
-// tablas todavía no existían— y la página siguió mostrando el aviso de error
-// aunque los datos ya estaban. Un mapa que miente por caché no sirve.
+// Read from the database on every visit, like /research and /pricing. With a
+// 5-minute cache, the first render froze from the previous deployment —when the
+// tables did not exist yet— and the page kept showing the error notice even
+// though the data was there. A map that lies because of a cache is no use.
 export const dynamic = "force-dynamic";
 
 type Plan = { id: string; nombre: string; precio_mxn: number; cobro: string; resumen: string };
@@ -29,25 +29,25 @@ type Funcion = {
 };
 
 const GRUPOS: { id: Funcion["grupo"]; titulo: string; bajada: string }[] = [
-  { id: "closet", titulo: "Tu clóset", bajada: "Convertir ropa en datos sin que sea un trabajo." },
-  { id: "estilista", titulo: "El estilista", bajada: "Decidir qué ponerte con lo que ya tienes." },
-  { id: "probador", titulo: "El probador", bajada: "Verte la ropa puesta antes de sacarla del clóset." },
-  { id: "compras", titulo: "Comprar mejor", bajada: "Qué te falta de verdad, y dónde está en México." },
-  { id: "publico", titulo: "Sin cuenta", bajada: "Lo que cualquiera puede ver y probar sin registrarse." },
+  { id: "closet", titulo: "Your closet", bajada: "Turning clothes into data without it becoming a chore." },
+  { id: "estilista", titulo: "The stylist", bajada: "Deciding what to wear from what you already own." },
+  { id: "probador", titulo: "The fitting room", bajada: "Seeing clothes on you before taking them out of the closet." },
+  { id: "compras", titulo: "Shopping smarter", bajada: "What you really need, and where to find it in Mexico." },
+  { id: "publico", titulo: "No account needed", bajada: "What anyone can see and try without signing up." },
 ];
 
 const ESTADOS: Record<Funcion["estado"], { texto: string; clase: string }> = {
-  vivo: { texto: "en vivo", clase: "border-border" },
-  esta_semana: { texto: "esta semana", clase: "border-border" },
-  planeado: { texto: "todavía no existe", clase: "border-border opacity-70" },
+  vivo: { texto: "live", clase: "border-border" },
+  esta_semana: { texto: "this week", clase: "border-border" },
+  planeado: { texto: "doesn't exist yet", clase: "border-border opacity-70" },
 };
 
 /**
- * `/product` — Semana 3.
+ * `/product` — Week 3.
  *
- * El mapa de funciones: qué hace ClosetAI, en qué plan entra cada cosa y —lo que
- * casi nunca se publica— cuáles no existen todavía. El estado sale de la base,
- * no de una promesa: una función marcada "en vivo" se puede abrir y usar.
+ * The feature map: what ClosetAI does, which plan each thing belongs to and —what
+ * is almost never published— which ones do not exist yet. The status comes from
+ * the database, not from a promise: a feature marked "live" can be opened and used.
  */
 export default async function Producto() {
   const admin = createAdminClient();
@@ -58,11 +58,11 @@ export default async function Producto() {
   ]);
 
   if (planesR.error || funcionesR.error) {
-    console.error("[product] no se pudieron leer los datos", planesR.error ?? funcionesR.error);
+    console.error("[product] could not read the data", planesR.error ?? funcionesR.error);
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-20">
-        <h1 className="font-display text-3xl font-semibold">Producto</h1>
-        <p className="mt-4 text-text-muted">El mapa del producto no está disponible en este momento.</p>
+        <h1 className="font-display text-3xl font-semibold">Product</h1>
+        <p className="mt-4 text-text-muted">The product map is not available right now.</p>
       </main>
     );
   }
@@ -84,36 +84,36 @@ export default async function Producto() {
           href="/pricing"
           className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
         >
-          Ver precios y simulador
+          See pricing and the simulator
         </Link>
       </header>
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
-        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Producto</p>
+        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Product</p>
         <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.25rem,6vw,3.75rem)] leading-[0.98] font-semibold tracking-[-0.03em] text-balance">
-          Qué hace ClosetAI,{" "}
+          What ClosetAI does,{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            función por función.
+            feature by feature.
           </span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-text-muted text-pretty">
-          Y cuáles todavía no existen. {vivas} funciones están en vivo —las puedes abrir ahora mismo—,
-          {" "}{estaSemana} se construyeron esta semana y {planeadas} están planeadas. Nada marcado
-          «en vivo» es una promesa: es una liga que funciona.
+          And which ones don&apos;t exist yet. {vivas} features are live —you can open them right now—,
+          {" "}{estaSemana} were built this week and {planeadas} are planned. Nothing marked “live” is a
+          promise: it is a link that works.
         </p>
 
         {/* ------------------------------------------------------------ Planes */}
-        <section aria-label="Los planes" className="mt-12 grid gap-4 md:grid-cols-3">
+        <section aria-label="The plans" className="mt-12 grid gap-4 md:grid-cols-3">
           {planes.map((p) => (
             <div key={p.id} className="rounded-xl border border-border bg-surface p-5">
               <p className="font-display text-lg font-semibold">{p.nombre}</p>
               <p className="mt-1 font-medium tabular-nums">
                 {p.precio_mxn === 0 ? "$0" : pesos(p.precio_mxn)}
                 {p.cobro === "unico"
-                  ? " · una sola vez"
+                  ? " · one time"
                   : p.cobro === "recarga"
-                    ? " · por recarga"
-                    : " · para siempre"}
+                    ? " · per top-up"
+                    : " · forever"}
               </p>
               <p className="mt-2 text-sm text-text-muted">{p.resumen}</p>
             </div>
@@ -128,10 +128,10 @@ export default async function Producto() {
           className="mt-20 border-t border-border pt-10"
         >
           <h2 id="mapa-titulo" className="font-display text-3xl font-semibold tracking-tight">
-            El mapa
+            The map
           </h2>
           <p className="mt-2 max-w-2xl text-text-muted">
-            Cada función dice en qué plan entra y en qué estado está.
+            Each feature says which plan it belongs to and what state it is in.
           </p>
 
           <div className="mt-8 space-y-12">
@@ -178,9 +178,9 @@ export default async function Producto() {
         </section>
 
         <section className="mt-20 border-t border-border pt-10">
-          <h2 className="font-display text-3xl font-semibold tracking-tight">Lo que cuesta cada plan</h2>
+          <h2 className="font-display text-3xl font-semibold tracking-tight">What each plan costs</h2>
           <p className="mt-2 max-w-2xl text-text-muted">
-            Los precios, lo que nos cuesta servirlos y un simulador para mover los supuestos están en{" "}
+            The prices, what they cost us to run and a simulator to move the assumptions are in{" "}
             <Link href="/pricing" className="underline underline-offset-4 hover:text-text">
               /pricing
             </Link>

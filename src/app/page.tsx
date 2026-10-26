@@ -182,7 +182,7 @@ export default async function Home() {
           Your closet is full and you keep wearing the same thing.
         </h2>
         <p className="mt-6 max-w-xl text-xl leading-relaxed text-text-muted text-pretty">
-          You're not short of clothes: you just can't see them all at once.
+          You’re not short of clothes: you just can’t see them all at once.
         </p>
       </section>
 
@@ -217,7 +217,7 @@ export default async function Home() {
             ))}
           </dl>
           <p className="mt-12 max-w-2xl font-display text-2xl leading-snug tracking-tight text-balance sm:text-3xl">
-            Buying isn't the problem.{" "}
+            Buying isn’t the problem.{" "}
             <span className="italic" style={{ color: "var(--barro)" }}>
               Knowing what goes together is.
             </span>
@@ -239,7 +239,7 @@ export default async function Home() {
           <div className="rounded-2xl border border-border bg-surface p-8">
             <p className="font-display text-5xl font-semibold tracking-tight">$0</p>
             <p className="mt-3 text-lg">Your closet, free forever.</p>
-            <p className="mt-2 text-text-muted">We never charge you for work you've already done.</p>
+            <p className="mt-2 text-text-muted">We never charge you for work you’ve already done.</p>
           </div>
           <div className="rounded-2xl border-2 bg-surface p-8" style={{ borderColor: "var(--barro)" }}>
             <p className="font-display text-5xl font-semibold tracking-tight">MX$100</p>

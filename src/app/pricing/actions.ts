@@ -8,18 +8,18 @@ import { calcular, type Supuestos } from "@/lib/precios";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Guardar un escenario del simulador.
+ * Save a simulator scenario.
  *
- * Dos reglas que no son obvias desde la pantalla:
+ * Two rules that are not obvious from the screen:
  *
- * 1. **El servidor recalcula.** Lo que manda el navegador son los supuestos, no
- *    el resultado. Si alguien edita el JavaScript y manda un ingreso de un
- *    millón, lo que se guarda sigue siendo lo que da la cuenta con esos
- *    supuestos. La pantalla pide; el servidor decide.
- * 2. **La IP no se guarda.** El límite por hora necesita *distinguir* IPs, no
- *    conocerlas, así que se guarda un hash con sal. La sal es una llave que ya
- *    existe en el entorno —no se agregó ninguna variable nueva— y sin ella el
- *    hash de una IP se podría adivinar probando las 4 mil millones.
+ * 1. **The server recalculates.** What the browser sends are the assumptions,
+ *    not the result. If someone edits the JavaScript and sends an income of a
+ *    million, what gets saved is still what the math gives for those
+ *    assumptions. The screen asks; the server decides.
+ * 2. **The IP is not stored.** The hourly limit needs to *tell IPs apart*, not
+ *    know them, so a salted hash is stored. The salt is a key that already exists
+ *    in the environment —no new variable was added— and without it an IP's hash
+ *    could be guessed by trying all 4 billion.
  */
 
 const SUPUESTOS = z.object({
@@ -42,10 +42,10 @@ const SUPUESTOS = z.object({
 const NOMBRE = z
   .string()
   .trim()
-  .min(2, "Ponle un nombre al escenario, aunque sea corto.")
-  .max(60, "Con 60 caracteres alcanza.");
+  .min(2, "Give the scenario a name, even a short one.")
+  .max(60, "60 characters is enough.");
 
-/** Escenarios que puede guardar una misma IP en una hora. */
+/** Scenarios a single IP can save per hour. */
 const TOPE_POR_HORA = 20;
 
 export type EstadoGuardado =
@@ -59,14 +59,14 @@ export async function guardarEscenario(
 ): Promise<EstadoGuardado> {
   const nombre = NOMBRE.safeParse(formData.get("nombre"));
   if (!nombre.success) {
-    return { estado: "error", mensaje: nombre.error.issues[0]?.message ?? "Revisa el nombre." };
+    return { estado: "error", mensaje: nombre.error.issues[0]?.message ?? "Check the name." };
   }
 
   let supuestos: Supuestos;
   try {
     supuestos = SUPUESTOS.parse(JSON.parse(String(formData.get("supuestos") ?? "")));
   } catch {
-    return { estado: "error", mensaje: "Los supuestos no se entendieron. Vuelve a intentarlo." };
+    return { estado: "error", mensaje: "The assumptions could not be read. Please try again." };
   }
 
   const ip_hash = await huellaDeQuienPide();
@@ -82,12 +82,12 @@ export async function guardarEscenario(
   if ((count ?? 0) >= TOPE_POR_HORA) {
     return {
       estado: "error",
-      mensaje: "Ya guardaste varios escenarios en la última hora. Espera un rato e inténtalo de nuevo.",
+      mensaje: "You have saved several scenarios in the last hour. Wait a while and try again.",
     };
   }
 
-  // Aquí está el punto: el resultado que se guarda sale de esta llamada, no del
-  // formulario.
+  // This is the point: the result that gets saved comes from this call, not from
+  // the form.
   const resultado = calcular(supuestos);
 
   const { error } = await admin.from("pricing_scenarios").insert({
@@ -111,8 +111,8 @@ export async function guardarEscenario(
   });
 
   if (error) {
-    console.error("[pricing] no se pudo guardar el escenario", error);
-    return { estado: "error", mensaje: "No se pudo guardar. Inténtalo de nuevo." };
+    console.error("[pricing] could not save the scenario", error);
+    return { estado: "error", mensaje: "Could not save. Please try again." };
   }
 
   revalidatePath("/pricing");

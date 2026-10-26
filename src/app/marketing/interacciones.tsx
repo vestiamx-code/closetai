@@ -132,7 +132,7 @@ export function Generador() {
           {generando ? "Writing…" : "Generate post"}
         </button>
         <p className="mt-3 text-xs text-text-muted">
-          An AI writes it in the brand's voice, using only the verified facts. If it invents a figure, the
+          An AI writes it in the brand’s voice, using only the verified facts. If it invents a figure, the
           post is rejected before it is shown.
         </p>
       </form>
@@ -186,7 +186,7 @@ export function Generador() {
             ) : null}
             <p className="mt-3 text-xs text-text-muted">
               It is saved publicly as “generated with AI, not reviewed”. Publishing it on social media is still a
-              person's decision. Model: {estado.modelo}.
+              person’s decision. Model: {estado.modelo}.
             </p>
           </article>
         ) : null}

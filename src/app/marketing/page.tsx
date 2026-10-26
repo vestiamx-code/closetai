@@ -170,7 +170,7 @@ export default async function Marketing() {
                   </li>
                 ))}
               </ul>
-              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Voice — don't</h3>
+              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Voice — don’t</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {MARCA.voz.no.map((v) => (
                   <li key={v} className="flex gap-2">
@@ -445,7 +445,7 @@ export default async function Marketing() {
         </Seccion>
 
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
-          This week's plan, written before the code, is in{" "}
+          This week’s plan, written before the code, is in{" "}
           <a href={PACKET} className="underline underline-offset-4 hover:text-text">
             SEMANA-4-PACKET.md
           </a>

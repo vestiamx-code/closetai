@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { pesos } from "@/lib/precios";
+import { EN_INGLES_DESDE } from "@/lib/marketing";
+import { ESCENARIOS, pesos } from "@/lib/precios";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 import { Simulador } from "./simulador";
 
 export const metadata: Metadata = {
-  title: "Precios · ClosetAI",
+  title: "Pricing · ClosetAI",
   description:
-    "Los tres planes de ClosetAI, lo que cuesta servir cada uno, y un simulador donde cada supuesto dice de dónde salió.",
+    "ClosetAI's three plans, what each one costs to run, and a simulator where every assumption says where it came from.",
 };
 
-// Los escenarios guardados tienen que reflejar lo que acaba de pasar.
+// Saved scenarios have to reflect what just happened.
 export const dynamic = "force-dynamic";
 
 const PACKET =
@@ -48,17 +49,17 @@ type EscenarioGuardado = {
 };
 
 const COMO_SE_COBRA: Record<Plan["cobro"], string> = {
-  gratis: "Para siempre",
-  unico: "Un solo pago",
-  recarga: "Cuando se te acaben",
+  gratis: "Forever",
+  unico: "One payment",
+  recarga: "When you run out",
 };
 
 /**
- * `/pricing` — Semana 3.
+ * `/pricing` — Week 3.
  *
- * Los tres planes con su costo al lado, y un simulador de ingresos donde cada
- * supuesto dice si está verificado o si es una apuesta. La aritmética vive en
- * `src/lib/precios.ts` y está probada aparte: aquí solo se muestra.
+ * The three plans with their cost alongside, and a revenue simulator where every
+ * assumption says whether it is verified or a bet. The arithmetic lives in
+ * `src/lib/precios.ts` and is tested separately: here it is only displayed.
  */
 export default async function Pricing() {
   const admin = createAdminClient();
@@ -66,21 +67,22 @@ export default async function Pricing() {
   const [planesR, supuestosR, guardadosR] = await Promise.all([
     admin.from("pricing_plans").select("*").order("orden"),
     admin.from("pricing_assumptions").select("*").order("orden"),
-    // Los escenarios se leen aquí, con la llave de servicio: la tabla guarda el
-    // hash de la IP de quien simuló y no se abre a la llave pública.
+    // Scenarios are read here, with the service key: the table stores the hash of
+    // the IP of whoever simulated, so it is not open to the public key.
     admin
       .from("pricing_scenarios")
       .select("id, nombre, escenario, resultado, created_at")
+      .gte("created_at", EN_INGLES_DESDE)
       .order("created_at", { ascending: false })
       .limit(12),
   ]);
 
   if (planesR.error || supuestosR.error) {
-    console.error("[pricing] no se pudieron leer los datos", planesR.error ?? supuestosR.error);
+    console.error("[pricing] could not read the data", planesR.error ?? supuestosR.error);
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-20">
-        <h1 className="font-display text-3xl font-semibold">Precios</h1>
-        <p className="mt-4 text-text-muted">Los precios no están disponibles en este momento.</p>
+        <h1 className="font-display text-3xl font-semibold">Pricing</h1>
+        <p className="mt-4 text-text-muted">Pricing is not available right now.</p>
       </main>
     );
   }
@@ -102,27 +104,27 @@ export default async function Pricing() {
           href="/product"
           className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
         >
-          Qué incluye cada plan
+          What each plan includes
         </Link>
       </header>
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
-        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Precios</p>
+        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Pricing</p>
         <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.25rem,6vw,3.75rem)] leading-[0.98] font-semibold tracking-[-0.03em] text-balance">
-          Un pago.{" "}
+          One payment.{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            Y la cuenta completa.
+            And the full math.
           </span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-text-muted text-pretty">
-          Cada plan dice lo que cuesta servirlo, no solo lo que cuesta comprarlo. Y abajo puedes mover
-          los supuestos tú misma: cuántas personas se registran, cuántas pagan, cuánto se prueban ropa.
-          De los {enElCalculo.length} supuestos que entran en la cuenta, {verificados} están
-          verificados; los demás están marcados como lo que son.
+          Each plan shows what it costs us to run, not just what it costs to buy. Below, you can move the
+          assumptions yourself: how many people sign up, how many pay, how often they try clothes on. Of
+          the {enElCalculo.length} assumptions in the calculation, {verificados} are verified; the rest are
+          labelled for what they are.
         </p>
 
         {/* ------------------------------------------------------------ Planes */}
-        <section aria-label="Planes" data-testid="planes" className="mt-12 grid gap-4 md:grid-cols-3">
+        <section aria-label="Plans" data-testid="planes" className="mt-12 grid gap-4 md:grid-cols-3">
           {planes.map((p) => (
             <article
               key={p.id}
@@ -154,8 +156,8 @@ export default async function Pricing() {
         {/* ------------------------------------------------------------ Simulador */}
         <Seccion
           id="simulador"
-          titulo="Simulador de ingresos"
-          bajada="Dos segmentos, tres escenarios. Modela un mes típico y lo repite doce veces: no inventa retención, porque ClosetAI todavía no tiene un solo cliente de pago del cual aprenderla."
+          titulo="Revenue simulator"
+          bajada="Two segments, three scenarios. It models one typical month and repeats it twelve times: it does not invent retention, because ClosetAI does not have a single paying customer to learn it from yet."
         >
           <Simulador />
         </Seccion>
@@ -163,17 +165,17 @@ export default async function Pricing() {
         {/* ------------------------------------------------------------ Supuestos */}
         <Seccion
           id="supuestos"
-          titulo="De dónde sale cada número"
-          bajada="Lo verificado y lo supuesto no se mezclan. Es la misma regla de la página de investigación."
+          titulo="Where every number comes from"
+          bajada="Verified and assumed are never mixed. It is the same rule as the research page."
         >
           <div className="mt-6 overflow-x-auto">
             <table data-testid="tabla-supuestos" className="w-full min-w-[640px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border text-left text-xs tracking-[0.1em] text-text-muted uppercase">
-                  <th scope="col" className="py-2">Supuesto</th>
-                  <th scope="col" className="py-2">Valor</th>
-                  <th scope="col" className="py-2">De dónde sale</th>
-                  <th scope="col" className="py-2">Estado</th>
+                  <th scope="col" className="py-2">Assumption</th>
+                  <th scope="col" className="py-2">Value</th>
+                  <th scope="col" className="py-2">Where it comes from</th>
+                  <th scope="col" className="py-2">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -192,7 +194,7 @@ export default async function Pricing() {
                             rel="noreferrer"
                             className="underline underline-offset-4 hover:text-text"
                           >
-                            fuente
+                            source
                           </a>
                         </>
                       ) : null}
@@ -206,7 +208,7 @@ export default async function Pricing() {
             </table>
           </div>
 
-          <h3 className="mt-10 font-display text-xl font-semibold">Contexto que no entra en la cuenta</h3>
+          <h3 className="mt-10 font-display text-xl font-semibold">Context that is not part of the calculation</h3>
           <ul className="mt-4 space-y-3 text-sm">
             {contexto.map((s) => (
               <li key={s.id} data-supuesto={s.id} className="rounded-xl border border-border bg-surface p-4">
@@ -226,7 +228,7 @@ export default async function Pricing() {
                         rel="noreferrer"
                         className="underline underline-offset-4 hover:text-text"
                       >
-                        fuente
+                        source
                       </a>
                     </>
                   ) : null}
@@ -239,26 +241,26 @@ export default async function Pricing() {
         {/* ------------------------------------------------------------ Guardados */}
         <Seccion
           id="guardados"
-          titulo="Escenarios guardados"
-          bajada="Lo que otras personas —y yo— hemos simulado. El número es el que calculó el servidor."
+          titulo="Saved scenarios"
+          bajada="What other people —and I— have simulated. The number is the one the server calculated."
         >
           {guardados.length === 0 ? (
             <p data-testid="sin-escenarios" className="mt-6 text-text-muted">
-              Todavía no hay escenarios guardados. El primero puede ser el tuyo.
+              No saved scenarios yet. The first one could be yours.
             </p>
           ) : (
             <ul data-testid="lista-escenarios" className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {guardados.map((g) => (
                 <li key={g.id} data-escenario-guardado={g.id} className="rounded-xl border border-border bg-surface p-5">
-                  <p className="text-xs tracking-[0.14em] text-text-muted uppercase">{g.escenario}</p>
+                  <p className="text-xs tracking-[0.14em] text-text-muted uppercase">{ESCENARIOS.find((e) => e.id === g.escenario)?.nombre ?? g.escenario}</p>
                   <p className="mt-2 leading-snug font-medium">{g.nombre}</p>
                   <p className="mt-3 font-display text-2xl font-semibold tabular-nums">
                     {pesos(g.resultado?.ingresoNeto ?? 0)}
                   </p>
-                  <p className="text-sm text-text-muted">neto al mes</p>
+                  <p className="text-sm text-text-muted">net per month</p>
                   <p className="mt-3 border-t border-border pt-3 text-sm text-text-muted">
-                    {pesos(g.resultado?.anualNeto ?? 0)} a doce meses ·{" "}
-                    {new Date(g.created_at).toLocaleDateString("es-MX", { day: "numeric", month: "long" })}
+                    {pesos(g.resultado?.anualNeto ?? 0)} over twelve months ·{" "}
+                    {new Date(g.created_at).toLocaleDateString("en-US", { day: "numeric", month: "long" })}
                   </p>
                 </li>
               ))}
@@ -267,12 +269,12 @@ export default async function Pricing() {
         </Seccion>
 
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
-          El plan de esta semana, escrito antes del código, está en{" "}
+          This week’s plan, written before the code, is in{" "}
           <a href={PACKET} className="underline underline-offset-4 hover:text-text">
             SEMANA-3-PACKET.md
           </a>
-          . La aritmética vive en un solo archivo, <code>src/lib/precios.ts</code>, y tiene sus propias
-          pruebas.
+          . The arithmetic lives in a single file, <code>src/lib/precios.ts</code>, and has its own
+          tests.
         </p>
       </div>
     </main>
@@ -282,16 +284,16 @@ export default async function Pricing() {
 function Sello({ verificado, fecha }: { verificado: boolean; fecha: string | null }) {
   if (!verificado) {
     return (
-      <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-text-muted">supuesto</span>
+      <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-text-muted">assumption</span>
     );
   }
   return (
     <span
       className="rounded-full border px-2.5 py-0.5 text-xs"
       style={{ borderColor: "var(--verde, #2f6b43)", color: "var(--verde, #2f6b43)" }}
-      title={fecha ? `Verificado el ${fecha}` : undefined}
+      title={fecha ? `Verified on ${fecha}` : undefined}
     >
-      verificado
+      verified
     </span>
   );
 }

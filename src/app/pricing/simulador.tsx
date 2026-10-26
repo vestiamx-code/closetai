@@ -20,9 +20,9 @@ import { guardarEscenario, type EstadoGuardado } from "./actions";
 const INICIAL: EstadoGuardado = { estado: "vacio" };
 
 /**
- * El simulador. Calcula en el navegador para que el número se mueva mientras se
- * mueve el control; al guardar, el servidor hace la misma cuenta y guarda la
- * suya. Las dos llaman a la misma función: `src/lib/precios.ts`.
+ * The simulator. It calculates in the browser so the number moves while the
+ * control moves; when saving, the server does the same calculation and saves its
+ * own. Both call the same function: `src/lib/precios.ts`.
  */
 export function Simulador() {
   const [s, setS] = useState<Supuestos>(SUPUESTOS_INICIALES);
@@ -43,11 +43,11 @@ export function Simulador() {
 
   return (
     <div data-testid="simulador" className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      {/* ----------------------------------------------------- Los controles */}
+      {/* ----------------------------------------------------- The controls */}
       <div className="rounded-2xl border border-border bg-surface p-5">
-        <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Supuestos</p>
+        <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Assumptions</p>
 
-        <div role="group" aria-label="Escenario" className="mt-4 flex flex-wrap gap-2">
+        <div role="group" aria-label="Scenario" className="mt-4 flex flex-wrap gap-2">
           {ESCENARIOS.map((e) => (
             <button
               key={e.id}
@@ -64,8 +64,8 @@ export function Simulador() {
           ))}
         </div>
         <p className="mt-2 text-sm text-text-muted">
-          {ESCENARIOS.find((e) => e.id === s.escenario)?.nota} El escenario mueve la conversión, nunca
-          el precio.
+          {ESCENARIOS.find((e) => e.id === s.escenario)?.nota} The scenario moves conversion, never the
+          price.
         </p>
 
         <div className="mt-6 space-y-5">
@@ -76,7 +76,7 @@ export function Simulador() {
 
               <Campo
                 id={`registros-${seg.id}`}
-                etiqueta="Registros nuevos al mes"
+                etiqueta="New sign-ups per month"
                 valor={s.registros[seg.id]}
                 min={0}
                 max={5000}
@@ -85,7 +85,7 @@ export function Simulador() {
               />
               <Campo
                 id={`completo-${seg.id}`}
-                etiqueta="De cada 100, cuántos compran el plan Completo"
+                etiqueta="Out of 100, how many buy the Complete plan"
                 sufijo="%"
                 valor={Number((s.compranCompleto[seg.id] * 100).toFixed(1))}
                 min={0}
@@ -95,7 +95,7 @@ export function Simulador() {
               />
               <Campo
                 id={`recarga-${seg.id}`}
-                etiqueta="De cada 100 que pagaron, cuántos compran recarga al mes"
+                etiqueta="Out of 100 who paid, how many buy a top-up each month"
                 sufijo="%"
                 valor={Number((s.compranRecarga[seg.id] * 100).toFixed(1))}
                 min={0}
@@ -108,7 +108,7 @@ export function Simulador() {
 
           <Campo
             id="creditos"
-            etiqueta="Créditos de try-on que usa al mes una persona de pago"
+            etiqueta="Try-on credits a paying customer uses per month"
             valor={s.creditosAlMes}
             min={0}
             max={60}
@@ -118,23 +118,23 @@ export function Simulador() {
         </div>
       </div>
 
-      {/* ----------------------------------------------------- El resultado */}
+      {/* ----------------------------------------------------- The result */}
       <div>
         <div data-testid="resultado" className="grid grid-cols-3 gap-3">
-          <Cifra etiqueta="Ingreso neto al mes" valor={pesos(r.total.ingresoNeto)} testid="neto-mensual" />
-          <Cifra etiqueta="A 12 meses" valor={pesos(r.anual.ingresoNeto)} testid="neto-anual" />
-          <Cifra etiqueta="Margen" valor={porcentaje(r.total.margen)} testid="margen" />
+          <Cifra etiqueta="Net income per month" valor={pesos(r.total.ingresoNeto)} testid="neto-mensual" />
+          <Cifra etiqueta="Over 12 months" valor={pesos(r.anual.ingresoNeto)} testid="neto-anual" />
+          <Cifra etiqueta="Margin" valor={porcentaje(r.total.margen)} testid="margen" />
         </div>
 
         <p className="mt-3 text-sm text-text-muted">
-          De {pesos(r.total.ingresoBruto)} que pagarían las clientas al mes, Stripe se queda{" "}
-          {pesos(r.total.comisiones)} y servir el producto cuesta {pesos(r.total.costoVariable)}.
+          Of the {pesos(r.total.ingresoBruto)} customers would pay per month, Stripe keeps{" "}
+          {pesos(r.total.comisiones)} and running the product costs {pesos(r.total.costoVariable)}.
         </p>
 
-        {/* Comparación de escenarios, en barras de CSS */}
+        {/* Scenario comparison, as CSS bars */}
         <div className="mt-6 rounded-2xl border border-border bg-surface p-5">
           <p className="text-xs tracking-[0.14em] text-text-muted uppercase">
-            Los tres escenarios, con estos mismos registros
+            The three scenarios, with these same sign-ups
           </p>
           <ul className="mt-5 flex h-36 items-end gap-4">
             {comparacion.map((c) => (
@@ -156,19 +156,19 @@ export function Simulador() {
             ))}
           </ul>
           <p className="mt-3 text-xs text-text-muted">
-            Cada barra suma los dos segmentos. Una barra pálida es un mes que pierde dinero.
+            Each bar adds up both segments. A pale bar is a month that loses money.
           </p>
         </div>
 
-        {/* Por segmento */}
+        {/* By segment */}
         <table className="mt-6 w-full border-collapse text-sm">
-          <caption className="sr-only">Resultado por segmento</caption>
+          <caption className="sr-only">Result by segment</caption>
           <thead>
             <tr className="border-b border-border text-left text-xs tracking-[0.1em] text-text-muted uppercase">
-              <th scope="col" className="py-2">Segmento</th>
-              <th scope="col" className="py-2 text-right">Compran</th>
-              <th scope="col" className="py-2 text-right">Neto al mes</th>
-              <th scope="col" className="py-2 text-right">Margen</th>
+              <th scope="col" className="py-2">Segment</th>
+              <th scope="col" className="py-2 text-right">Buyers</th>
+              <th scope="col" className="py-2 text-right">Net per month</th>
+              <th scope="col" className="py-2 text-right">Margin</th>
             </tr>
           </thead>
           <tbody>
@@ -189,26 +189,26 @@ export function Simulador() {
           </tbody>
         </table>
 
-        {/* Guardar */}
+        {/* Save */}
         <form
           action={(fd) => {
             fd.set("supuestos", JSON.stringify(s));
             accion(fd);
-            // La lista de abajo la pinta el servidor: hay que pedirle que se repinte.
+            // The list below is rendered by the server: it has to be asked to re-render.
             setTimeout(() => router.refresh(), 400);
           }}
           className="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-surface p-5"
         >
           <div className="min-w-56 flex-1">
             <label htmlFor="nombre" className="block text-sm font-medium">
-              Guardar este escenario
+              Save this scenario
             </label>
             <input
               id="nombre"
               name="nombre"
               required
               maxLength={60}
-              placeholder="Por ejemplo: 400 registros, 3% paga"
+              placeholder="For example: 400 sign-ups, 3% pay"
               className="mt-1.5 w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm"
             />
           </div>
@@ -217,11 +217,11 @@ export function Simulador() {
             disabled={guardando}
             className="rounded-full border border-text px-5 py-2 text-sm transition hover:bg-text hover:text-bg disabled:opacity-50"
           >
-            {guardando ? "Guardando…" : "Guardar"}
+            {guardando ? "Saving…" : "Save"}
           </button>
           <p className="w-full text-xs text-text-muted">
-            Se guarda en público, sin cuenta: no escribas datos personales en el nombre. Lo que se
-            guarda es el resultado que calcula el servidor con estos supuestos.
+            It is saved publicly, without an account: don’t put personal details in the name. What gets
+            saved is the result the server calculates with these assumptions.
           </p>
           {estado.estado === "error" ? (
             <p role="alert" className="w-full text-sm" style={{ color: "var(--barro)" }}>
@@ -230,7 +230,7 @@ export function Simulador() {
           ) : null}
           {estado.estado === "guardado" ? (
             <p role="status" className="w-full text-sm text-text-muted">
-              Guardado: «{estado.nombre}» con {pesos(estado.ingresoNeto)} de ingreso neto al mes.
+              Saved: “{estado.nombre}”, with {pesos(estado.ingresoNeto)} net income per month.
             </p>
           ) : null}
         </form>
@@ -273,7 +273,7 @@ function Campo({
         <input
           id={`${id}-rango`}
           type="range"
-          aria-label={`${etiqueta} (deslizador)`}
+          aria-label={`${etiqueta} (slider)`}
           value={valor}
           min={min}
           max={max}
