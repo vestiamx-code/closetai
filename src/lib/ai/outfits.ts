@@ -32,7 +32,7 @@ export function parseStylistResponse(raw: string, idsValidos: Set<string>): Styl
     const limpio = raw.trim().replace(/^```(?:json)?\s*\n?/, "").replace(/\n?```$/, "");
     parsed = JSON.parse(limpio);
   } catch {
-    return { ok: false, message: "el modelo no devolvió JSON" };
+    return { ok: false, message: "the model did not return JSON" };
   }
 
   const validado = stylistResponseSchema.safeParse(parsed);
@@ -45,7 +45,7 @@ export function parseStylistResponse(raw: string, idsValidos: Set<string>): Styl
   );
 
   if (outfits.length === 0) {
-    return { ok: false, message: "el modelo propuso prendas que no están en el clóset" };
+    return { ok: false, message: "the model suggested garments that are not in the closet" };
   }
 
   return { ok: true, response: { ...validado.data, outfits } };

@@ -3,19 +3,28 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { researchReportSchema } from "@/lib/ai/schemas";
+import { EN_INGLES_DESDE } from "@/lib/marketing";
 import { resumir, severidad, type Fuente, type Riesgo } from "@/lib/research";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 import { Investigacion, TablaCompetidores } from "./interacciones";
 
 export const metadata: Metadata = {
-  title: "Investigación · ClosetAI",
+  title: "Research · ClosetAI",
   description:
-    "¿El problema es real? Competidores, sustitutos, referentes globales, México y riesgos de ClosetAI — cada dato con su fuente.",
+    "Is the problem real? ClosetAI's competitors, substitutes, global benchmarks, Mexico and risks — every figure with its source.",
 };
 
-// Los guardados y la validación tienen que reflejar lo que acaba de pasar.
+// Saved reports and the validation have to reflect what just happened.
 export const dynamic = "force-dynamic";
+
+/** Source types as shown on screen; the stored value stays as it was. */
+const TIPO_LEGIBLE: Record<string, string> = {
+  competidor: "competitor",
+  sustituto: "substitute",
+  referente: "benchmark",
+  mercado: "market",
+};
 
 const DOCUMENTO_DE_VERIFICACION =
   "https://github.com/vestiamx-code/closetai/blob/main/docs/evidencia/INVESTIGACION-SEMANA-2.md";
@@ -31,12 +40,12 @@ type Validacion = {
 };
 
 /**
- * `/research` — Semana 2.
+ * `/research` — Week 2.
  *
- * La investigación de mercado de ClosetAI, pública y comprobable. Cada dato
- * viene de `research_sources`, con la fuente que lo sostiene y la fecha en que
- * se verificó. Lo que no se pudo verificar no aparece como dato: aparece al
- * final, en la lista de lo descartado.
+ * ClosetAI's market research, public and checkable. Every figure comes from
+ * `research_sources`, with the source that backs it and the date it was verified.
+ * What could not be verified does not appear as a fact: it appears at the end, in
+ * the list of what was discarded.
  */
 export default async function Research() {
   const admin = createAdminClient();
@@ -51,16 +60,17 @@ export default async function Research() {
     admin
       .from("research_outputs")
       .select("id, pregunta, informe, created_at")
+      .gte("created_at", EN_INGLES_DESDE)
       .order("created_at", { ascending: false })
       .limit(12),
   ]);
 
   if (fuentesR.error || riesgosR.error) {
-    console.error("[research] no se pudieron leer los datos", fuentesR.error ?? riesgosR.error);
+    console.error("[research] could not read the data", fuentesR.error ?? riesgosR.error);
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-20">
-        <h1 className="font-display text-3xl font-semibold">Investigación</h1>
-        <p className="mt-4 text-text-muted">Los datos de investigación no están disponibles en este momento.</p>
+        <h1 className="font-display text-3xl font-semibold">Research</h1>
+        <p className="mt-4 text-text-muted">The research data is not available right now.</p>
       </main>
     );
   }
@@ -85,68 +95,68 @@ export default async function Research() {
           ClosetAI
         </Link>
         <Link href="/core" className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text">
-          Probar el núcleo de estilo
+          Try the style core
         </Link>
       </header>
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
-        {/* ------------------------------------------------------------ Portada */}
-        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Investigación</p>
+        {/* ------------------------------------------------------------ Cover */}
+        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Research</p>
         <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.25rem,6vw,3.75rem)] leading-[0.98] font-semibold tracking-[-0.03em] text-balance">
-          ¿El problema es real?{" "}
+          Is the problem real?{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            Con fuentes.
+            With sources.
           </span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-text-muted text-pretty">
-          Quién más resuelve lo mismo, qué usa la gente en su lugar, qué pasa en México y qué podría
-          matar a ClosetAI. Cada dato enlaza a su fuente; lo que no pudimos verificar está al final,
-          fuera de la tabla.
+          Who else solves the same problem, what people use instead, what is happening in Mexico, and what
+          could kill ClosetAI. Every figure links to its source; what we could not verify is at the end,
+          outside the table.
         </p>
         <p className="mt-3 text-sm text-text-muted">
-          Verificado el 14 de septiembre de 2026 ·{" "}
+          Verified on September 14, 2026 ·{" "}
           <a href={DOCUMENTO_DE_VERIFICACION} className="underline underline-offset-4 hover:text-text">
-            cómo se verificó cada dato
+            how each figure was verified
           </a>
         </p>
 
         {/* ------------------------------------------------------------ Panel */}
-        <section aria-label="Resumen de la investigación" className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Cifra valor={resumen.competidores} etiqueta="Competidores" />
-          <Cifra valor={resumen.sustitutos} etiqueta="Sustitutos" />
-          <Cifra valor={resumen.referentesGlobales} etiqueta="Referentes globales" />
-          <Cifra valor={resumen.riesgos} etiqueta="Riesgos mapeados" />
+        <section aria-label="Research summary" className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Cifra valor={resumen.competidores} etiqueta="Competitors" />
+          <Cifra valor={resumen.sustitutos} etiqueta="Substitutes" />
+          <Cifra valor={resumen.referentesGlobales} etiqueta="Global benchmarks" />
+          <Cifra valor={resumen.riesgos} etiqueta="Risks mapped" />
           <div className="col-span-2 rounded-xl border border-border bg-surface p-4">
-            <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Riesgo más alto</p>
+            <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Highest risk</p>
             <p className="mt-1.5 leading-snug font-medium">{resumen.riesgoMasAlto?.riesgo ?? "—"}</p>
           </div>
           <div className="col-span-2 rounded-xl border border-border bg-surface p-4">
-            <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Validación con personas</p>
+            <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Validation with people</p>
             <p className="mt-1.5 leading-snug font-medium">
               {resumen.validaciones === 0
-                ? "Pendiente"
-                : `${resumen.validaciones} ${resumen.validaciones === 1 ? "conversación real" : "conversaciones reales"}`}
-              <span className="text-text-muted"> · {resumen.informes} informes guardados</span>
+                ? "Pending"
+                : `${resumen.validaciones} ${resumen.validaciones === 1 ? "real conversation" : "real conversations"}`}
+              <span className="text-text-muted"> · {resumen.informes} saved reports</span>
             </p>
           </div>
         </section>
 
-        {/* ------------------------------------------------------------ Pregunta */}
-        <Seccion id="preguntar" titulo="Hazle una pregunta a la investigación">
+        {/* ------------------------------------------------------------ Question */}
+        <Seccion id="preguntar" titulo="Ask the research a question">
           <Investigacion fuentes={fuentes.map(({ id, nombre, fuente_url }) => ({ id, nombre, fuente_url }))} />
         </Seccion>
 
-        {/* ------------------------------------------------------------ Referentes */}
+        {/* ------------------------------------------------------------ Benchmarks */}
         <Seccion
           id="referentes"
-          titulo="5 referentes globales"
-          bajada="Lo que ya funcionó —o no— en otros mercados, y lo que le enseña a ClosetAI."
+          titulo="5 global benchmarks"
+          bajada="What already worked —or didn't— in other markets, and what it teaches ClosetAI."
         >
           <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {referentes.map((f) => (
               <li key={f.id} data-testid="referente" className="flex flex-col rounded-xl border border-border bg-surface p-5">
                 <p className="text-xs tracking-[0.14em] text-text-muted uppercase">
-                  {f.tipo}
+                  {TIPO_LEGIBLE[f.tipo] ?? f.tipo}
                   {f.pais ? ` · ${f.pais}` : ""}
                 </p>
                 <p className="mt-2 font-display text-xl font-semibold">{f.nombre}</p>
@@ -154,7 +164,7 @@ export default async function Research() {
                 {f.precio ? <p className="mt-2 text-sm text-text-muted">{f.precio}</p> : null}
                 {f.leccion ? (
                   <p className="mt-4 border-t border-border pt-3 text-sm leading-relaxed">
-                    <span className="text-text-muted">Lección: </span>
+                    <span className="text-text-muted">Lesson: </span>
                     {f.leccion}
                   </p>
                 ) : null}
@@ -164,11 +174,11 @@ export default async function Research() {
           </ul>
         </Seccion>
 
-        {/* ------------------------------------------------------------ México */}
+        {/* ------------------------------------------------------------ Mexico */}
         <Seccion
           id="mexico"
-          titulo="México"
-          bajada="Traducir no es localizar. Lo que dicen los datos sobre el mercado donde ClosetAI sí puede ser el primero."
+          titulo="Mexico"
+          bajada="Translating is not localizing. What the data says about the market where ClosetAI can be first."
         >
           <ul className="mt-6 grid gap-4 sm:grid-cols-2">
             {mexico.map((f) => (
@@ -185,17 +195,17 @@ export default async function Research() {
         {/* ------------------------------------------------------------ Tabla */}
         <Seccion
           id="competidores"
-          titulo="Competidores y sustitutos"
-          bajada="Competidor: resuelve lo mismo. Sustituto: resuelve la necesidad de otra forma."
+          titulo="Competitors and substitutes"
+          bajada="Competitor: solves the same problem. Substitute: meets the need another way."
         >
           <TablaCompetidores fuentes={fuentes} />
         </Seccion>
 
-        {/* ------------------------------------------------------------ Riesgos */}
+        {/* ------------------------------------------------------------ Risks */}
         <Seccion
           id="riesgos"
-          titulo="Mapa de riesgos"
-          bajada="Probabilidad × impacto. Cada riesgo apunta a la evidencia que lo sostiene."
+          titulo="Risk map"
+          bajada="Probability × impact. Each risk points to the evidence behind it."
         >
           <MapaDeRiesgos riesgos={riesgos} />
           <ul className="mt-8 divide-y divide-border rounded-xl border border-border">
@@ -203,15 +213,15 @@ export default async function Research() {
               <li key={r.id} className="p-5">
                 <p className="font-medium">{r.riesgo}</p>
                 <p className="mt-1 text-xs text-text-muted">
-                  Probabilidad {r.probabilidad}/3 · Impacto {r.impacto}/3
+                  Probability {r.probabilidad}/3 · Impact {r.impacto}/3
                 </p>
                 <p className="mt-3 text-sm leading-relaxed">
-                  <span className="text-text-muted">Mitigación: </span>
+                  <span className="text-text-muted">Mitigation: </span>
                   {r.mitigacion}
                 </p>
                 {r.evidencia.length > 0 ? (
                   <p className="mt-2 flex flex-wrap gap-1.5 text-xs">
-                    <span className="text-text-muted">Evidencia:</span>
+                    <span className="text-text-muted">Evidence:</span>
                     {r.evidencia.map((id) => {
                       const f = porId.get(id);
                       return f ? (
@@ -233,17 +243,17 @@ export default async function Research() {
           </ul>
         </Seccion>
 
-        {/* ------------------------------------------------------------ Validación */}
+        {/* ------------------------------------------------------------ Validation */}
         <Seccion
           id="validacion"
-          titulo="Validación con una persona real"
-          bajada="Los datos dicen qué hace el mercado. Una conversación dice qué hace una persona."
+          titulo="Validation with a real person"
+          bajada="The data says what the market does. A conversation says what a person does."
         >
           <div data-testid="validacion">
             {validaciones.length === 0 ? (
               <p className="mt-6 rounded-xl border border-dashed border-border px-5 py-6 text-sm leading-relaxed">
-                <strong>Pendiente.</strong> Todavía no hay una conversación registrada. No la vamos a simular:
-                aparece aquí cuando ocurra, con permiso de la persona y sin su nombre.
+                <strong>Pending.</strong> There is no recorded conversation yet. We will not simulate one: it
+                appears here when it happens, with the person&apos;s consent and without their name.
               </p>
             ) : (
               validaciones.map((v) => (
@@ -259,9 +269,9 @@ export default async function Research() {
                     ))}
                   </div>
                   <dl className="mt-6 grid gap-5 text-sm sm:grid-cols-3">
-                    {v.confirmo ? <Par titulo="Confirmó" texto={v.confirmo} /> : null}
-                    {v.contradijo ? <Par titulo="Contradijo" texto={v.contradijo} /> : null}
-                    {v.sorpresa ? <Par titulo="Sorprendió" texto={v.sorpresa} /> : null}
+                    {v.confirmo ? <Par titulo="Confirmed" texto={v.confirmo} /> : null}
+                    {v.contradijo ? <Par titulo="Contradicted" texto={v.contradijo} /> : null}
+                    {v.sorpresa ? <Par titulo="Surprised us" texto={v.sorpresa} /> : null}
                   </dl>
                 </article>
               ))
@@ -269,17 +279,17 @@ export default async function Research() {
           </div>
         </Seccion>
 
-        {/* ------------------------------------------------------------ Guardados */}
+        {/* ------------------------------------------------------------ Saved */}
         {informes.length > 0 ? (
-          <Seccion id="guardados" titulo="Investigaciones guardadas">
+          <Seccion id="guardados" titulo="Saved research">
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {informes.map((i) => (
                 <li key={i.id} className="rounded-xl border border-border bg-surface p-5">
                   <p className="text-sm text-text-muted">{i.pregunta}</p>
                   <p className="mt-2 leading-relaxed">{i.informe.respuesta}</p>
                   <p className="mt-3 text-xs text-text-muted">
-                    {i.informe.suficiente ? "Con evidencia suficiente" : "Evidencia insuficiente"} ·{" "}
-                    {new Set(i.informe.hallazgos.flatMap((h) => h.fuentes)).size} fuentes citadas
+                    {i.informe.suficiente ? "Enough evidence" : "Not enough evidence"} ·{" "}
+                    {new Set(i.informe.hallazgos.flatMap((h) => h.fuentes)).size} sources cited
                   </p>
                 </li>
               ))}
@@ -287,20 +297,20 @@ export default async function Research() {
           </Seccion>
         ) : null}
 
-        {/* ------------------------------------------------------------ Descartado */}
+        {/* ------------------------------------------------------------ Discarded */}
         <Seccion
           id="descartado"
-          titulo="Lo que descartamos"
-          bajada="Pueden ser ciertos, pero no los pudimos comprobar en su fuente. Por eso no están arriba."
+          titulo="What we discarded"
+          bajada="They may be true, but we could not check them at their source. That is why they are not above."
         >
           <ul className="mt-6 space-y-2 text-sm text-text-muted">
             {[
-              "Que Chicisimo haya sido la app de moda número uno en México en 2014.",
-              "Que el 90% de las usuarias de GoTrendier sean mujeres.",
-              "Que catalogar en Stylebook tome de 6 a 8 horas por cada 100 prendas.",
-              "Que Doji haya cambiado la raza de usuarios en sus avatares.",
-              "Las rondas de Daydream (50 M USD) y Phia (35 M USD).",
-              "El ticket promedio de moda en línea en México de 1,300 MXN.",
+              "That Chicisimo was the number one fashion app in Mexico in 2014.",
+              "That 90% of GoTrendier users are women.",
+              "That cataloging in Stylebook takes 6 to 8 hours per 100 garments.",
+              "That Doji changed users' race in their avatars.",
+              "The Daydream (USD 50 M) and Phia (USD 35 M) funding rounds.",
+              "The average online fashion ticket in Mexico of MXN 1,300.",
             ].map((t) => (
               <li key={t} className="flex gap-3">
                 <span aria-hidden>·</span>
@@ -360,11 +370,11 @@ function FuenteLink({ fuente }: { fuente: Fuente }) {
             rel="noreferrer"
             className="underline underline-offset-4 hover:text-text"
           >
-            otra fuente ↗
+            another source ↗
           </a>
         </>
       ) : null}
-      {" · "}verificado el {fuente.verificado_el}
+      {" · "}verified on {fuente.verificado_el}
     </p>
   );
 }
@@ -378,9 +388,9 @@ function Par({ titulo, texto }: { titulo: string; texto: string }) {
   );
 }
 
-const NIVEL = ["", "Baja", "Media", "Alta"];
+const NIVEL = ["", "Low", "Medium", "High"];
 
-/** Tinte según probabilidad × impacto. Transparencias, para que funcione en tema claro y oscuro. */
+/** Tint by probability × impact. Transparent, so it works in light and dark themes. */
 function tinte(sev: number): string {
   if (sev >= 9) return "rgba(176, 58, 40, 0.24)";
   if (sev >= 6) return "rgba(196, 112, 52, 0.18)";
@@ -394,13 +404,13 @@ function MapaDeRiesgos({ riesgos }: { riesgos: Riesgo[] }) {
       <div
         data-testid="mapa-riesgos"
         role="img"
-        aria-label="Mapa de riesgos por probabilidad e impacto. El detalle de cada riesgo está en la lista de abajo."
+        aria-label="Risk map by probability and impact. Each risk's detail is in the list below."
         className="grid min-w-[560px] grid-cols-[4.5rem_repeat(3,minmax(0,1fr))] gap-1.5 text-xs"
       >
         {[3, 2, 1].map((impacto) => (
           <Fragment key={impacto}>
             <div className="flex items-center pr-2 text-text-muted">
-              Impacto
+              Impact
               <br />
               {NIVEL[impacto].toLowerCase()}
             </div>
@@ -424,7 +434,7 @@ function MapaDeRiesgos({ riesgos }: { riesgos: Riesgo[] }) {
         <div />
         {[1, 2, 3].map((p) => (
           <div key={p} className="pt-1 text-center text-text-muted">
-            Probabilidad {NIVEL[p].toLowerCase()}
+            Probability {NIVEL[p].toLowerCase()}
           </div>
         ))}
       </div>

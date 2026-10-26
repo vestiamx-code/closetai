@@ -2,38 +2,40 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { styleCoreSchema, type StyleCore } from "@/lib/ai/schemas";
+import { EN_INGLES_DESDE } from "@/lib/marketing";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 import { Nucleo } from "./interacciones";
 
 export const metadata: Metadata = {
-  title: "Tu núcleo de estilo",
+  title: "Your style core",
   description:
-    "Escribe en tus palabras cómo te gusta vestirte y ClosetAI destila tu núcleo de estilo. Sin cuenta y sin subir una sola foto.",
+    "Write in your own words how you like to dress and ClosetAI distills your style core. No account, and not a single photo.",
 };
 
-// La lista de guardados tiene que reflejar lo que se acaba de guardar.
+// The saved list has to reflect what was just saved.
 export const dynamic = "force-dynamic";
 
 /**
- * `/core` — Semana 1.
+ * `/core` — Week 1.
  *
- * Convierte el Apéndice A3 del Documento Maestro (cómo ClosetAI deduce el estilo
- * de alguien) en un módulo generativo público.
+ * Turns Master Document Appendix A3 (how ClosetAI infers someone's style) into a
+ * public generative module.
  *
- * Está fuera del grupo `(app)` a propósito: ese layout exige sesión, y el punto
- * entero de esta página es dar algo útil antes de pedir registro. Es la respuesta
- * a la objeción más fuerte que recibió la propuesta de valor — que el trabajo va
- * antes del beneficio.
+ * It sits outside the `(app)` group on purpose: that layout requires a session,
+ * and the whole point of this page is to give something useful before asking for
+ * a sign-up. It answers the strongest objection the value proposition received —
+ * that the work comes before the benefit.
  */
 export default async function Core() {
   const admin = createAdminClient();
 
-  // `entrada` NO se selecciona: el texto que alguien escribe sobre sí misma es
-  // suyo. La lista pública muestra el núcleo generado, nunca lo que confesó.
+  // `entrada` is NOT selected: the text someone writes about themselves is theirs.
+  // The public list shows the generated core, never what they shared.
   const { data: filas } = await admin
     .from("core_outputs")
     .select("id, nucleo, created_at")
+    .gte("created_at", EN_INGLES_DESDE)
     .order("created_at", { ascending: false })
     .limit(12);
 
@@ -52,23 +54,22 @@ export default async function Core() {
           href="/registro"
           className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
         >
-          Crear cuenta
+          Create an account
         </Link>
       </header>
 
       <section className="mx-auto w-full max-w-3xl px-6 pb-20">
-        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Núcleo de estilo</p>
+        <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Style core</p>
         <h1 className="mt-4 font-display text-[clamp(2.25rem,7vw,4rem)] leading-[0.95] font-semibold tracking-[-0.03em] text-balance">
-          Antes de fotografiar
-          <br />
+          Before you photograph
+          <br />{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            una sola prenda.
+            a single garment.
           </span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-text-muted text-pretty">
-          Cuéntame cómo te gusta vestirte y destilo tu núcleo de estilo: tus principios,
-          tu paleta, tus siluetas y una regla tuya. Sin cuenta, sin subir fotos, en menos
-          de un minuto.
+          Tell me how you like to dress and I&apos;ll distill your style core: your principles, your
+          palette, your silhouettes and a rule of your own. No account, no photos, in under a minute.
         </p>
 
         <Nucleo guardados={guardados.length} />
@@ -76,11 +77,11 @@ export default async function Core() {
         {guardados.length > 0 ? (
           <section className="mt-20 border-t border-border pt-10">
             <h2 className="font-display text-2xl font-semibold tracking-tight">
-              Núcleos que ya se generaron
+              Cores already generated
             </h2>
             <p className="mt-2 text-sm text-text-muted">
-              Solo se muestra el núcleo. Lo que cada persona escribió sobre sí misma no se
-              publica nunca.
+              Only the core is shown. What each person wrote about themselves is never
+              published.
             </p>
 
             <ul className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -102,11 +103,11 @@ export default async function Core() {
         ) : null}
 
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
-          ¿Te sonó a ti?{" "}
+          Sounds like you?{" "}
           <Link href="/registro" className="underline underline-offset-4 transition hover:text-text">
-            Arma tu clóset gratis
+            Build your closet for free
           </Link>{" "}
-          y el estilista empieza con esto ya sabido.
+          and the stylist starts out already knowing this.
         </p>
       </section>
     </main>

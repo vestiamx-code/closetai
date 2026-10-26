@@ -21,8 +21,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const preguntaSchema = z
   .string()
   .trim()
-  .min(20, "Escribe la pregunta completa — con menos de 20 caracteres no hay qué investigar.")
-  .max(500, "Con 500 caracteres alcanza. Recórtala un poco.");
+  .min(20, "Write the full question — with fewer than 20 characters there is nothing to research.")
+  .max(500, "500 characters is enough. Shorten it a little.");
 
 export type EstadoInvestigacion =
   | { estado: "vacio" }
@@ -70,7 +70,7 @@ export async function generarInvestigacion(
   if (!(await pasaElLimite(huella))) {
     return {
       estado: "error",
-      mensaje: "Ya generaste varios informes en la última hora. Espera un rato e inténtalo de nuevo.",
+      mensaje: "You have generated several reports in the last hour. Wait a while and try again.",
     };
   }
 
@@ -79,7 +79,7 @@ export async function generarInvestigacion(
     datos = await leerDatosVerificados();
   } catch (error) {
     console.error("[research] no se pudieron leer los datos", error);
-    return { estado: "error", mensaje: "No pude leer los datos de investigación. Inténtalo en un momento." };
+    return { estado: "error", mensaje: "I couldn't read the research data. Try again in a moment." };
   }
 
   const resultado = await generarInforme(pregunta.data, datos.fuentes, datos.riesgos);
@@ -95,10 +95,10 @@ export async function generarInvestigacion(
   if (!resultado.ok) {
     const mensaje =
       resultado.reason === "invented_source"
-        ? "El modelo citó algo que no está en los datos verificados, así que no muestro ese informe. Vuelve a intentarlo."
+        ? "The model cited something that is not in the verified data, so I am not showing that report. Please try again."
         : resultado.reason === "rejected" || resultado.reason === "unavailable"
           ? resultado.message
-          : "No pude armar un informe confiable con esa pregunta. Prueba a formularla de otra forma.";
+          : "I couldn't build a reliable report for that question. Try phrasing it another way.";
     return { estado: "error", mensaje };
   }
 
@@ -123,20 +123,20 @@ export async function guardarInvestigacion(formData: FormData): Promise<{ error?
   }
 
   const pregunta = preguntaSchema.safeParse(datos.pregunta);
-  if (!pregunta.success) return { error: "La pregunta ya no es válida." };
+  if (!pregunta.success) return { error: "The question is no longer valid." };
 
   // Se revalida el informe completo —citas incluidas— contra la base. Una Server
   // Action se puede llamar por POST directo: sin esto, cualquiera guardaría un
   // "informe" con fuentes inventadas y la página lo mostraría como verificado.
   const admin = createAdminClient();
   const { data: ids, error: errorIds } = await admin.from("research_sources").select("id");
-  if (errorIds) return { error: "No pudimos comprobar las fuentes. Inténtalo otra vez." };
+  if (errorIds) return { error: "We couldn't check the sources. Please try again." };
 
   const validado = parseResearchReport(
     JSON.stringify(datos.informe ?? null),
     new Set((ids ?? []).map((f: { id: string }) => f.id)),
   );
-  if (!validado.ok) return { error: "El informe ya no es válido." };
+  if (!validado.ok) return { error: "The report is no longer valid." };
 
   const { error } = await admin.from("research_outputs").insert({
     pregunta: pregunta.data,
@@ -147,7 +147,7 @@ export async function guardarInvestigacion(formData: FormData): Promise<{ error?
 
   if (error) {
     console.error("[research] no se pudo guardar", error);
-    return { error: "No pudimos guardarlo. Inténtalo otra vez." };
+    return { error: "We couldn't save it. Please try again." };
   }
 
   revalidatePath("/research");

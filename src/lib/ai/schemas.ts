@@ -88,7 +88,7 @@ export function parseGarmentCatalog(raw: string): GarmentCatalogResult {
   try {
     parsed = desenvolver(JSON.parse(stripCodeFence(raw)));
   } catch {
-    return { ok: false, reason: "unparseable", message: "el modelo no devolvió JSON" };
+    return { ok: false, reason: "unparseable", message: "the model did not return JSON" };
   }
 
   const rejection = garmentCatalogRejectionSchema.safeParse(parsed);
@@ -153,12 +153,12 @@ export function parseStyleCore(raw: string): StyleCoreResult {
   try {
     datos = JSON.parse(stripCodeFence(raw));
   } catch {
-    return { ok: false, reason: "unparseable", message: "El modelo no devolvió JSON." };
+    return { ok: false, reason: "unparseable", message: "The model did not return JSON." };
   }
 
   if (Array.isArray(datos)) {
     if (datos.length !== 1) {
-      return { ok: false, reason: "unparseable", message: "El modelo devolvió varios núcleos." };
+      return { ok: false, reason: "unparseable", message: "The model returned several cores." };
     }
     datos = datos[0];
   }
@@ -168,7 +168,7 @@ export function parseStyleCore(raw: string): StyleCoreResult {
 
   const validado = styleCoreSchema.safeParse(datos);
   if (!validado.success) {
-    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Formato inesperado." };
+    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Unexpected format." };
   }
 
   return { ok: true, core: validado.data };
@@ -180,7 +180,7 @@ export function parseStyleCore(raw: string): StyleCoreResult {
 // ---------------------------------------------------------------------------
 
 /** Mismo formato que los ids de `research_sources`. */
-const idDeFuente = z.string().regex(/^[a-z0-9-]{2,40}$/, "Una fuente con un id de formato inválido.");
+const idDeFuente = z.string().regex(/^[a-z0-9-]{2,40}$/, "A source with an invalid id format.");
 
 export const researchReportSchema = z
   .object({
@@ -189,7 +189,7 @@ export const researchReportSchema = z
       .array(
         z.object({
           afirmacion: z.string().trim().min(1).max(320),
-          fuentes: z.array(idDeFuente).min(1, "Cada hallazgo necesita al menos una fuente.").max(4),
+          fuentes: z.array(idDeFuente).min(1, "Each finding needs at least one source.").max(4),
         }),
       )
       .max(5),
@@ -199,7 +199,7 @@ export const researchReportSchema = z
     suficiente: z.boolean(),
   })
   .refine((r) => !r.suficiente || r.hallazgos.length > 0, {
-    message: "Un informe que dice tener evidencia suficiente necesita al menos un hallazgo.",
+    message: "A report that claims enough evidence needs at least one finding.",
   });
 
 export type ResearchReport = z.infer<typeof researchReportSchema>;
@@ -224,12 +224,12 @@ export function parseResearchReport(raw: string, fuentesValidas: ReadonlySet<str
   try {
     datos = JSON.parse(stripCodeFence(raw));
   } catch {
-    return { ok: false, reason: "unparseable", message: "El modelo no devolvió JSON." };
+    return { ok: false, reason: "unparseable", message: "The model did not return JSON." };
   }
 
   if (Array.isArray(datos)) {
     if (datos.length !== 1) {
-      return { ok: false, reason: "unparseable", message: "El modelo devolvió varios informes." };
+      return { ok: false, reason: "unparseable", message: "The model returned several reports." };
     }
     datos = datos[0];
   }
@@ -239,7 +239,7 @@ export function parseResearchReport(raw: string, fuentesValidas: ReadonlySet<str
 
   const validado = researchReportSchema.safeParse(datos);
   if (!validado.success) {
-    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Formato inesperado." };
+    return { ok: false, reason: "unparseable", message: validado.error.issues[0]?.message ?? "Unexpected format." };
   }
 
   const inventadas = [

@@ -83,12 +83,12 @@ describe("parseGarmentCatalog", () => {
     expect(result.ok).toBe(false);
   });
 
-  it("no lanza cuando el modelo devuelve texto suelto", () => {
-    const result = parseGarmentCatalog("Claro, aquí tienes la prenda:");
+  it("does not throw when the model returns loose text", () => {
+    const result = parseGarmentCatalog("Sure, here is the garment:");
     expect(result).toEqual({
       ok: false,
       reason: "unparseable",
-      message: "el modelo no devolvió JSON",
+      message: "the model did not return JSON",
     });
   });
 

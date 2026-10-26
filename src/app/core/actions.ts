@@ -21,8 +21,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const entradaSchema = z
   .string()
   .trim()
-  .min(40, "Escribe un poco más — con menos de 40 caracteres no alcanzo a deducir nada.")
-  .max(1000, "Con mil caracteres me sobra. Recorta un poco.");
+  .min(40, "Write a little more — with fewer than 40 characters I can't infer anything.")
+  .max(1000, "A thousand characters is plenty. Trim it a little.");
 
 export type EstadoCore =
   | { estado: "vacio" }
@@ -54,7 +54,7 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
   if (!(await pasaElLimite(huella))) {
     return {
       estado: "error",
-      mensaje: "Ya generaste varios núcleos en la última hora. Espera un rato e inténtalo de nuevo.",
+      mensaje: "You have generated several cores in the last hour. Wait a while and try again.",
     };
   }
 
@@ -76,7 +76,7 @@ export async function generarNucleo(_previo: EstadoCore, formData: FormData): Pr
         // "unavailable" es del proveedor, no de quien escribió: se dice tal cual.
         resultado.reason === "rejected" || resultado.reason === "unavailable"
           ? resultado.message
-          : "No pude leer bien lo que escribiste. Cuéntame cómo te gusta vestirte, con tus palabras.",
+          : "I couldn't quite read what you wrote. Tell me how you like to dress, in your own words.",
     };
   }
 
@@ -97,14 +97,14 @@ export async function guardarNucleo(formData: FormData): Promise<{ error?: strin
   try {
     datos = JSON.parse(payload);
   } catch {
-    return { error: "No pudimos leer el núcleo." };
+    return { error: "We couldn't read the core." };
   }
 
   // Se vuelve a validar lo que llega del navegador. El payload viaja por el
   // cliente y una Server Action se puede llamar por POST directo: confiar en
   // que sigue siendo lo que generamos sería dejar la puerta abierta.
   const entrada = entradaSchema.safeParse(datos.entrada);
-  if (!entrada.success) return { error: "La entrada ya no es válida." };
+  if (!entrada.success) return { error: "The input is no longer valid." };
 
   const admin = createAdminClient();
   const { error } = await admin.from("core_outputs").insert({
@@ -116,7 +116,7 @@ export async function guardarNucleo(formData: FormData): Promise<{ error?: strin
 
   if (error) {
     console.error("[core] no se pudo guardar", error);
-    return { error: "No pudimos guardarlo. Inténtalo otra vez." };
+    return { error: "We couldn't save it. Please try again." };
   }
 
   revalidatePath("/core");

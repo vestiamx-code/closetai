@@ -10,15 +10,15 @@ import { generarInvestigacion, guardarInvestigacion, type EstadoInvestigacion } 
 const INICIAL: EstadoInvestigacion = { estado: "vacio" };
 
 const EJEMPLOS = [
-  "¿Hay competidores hechos para México?",
-  "¿La gente paga por apps para organizar su clóset, y cuánto?",
-  "¿Qué tan grande es la compra de ropa en línea en México?",
+  "Are there competitors built for Mexico?",
+  "Do people pay for closet apps, and how much?",
+  "How big is online clothing shopping in Mexico?",
 ];
 
 type FuenteCitable = Pick<Fuente, "id" | "nombre" | "fuente_url">;
 
 // ---------------------------------------------------------------------------
-// Pregunta de investigación → informe → guardar
+// Research question → report → save
 // ---------------------------------------------------------------------------
 
 export function Investigacion({ fuentes }: { fuentes: FuenteCitable[] }) {
@@ -29,11 +29,11 @@ export function Investigacion({ fuentes }: { fuentes: FuenteCitable[] }) {
     <>
       <form action={accion} className="mt-6">
         <label htmlFor="pregunta" className="block text-sm font-medium">
-          Pregunta de investigación
+          Research question
         </label>
         <p className="mt-1 text-sm text-text-muted">
-          La respuesta sale solo de los datos verificados de esta página. La pregunta y el informe se
-          publican si los guardas: no escribas datos personales.
+          The answer comes only from the verified data on this page. The question and the report are
+          published if you save them: don&apos;t include personal details.
         </p>
 
         <textarea
@@ -66,7 +66,7 @@ export function Investigacion({ fuentes }: { fuentes: FuenteCitable[] }) {
           disabled={generando}
           className="mt-4 w-full rounded-full bg-text px-6 py-3.5 font-medium text-bg transition hover:opacity-90 disabled:opacity-60 sm:w-auto sm:px-10"
         >
-          {generando ? "Revisando la evidencia…" : "Investigar"}
+          {generando ? "Reviewing the evidence…" : "Research"}
         </button>
       </form>
 
@@ -96,7 +96,7 @@ function Informe({
   return (
     <article data-testid="informe" className="mt-8 overflow-hidden rounded-2xl border border-border bg-surface">
       <header className="border-b border-border px-6 py-5" style={{ background: "var(--arena)" }}>
-        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Informe</p>
+        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Report</p>
         <p className="mt-2 text-sm text-text-muted">{datos.pregunta}</p>
         <p className="mt-3 font-display text-xl leading-snug font-semibold tracking-tight text-pretty">
           {informe.respuesta}
@@ -104,17 +104,17 @@ function Informe({
       </header>
 
       {/*
-        Esta línea va siempre, no solo cuando conviene. Un informe que se presenta
-        igual de seguro cuando los datos no alcanzan es justo lo que esta página no
-        quiere ser.
+        This line is always there, not only when it is convenient. A report that sounds
+        just as confident when the data falls short is exactly what this page does not
+        want to be.
       */}
       <p className="border-b border-border px-6 py-3 text-sm">
         {informe.suficiente ? (
-          <>Los datos verificados alcanzan para responder.</>
+          <>The verified data is enough to answer.</>
         ) : (
-          <strong>Los datos verificados no alcanzan para responder esto.</strong>
+          <strong>The verified data is not enough to answer this.</strong>
         )}{" "}
-        <span className="text-text-muted">Síntesis de IA a partir de las fuentes citadas.</span>
+        <span className="text-text-muted">AI synthesis from the cited sources.</span>
       </p>
 
       {informe.hallazgos.length > 0 ? (
@@ -145,14 +145,14 @@ function Informe({
       ) : null}
 
       <dl className="grid gap-5 border-t border-border px-6 py-5 text-sm sm:grid-cols-3">
-        {informe.hueco ? <Dato titulo="Hueco para ClosetAI" texto={informe.hueco} /> : null}
-        {informe.riesgo ? <Dato titulo="Riesgo" texto={informe.riesgo} /> : null}
-        <Dato titulo="Falta validar" texto={informe.falta_validar} />
+        {informe.hueco ? <Dato titulo="Gap for ClosetAI" texto={informe.hueco} /> : null}
+        {informe.riesgo ? <Dato titulo="Risk" texto={informe.riesgo} /> : null}
+        <Dato titulo="Still to validate" texto={informe.falta_validar} />
       </dl>
 
       <div className="border-t border-border px-6 py-5">
         {guardado ? (
-          <p className="text-sm">Guardado. Ya aparece abajo, en las investigaciones guardadas.</p>
+          <p className="text-sm">Saved. It now appears below, under saved research.</p>
         ) : (
           <form
             action={(fd) =>
@@ -181,7 +181,7 @@ function Informe({
               disabled={pendiente}
               className="rounded-full border border-text px-6 py-2.5 text-sm font-medium transition hover:bg-text hover:text-bg disabled:opacity-60"
             >
-              {pendiente ? "Guardando…" : "Guardar este informe"}
+              {pendiente ? "Saving…" : "Save this report"}
             </button>
             {error ? <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
           </form>
@@ -201,13 +201,13 @@ function Dato({ titulo, texto }: { titulo: string; texto: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Tabla de competidores y sustitutos, con filtro y búsqueda
+// Competitors and substitutes table, with filter and search
 // ---------------------------------------------------------------------------
 
 const OPCIONES: { valor: FiltroTabla["tipo"]; etiqueta: string }[] = [
-  { valor: "todos", etiqueta: "Todos" },
-  { valor: "competidor", etiqueta: "Competidores" },
-  { valor: "sustituto", etiqueta: "Sustitutos" },
+  { valor: "todos", etiqueta: "All" },
+  { valor: "competidor", etiqueta: "Competitors" },
+  { valor: "sustituto", etiqueta: "Substitutes" },
 ];
 
 export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
@@ -218,7 +218,7 @@ export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
   return (
     <div>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-2" role="group" aria-label="Filtrar por tipo">
+        <div className="flex gap-2" role="group" aria-label="Filter by type">
           {OPCIONES.map((o) => (
             <button
               key={o.valor}
@@ -233,8 +233,8 @@ export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
         </div>
         <input
           type="search"
-          aria-label="Buscar competidores y sustitutos"
-          placeholder="Buscar: nombre, país, precio…"
+          aria-label="Search competitors and substitutes"
+          placeholder="Search: name, country, price…"
           value={filtro.texto}
           onChange={(e) => setFiltro((f) => ({ ...f, texto: e.target.value }))}
           className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm outline-none focus:border-accent sm:w-72"
@@ -242,23 +242,23 @@ export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
       </div>
 
       <p className="mt-3 text-xs text-text-muted" aria-live="polite">
-        {visibles.length} de {total}
+        {visibles.length} of {total}
       </p>
 
       {visibles.length === 0 ? (
         <p className="mt-4 rounded-xl border border-border bg-surface-2 px-4 py-6 text-center text-sm">
-          Ningún competidor ni sustituto coincide con «{filtro.texto}».
+          No competitor or substitute matches “{filtro.texto}”.
         </p>
       ) : (
         <div className="mt-3 overflow-x-auto rounded-xl border border-border">
           <table data-testid="tabla-competidores" className="w-full min-w-[640px] text-left text-sm">
             <thead className="bg-surface-2 text-xs tracking-[0.12em] text-text-muted uppercase">
               <tr>
-                <th className="px-4 py-3 font-medium">Nombre</th>
-                <th className="px-4 py-3 font-medium">Tipo</th>
-                <th className="px-4 py-3 font-medium">Dato verificado</th>
-                <th className="px-4 py-3 font-medium">Precio</th>
-                <th className="px-4 py-3 font-medium">Amenaza</th>
+                <th className="px-4 py-3 font-medium">Name</th>
+                <th className="px-4 py-3 font-medium">Type</th>
+                <th className="px-4 py-3 font-medium">Verified fact</th>
+                <th className="px-4 py-3 font-medium">Price</th>
+                <th className="px-4 py-3 font-medium">Threat</th>
               </tr>
             </thead>
             <tbody>
@@ -268,7 +268,7 @@ export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
                     <p className="font-medium">{f.nombre}</p>
                     {f.pais ? <p className="text-xs text-text-muted">{f.pais}</p> : null}
                   </td>
-                  <td className="px-4 py-3 capitalize">{f.tipo}</td>
+                  <td className="px-4 py-3 capitalize">{f.tipo === "competidor" ? "competitor" : f.tipo === "sustituto" ? "substitute" : f.tipo}</td>
                   <td className="px-4 py-3">
                     <p className="leading-relaxed">{f.dato_clave}</p>
                     <a
@@ -296,9 +296,9 @@ export function TablaCompetidores({ fuentes }: { fuentes: Fuente[] }) {
 
 function Amenaza({ nivel }: { nivel: number | null }) {
   if (!nivel) return <span className="text-text-muted">—</span>;
-  const etiqueta = ["", "Baja", "Media", "Alta"][nivel];
+  const etiqueta = ["", "Low", "Medium", "High"][nivel];
   return (
-    <span className="whitespace-nowrap" aria-label={`Amenaza ${etiqueta.toLowerCase()}`}>
+    <span className="whitespace-nowrap" aria-label={`${etiqueta} threat`}>
       <span aria-hidden>{"●".repeat(nivel)}</span>
       <span aria-hidden className="text-text-muted/40">{"●".repeat(3 - nivel)}</span>{" "}
       <span className="text-xs text-text-muted">{etiqueta}</span>

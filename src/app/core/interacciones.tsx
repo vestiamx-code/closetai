@@ -8,8 +8,8 @@ import { generarNucleo, guardarNucleo, type EstadoCore } from "./actions";
 const INICIAL: EstadoCore = { estado: "vacio" };
 
 const EJEMPLO =
-  "Me gusta andar cómoda pero que se vea que me arreglé. Uso mucho negro y beige, jeans anchos y tenis. " +
-  "Odio la ropa muy entallada y los estampados grandes. Para la oficina le pongo un saco encima y ya.";
+  "I like to be comfortable but look like I made an effort. I wear a lot of black and beige, wide jeans and sneakers. " +
+  "I hate very tight clothes and big prints. For the office I just throw a blazer on top.";
 
 export function Nucleo({ guardados }: { guardados: number }) {
   const [estado, accion, generando] = useActionState(generarNucleo, INICIAL);
@@ -19,10 +19,10 @@ export function Nucleo({ guardados }: { guardados: number }) {
     <>
       <form action={accion} className="mt-8">
         <label htmlFor="texto" className="block text-sm font-medium">
-          ¿Cómo te gusta vestirte?
+          How do you like to dress?
         </label>
         <p className="mt-1 text-sm text-text-muted">
-          Escríbelo como se lo contarías a una amiga. No hace falta que suene bonito.
+          Write it the way you&apos;d tell a friend. It doesn&apos;t have to sound nice.
         </p>
 
         <textarea
@@ -42,7 +42,7 @@ export function Nucleo({ guardados }: { guardados: number }) {
             onClick={() => setTexto(EJEMPLO)}
             className="underline underline-offset-4 transition hover:text-text"
           >
-            Usar un ejemplo
+            Use an example
           </button>
           <span>{texto.trim().length} / 1000</span>
         </div>
@@ -52,7 +52,7 @@ export function Nucleo({ guardados }: { guardados: number }) {
           disabled={generando}
           className="mt-4 w-full rounded-full bg-text px-6 py-3.5 font-medium text-bg transition hover:opacity-90 disabled:opacity-60 sm:w-auto sm:px-10"
         >
-          {generando ? "Leyéndote…" : "Extraer mi núcleo"}
+          {generando ? "Reading you…" : "Extract my core"}
         </button>
       </form>
 
@@ -83,41 +83,40 @@ function Tarjeta({
   return (
     <article className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface">
       <header className="border-b border-border px-6 py-5" style={{ background: "var(--arena)" }}>
-        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Tu núcleo de estilo</p>
+        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Your style core</p>
         <p className="mt-2 font-display text-2xl leading-snug font-semibold tracking-tight text-balance">
           {core.esencia}
         </p>
       </header>
 
       <div className="grid gap-6 px-6 py-6 sm:grid-cols-2">
-        <Lista titulo="Principios" items={core.principios} />
-        <Lista titulo="Paleta" items={core.paleta} />
-        <Lista titulo="Siluetas" items={core.siluetas} />
-        <Lista titulo="Evitar" items={core.evitar} />
+        <Lista titulo="Principles" items={core.principios} />
+        <Lista titulo="Palette" items={core.paleta} />
+        <Lista titulo="Silhouettes" items={core.siluetas} />
+        <Lista titulo="Avoid" items={core.evitar} />
       </div>
 
       <div className="border-t border-border px-6 py-5">
-        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Tu regla</p>
+        <p className="text-xs tracking-[0.16em] text-text-muted uppercase">Your rule</p>
         <p className="mt-2 font-display text-lg italic">“{core.regla}”</p>
       </div>
 
       {/*
-        La confianza y lo que faltó se muestran siempre, no solo cuando son
-        buenas. Un núcleo que se presenta igual de seguro con tres líneas vagas
-        que con un párrafo detallado es exactamente lo que esta página no quiere
-        ser.
+        Confidence and what was missing are always shown, not only when they are
+        good. A core that sounds just as sure with three vague lines as with a
+        detailed paragraph is exactly what this page does not want to be.
       */}
       <div className="border-t border-border px-6 py-4 text-sm text-text-muted">
         <p>
-          Qué tan seguro estoy: <strong className="text-text">{Math.round(core.confianza * 100)}%</strong>
-          {core.falta ? ` · Me faltó saber: ${core.falta}` : null}
+          How sure I am: <strong className="text-text">{Math.round(core.confianza * 100)}%</strong>
+          {core.falta ? ` · What I didn’t get to know: ${core.falta}` : null}
         </p>
       </div>
 
       <div className="border-t border-border px-6 py-5">
         {guardado ? (
           <p className="text-sm">
-            Guardado. Ya aparece abajo, junto a los otros {guardados > 0 ? guardados : ""} núcleos.
+            Saved. It now appears below, with the other {guardados > 0 ? guardados : ""} cores.
           </p>
         ) : (
           <form
@@ -147,7 +146,7 @@ function Tarjeta({
               disabled={pendiente}
               className="rounded-full border border-text px-6 py-2.5 text-sm font-medium transition hover:bg-text hover:text-bg disabled:opacity-60"
             >
-              {pendiente ? "Guardando…" : "Guardar este núcleo"}
+              {pendiente ? "Saving…" : "Save this core"}
             </button>
             {error ? <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
           </form>
