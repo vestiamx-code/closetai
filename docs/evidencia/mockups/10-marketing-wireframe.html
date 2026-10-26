@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — homepage and /marketing</title>
+<!--
+  Source of 10-marketing-wireframe.png. The original (Oct 21, 2026) was drawn in Spanish;
+  this English version replaced it on Oct 26, 2026, when the course required English.
+  One annotation differs: the privacy block said "virtual try-on works without your face",
+  a promise withdrawn before launch because it was never tested (see ITERATION_LOG, Oct 21).
+  It now says what shipped. Render: node docs/evidencia/mockups/render-wireframe.mjs
+-->
+<style>
+  :root { --ink:#1d1916; --clay:#8f4424; --sand:#ece2d6; --bone:#faf7f3; --line:#d7cbbf; --muted:#7a716a; --ok:#2f6b43; }
+  * { box-sizing:border-box; margin:0; }
+  body { width:2000px; padding:48px 54px 60px; font:20px/1.35 -apple-system, "Helvetica Neue", Arial, sans-serif; color:var(--ink); background:#fff; }
+  h1 { font-size:34px; font-weight:700; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:21px; margin-top:10px; }
+  .cols { display:grid; grid-template-columns:790px 1fr; gap:32px; margin-top:36px; }
+  .label { font-size:18px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:18px; }
+  .box { border:2px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:16px; }
+  .bar { height:13px; border-radius:7px; background:#f1ebe4; margin:12px 0; }
+  .w60{width:66%}.w85{width:87%}.w40{width:44%}
+  .note { color:var(--clay); font-size:18px; margin-top:12px; }
+  .btn { display:inline-block; border:2px solid var(--ink); border-radius:999px; padding:7px 18px; font-size:19px; margin-top:12px; }
+  .row { display:flex; gap:12px; margin-top:10px; }
+  .variant { flex:1; border:2px dashed var(--clay); border-radius:8px; padding:9px 12px; font:700 21px Georgia, serif; }
+  .step { flex:1; border:2px solid var(--line); border-radius:6px; padding:10px 12px; color:var(--muted); font-size:19px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .sw { width:50px; height:36px; border-radius:6px; border:2px solid var(--line); }
+  .tag { display:inline-block; border:1.5px solid var(--line); border-radius:999px; padding:1px 11px; font-size:16px; margin-right:6px; }
+  .tag.ok { border-color:var(--ok); color:var(--ok); }
+  .card { flex:1; border:2px solid var(--line); border-radius:10px; padding:14px; }
+  .card b { font-size:19px; }
+  .ab { flex:1; border:2px solid var(--line); border-radius:8px; padding:12px 14px; }
+  .ab .pct { font-size:26px; font-weight:700; margin:6px 0; }
+  .cal { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cal div { border:2px solid var(--line); border-radius:4px; height:56px; padding:6px 8px; font-size:15px; color:var(--muted); }
+  .field { border:2px solid var(--line); border-radius:6px; padding:11px 14px; color:var(--muted); margin-top:10px; }
+</style>
+</head>
+<body>
+  <h1>Wireframe — homepage (/) and /marketing</h1>
+  <p class="sub">ClosetAI · Week 4 · the homepage argues from top to bottom; /marketing is a workbench, not a brochure</p>
+
+  <div class="cols">
+    <div>
+      <p class="label">Homepage · reads as an argument</p>
+      <div class="box">
+        <p class="label">1 · Headline — A/B experiment</p>
+        <div class="row">
+          <div class="variant">A · “Your stylist, in your pocket.”</div>
+          <div class="variant">B · “You already have something to wear.”</div>
+        </div>
+        <div class="bar w60"></div>
+        <span class="btn">Start for free</span>
+        <p class="note">Each visitor sees one variant, always the same one. One view and one click are counted per person.</p>
+      </div>
+      <div class="box"><p class="label">2 · The problem, in a customer’s words</p><div class="bar w85"></div><div class="bar w60"></div></div>
+      <div class="box">
+        <p class="label">3 · How it works</p>
+        <div class="row"><div class="step">Photograph your clothes</div><div class="step">AI builds the closet</div><div class="step">It tells you what to wear</div></div>
+      </div>
+      <div class="box"><p class="label">4 · Proof · data with its source</p><div class="bar w85"></div><p class="note">Links to /research</p></div>
+      <div class="box"><p class="label">5 · Price</p><div class="bar w60"></div><p class="note">Free forever · MX$100 once · links to /pricing</p></div>
+      <div class="box"><p class="label">6 · Privacy</p><div class="bar w85"></div><p class="note">Your photos are yours · private storage · truly deleted · no ads</p></div>
+      <div class="box"><p class="label">7 · Start</p><span class="btn" style="margin-top:0">Create my closet</span></div>
+    </div>
+
+    <div>
+      <p class="label">/marketing · no account</p>
+      <div class="grid2">
+        <div class="box">
+          <p class="label">Brand system</p>
+          <div class="row" style="gap:10px"><div class="sw" style="background:var(--ink)"></div><div class="sw" style="background:var(--clay)"></div><div class="sw" style="background:var(--sand)"></div><div class="sw" style="background:var(--bone)"></div></div>
+          <div class="bar w85"></div><div class="bar w60"></div>
+          <p class="note">Voice: do / don’t · brand risk</p>
+        </div>
+        <div class="box">
+          <p class="label">Persona</p>
+          <div class="bar w60"></div>
+          <span class="tag ok">data</span><span class="tag">hypothesis</span>
+          <div class="bar w85"></div><div class="bar w40"></div>
+        </div>
+      </div>
+      <div class="box">
+        <p class="label">10 posts · Instagram and TikTok</p>
+        <div class="row">
+          <div class="card"><b>Carousel · Instagram</b><div class="bar w85"></div><span class="tag ok">approved</span><br><span class="btn">Copy</span></div>
+          <div class="card"><b>Post · Instagram</b><div class="bar w60"></div><span class="tag ok">approved</span><br><span class="btn">Copy</span></div>
+          <div class="card"><b>Video · TikTok</b><div class="bar w85"></div><span class="tag ok">approved</span><br><span class="btn">Copy</span></div>
+        </div>
+        <span class="btn">Export all (.md)</span>
+      </div>
+      <div class="grid2">
+        <div class="box"><p class="label">3 video scripts</p><div class="bar w85"></div><div class="bar w60"></div><p class="note">Duration, shots, on-screen text</p></div>
+        <div class="box">
+          <p class="label">A/B results</p>
+          <div class="row"><div class="ab">A<div class="pct">— %</div>views · clicks</div><div class="ab">B<div class="pct">— %</div>views · clicks</div></div>
+          <p class="note">“No winner yet” until 100 visitors per variant and p &lt; 0.05</p>
+        </div>
+      </div>
+      <div class="box">
+        <p class="label">Calendar · 14 days</p>
+        <div class="cal">
+          <div>1 · IG</div><div>2 · TT</div><div>3 · IG</div><div>4 · IG</div><div>5 · TT</div><div>6</div><div>7</div>
+          <div>8 · IG</div><div>9 · TT</div><div>10 · IG</div><div>11 · IG</div><div>12 · IG</div><div>13</div><div>14 · TT</div>
+        </div>
+        <span class="btn">Export CSV</span>
+      </div>
+      <div class="box">
+        <p class="label">Generator · AI, labelled as such</p>
+        <div class="field">Post topic</div>
+        <div class="field">Channel</div>
+        <span class="btn">Generate</span>
+        <p class="note">Rejects the post if it invents a figure. Saved as “generated with AI, not reviewed”.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
