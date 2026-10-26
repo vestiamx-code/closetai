@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Aviso de privacidad",
-  description: "Qué datos guarda ClosetAI, para qué, y cómo borrarlos.",
+  title: "Privacy notice",
+  description: "What data ClosetAI keeps, what for, and how to delete it.",
 };
 
 export default function PrivacidadPage() {
@@ -17,160 +17,159 @@ export default function PrivacidadPage() {
 
       <article className="mx-auto w-full max-w-2xl px-6 pb-24">
         <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          Aviso de privacidad
+          Privacy notice
         </h1>
-        <p className="mt-2 text-sm text-text-muted">Última actualización: 21 de agosto de 2026</p>
+        <p className="mt-2 text-sm text-text-muted">Last updated: October 26, 2026</p>
 
         <div className="mt-8 space-y-8 leading-relaxed">
           <section>
-            <h2 className="font-display text-xl font-semibold">Quién responde por tus datos</h2>
+            <h2 className="font-display text-xl font-semibold">Who is responsible for your data</h2>
             <p className="mt-2 text-pretty">
-              ClosetAI, operado por Tamara Muñoz Delgadillo, con domicilio en México y contacto en{" "}
+              ClosetAI, operated by Tamara Muñoz Delgadillo, based in Mexico, contact{" "}
               <a href="mailto:hola@closetai.lat" className="text-accent underline underline-offset-4">
                 hola@closetai.lat
               </a>
-              . Este aviso se hace conforme a la Ley Federal de Protección de Datos Personales en
-              Posesión de los Particulares.
+              . This notice follows Mexico&rsquo;s Federal Law on the Protection of Personal Data Held by
+              Private Parties (LFPDPPP).
             </p>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Qué guardamos</h2>
+            <h2 className="font-display text-xl font-semibold">What we keep</h2>
             <ul className="mt-3 space-y-3">
               <li>
-                <strong>Tu cuenta:</strong> correo, nombre, y si quieres, tus tallas y tu ciudad.
-                La ciudad sirve para saber qué clima vas a tener.
+                <strong>Your account:</strong> email, name, and if you want, your sizes and your city.
+                The city is used to know what weather you&rsquo;ll have.
               </li>
               <li>
-                <strong>Fotos de tus prendas:</strong> las que subes a tu clóset, y lo que la IA
-                dedujo de ellas.
+                <strong>Photos of your garments:</strong> the ones you upload to your closet, and what AI
+                inferred from them.
               </li>
               <li>
-                <strong>Fotos tuyas de cuerpo completo</strong>, si decides usar la prueba virtual.
+                <strong>Full-body photos of you</strong>, if you choose to use the virtual try-on.
                 <span className="mt-1 block rounded-lg border border-border bg-surface p-3 text-sm text-pretty">
-                  Estas son <strong>datos personales sensibles</strong>. Solo se guardan si tú
-                  subes una, viven en un almacenamiento privado al que nadie más tiene acceso, se
-                  usan únicamente para generar tus pruebas virtuales, y se borran de verdad cuando
-                  borras tu cuenta o la reemplazas.
+                  These are <strong>sensitive personal data</strong>. They are only kept if you upload
+                  one, they live in private storage nobody else can access, they are used only to
+                  generate your virtual try-ons, and they are truly deleted when you delete your account
+                  or replace them.
                 </span>
               </li>
               <li>
-                <strong>Lo que aceptas y rechazas:</strong> es lo que hace que ClosetAI aprenda tu
-                estilo. Puedes ver todo lo que ha aprendido en{" "}
+                <strong>What you accept and reject:</strong> it is what lets ClosetAI learn your style.
+                You can see everything it has learned in{" "}
                 <Link href="/estilo" className="text-accent underline underline-offset-4">
-                  Tu estilo
+                  Your style
                 </Link>{" "}
-                y corregir cualquier cosa.
+                and correct anything.
               </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Las páginas que no piden cuenta</h2>
+            <h2 className="font-display text-xl font-semibold">Pages that don&rsquo;t require an account</h2>
             <p className="mt-2 text-pretty">
               <Link href="/core" className="text-accent underline underline-offset-4">
-                El núcleo de estilo
+                The style core
               </Link>
               ,{" "}
               <Link href="/research" className="text-accent underline underline-offset-4">
-                la investigación
+                the research
               </Link>{" "}
-              y{" "}
+              and{" "}
               <Link href="/pricing" className="text-accent underline underline-offset-4">
-                el simulador de precios
+                the pricing simulator
               </Link>{" "}
-              funcionan sin registrarte. Ahí guardamos:
+              work without signing up. There we keep:
             </p>
             <ul className="mt-3 space-y-2 text-pretty">
               <li>
-                <strong>Lo que escribes</strong> —tu párrafo de estilo, tu pregunta de
-                investigación, el nombre que le pones a un escenario—. El resultado se publica en
-                esas páginas; tu texto original no se muestra y desde el 6 de octubre de 2026 la
-                base de datos impide leerlo desde fuera. No escribas datos personales ahí.
+                <strong>What you write</strong> —your style paragraph, your research question, the name
+                you give a scenario. The result is published on those pages; your original text is not
+                shown, and since October 6, 2026 the database prevents it from being read from outside.
+                Don&rsquo;t put personal details there.
               </li>
               <li>
-                <strong>Una huella de tu conexión</strong>, para que nadie use el servicio miles de
-                veces y lo tire. Es un hash de tu dirección IP, no la dirección: sirve para
-                distinguir, no para identificarte. Antes se guardaba entera; lo corregimos.
+                <strong>A fingerprint of your connection</strong>, so nobody can use the service thousands
+                of times and bring it down. It is a hash of your IP address, not the address: it tells
+                visitors apart, it doesn&rsquo;t identify you. It used to be stored in full; we fixed that.
               </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Con quién se comparten</h2>
+            <h2 className="font-display text-xl font-semibold">Who it is shared with</h2>
             <p className="mt-2 text-pretty">
-              Para que la app funcione, tus fotos pasan por proveedores de inteligencia artificial
-              que las procesan y devuelven un resultado:
+              For the app to work, your photos go through artificial intelligence providers that process
+              them and return a result:
             </p>
             <ul className="mt-3 space-y-2 text-pretty">
               <li>
-                <strong>Google (Gemini)</strong> — reconoce tus prendas y arma tus outfits.
+                <strong>Google (Gemini)</strong> — recognizes your garments and builds your outfits.
               </li>
               <li>
-                <strong>fal.ai</strong> — quita el fondo de las fotos y genera las pruebas
-                virtuales.
+                <strong>fal.ai</strong> — removes photo backgrounds and generates the virtual try-ons.
               </li>
               <li>
-                <strong>Supabase</strong> — guarda tu cuenta y tus archivos, en servidores de
-                Estados Unidos.
+                <strong>Supabase</strong> — stores your account and your files, on servers in the
+                United States.
               </li>
               <li>
-                <strong>Stripe</strong> — procesa los pagos. ClosetAI nunca ve ni guarda los datos
-                de tu tarjeta.
+                <strong>Stripe</strong> — processes payments. ClosetAI never sees or stores your card
+                details.
               </li>
             </ul>
             <p className="mt-3 text-pretty">
-              No vendemos tus datos. No los usamos para publicidad. No hay anuncios en ClosetAI.
+              We don&rsquo;t sell your data. We don&rsquo;t use it for advertising. There are no ads on ClosetAI.
             </p>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Tus derechos ARCO</h2>
+            <h2 className="font-display text-xl font-semibold">Your ARCO rights</h2>
             <p className="mt-2 text-pretty">
-              Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos. Dos de
-              esos derechos los ejerces tú directamente, sin pedirle permiso a nadie:
+              Under Mexican law you can access, rectify, cancel or oppose the processing of your data (the
+              ARCO rights). Two of them you exercise yourself, without asking anyone&rsquo;s permission:
             </p>
             <ul className="mt-3 space-y-2 text-pretty">
               <li>
-                <strong>Rectificar:</strong> corrige tus datos en tu perfil y las inferencias de
-                estilo en la pantalla de Tu estilo.
+                <strong>Rectify:</strong> correct your details in your profile, and the style inferences
+                on the Your style screen.
               </li>
               <li>
-                <strong>Cancelar:</strong> el botón de borrar cuenta en tu perfil elimina tus
-                datos y tus archivos. No se archivan en ningún lado.
+                <strong>Cancel:</strong> the delete-account button in your profile erases your data and
+                your files. They are not archived anywhere.
               </li>
             </ul>
             <p className="mt-3 text-pretty">
-              Para acceso u oposición, escríbenos a{" "}
+              For access or opposition, write to us at{" "}
               <a href="mailto:hola@closetai.lat" className="text-accent underline underline-offset-4">
                 hola@closetai.lat
               </a>{" "}
-              y respondemos en un máximo de 20 días hábiles.
+              and we will answer within 20 business days.
             </p>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Enlaces a tiendas</h2>
+            <h2 className="font-display text-xl font-semibold">Links to stores</h2>
             <p className="mt-2 text-pretty">
-              Cuando ClosetAI te recomienda comprar algo, el enlace puede llevar un código de
-              afiliado y podemos ganar una comisión. Eso no cambia lo que te recomendamos: la
-              relevancia va primero y el afiliado solo desempata. Los clics salientes se registran
-              para saber qué recomendaciones sirven.
+              When ClosetAI recommends buying something, the link may carry an affiliate code and we may
+              earn a commission. That doesn&rsquo;t change what we recommend: relevance comes first and the
+              affiliate only breaks ties. Outgoing clicks are logged to learn which recommendations are
+              useful.
             </p>
           </section>
 
           <section>
-            <h2 className="font-display text-xl font-semibold">Cambios</h2>
+            <h2 className="font-display text-xl font-semibold">Changes</h2>
             <p className="mt-2 text-pretty">
-              Si esto cambia, la fecha de arriba cambia con ello y te avisamos por correo antes de
-              que aplique.
+              If this changes, the date above changes with it and we will let you know by email before it
+              applies.
             </p>
           </section>
         </div>
 
         <p className="mt-12 border-t border-border pt-6">
           <Link href="/" className="text-sm text-accent underline underline-offset-4">
-            ← Volver
+            ← Back
           </Link>
         </p>
       </article>

@@ -14,22 +14,22 @@ export function FormularioRegistro() {
     <form action={accion} className="mt-8 space-y-4">
       {estado.error ? <Aviso>{estado.error}</Aviso> : null}
 
-      <Campo etiqueta="Tu nombre" name="nombre" autoComplete="given-name" placeholder="Tamara" required />
+      <Campo etiqueta="Your name" name="nombre" autoComplete="given-name" placeholder="Tamara" required />
       <Campo
-        etiqueta="Correo"
+        etiqueta="Email"
         name="email"
         type="email"
         autoComplete="email"
-        placeholder="tu@correo.com"
+        placeholder="you@email.com"
         required
       />
       <Campo
-        etiqueta="Contraseña"
+        etiqueta="Password"
         name="password"
         type="password"
         autoComplete="new-password"
         minLength={8}
-        ayuda="Mínimo 8 caracteres."
+        ayuda="At least 8 characters."
         required
       />
 
@@ -41,19 +41,19 @@ export function FormularioRegistro() {
           className="mt-0.5 size-4 shrink-0 accent-[var(--accent)]"
         />
         <span className="text-pretty">
-          Entiendo cómo ClosetAI usa mis fotos y acepto el{" "}
+          I understand how ClosetAI uses my photos and I accept the{" "}
           <a
             href="/privacidad"
             target="_blank"
             className="text-accent underline underline-offset-4"
           >
-            aviso de privacidad
+            privacy notice
           </a>
           .
         </span>
       </label>
 
-      <Boton cargando="Creando tu cuenta…">Crear cuenta</Boton>
+      <Boton cargando="Creating your account…">Create account</Boton>
     </form>
   );
 }

@@ -21,8 +21,8 @@ export function FormularioRecuperar() {
   return (
     <form action={accion} className="mt-8 space-y-4">
       {estado.error ? <Aviso>{estado.error}</Aviso> : null}
-      <Campo etiqueta="Correo" name="email" type="email" autoComplete="email" required />
-      <Boton cargando="Enviando…">Mandar enlace</Boton>
+      <Campo etiqueta="Email" name="email" type="email" autoComplete="email" required />
+      <Boton cargando="Sending…">Send link</Boton>
     </form>
   );
 }

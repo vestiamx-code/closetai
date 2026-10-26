@@ -3,20 +3,20 @@ import Link from "next/link";
 
 import { FormularioRegistro } from "./formulario";
 
-export const metadata: Metadata = { title: "Crear cuenta" };
+export const metadata: Metadata = { title: "Create account" };
 
 export default function RegistroPage() {
   return (
     <>
-      <h1 className="font-display text-3xl font-semibold tracking-tight">Arma tu clóset</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Build your closet</h1>
       <p className="mt-2 text-text-muted">
-        Gratis, e ilimitado. Nunca te vamos a cobrar por ver tu propia ropa.
+        Free and unlimited. We will never charge you to see your own clothes.
       </p>
       <FormularioRegistro />
       <p className="mt-6 text-center text-sm text-text-muted">
-        ¿Ya tienes cuenta?{" "}
+        Already have an account?{" "}
         <Link href="/entrar" className="text-accent underline underline-offset-4">
-          Entrar
+          Sign in
         </Link>
       </p>
     </>

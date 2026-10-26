@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Video demo · Semana 4 · ClosetAI",
+  title: "Demo video · Week 4 · ClosetAI",
   description:
-    "Recorrido de 2:32 por la portada nueva y /marketing: el titular A/B, la marca, la persona, el contenido de lanzamiento y un generador que no puede inventar cifras.",
+    "A walkthrough of the new homepage and /marketing: the A/B headline, the brand, the persona, the launch content and a generator that cannot invent figures.",
 };
 
 /** Video de la Semana 4, con su propio enlace estable, como el de cada semana. */
@@ -16,11 +16,11 @@ export default function DemoSemana4() {
       </Link>
 
       <h1 className="mt-8 font-display text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-        Semana 4 · Decir solo lo que se puede probar
+        Week 4 · Say only what you can prove
       </h1>
       <p className="mt-4 max-w-xl text-lg leading-relaxed text-text-muted text-pretty">
-        Recorrido de 2:32 por la portada y <code className="text-text">/marketing</code> en producción: el
-        titular que se mide con visitas reales, y un marketing que solo dice lo que está verificado.
+        A walkthrough of the homepage and <code className="text-text">/marketing</code> in production: a
+        headline measured with real visits, and marketing that only says what has been verified.
       </p>
 
       <video
@@ -30,23 +30,23 @@ export default function DemoSemana4() {
         className="mt-8 w-full rounded-lg border border-border bg-black"
       >
         <source src="/semana-4-marketing.mp4" type="video/mp4" />
-        Tu navegador no puede reproducir video.{" "}
+        Your browser can’t play this video.{" "}
         <a href="/semana-4-marketing.mp4" className="underline">
-          Descarga el archivo
+          Download the file
         </a>
         .
       </video>
 
-      <h2 className="mt-12 font-display text-2xl font-semibold tracking-tight">Qué muestra</h2>
+      <h2 className="mt-12 font-display text-2xl font-semibold tracking-tight">What it shows</h2>
       <ul className="mt-4 space-y-2 text-text-muted">
         {[
-          "Las dos versiones del titular, cada una para un visitante distinto",
-          "La portada como argumento: problema, cómo funciona, datos con fuente, precio y privacidad",
-          "La marca, y Sofía, la persona, con cada rasgo marcado como dato o hipótesis",
-          "Los resultados A/B en vivo, sin ganador hasta tener muestra suficiente",
-          "Los 10 posts aprobados, copiar uno, los 3 guiones y el calendario exportable",
-          "El generador escribiendo un post nuevo, que se guarda como «sin revisar»",
-          "El historial en GitHub",
+          "The two versions of the headline, each for a different visitor",
+          "The homepage as an argument: problem, how it works, sourced data, price and privacy",
+          "The brand, and Sofía, the persona, with every trait marked as data or hypothesis",
+          "The live A/B results, with no winner until there is enough sample",
+          "The 10 approved posts, copying one, the 3 scripts and the exportable calendar",
+          "The generator writing a new post, saved as “not reviewed”",
+          "The GitHub history",
         ].map((t) => (
           <li key={t} className="flex gap-3">
             <span aria-hidden className="text-text-muted">
@@ -59,11 +59,11 @@ export default function DemoSemana4() {
 
       <p className="mt-10 text-sm text-text-muted">
         <Link href="/demo/semana-3" className="underline underline-offset-4">
-          Ver el video de la Semana 3
+          Watch the Week 3 video
         </Link>{" "}
         ·{" "}
         <a href="/semana-4-marketing.mp4" download className="underline underline-offset-4">
-          Descargar este video
+          Download this video
         </a>
       </p>
     </main>

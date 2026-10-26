@@ -7,26 +7,26 @@ import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
 
-/** Lo que devuelven las acciones al formulario para pintar el error. */
+/** What the actions return to the form so it can show the error. */
 export type EstadoFormulario = { error?: string; aviso?: string };
 
-const correo = z.string().trim().min(1, "Escribe tu correo").email("Ese correo no se ve válido");
-const contrasena = z.string().min(8, "La contraseña necesita al menos 8 caracteres");
+const correo = z.string().trim().min(1, "Enter your email").email("That email doesn't look valid");
+const contrasena = z.string().min(8, "The password needs at least 8 characters");
 
 const registroSchema = z.object({
   email: correo,
   password: contrasena,
-  nombre: z.string().trim().min(1, "¿Cómo te llamas?").max(60),
-  // El `required` del HTML se puede quitar desde el navegador. El consentimiento
-  // para tratar datos sensibles tiene que comprobarse en el servidor (§4.4).
-  consentimiento: z.literal("on", { message: "Necesitamos tu consentimiento para crear la cuenta." }),
+  nombre: z.string().trim().min(1, "What's your name?").max(60),
+  // The HTML `required` can be removed from the browser. Consent to process
+  // sensitive data has to be checked on the server (§4.4).
+  consentimiento: z.literal("on", { message: "We need your consent to create the account." }),
 });
 
-const entrarSchema = z.object({ email: correo, password: z.string().min(1, "Escribe tu contraseña") });
+const entrarSchema = z.object({ email: correo, password: z.string().min(1, "Enter your password") });
 
-/** Primer mensaje de error de zod, en español, para mostrar tal cual. */
+/** First zod error message, in English, to show as is. */
 function primerError(error: z.ZodError): string {
-  return error.issues[0]?.message ?? "Revisa los datos";
+  return error.issues[0]?.message ?? "Check your details";
 }
 
 async function urlDelSitio(): Promise<string> {
@@ -55,7 +55,7 @@ export async function registrarse(
     options: {
       data: {
         full_name: datos.data.nombre,
-        // Queda constancia de cuándo se dio el consentimiento.
+        // Records when consent was given.
         consentimiento_privacidad: new Date().toISOString(),
       },
       emailRedirectTo: `${await urlDelSitio()}/auth/callback`,
@@ -63,11 +63,11 @@ export async function registrarse(
   });
 
   if (error) {
-    // Los mensajes de Supabase vienen en inglés y son técnicos.
+    // Supabase messages are technical, so we show our own.
     if (error.message.includes("already registered")) {
-      return { error: "Ese correo ya tiene cuenta. Inicia sesión." };
+      return { error: "That email already has an account. Sign in." };
     }
-    return { error: "No pudimos crear tu cuenta. Inténtalo de nuevo." };
+    return { error: "We couldn't create your account. Please try again." };
   }
 
   redirect("/registro/revisa-tu-correo");
@@ -87,9 +87,9 @@ export async function entrar(
   const { error } = await supabase.auth.signInWithPassword(datos.data);
 
   if (error) {
-    // A propósito no distinguimos "no existe" de "contraseña incorrecta":
-    // decirlo revela qué correos tienen cuenta.
-    return { error: "Correo o contraseña incorrectos." };
+    // On purpose we don't tell "doesn't exist" from "wrong password":
+    // saying so reveals which emails have an account.
+    return { error: "Wrong email or password." };
   }
 
   const destino = String(formData.get("destino") ?? "").startsWith("/")
@@ -119,9 +119,9 @@ export async function pedirRecuperacion(
     redirectTo: `${await urlDelSitio()}/auth/callback?siguiente=/nueva-contrasena`,
   });
 
-  // Siempre el mismo mensaje, exista o no la cuenta: si dijéramos "ese correo no
-  // está registrado", cualquiera podría averiguar quién tiene cuenta.
-  return { aviso: "Si ese correo tiene cuenta, te mandamos un enlace para cambiar tu contraseña." };
+  // Always the same message, whether the account exists or not: if we said "that
+  // email is not registered", anyone could find out who has an account.
+  return { aviso: "If that email has an account, we sent you a link to change your password." };
 }
 
 export async function cambiarContrasena(
@@ -135,10 +135,10 @@ export async function cambiarContrasena(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "El enlace expiró. Pide uno nuevo." };
+  if (!user) return { error: "The link expired. Ask for a new one." };
 
   const { error } = await supabase.auth.updateUser({ password: datos.data.password });
-  if (error) return { error: "No pudimos cambiar tu contraseña. Intenta de nuevo." };
+  if (error) return { error: "We couldn't change your password. Please try again." };
 
   revalidatePath("/", "layout");
   redirect("/closet");

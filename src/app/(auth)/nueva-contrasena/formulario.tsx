@@ -14,15 +14,15 @@ export function FormularioNuevaContrasena() {
     <form action={accion} className="mt-8 space-y-4">
       {estado.error ? <Aviso>{estado.error}</Aviso> : null}
       <Campo
-        etiqueta="Contraseña nueva"
+        etiqueta="New password"
         name="password"
         type="password"
         autoComplete="new-password"
         minLength={8}
-        ayuda="Mínimo 8 caracteres."
+        ayuda="At least 8 characters."
         required
       />
-      <Boton cargando="Guardando…">Guardar</Boton>
+      <Boton cargando="Saving…">Save</Boton>
     </form>
   );
 }

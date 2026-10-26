@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Video demo · Semana 2 · ClosetAI",
+  title: "Demo video · Week 2 · ClosetAI",
   description:
-    "Recorrido de 2:30 por /research: la investigación de ClosetAI con fuentes verificadas, el mapa de riesgos y una conversación real.",
+    "A 2:30 walkthrough of /research: ClosetAI's research with verified sources, the risk map and a real conversation.",
 };
 
 /** Video de la Semana 2, con su propio enlace estable, como el de cada semana. */
@@ -16,11 +16,11 @@ export default function DemoSemana2() {
       </Link>
 
       <h1 className="mt-8 font-display text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-        Semana 2 · ¿El problema es real?
+        Week 2 · Is the problem real?
       </h1>
       <p className="mt-4 max-w-xl text-lg leading-relaxed text-text-muted text-pretty">
-        Recorrido de 2:30 por <code className="text-text">/research</code> en producción: cada dato con su
-        fuente, una pregunta respondida en vivo y una conversación real.
+        A 2:30 walkthrough of <code className="text-text">/research</code> in production: every figure with its
+        source, a question answered live and a real conversation.
       </p>
 
       <video
@@ -30,24 +30,24 @@ export default function DemoSemana2() {
         className="mt-8 w-full rounded-lg border border-border bg-black"
       >
         <source src="/semana-2-research.mp4" type="video/mp4" />
-        Tu navegador no puede reproducir video.{" "}
+        Your browser can’t play this video.{" "}
         <a href="/semana-2-research.mp4" className="underline">
-          Descarga el archivo
+          Download the file
         </a>
         .
       </video>
 
-      <h2 className="mt-12 font-display text-2xl font-semibold tracking-tight">Qué muestra</h2>
+      <h2 className="mt-12 font-display text-2xl font-semibold tracking-tight">What it shows</h2>
       <ul className="mt-4 space-y-2 text-text-muted">
         {[
-          "La página pública /research, sin cuenta",
-          "El panel de resumen, calculado desde la base de datos",
-          "Una pregunta en vivo y un informe que solo cita fuentes verificadas",
-          "Los 5 referentes globales y la sección de México",
-          "La tabla de competidores y sustitutos, con filtro y búsqueda sin acentos",
-          "El mapa de riesgos, cada uno con su evidencia",
-          "La conversación real de validación, sin nombre y con permiso",
-          "Lo que se descartó por no poder verificarse, y el historial en GitHub",
+          "The public /research page, no account",
+          "The summary panel, computed from the database",
+          "A live question and a report that only cites verified sources",
+          "The 5 global benchmarks and the Mexico section",
+          "The competitors and substitutes table, with filter and accent-insensitive search",
+          "The risk map, each risk with its evidence",
+          "The real validation conversation, anonymous and with consent",
+          "What was discarded because it could not be verified, and the GitHub history",
         ].map((t) => (
           <li key={t} className="flex gap-3">
             <span aria-hidden className="text-text-muted">
@@ -60,11 +60,11 @@ export default function DemoSemana2() {
 
       <p className="mt-10 text-sm text-text-muted">
         <Link href="/demo/semana-1" className="underline underline-offset-4">
-          Ver el video de la Semana 1
+          Watch the Week 1 video
         </Link>{" "}
         ·{" "}
         <a href="/semana-2-research.mp4" download className="underline underline-offset-4">
-          Descargar este video
+          Download this video
         </a>
       </p>
     </main>

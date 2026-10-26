@@ -25,26 +25,26 @@ export function FormularioEntrar({
       {destino ? <input type="hidden" name="destino" value={destino} /> : null}
 
       <Campo
-        etiqueta="Correo"
+        etiqueta="Email"
         name="email"
         type="email"
         autoComplete="email"
-        placeholder="tu@correo.com"
+        placeholder="you@email.com"
         required
       />
       <Campo
-        etiqueta="Contraseña"
+        etiqueta="Password"
         name="password"
         type="password"
         autoComplete="current-password"
         required
       />
 
-      <Boton cargando="Entrando…">Entrar</Boton>
+      <Boton cargando="Signing in…">Sign in</Boton>
 
       <p className="text-center text-sm">
         <Link href="/recuperar" className="text-text-muted underline underline-offset-4">
-          Olvidé mi contraseña
+          I forgot my password
         </Link>
       </p>
     </form>
