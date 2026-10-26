@@ -1,174 +1,175 @@
-# Semana 4 · Contenido de lanzamiento
+# Week 4 · Launch content
 
-> Redactado con IA el 21 de octubre de 2026 y **aprobado por Tamara Muñoz Delgadillo el mismo día**,
-> con un cambio: el post 5 original se retiró (ver abajo).
+> Drafted with AI on October 21, 2026 and **approved by Tamara Muñoz Delgadillo the same day**, with one
+> change: the original post 5 was withdrawn (see below). Translated into English on October 26, 2026, when
+> the course required all work in English; the meaning of every piece is unchanged.
 >
-> **Cambio posterior, aprobado por Tamara el mismo día.** El cierre de la portada decía «Ya tienes
-> qué ponerte. Solo falta verlo.», que es el titular B del experimento. Quien veía la variante A
-> también leía la frase de B al final, y la comparación quedaba contaminada. Se cambió por uno que
-> no se parece a ninguno de los dos titulares (migración 012).
-> Regla de redacción: solo se usan los datos de `src/lib/marketing.ts` (`DATOS_VERIFICADOS`),
-> cada uno con su fuente. No hay testimonios, ni «miles de usuarias», ni la cita de la entrevista:
-> el permiso de la Semana 2 fue para la página de investigación y el documento, no para publicidad.
+> **Later change, approved by Tamara the same day.** The homepage closing line repeated headline B of the
+> experiment, so people who saw variant A read B's sentence too, contaminating the comparison. It was
+> replaced by a line that resembles neither headline (migration 012).
 >
-> **Lo que se retiró antes de aprobar.** El post 5 original decía que la prueba virtual funciona
-> sin tu cara. El validador de fotos ya acepta fotos sin cara (prompt v3), pero nadie ha visto un
-> resultado con una foto así. Para comprobarlo había que pedirle a Tamara una foto de su cuerpo, que
-> además gasta un crédito y pasa por un proveedor externo, solo para poder publicar una frase. Se
-> decidió al revés: el marketing dice lo que ya está comprobado. El post se cambió por uno de
-> privacidad que sale del aviso de privacidad, y el mapa de producto dejó de prometerlo.
+> Writing rule: only the facts in `src/lib/marketing.ts` (`DATOS_VERIFICADOS`) are used, each with its
+> source. No testimonials, no "thousands of users", and no quote from the interview: the Week 2 consent
+> covered the research page and the document, not advertising.
+>
+> **What was withdrawn before approval.** The original post 5 said the virtual try-on works without your
+> face. The photo validator already accepts photos without a face (prompt v3), but nobody has seen a
+> result with such a photo. Checking it would have meant asking Tamara for a photo of her body, which uses
+> a credit and goes through an external provider, just to publish one sentence. It was decided the other
+> way around: marketing says what has been checked. The post was replaced by a privacy post taken from the
+> privacy notice, and the product map stopped promising it.
 
 ---
 
-## Texto de la landing (la portada)
+## Homepage copy
 
-**Antetítulo:** Estilista personal con IA · Hecho en México
+**Eyebrow:** AI personal stylist · Made in Mexico
 
-**Titular (experimento A/B):**
-- A · Tu estilista, en tu bolsillo.
-- B · Ya tienes qué ponerte.
+**Headline (A/B experiment):**
+- A · Your stylist, in your pocket.
+- B · You already have something to wear.
 
-**Bajada:** Fotografía tu ropa, ClosetAI la ordena por ti y cada mañana te dice qué ponerte con lo que
-ya tienes.
+**Subhead:** Photograph your clothes, ClosetAI sorts them for you, and every morning it tells you what to
+wear from what you already own.
 
-**Botones:** Empezar gratis · Probar sin cuenta
+**Buttons:** Start for free · Try it without an account
 
-**El problema.** Tienes el clóset lleno y te pones lo mismo. No te falta ropa: te falta verla toda
-junta.
+**The problem.** Your closet is full and you keep wearing the same thing. You're not short of clothes:
+you just can't see them all at once.
 
-**Cómo funciona.**
-1. **Fotografía tu ropa.** La IA llena el tipo, los colores y la temporada de cada prenda.
-2. **Arma tu clóset.** Todo en tu celular, con el fondo recortado.
-3. **Te dice qué ponerte.** Outfits con lo que ya tienes, para el clima de tu ciudad.
+**How it works.**
+1. **Photograph your clothes.** AI fills in the type, the colors and the season of every garment.
+2. **Build your closet.** Everything on your phone, with the background removed.
+3. **It tells you what to wear.** Outfits from what you already own, for the weather in your city.
 
-**Lo que dicen los datos.** Más de 77 millones de personas compraron en línea en México en 2025. El
-59% compra ropa. Pero solo el 35% quedó muy satisfecha con su compra de moda en línea. Comprar no es
-el problema; saber qué combinar, sí. *Cada dato enlaza a su fuente en closetai.lat/research.*
+**What the data says.** More than 77 million people bought online in Mexico in 2025. 59% buy clothes.
+But only 35% were very satisfied with their online fashion purchase. Buying isn't the problem; knowing
+what goes together is. *Every figure links to its source at closetai.lat/research.*
 
-**Precio.** Tu clóset es gratis para siempre. ClosetAI Completo cuesta 100 pesos, una sola vez: sin
-mensualidad. *Ver la cuenta completa en closetai.lat/pricing.*
+**Price.** Your closet is free forever. ClosetAI Complete costs 100 pesos, one time: no monthly fee.
+*See the full math at closetai.lat/pricing.*
 
-**Tus fotos son tuyas.** Viven en un espacio privado al que nadie más entra. Se borran de verdad
-cuando las quitas o borras tu cuenta. No vendemos tus datos y no hay anuncios.
+**Your photos are yours.** They live in a private space nobody else can enter. They are truly deleted
+when you remove them or delete your account. We don't sell your data, and there are no ads.
 
-**Cierre.** Tu ropa ya está ahí. Solo falta verla. · Botón: Crear mi clóset gratis
+**Closing.** Your clothes are already there. You just have to see them. · Button: Create my closet for free
 
 ---
 
 ## 10 posts
 
-### 1 · Instagram · carrusel — «Ya tienes qué ponerte»
-1. Ya tienes qué ponerte.
-2. El problema no es que te falte ropa. Es que no la ves toda junta.
-3. ClosetAI convierte tu ropa en un clóset en tu celular: le tomas foto a cada prenda y la IA la ordena por ti.
-4. Cada mañana te propone qué ponerte, con lo que ya tienes y el clima de tu ciudad.
-5. Tu clóset es gratis para siempre. closetai.lat
+### 1 · Instagram · carousel — “You already have something to wear”
+1. You already have something to wear.
+2. The problem isn't that you're short of clothes. It's that you can't see them all at once.
+3. ClosetAI turns your clothes into a closet on your phone: take a photo of each garment and AI sorts it for you.
+4. Every morning it suggests what to wear, from what you already own and the weather in your city.
+5. Your closet is free forever. closetai.lat
 
-**Texto:** Antes de comprar algo nuevo, abre lo que ya tienes. Tu clóset digital es gratis para siempre en closetai.lat
-**Hashtags:** #ClosetAI #QuéMePongo #ModaMexicana #Outfits
+**Caption:** Before you buy something new, open what you already have. Your digital closet is free forever at closetai.lat
+**Hashtags:** #ClosetAI #WhatToWear #MexicanFashion #Outfits
 
-### 2 · Instagram · post — «Tu clóset, en tu bolsillo»
-Toda tu ropa en tu celular, ordenada sola. Y 3 outfits del día hechos con lo que ya tienes. Gratis,
-para siempre: nunca te vamos a cobrar por el trabajo que ya hiciste.
-**Hashtags:** #ClosetAI #ClósetDigital #Outfits
+### 2 · Instagram · post — “Your closet, in your pocket”
+All your clothes on your phone, sorted for you. And 3 outfits of the day made from what you already own.
+Free, forever: we will never charge you for work you've already done.
+**Hashtags:** #ClosetAI #DigitalCloset #Outfits
 
-### 3 · TikTok · video — «Cómo funciona ClosetAI» → guion 1
-**Texto:** Le tomas foto a tu ropa y te dice qué ponerte. Así de fácil. closetai.lat
-**Hashtags:** #ClosetAI #QuéMePongo #OutfitDelDía
+### 3 · TikTok · video — “How ClosetAI works” → script 1
+**Caption:** Take a photo of your clothes and it tells you what to wear. That simple. closetai.lat
+**Hashtags:** #ClosetAI #WhatToWear #OutfitOfTheDay
 
-### 4 · Instagram · carrusel — «Lo que dicen los datos»
-1. Más de 77 millones de personas compraron en línea en México en 2025.
-2. El 59% compra ropa.
-3. Pero solo el 35% quedó muy satisfecha con su compra de moda en línea.
-4. Comprar no es el problema. Saber qué combinar, sí.
-5. ClosetAI te ayuda a usar lo que ya tienes antes de comprar más.
+### 4 · Instagram · carousel — “What the data says”
+1. More than 77 million people bought online in Mexico in 2025.
+2. 59% buy clothes.
+3. But only 35% were very satisfied with their online fashion purchase.
+4. Buying isn't the problem. Knowing what goes together is.
+5. ClosetAI helps you use what you already own before you buy more.
 
-**Texto:** Fuentes: AMVO, y Milenio con datos de AMVO. Cada dato, con su enlace, en closetai.lat/research
-**Hashtags:** #ClosetAI #ModaMexicana #ComprasEnLínea
+**Caption:** Sources: AMVO, and Milenio citing AMVO data. Every figure, with its link, at closetai.lat/research
+**Hashtags:** #ClosetAI #MexicanFashion #OnlineShopping
 
-### 5 · Instagram · post — «Tus fotos son tuyas»
-Tus fotos viven en un espacio privado al que nadie más entra. Se borran de verdad cuando las quitas
-o borras tu cuenta. No vendemos tus datos y en ClosetAI no hay anuncios.
-**Texto:** Todo, con detalle, en closetai.lat/privacidad
-**Hashtags:** #ClosetAI #Privacidad
+### 5 · Instagram · post — “Your photos are yours”
+Your photos live in a private space nobody else can enter. They are truly deleted when you remove them
+or delete your account. We don't sell your data, and ClosetAI has no ads.
+**Caption:** All of it, in detail, at closetai.lat/privacidad
+**Hashtags:** #ClosetAI #Privacy
 
-### 6 · TikTok · video — «POV: el clóset lleno» → guion 2
-**Texto:** POV: tienes el clóset lleno y nada que ponerte. Spoiler: sí tienes. closetai.lat
-**Hashtags:** #ClosetAI #POV #QuéMePongo
+### 6 · TikTok · video — “POV: a full closet” → script 2
+**Caption:** POV: your closet is full and you have nothing to wear. Spoiler: you do. closetai.lat
+**Hashtags:** #ClosetAI #POV #WhatToWear
 
-### 7 · Instagram · carrusel — «Antes de comprar otra blusa»
-1. Antes de comprar otra blusa…
-2. …pregúntate con qué la vas a combinar.
-3. ClosetAI revisa tu clóset y te dice qué prenda te falta para armar más outfits con lo que ya tienes.
-4. Comprar menos, combinar mejor.
+### 7 · Instagram · carousel — “Before you buy another blouse”
+1. Before you buy another blouse…
+2. …ask yourself what you'll wear it with.
+3. ClosetAI looks at your closet and tells you which garment you're missing to make more outfits from what you already own.
+4. Buy less, combine better.
 
-**Texto:** «Qué te falta» viene en ClosetAI Completo: 100 pesos, una sola vez.
-**Hashtags:** #ClosetAI #ComprarMejor #Outfits
+**Caption:** “What you're missing” comes with ClosetAI Complete: 100 pesos, one time.
+**Hashtags:** #ClosetAI #BuyBetter #Outfits
 
-### 8 · TikTok · video — «El outfit del día, según el clima» → guion 3
-**Texto:** Abre ClosetAI antes de abrir el clóset. Te dice qué ponerte para el clima de hoy.
-**Hashtags:** #ClosetAI #OutfitDelDía #CDMX
+### 8 · TikTok · video — “The outfit of the day, for the weather” → script 3
+**Caption:** Open ClosetAI before you open your closet. It tells you what to wear for today's weather.
+**Hashtags:** #ClosetAI #OutfitOfTheDay #MexicoCity
 
-### 9 · Instagram · post — «¿Por qué no hay mensualidad?»
-ClosetAI Completo cuesta 100 pesos. Una vez. Sin mensualidad. Incluye el estilista sin límite y 30
-créditos para probarte la ropa. Si se te acaban, una recarga cuesta 49 pesos por 20 créditos. Y tu
-clóset sigue siendo gratis para siempre.
-**Hashtags:** #ClosetAI #SinMensualidad
+### 9 · Instagram · post — “Why is there no monthly fee?”
+ClosetAI Complete costs 100 pesos. Once. No monthly fee. It includes the unlimited stylist and 30
+credits to try clothes on. If you run out, a top-up costs 49 pesos for 20 credits. And your closet is
+still free forever.
+**Hashtags:** #ClosetAI #NoMonthlyFee
 
-### 10 · Instagram · carrusel — «Lo más tedioso, hecho por ti»
-1. En Estados Unidos, una empresa cobra 295 dólares por catalogar 100 prendas por ti.
-2. Porque catalogar tu ropa a mano es lo más tedioso de tener un clóset digital.
-3. En ClosetAI le tomas foto a la prenda y la IA llena el resto: tipo, colores, temporada.
-4. Gratis, para siempre.
+### 10 · Instagram · carousel — “The most tedious part, done for you”
+1. In the United States, one company charges 295 dollars to catalog 100 garments for you.
+2. Because cataloging your clothes by hand is the most tedious part of having a digital closet.
+3. In ClosetAI you take a photo of the garment and AI fills in the rest: type, colors, season.
+4. Free, forever.
 
-**Texto:** Fuente: Indyx, myindyx.com
-**Hashtags:** #ClosetAI #ClósetDigital
-
----
-
-## 3 guiones de video corto (TikTok y Reels)
-
-### Guion 1 · «Cómo funciona ClosetAI» · ~30 s
-| Toma | Qué se ve | Texto en pantalla | Voz |
-|---|---|---|---|
-| 0–3 s | Una mano abre un clóset lleno | Tengo mucha ropa y nada que ponerme | — |
-| 3–10 s | Foto de una blusa con el celular; aparece su tarjeta con tipo y colores | — | Le tomo foto a cada prenda y ClosetAI la ordena sola. |
-| 10–20 s | La pantalla «Qué me pongo hoy» con un outfit | Con lo que ya tienes | Cada mañana me dice qué ponerme con lo que ya tengo. |
-| 20–28 s | El clóset digital completo, desplazándose | closetai.lat | Y mi clóset es gratis para siempre. |
-
-### Guion 2 · «POV: el clóset lleno» · ~25 s
-| Toma | Qué se ve | Texto en pantalla | Voz |
-|---|---|---|---|
-| 0–4 s | POV: abres el clóset y miras | POV: no tienes qué ponerte | — |
-| 4–10 s | Ropa amontonada en la cama, una prenda tras otra | Spoiler: sí tienes | — |
-| 10–20 s | ClosetAI propone un outfit con esas mismas prendas | Ya tienes qué ponerte | No te falta ropa. Te falta verla junta. |
-| 20–25 s | El outfit puesto, frente al espejo | closetai.lat | — |
-
-### Guion 3 · «El outfit del día, según el clima» · ~25 s
-| Toma | Qué se ve | Texto en pantalla | Voz |
-|---|---|---|---|
-| 0–4 s | La ventana: el día nublado | Hoy amaneció así | — |
-| 4–14 s | «Qué me pongo hoy» muestra el clima de la ciudad y un outfit para él | El clima de tu ciudad, con tu ropa | ClosetAI ve el clima antes que yo. |
-| 14–22 s | El outfit armado sobre la cama | — | Y me arma el outfit con lo que tengo. |
-| 22–25 s | Pantalla final | closetai.lat | — |
+**Caption:** Source: Indyx, myindyx.com
+**Hashtags:** #ClosetAI #DigitalCloset
 
 ---
 
-## Calendario de 14 días
+## 3 short video scripts (TikTok and Reels)
 
-| Día | Canal | Pieza | Para qué |
+### Script 1 · “How ClosetAI works” · ~30 s
+| Shot | What you see | On-screen text | Voice |
 |---|---|---|---|
-| 1 | Instagram | Post 1 · carrusel «Ya tienes qué ponerte» | Lanzamiento: la promesa |
-| 2 | TikTok | Post 3 · guion 1 | Mostrar cómo funciona |
-| 3 | Instagram | Post 2 · «Tu clóset, en tu bolsillo» | El plan gratis |
-| 4 | Instagram | Post 4 · «Lo que dicen los datos» | Credibilidad: datos con fuente |
-| 5 | TikTok | Post 6 · guion 2 | El problema, con humor |
-| 6 | — | Descanso | Responder comentarios y mensajes |
-| 7 | — | Descanso | Revisar qué post tuvo más guardados |
-| 8 | Instagram | Post 10 · «Lo más tedioso, hecho por ti» | La objeción de fotografiar todo |
-| 9 | TikTok | Post 8 · guion 3 | El uso diario |
-| 10 | Instagram | Post 7 · «Antes de comprar otra blusa» | El plan Completo |
-| 11 | Instagram | Post 9 · «¿Por qué no hay mensualidad?» | El precio, explicado |
-| 12 | Instagram | Post 5 · «Tus fotos son tuyas» | Privacidad |
-| 13 | — | Descanso | Revisar el A/B de la portada |
-| 14 | TikTok | El guion que más se vio, regrabado | Repetir lo que funcionó, decidido con datos |
+| 0–3 s | A hand opens a full closet | I have so many clothes and nothing to wear | — |
+| 3–10 s | A photo of a blouse taken with a phone; its card appears with type and colors | — | I take a photo of each garment and ClosetAI sorts it for me. |
+| 10–20 s | The “What to wear today” screen with an outfit | With what you already own | Every morning it tells me what to wear from what I already have. |
+| 20–28 s | The full digital closet, scrolling | closetai.lat | And my closet is free forever. |
+
+### Script 2 · “POV: a full closet” · ~25 s
+| Shot | What you see | On-screen text | Voice |
+|---|---|---|---|
+| 0–4 s | POV: you open the closet and stare | POV: you have nothing to wear | — |
+| 4–10 s | Clothes piled on the bed, one garment after another | Spoiler: you do | — |
+| 10–20 s | ClosetAI suggests an outfit with those same garments | You already have something to wear | You're not short of clothes. You just can't see them together. |
+| 20–25 s | The outfit on, in front of the mirror | closetai.lat | — |
+
+### Script 3 · “The outfit of the day, for the weather” · ~25 s
+| Shot | What you see | On-screen text | Voice |
+|---|---|---|---|
+| 0–4 s | The window: a cloudy day | This is how the day started | — |
+| 4–14 s | “What to wear today” shows the city's weather and an outfit for it | Your city's weather, with your clothes | ClosetAI checks the weather before I do. |
+| 14–22 s | The outfit laid out on the bed | — | And it puts the outfit together from what I have. |
+| 22–25 s | End screen | closetai.lat | — |
+
+---
+
+## 14-day calendar
+
+| Day | Channel | Piece | Purpose |
+|---|---|---|---|
+| 1 | Instagram | Post 1 · carousel “You already have something to wear” | Launch: the promise |
+| 2 | TikTok | Post 3 · script 1 | Show how it works |
+| 3 | Instagram | Post 2 · “Your closet, in your pocket” | The free plan |
+| 4 | Instagram | Post 4 · “What the data says” | Credibility: data with sources |
+| 5 | TikTok | Post 6 · script 2 | The problem, with humor |
+| 6 | — | Rest | Reply to comments and messages |
+| 7 | — | Rest | Check which post was saved most |
+| 8 | Instagram | Post 10 · “The most tedious part, done for you” | The objection about photographing everything |
+| 9 | TikTok | Post 8 · script 3 | Everyday use |
+| 10 | Instagram | Post 7 · “Before you buy another blouse” | The Complete plan |
+| 11 | Instagram | Post 9 · “Why is there no monthly fee?” | The price, explained |
+| 12 | Instagram | Post 5 · “Your photos are yours” | Privacy |
+| 13 | — | Rest | Check the homepage A/B test |
+| 14 | TikTok | The most-watched script, re-shot | Repeat what worked, decided with data |
