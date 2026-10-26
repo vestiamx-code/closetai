@@ -7,7 +7,7 @@ tables, so translating the code was not enough.
 
 Each UPDATE matches a row by its id and replaces only the visible text. Ids, codes,
 figures, URLs and dates do not change. The marketing content is regenerated from
-docs/evidencia/MARKETING-SEMANA-4.md by scripts/contenido-semana-4.py.
+docs/evidencia/MARKETING-WEEK-4.md by scripts/contenido-semana-4.py.
 
 Usage:  python3 scripts/traduccion-013.py > supabase/migrations/20261026000013_english.sql
 """
@@ -242,7 +242,7 @@ w("  variantes = excluded.variantes, metrica = excluded.metrica, inicio = exclud
 # Marketing content, regenerated from the approved document
 # ---------------------------------------------------------------------------
 w("")
-w("-- marketing_assets: generated from docs/evidencia/MARKETING-SEMANA-4.md ------")
+w("-- marketing_assets: generated from docs/evidencia/MARKETING-WEEK-4.md ------")
 contenido = subprocess.run([sys.executable, str(RAIZ / "scripts/contenido-semana-4.py")], capture_output=True, text=True, check=True).stdout
 w(contenido.rstrip())
 

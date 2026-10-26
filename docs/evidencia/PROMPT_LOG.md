@@ -298,52 +298,76 @@ construidas**. Un mapa donde todo está en vivo es publicidad; la prueba lo impi
 
 ---
 
-# Semana 4 · Portada y `/marketing`
+# Week 4 · Homepage and `/marketing`
 
-## [2026-10-21] — Sesión 1 · Cuatro decisiones de marca antes del plan
-**Prompt:** "Ahora hagamos lo de esta semana." (con el assignment, los macro-prompts, el overview y la rúbrica)
-**Resultado:** cuatro preguntas a Tamara antes de escribir nada: qué titulares competir, quién es la
-persona, en qué redes, y quién escribe el contenido.
-**Juicio humano:** Tamara puso a competir el titular actual contra «Ya tienes qué ponerte.», la frase
-que sale del lenguaje de una clienta real.
-**Commit:** 660dc07
+*Translated into English on October 26, 2026. The prompts were given in Spanish and are translated
+here; the commit hashes are the ones after the commit messages were rewritten in English (the
+originals are in a local backup tag).*
 
-## [2026-10-21] — Sesión 2 · El packet, antes del código
-**Prompt:** "Escribe el Build Discipline Packet de la portada y /marketing y commitéalo antes de tocar código."
-**Resultado:** `docs/SEMANA-4-PACKET.md` y el wireframe, commit `660dc07` a las 13:26.
-**Juicio humano:** la variante A/B no se asigna en `proxy.ts`, donde vive la sesión que ya se rompió
-una vez. Y el agente agregó una regla que nadie pidió: no usar la cita de la entrevista en redes,
-porque el permiso fue para la web y el documento, no para publicidad.
-**Commit:** 660dc07
+## [2026-10-21] — Session 1 · Four brand decisions before the plan
+**Prompt:** "Now let's do this week's work." (with the assignment, the macro-prompts, the overview and the rubric)
+**Result:** four questions to Tamara before writing anything: which headlines to test, who the
+persona is, which networks, and who writes the content.
+**Human judgment:** Tamara put the current headline against "You already have something to wear.",
+the sentence that comes from a real customer's language.
+**Commit:** 3e44b5a
 
-## [2026-10-21] — Sesión 3 · La lógica A/B, sola y probada
-**Prompt:** "Asignación por hash y prueba z de dos proporciones, en funciones puras. Dos pruebas: que
-reparta bien y que no declare un ganador falso."
-**Resultado:** `src/lib/ab.ts` y 7 casos.
-**Juicio humano:** la prueba de independencia, que nadie pidió, encontró que dos experimentos se
-habrían contradicho siempre. Se arregló el hash, no la prueba.
-**Commit:** 060c841
+## [2026-10-21] — Session 2 · The packet, before the code
+**Prompt:** "Write the Build Discipline Packet for the homepage and /marketing and commit it before touching code."
+**Result:** the packet (now `docs/WEEK-4-PACKET.md`) and the wireframe, commit `3e44b5a` at 13:26.
+**Human judgment:** the A/B variant is not assigned in `proxy.ts`, where the session lives and once
+broke. And the agent added a rule nobody asked for: don't use the interview quote on social media,
+because the permission was for the website and the document, not for advertising.
+**Commit:** 3e44b5a
 
-## [2026-10-21] — Sesión 4 · Que el marketing no invente números
-**Prompt:** "Una lista cerrada de datos verificados con su fuente, y un guardia que rechace cualquier
-cifra fuera de ella. El contenido y el generador pasan por él."
-**Resultado:** `src/lib/marketing.ts`, el borrador del contenido y el contrato del generador.
-**Juicio humano:** el borrador incluía un post que prometía que la prueba virtual funciona sin cara.
-Comprobarlo exigía una foto del cuerpo de Tamara; se retiró la promesa en vez de pedirle la foto.
-**Commit:** 060c841, 9f73646
+## [2026-10-21] — Session 3 · The A/B logic, alone and tested
+**Prompt:** "Hash assignment and a two-proportion z-test, as pure functions. Two tests: that it
+splits well and that it doesn't declare a fake winner."
+**Result:** `src/lib/ab.ts` and 7 cases.
+**Human judgment:** the independence test, which nobody asked for, found that two experiments would
+always have contradicted each other. The hash was fixed, not the test.
+**Commit:** f953439
 
-## [2026-10-21] — Sesión 5 · La portada y /marketing
-**Prompt:** "Portada con el argumento en orden y el titular A/B; /marketing con marca, persona,
-contenido, copiar y exportar, resultados A/B y el generador."
-**Resultado:** las dos páginas, la acción que registra eventos y el generador con respaldo.
-**Juicio humano:** la portada vieja tenía dos frases que no se podían sostener; se quitaron.
-**Commit:** 74fb66f
+## [2026-10-21] — Session 4 · Marketing must not invent numbers
+**Prompt:** "A closed list of verified facts with their source, and a guard that rejects any figure
+outside it. The content and the generator go through it."
+**Result:** `src/lib/marketing.ts`, the content draft and the generator's contract.
+**Human judgment:** the draft included a post promising that virtual try-on works without a face.
+Checking it required a photo of Tamara's body; the promise was withdrawn instead of asking for it.
+**Commit:** f953439, 55d50a2
 
-## [2026-10-21] — Sesión 6 · Probar contra el sitio real, de verdad
-**Prompt:** "Tres pruebas de software contra producción: que cargue, que exporte y que el A/B cuente
-bien. Y una que demuestre que sí cuenta, no solo que no cuenta."
-**Resultado:** `e2e/marketing.spec.ts`, 6 pruebas.
-**Juicio humano:** el informe de un fallo mostró que la suite llevaba siete semanas corriendo contra un
-servidor local. Se corrigió la configuración, se volvió a correr todo contra closetai.lat y se
-escribió la corrección en vez de esconderla.
-**Commit:** (ver historial de la semana)
+## [2026-10-21] — Session 5 · The homepage and /marketing
+**Prompt:** "A homepage with the argument in order and the A/B headline; /marketing with brand,
+persona, content, copy and export, A/B results and the generator."
+**Result:** both pages, the action that records events and the generator with fallback.
+**Human judgment:** the old homepage had two sentences that couldn't be backed up; they were removed.
+**Commit:** 7b6d22c
+
+## [2026-10-21] — Session 6 · Testing against the real site, for real
+**Prompt:** "Three software tests against production: that it loads, that it exports and that the
+A/B counts correctly. And one that proves it does count, not only that it doesn't."
+**Result:** `e2e/marketing.spec.ts`, 6 tests.
+**Human judgment:** a failure report showed the suite had been running against a local server for
+seven weeks. The configuration was fixed, everything was rerun against closetai.lat, and the
+correction was written down instead of hidden.
+**Commit:** b1c7079, f38fe91, 10667bc
+
+## [2026-10-26] — Session 7 · Everything in English, now
+**Prompt:** the professor's message (everything in English from Module 4, or the grade is 0) and
+"CHANGE IT NOW".
+**Result:** two questions before touching anything: rewrite this week's commit messages or only
+write new ones in English, and translate only the public pages or the whole product.
+**Human judgment:** Tamara chose to rewrite the commits and to translate the whole product,
+including the database and the AI output. The agent kept internal identifiers and stored enum codes
+in Spanish, mapped to English labels on screen, so no stored data had to change shape; and it
+closed the Spanish A/B experiment instead of adding English views to Spanish ones.
+**Commit:** 3acd4e4, 77a9f4b, 01c8ca3, 1e7aca1, eb2f9a8, d1c1f86, 45e7f4e
+
+## [2026-10-26] — Session 8 · The tests found what the translation broke
+**Prompt:** "Do everything that's needed, I approve everything."
+**Result:** the Demo account's data in English (migration 014), English URLs with redirects, and
+the failing AI tests investigated instead of blamed on the quota.
+**Human judgment:** the quota explained the failures, but not all of them. A live call showed the
+profile prompt was producing replies that didn't validate, because it never named its keys. Fixed
+in prompt v3 and verified live before committing.
+**Commit:** ba8a395, 0aec5c2, 85d5abd

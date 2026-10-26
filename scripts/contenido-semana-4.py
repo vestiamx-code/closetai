@@ -1,7 +1,7 @@
 """
 Turns the approved Week 4 content into the SQL that seeds it.
 
-The source of truth is docs/evidencia/MARKETING-SEMANA-4.md, the document Tamara
+The source of truth is docs/evidencia/MARKETING-WEEK-4.md, the document Tamara
 approved (translated into English on Oct 26, 2026). The SQL is generated from it,
 never written by hand: what reaches the database is exactly what was approved, and
 if the document changes, the SQL is regenerated instead of being edited in two
@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-MD = (RAIZ / "docs/evidencia/MARKETING-SEMANA-4.md").read_text(encoding="utf-8")
+MD = (RAIZ / "docs/evidencia/MARKETING-WEEK-4.md").read_text(encoding="utf-8")
 
 APROBADO_POR = "Tamara Muñoz Delgadillo"
 APROBADO_EL = "2026-10-21"

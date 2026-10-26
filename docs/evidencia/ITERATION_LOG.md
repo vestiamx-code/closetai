@@ -422,70 +422,100 @@ privacidad ahora lo dice. La tabla nueva de escenarios nace con hash y sin lectu
 
 ---
 
-# Semana 4 · Portada y `/marketing`
+# Week 4 · Homepage and `/marketing`
 
-## [2026-10-21] — Dos experimentos que se habrían contradicho siempre
-**Observado:** la prueba de independencia —dos experimentos simultáneos deberían coincidir la mitad
-de las veces— dio **0 coincidencias en 10,000**.
-**Diagnóstico:** la variante salía de `fnv1a % 2`, que solo mira el último bit. En FNV-1a ese bit es
-la paridad de las letras del texto: multiplicar por un primo impar no lo cambia. Dos experimentos
-con nombres de distinta paridad quedaban perfectamente opuestos: quien viera el titular A habría
-visto siempre el botón B, y nunca se habría podido separar el efecto de uno del otro. La prueba de
-reparto 50/50 pasaba igual, porque los ids al azar sí tienen paridad pareja.
-**Cambio:** el mezclador final de MurmurHash3 después de FNV-1a, y se toma el bit más alto.
-**Lo que esto vale:** el error no se habría visto en la pantalla jamás; solo en un resultado A/B
-equivocado meses después.
+*From Module 4 on the course requires everything in English, so this section was translated on
+October 26, 2026. Earlier weeks stay as they were submitted.*
 
-## [2026-10-21] — La portada vieja prometía dos cosas que no se podían sostener
-**Observado:** al mejorar la portada se releyó la anterior frase por frase.
-**Cambio:** se quitaron «A las dos semanas ya no te propone lo que odias» (nunca se midió) y «Diez
-prendas bastan para empezar» (la única conversación real puso el límite en 40). Una prueba e2e
-comprueba que no vuelvan.
+## [2026-10-21] — Two experiments that would always have contradicted each other
+**Observed:** the independence test —two simultaneous experiments should agree half the time—
+gave **0 agreements in 10,000**.
+**Diagnosis:** the variant came from `fnv1a % 2`, which only looks at the last bit. In FNV-1a that
+bit is the parity of the text's letters: multiplying by an odd prime doesn't change it. Two
+experiments whose names had different parity were perfectly opposed: whoever saw headline A would
+always have seen button B, and the effect of one could never have been separated from the other.
+The 50/50 split test passed anyway, because random ids do have even parity.
+**Change:** MurmurHash3's final mixer after FNV-1a, and the top bit is taken.
+**Why it matters:** the error would never have shown on screen; only in a wrong A/B result months
+later.
 
-## [2026-10-21] — Una promesa sin evidencia, en el mapa y en un post
-**Observado:** el mapa de producto de la Semana 3 decía que la prueba virtual «funciona sin que salga
-tu cara», y el borrador del post 5 lo repetía. Nadie lo había probado: el validador de fotos ni
-siquiera lo mencionaba.
-**Diagnóstico:** se había escrito como hecho lo que era una intención, salida de la entrevista de la
-Semana 2.
-**Cambio:** el validador ahora acepta explícitamente fotos sin cara (prompt v3); el post 5 se cambió
-por uno de privacidad verificado; la migración 011 quitó la promesa del mapa. Para comprobarlo había
-que pedirle a Tamara una foto de su cuerpo, que gasta un crédito y pasa por un proveedor externo,
-solo para publicar una frase. Se decidió al revés: el marketing dice lo comprobado.
+## [2026-10-21] — The old homepage promised two things it couldn't back up
+**Observed:** while improving the homepage, the previous one was reread sentence by sentence.
+**Change:** "Two weeks in, it stops suggesting what you hate" (never measured) and "Ten garments
+are enough to start" (the only real conversation put the bar at 40) were removed. An e2e test
+checks they don't come back.
 
-## [2026-10-21] — Al titular le faltaba un espacio, desde la Semana 0
-**Observado:** la prueba de la portada comparaba el texto plano del titular y falló:
-«Ya tienesqué ponerte.».
-**Diagnóstico:** las dos líneas del titular son bloques y en pantalla se ven separadas, pero en el
-HTML no había espacio entre ellas. Así lo leían un lector de pantalla y un buscador. La portada
-anterior tenía el mismo error («Tu estilista,en tu bolsillo.»).
-**Cambio:** un espacio entre las líneas, y la prueba exige el texto con espacio.
+## [2026-10-21] — A promise without evidence, in the product map and in a post
+**Observed:** the Week 3 product map said virtual try-on "works without showing your face", and the
+draft of post 5 repeated it. Nobody had tested it: the photo validator didn't even mention it.
+**Diagnosis:** an intention, taken from the Week 2 interview, had been written as a fact.
+**Change:** the validator now explicitly accepts photos without a face (prompt v3); post 5 was
+replaced by a verified privacy post; migration 011 removed the promise from the map. Checking it
+would have meant asking Tamara for a photo of her body, which spends a credit and goes through an
+external provider, just to publish one sentence. It was decided the other way around: marketing
+says what has been checked.
 
-## [2026-10-21] — Las pruebas «contra producción» no iban contra producción
-**Observado:** el informe de una prueba fallida mostró un botón «Open Next.js Dev Tools», que solo
-existe en el servidor de desarrollo.
-**Diagnóstico:** sin `PLAYWRIGHT_BASE_URL`, Playwright va a `localhost:3000`, y en la Mac había un
-`next dev` corriendo **desde el 2 de septiembre**, que Playwright reusaba en silencio. Ese servidor
-usa la base de datos de producción, así que todo parecía real, pero el sitio probado era el código
-local. Desde la re-verificación de la Semana 2 (25-sep) y durante toda la Semana 3, los documentos
-dijeron «contra producción» sin serlo.
-**Cambio:** `pnpm test:e2e:prod` apunta a https://closetai.lat, y la configuración imprime en cada
-corrida `[e2e] contra …`. Se corrió todo contra el sitio real: **47 de 47** —portada, marketing,
-precios e investigación—, con 3 saltadas por diseño.
-**Lo que esto vale:** los resultados de la Semana 3 se confirman hoy sobre el sitio real, pero la
-afirmación de entonces no estaba probada. El documento entregado de la Semana 3 no se puede cambiar;
-esta corrección queda aquí y en el documento de la Semana 4.
+## [2026-10-21] — The headline was missing a space, since Week 0
+**Observed:** the homepage test compared the headline's plain text and failed: the two lines ran
+together with no space between them.
+**Diagnosis:** the headline's two lines are blocks and look separate on screen, but in the HTML
+there was no space between them. That is how a screen reader and a search engine read it. The
+previous homepage had the same error.
+**Change:** a space between the lines, and the test requires the text with the space.
 
-## [2026-10-21] — El experimento contaba las capturas automáticas de Vercel
-**Observado:** con la portada nueva en vivo hacía un par de horas, el experimento tenía 10 vistas,
-siempre en pares y en el mismo segundo, y ningún clic.
-**Diagnóstico:** primero se descartaron las pruebas propias: cada una se corrió sola contando los
-eventos antes y después, y ninguna dejaba residuos; la marca de prueba funcionaba en producción (con
-ella, 0 eventos; sin ella, 1). Un par había llegado 26 segundos después de un despliegue: el patrón de
-la captura que Vercel toma de cada despliegue con un navegador automático, que ejecuta JavaScript.
-**Cambio:** `traficoAutomatico()` descarta navegadores automáticos, buscadores, vistas previas de
-enlaces y bots, y registra en el log solo la categoría. **Confirmación:** en el siguiente despliegue
-el log mostró exactamente dos «visita descartada: navegador-automatico», y el conteo no se movió. Con
-permiso de Tamara se borraron las 10 vistas anteriores al filtro; el experimento quedó en 0.
-**Lo que esto vale:** sin el filtro, cada despliegue habría sumado dos «visitantes», y en una semana
-con diez despliegues el experimento habría medido a Vercel.
+## [2026-10-21] — The "against production" tests weren't running against production
+**Observed:** the report of a failed test showed an "Open Next.js Dev Tools" button, which only
+exists on the development server.
+**Diagnosis:** without `PLAYWRIGHT_BASE_URL`, Playwright goes to `localhost:3000`, and on the Mac a
+`next dev` had been running **since September 2**, which Playwright silently reused. That server
+uses the production database, so everything looked real, but the site under test was the local
+code. From the Week 2 re-verification (Sep 25) and throughout Week 3, the documents said "against
+production" without it being true.
+**Change:** `pnpm test:e2e:prod` points at https://closetai.lat, and the configuration prints
+`[e2e] contra …` on every run. Everything was run against the real site: **47 of 47** —homepage,
+marketing, pricing and research— with 3 skipped by design.
+**Why it matters:** the Week 3 results are confirmed today on the real site, but the claim made
+then wasn't proven. The submitted Week 3 document can't be changed; this correction stays here and
+in the Week 4 document.
+
+## [2026-10-21] — The experiment was counting Vercel's automatic screenshots
+**Observed:** with the new homepage live for a couple of hours, the experiment had 10 views, always
+in pairs and in the same second, and no clicks.
+**Diagnosis:** our own tests were ruled out first: each was run alone, counting events before and
+after, and none left anything behind; the test marker worked in production (with it, 0 events;
+without it, 1). One pair had arrived 26 seconds after a deploy: the pattern of the screenshot
+Vercel takes of every deployment with an automated browser that runs JavaScript.
+**Change:** `traficoAutomatico()` discards automated browsers, search engines, link previews and
+bots, and logs only the category. **Confirmation:** on the next deploy the log showed exactly two
+"discarded visit: automated-browser", and the count didn't move. With Tamara's permission the 10
+views from before the filter were deleted; the experiment went back to 0.
+**Why it matters:** without the filter, every deploy would have added two "visitors", and in a week
+with ten deploys the experiment would have been measuring Vercel.
+
+## [2026-10-26] — The whole product had to be in English, and that touched the experiment
+**Observed:** the course announced that from Module 4 everything —the live interface, mockups,
+the submission document, commit messages and the video— must be in English, or the work scores 0.
+ClosetAI was entirely in Mexican Spanish.
+**Change:** every screen, server message, AI prompt and the public database content was translated
+(migrations 013 and 014); routes moved to English with permanent redirects from the old ones; the
+13 Week 4 commit messages were rewritten in English with their dates preserved.
+**What it did to the A/B test:** the headlines were the stimulus. Translating them means people now
+read different sentences, so the views collected in Spanish can't be added to the English ones.
+The `titular` experiment was closed and a new one, `headline`, started from zero with the English
+variants. Its sample starts on October 26.
+
+## [2026-10-26] — Translating a prompt quietly broke the learning loop
+**Observed:** after the translation, the production log showed "[profile] the model did not return
+a valid profile" three times in a row.
+**Diagnosis:** at first it looked like Gemini's daily quota, which had run out. It wasn't only that.
+The profile prompt never listed its JSON keys: the model copied them from the current profile, and
+inside an empty profile there are no entries to copy, so it had to guess the entry keys. In Spanish
+it guessed `valor`, `evidencia`; with an English prompt it could guess `value`, `evidence`, and
+validation rejected the whole profile. ClosetAI would have stopped learning from reactions without
+any visible error. A live call confirmed it: with the old prompt the reply didn't validate.
+**Change:** profile prompt v3 spells out the exact shape and says keys are never translated. A live
+call with v3 returned Spanish keys, English values, and a profile that validates. The other six
+prompts were checked: all of them already name their keys.
+**Why it matters:** a translation is not a cosmetic change when the text is also an instruction to
+a model. The test that caught it only polled for 40 seconds while the server's quota retries take
+90, so it was also widened.

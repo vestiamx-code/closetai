@@ -405,59 +405,86 @@ volumen medio en el tramo de prueba.
 
 ---
 
-# Semana 4 · Portada y `/marketing`
+# Week 4 · Homepage and `/marketing`
 
-## Corrección sobre las semanas anteriores
+*Translated into English on October 26, 2026, when the course required all Module 4 work in
+English. Earlier weeks stay as they were submitted.*
 
-Las corridas e2e del 25 de septiembre (re-verificación de la Semana 2) y del 6 y 9 de octubre (Semana
-3) **no fueron contra producción**: fueron contra un `next dev` local que corría desde el 2 de
-septiembre, conectado a la base de producción. Ver ITERATION_LOG, 21-oct-2026. Desde hoy:
-`pnpm test:e2e:prod`, y cada corrida imprime contra qué sitio va.
+## Correction about earlier weeks
 
-## Pruebas A/B (`src/lib/ab.test.ts`) — las 2 que pide la semana, en 7 casos
+The e2e runs of September 25 (Week 2 re-verification) and October 6 and 9 (Week 3) **were not
+against production**: they ran against a local `next dev` that had been running since September 2,
+connected to the production database. See ITERATION_LOG, Oct 21, 2026. From now on:
+`pnpm test:e2e:prod`, and every run prints which site it targets.
 
-| # | Qué afirma | Resultado |
+## A/B tests (`src/lib/ab.test.ts`) — the 2 the week asks for, in 7 cases
+
+| # | What it asserts | Result |
 |---|---|---|
-| 1a | El mismo visitante ve siempre la misma variante, y 10,000 visitantes se reparten entre 48% y 52% | verde |
-| 1b | Dos experimentos simultáneos son independientes (coinciden entre 47% y 53%) | verde — **encontró un error real** |
-| 2a | Con 30 visitantes por lado, 10% contra 40% no es ganador | verde |
-| 2b | Con muestra suficiente y diferencia chica, tampoco | verde |
-| 2c | 10% contra 20% con 500 por lado gana B, y al revés gana A | verde |
-| 2d | El valor p coincide con la prueba z hecha a mano (z = 1.963, p = 0.0497) | verde |
-| 2e | El mínimo de muestra es 100, el que dice la página | verde |
+| 1a | The same visitor always sees the same variant, and 10,000 visitors split between 48% and 52% | green |
+| 1b | Two simultaneous experiments are independent (they agree between 47% and 53%) | green — **found a real bug** |
+| 2a | With 30 visitors per side, 10% vs 40% is not a winner | green |
+| 2b | With enough sample and a small difference, neither | green |
+| 2c | 10% vs 20% with 500 per side: B wins, and the other way round A wins | green |
+| 2d | The p-value matches the z-test done by hand (z = 1.963, p = 0.0497) | green |
+| 2e | The minimum sample is 100, the one the page states | green |
 
-**Vistas fallar a propósito:** con la asignación fija en «a», fallan 1a y 1b. Con la muestra mínima
-en 10, fallan 2a y 2e. Al revertir, las siete vuelven a verde.
+**Seen failing on purpose:** with the assignment fixed to "a", 1a and 1b fail. With the minimum
+sample at 10, 2a and 2e fail. After reverting, all seven are green again.
 
-## El guardia del marketing (`src/lib/marketing.test.ts`) — 10 casos
+## The marketing guard (`src/lib/marketing.test.ts`) — 11 cases
 
-Deja pasar las cifras verificadas escritas como las escribe una persona (77 millones, 59 %, $100);
-atrapa «3 de cada 4», «80%», «10,000 usuarias» y «#Top10Outfits»; lee miles y decimales como un solo
-número; cada dato tiene fuente; rechaza JSON roto o incompleto; y exporta el calendario en orden con
-las comas escapadas. Todo el contenido aprobado pasó por el mismo guardia antes de sembrarse.
+It lets through verified figures written the way a person writes them (77 million, 59%, MX$100);
+it catches "3 out of 4", "80%", "10,000 users" and "#Top10Outfits"; it reads thousands and decimals
+as a single number; every fact has a source; it rejects broken or incomplete JSON; and it exports
+the calendar in order with commas escaped. All approved content went through the same guard before
+being seeded.
 
-## Pruebas de software contra https://closetai.lat (`e2e/marketing.spec.ts`)
+## Software tests against https://closetai.lat (`e2e/marketing.spec.ts`)
 
-| # | Qué afirma | Resultado |
+| # | What it asserts | Result |
 |---|---|---|
-| 1 | `/marketing` carga sin sesión con 10 posts, 3 guiones y 14 días; la persona tiene datos **y** hipótesis | verde |
-| 2 | Exportar el calendario descarga un CSV con encabezado y 14 filas; copiar el post 1 pone su texto | verde |
-| 3 | La portada muestra un solo titular, con espacio, el mismo en 3 recargas; el tráfico de prueba no deja eventos | verde |
-| 4 | Una visita real **sí** se cuenta: una vista aunque recargue, un clic, con la misma variante | verde |
-| 5 | El generador escribe un post sin cifras inventadas y lo guarda como «generado con IA, sin revisar» | verde |
-| 6 | La portada tiene las siete secciones en orden, y las dos frases retiradas no volvieron | verde |
+| 1 | `/marketing` loads without a session with 10 posts, 3 scripts and 14 days; the persona has data **and** hypotheses | green |
+| 2 | Exporting the calendar downloads a CSV with a header and 14 rows; copying post 1 puts its text on the clipboard | green |
+| 3 | The homepage shows one headline, with its space, the same across 3 reloads; test traffic leaves no events | green |
+| 4 | A real visit **is** counted: one view even with reloads, one click, with the same variant | green |
+| 5 | The generator writes a post without invented figures and saves it as "generated with AI, not reviewed" | green on Oct 21; skipped on Oct 26 (Gemini daily quota exhausted) |
+| 6 | The homepage has its seven sections in order, and the two removed sentences haven't come back | green |
 
-La 3 y la 4 se necesitan juntas: la 3 sola pasaría también si el contador estuviera roto y no contara
-nada. La 4 usa un navegador sin la marca de prueba y borra sus propios eventos al terminar; después de
-correrla, el experimento quedó en 0 eventos.
+3 and 4 are needed together: 3 alone would also pass if the counter were broken and counted nothing.
+4 uses a browser without the test marker and deletes its own events at the end; after running it,
+the experiment was left with 0 events.
 
-**Corrida completa contra el sitio real, 21-oct-2026:** portada, marketing, precios e investigación,
-**47 de 47**, 3 saltadas por diseño. Confirmado que la corrida resolvió a `https://closetai.lat` y
-sin servidor local.
+**Full run against the real site, Oct 21, 2026:** homepage, marketing, pricing and research,
+**47 of 47**, 3 skipped by design. Confirmed that the run resolved to `https://closetai.lat`, with no
+local server.
 
-## Tráfico automático (`src/lib/ab.test.ts`, 2 casos más)
+## Automated traffic (`src/lib/ab.test.ts`, 2 more cases)
 
-Descarta HeadlessChrome, Googlebot, la vista previa de WhatsApp, un user-agent de Vercel y una visita
-sin user-agent; deja pasar un iPhone, un Android y una Mac. Confirmado en producción: después del
-despliegue del filtro, el log mostró dos visitas descartadas como «navegador-automatico» y el
-experimento no sumó ninguna. Las 10 vistas automáticas anteriores se borraron con permiso de Tamara.
+It discards HeadlessChrome, Googlebot, the WhatsApp link preview, a Vercel user-agent and a visit
+with no user-agent; it lets an iPhone, an Android phone and a Mac through. Confirmed in production:
+after the filter was deployed, the log showed two visits discarded as "automated-browser" and the
+experiment added none. The 10 earlier automated views were deleted with Tamara's permission.
+
+## [2026-10-26] — After translating the product into English
+
+Every e2e selector and expected text was changed to the English interface, and the inputs typed by
+the tests are in English too. Results against https://closetai.lat (`[e2e] contra
+https://closetai.lat` printed on every run):
+
+| Run | Passed | Failed | Skipped | Notes |
+|---|---|---|---|---|
+| Full suite, first pass | 85 | 4 | 5 (+2 not run) | 2 failures: the test still expected `lang="es-MX"` (fixed: now `en`). 2 failures: Gemini's free-tier daily quota (20 requests) ran out mid-run |
+| Re-run of the failing specs | 25 | 2 | 2 | The mobile closet flow passed; the 2 failures were again the AI quota |
+| Everything that doesn't call the AI, after the English URLs | 62 | 0 | 4 | Includes the new test that every old Spanish address answers 308 to its English one |
+| New-account data | 1 | 0 | 0 | A new account is born with the city "Mexico City", byte by byte |
+
+**Not yet re-verified in English:** the tests that call Gemini (outfit generation, profile update,
+post generator, core and research generation). They passed before the translation; they need a run
+once the daily quota resets. That run will be recorded here.
+
+**A bug found by these runs:** the profile-update failures hid a real defect introduced by the
+translation (see ITERATION_LOG, Oct 26). Checked with a live call to Gemini Flash-Lite: before the
+fix the profile reply didn't validate; after it, it did.
+
+**Unit tests:** 76 passed, 6 skipped (the live tests, which only run with `PRUEBAS_VIVAS=1`).

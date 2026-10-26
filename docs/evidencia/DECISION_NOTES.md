@@ -210,12 +210,12 @@ people wrote on my style page, and that I was storing full IP addresses. Both ar
 
 ---
 
-## Semana 4 — [2026-10-26] — No decir más de lo que puedo probar
+## Week 4 — [2026-10-26] — Not saying more than I can prove
 
 This week I had to market a product, and the hardest part was not saying more than I can prove.
 
-I chose to test my own brand headline, "Tu estilista, en tu bolsillo", against a phrase that comes
-from a real customer: "Ya tienes qué ponerte." I would rather learn which one works than keep the
+I chose to test my own brand headline, "Your stylist, in your pocket", against a phrase that comes
+from a real customer: "You already have something to wear." I would rather learn which one works than keep the
 one I like.
 
 I rejected a post that said the virtual try-on works without your face. It had never been tested,
@@ -231,4 +231,6 @@ The tradeoff: my experiment will probably not have a winner by the deadline. It 
 visitors per headline, so the page says "no winner yet" instead of showing a percentage that looks
 like a decision and is really noise.
 
-**213 palabras · aprobada por Tamara Muñoz Delgadillo el 26 de octubre de 2026.**
+**213 words · approved by Tamara Muñoz Delgadillo on October 26, 2026.** The two headlines are quoted
+in English: the product was in Spanish when the note was written, and the experiment now runs in
+English.

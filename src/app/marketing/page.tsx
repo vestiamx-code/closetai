@@ -28,8 +28,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const CONTENIDO =
-  "https://github.com/vestiamx-code/closetai/blob/main/docs/evidencia/MARKETING-SEMANA-4.md";
-const PACKET = "https://github.com/vestiamx-code/closetai/blob/main/docs/SEMANA-4-PACKET.md";
+  "https://github.com/vestiamx-code/closetai/blob/main/docs/evidencia/MARKETING-WEEK-4.md";
+const PACKET = "https://github.com/vestiamx-code/closetai/blob/main/docs/WEEK-4-PACKET.md";
 
 type Experimento = {
   id: string;
@@ -447,11 +447,11 @@ export default async function Marketing() {
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
           This week’s plan, written before the code, is in{" "}
           <a href={PACKET} className="underline underline-offset-4 hover:text-text">
-            SEMANA-4-PACKET.md
+            WEEK-4-PACKET.md
           </a>
           . The approved content, and what was withdrawn before approval, is in{" "}
           <a href={CONTENIDO} className="underline underline-offset-4 hover:text-text">
-            MARKETING-SEMANA-4.md
+            MARKETING-WEEK-4.md
           </a>
           .
         </p>
