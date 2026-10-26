@@ -44,7 +44,7 @@ test.describe("Datos de una cuenta nueva", () => {
       expect(
         Buffer.from(ciudad, "utf8").toString("hex"),
         `la cuenta nueva nació con ${JSON.stringify(ciudad)}`,
-      ).toBe(Buffer.from("Ciudad de México", "utf8").toString("hex"));
+      ).toBe(Buffer.from("Mexico City", "utf8").toString("hex"));
     } finally {
       await admin.auth.admin.deleteUser(id);
     }
