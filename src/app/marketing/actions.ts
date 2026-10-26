@@ -10,25 +10,25 @@ import { CANALES, revisarPost, type PostGenerado } from "@/lib/marketing";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Server Actions de `/marketing`.
+ * `/marketing` Server Actions.
  *
- * Mismo modelo de defensa que `/core` y `/research`: la página es pública, así
- * que el freno va por la huella de quien pide y la escritura pasa solo por el
- * servidor. Y lo que se guarda se vuelve a revisar aquí, porque llega del
- * navegador: si alguien edita el post antes de guardarlo y le mete una cifra
- * inventada, no entra.
+ * Same defense model as `/core` and `/research`: the page is public, so the brake
+ * is per requester fingerprint and writes only go through the server. And what
+ * gets saved is checked again here, because it comes from the browser: if someone
+ * edits the post before saving it and slips in an invented figure, it does not
+ * get in.
  */
 
 const PEDIDO = z.object({
   tema: z
     .string()
     .trim()
-    .min(8, "Escribe un tema un poco más largo: con menos de 8 caracteres no hay de qué escribir.")
-    .max(200, "Con 200 caracteres alcanza."),
+    .min(8, "Write a slightly longer topic: with fewer than 8 characters there is nothing to write about.")
+    .max(200, "200 characters is enough."),
   canal: z.enum(CANALES),
 });
 
-/** Posts que puede generar una misma huella en una hora. */
+/** Posts a single fingerprint can generate per hour. */
 const TOPE_POR_HORA = 10;
 const OPERACION = "marketing_post";
 
@@ -40,7 +40,7 @@ export type EstadoGenerador =
 export async function generarPost(_previo: EstadoGenerador, formData: FormData): Promise<EstadoGenerador> {
   const pedido = PEDIDO.safeParse({ tema: formData.get("tema"), canal: formData.get("canal") });
   if (!pedido.success) {
-    return { estado: "error", mensaje: pedido.error.issues[0]?.message ?? "Revisa el tema y el canal." };
+    return { estado: "error", mensaje: pedido.error.issues[0]?.message ?? "Check the topic and the channel." };
   }
 
   const huella = await huellaDeQuienPide();
@@ -56,13 +56,13 @@ export async function generarPost(_previo: EstadoGenerador, formData: FormData):
   if ((count ?? 0) >= TOPE_POR_HORA) {
     return {
       estado: "error",
-      mensaje: "Ya generaste varios posts en la última hora. Espera un rato e inténtalo de nuevo.",
+      mensaje: "You have generated several posts in the last hour. Wait a while and try again.",
     };
   }
 
   const resultado = await generarPostMarketing(pedido.data.tema, pedido.data.canal);
 
-  // El costo se registra pase lo que pase: es lo que hace de contador del límite.
+  // The cost is logged no matter what: it is what the limit counts.
   await admin.from("api_costs").insert({
     provider: `ip:${huella}`,
     operation: OPERACION,
@@ -90,9 +90,9 @@ export type EstadoGuardado = { ok: true; id: string } | { ok: false; mensaje: st
 
 export async function guardarPost(datos: { canal: string; tema: string; post: unknown }): Promise<EstadoGuardado> {
   const d = GUARDAR.safeParse(datos);
-  if (!d.success) return { ok: false, mensaje: "No se pudo guardar: faltan datos." };
+  if (!d.success) return { ok: false, mensaje: "Could not save: data is missing." };
 
-  // Se revisa otra vez: lo que llega aquí salió del navegador.
+  // Checked again: what arrives here came from the browser.
   const revision = revisarPost(d.data.post);
   if (!revision.ok) return { ok: false, mensaje: revision.mensaje };
   const { post } = revision;
@@ -113,8 +113,8 @@ export async function guardarPost(datos: { canal: string; tema: string; post: un
   });
 
   if (error) {
-    console.error("[marketing] no se pudo guardar el post", error);
-    return { ok: false, mensaje: "No se pudo guardar. Inténtalo de nuevo." };
+    console.error("[marketing] could not save the post", error);
+    return { ok: false, mensaje: "Could not save. Please try again." };
   }
 
   revalidatePath("/marketing");

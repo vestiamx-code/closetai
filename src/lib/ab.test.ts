@@ -51,7 +51,7 @@ describe("Prueba A/B 2 · el ganador", () => {
     const r = resultado({ vistas: 30, clics: 3 }, { vistas: 30, clics: 12 });
     expect(r.ganador).toBeNull();
     expect(r.p).toBeNull();
-    expect(r.motivo).toMatch(/faltan 70 visitantes/);
+    expect(r.motivo).toMatch(/needs 70 more/);
   });
 
   it("con muestra suficiente pero diferencia chica, tampoco", () => {
@@ -90,11 +90,11 @@ describe("Prueba A/B 2 · el ganador", () => {
 
 describe("Tráfico automático", () => {
   it("descarta navegadores automáticos, buscadores y vistas previas de enlaces", () => {
-    expect(traficoAutomatico("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36")).toBe("navegador-automatico");
-    expect(traficoAutomatico("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")).toBe("buscador");
-    expect(traficoAutomatico("WhatsApp/2.23.20.0")).toBe("vista-previa");
+    expect(traficoAutomatico("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36")).toBe("automated-browser");
+    expect(traficoAutomatico("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")).toBe("search-engine");
+    expect(traficoAutomatico("WhatsApp/2.23.20.0")).toBe("link-preview");
     expect(traficoAutomatico("vercel-screenshot/1.0")).toBe("vercel");
-    expect(traficoAutomatico(null)).toBe("sin-user-agent");
+    expect(traficoAutomatico(null)).toBe("no-user-agent");
   });
 
   it("deja pasar a una persona en su celular o su computadora", () => {

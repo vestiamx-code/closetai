@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { resultado, type Conteo, type Variante } from "@/lib/ab";
+import { EXPERIMENTO, resultado, type Conteo, type Variante } from "@/lib/ab";
 import {
   calendarioCsv,
   canalLegible,
+  EN_INGLES_DESDE,
+  FORMATO_LEGIBLE,
   guionesMarkdown,
   MARCA,
   PERSONA,
@@ -19,10 +21,10 @@ import { BotonCopiar, BotonExportar, Generador } from "./interacciones";
 export const metadata: Metadata = {
   title: "Marketing · ClosetAI",
   description:
-    "La marca, la persona, el contenido de lanzamiento y el experimento A/B de la portada de ClosetAI — con cada dato verificado y cada pieza aprobada por una persona.",
+    "ClosetAI's brand, persona, launch content and homepage A/B test — every figure verified and every piece approved by a person.",
 };
 
-// Los resultados del experimento y lo recién guardado tienen que verse al momento.
+// The experiment results and anything just saved have to show immediately.
 export const dynamic = "force-dynamic";
 
 const CONTENIDO =
@@ -39,7 +41,7 @@ type Experimento = {
 };
 
 const porcentaje = (n: number) =>
-  new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 1 }).format(n);
+  new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 1 }).format(n);
 
 async function contar(experimento: string, variante: Variante, evento: "vista" | "clic") {
   const { count } = await createAdminClient()
@@ -52,25 +54,25 @@ async function contar(experimento: string, variante: Variante, evento: "vista" |
 }
 
 /**
- * `/marketing` — Semana 4.
+ * `/marketing` — Week 4.
  *
- * Una mesa de trabajo, no un folleto: la marca, a quién se le habla, el
- * contenido listo para copiar o exportar, el experimento de la portada con sus
- * números reales, y un generador que no puede inventar cifras.
+ * A workbench, not a brochure: the brand, who we are talking to, the content
+ * ready to copy or export, the homepage experiment with its real numbers, and a
+ * generator that cannot invent figures.
  */
 export default async function Marketing() {
   const admin = createAdminClient();
   const [recursosR, experimentoR] = await Promise.all([
     admin.from("marketing_assets").select("*").order("orden"),
-    admin.from("ab_experiments").select("*").eq("id", "titular").maybeSingle(),
+    admin.from("ab_experiments").select("*").eq("id", EXPERIMENTO).maybeSingle(),
   ]);
 
   if (recursosR.error) {
-    console.error("[marketing] no se pudo leer el contenido", recursosR.error);
+    console.error("[marketing] could not read the content", recursosR.error);
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-20">
         <h1 className="font-display text-3xl font-semibold">Marketing</h1>
-        <p className="mt-4 text-text-muted">El contenido de marketing no está disponible en este momento.</p>
+        <p className="mt-4 text-text-muted">The marketing content is not available right now.</p>
       </main>
     );
   }
@@ -82,7 +84,7 @@ export default async function Marketing() {
   const guiones = aprobados.filter((r) => r.tipo === "guion");
   const dias = aprobados.filter((r) => r.tipo === "dia").sort((a, b) => (a.detalle.dia ?? 0) - (b.detalle.dia ?? 0));
   const generados = recursos
-    .filter((r) => r.origen === "generado_ia")
+    .filter((r) => r.origen === "generado_ia" && r.created_at >= EN_INGLES_DESDE)
     .sort((a, b) => b.created_at.localeCompare(a.created_at))
     .slice(0, 12);
 
@@ -106,29 +108,29 @@ export default async function Marketing() {
           ClosetAI
         </Link>
         <Link href="/" className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text">
-          Ver la portada
+          See the homepage
         </Link>
       </header>
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
         <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Marketing</p>
         <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.25rem,6vw,3.75rem)] leading-[0.98] font-semibold tracking-[-0.03em] text-balance">
-          Lo que decimos,{" "}
+          What we say,{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            y por qué se puede creer.
+            and why you can believe it.
           </span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-text-muted text-pretty">
-          La marca, a quién le hablamos y todo el contenido de lanzamiento. Lo redactó una IA usando solo
-          datos verificados, y lo aprobó una persona antes de publicarse. Nada de aquí trae una cifra sin su
-          fuente.
+          The brand, who we are talking to, and all the launch content. An AI drafted it using only verified
+          facts, and a person approved it before it was published. Nothing here carries a figure without its
+          source.
         </p>
 
         {/* ------------------------------------------------------------ Marca */}
-        <Seccion id="marca" titulo="Sistema de marca" bajada={`La promesa: «${MARCA.promesa}»`}>
+        <Seccion id="marca" titulo="Brand system" bajada={`The promise: “${MARCA.promesa}”`}>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl border border-border bg-surface p-5">
-              <h3 className="text-xs tracking-[0.14em] text-text-muted uppercase">Colores</h3>
+              <h3 className="text-xs tracking-[0.14em] text-text-muted uppercase">Colors</h3>
               <ul className="mt-4 space-y-3">
                 {MARCA.colores.map((c) => (
                   <li key={c.hex} className="flex items-center gap-3">
@@ -145,7 +147,7 @@ export default async function Marketing() {
                   </li>
                 ))}
               </ul>
-              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Tipografías</h3>
+              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Typefaces</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {MARCA.tipografias.map((t) => (
                   <li key={t.nombre}>
@@ -159,7 +161,7 @@ export default async function Marketing() {
             </div>
 
             <div className="rounded-2xl border border-border bg-surface p-5">
-              <h3 className="text-xs tracking-[0.14em] text-text-muted uppercase">Voz — sí</h3>
+              <h3 className="text-xs tracking-[0.14em] text-text-muted uppercase">Voice — do</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {MARCA.voz.si.map((v) => (
                   <li key={v} className="flex gap-2">
@@ -168,7 +170,7 @@ export default async function Marketing() {
                   </li>
                 ))}
               </ul>
-              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Voz — no</h3>
+              <h3 className="mt-6 text-xs tracking-[0.14em] text-text-muted uppercase">Voice — don't</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {MARCA.voz.no.map((v) => (
                   <li key={v} className="flex gap-2">
@@ -180,7 +182,7 @@ export default async function Marketing() {
             </div>
           </div>
           <p className="mt-4 rounded-xl border border-border p-4 text-sm">
-            <span className="font-medium">Riesgo de marca conocido. </span>
+            <span className="font-medium">Known brand risk. </span>
             <span className="text-text-muted">{MARCA.riesgo}</span>
           </p>
         </Seccion>
@@ -199,11 +201,11 @@ export default async function Marketing() {
           </ul>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <p className="rounded-xl border border-border bg-surface p-4">
-              <span className="text-xs tracking-[0.14em] text-text-muted uppercase">Lo que quiere</span>
+              <span className="text-xs tracking-[0.14em] text-text-muted uppercase">What she wants</span>
               <span className="mt-1.5 block">{PERSONA.quiere}</span>
             </p>
             <p className="rounded-xl border border-border bg-surface p-4">
-              <span className="text-xs tracking-[0.14em] text-text-muted uppercase">Lo que la frena</span>
+              <span className="text-xs tracking-[0.14em] text-text-muted uppercase">What holds her back</span>
               <span className="mt-1.5 block">{PERSONA.frena}</span>
             </p>
           </div>
@@ -211,11 +213,11 @@ export default async function Marketing() {
 
         {/* ------------------------------------------------------------ Portada */}
         {landing ? (
-          <Seccion id="landing" titulo="Texto de la portada" bajada="El que está en vivo en closetai.lat, para copiar entero.">
+          <Seccion id="landing" titulo="Homepage copy" bajada="The copy live on closetai.lat, to copy in full.">
             <div data-testid="landing-copy" className="mt-6 rounded-2xl border border-border bg-surface p-5">
               <p className="max-h-72 overflow-y-auto text-sm leading-relaxed whitespace-pre-line">{landing.cuerpo}</p>
               <div className="mt-4 flex flex-wrap items-center gap-3">
-                <BotonCopiar texto={landing.cuerpo} etiqueta="Copiar el texto" />
+                <BotonCopiar texto={landing.cuerpo} etiqueta="Copy the text" />
                 <Aprobado />
               </div>
             </div>
@@ -224,7 +226,7 @@ export default async function Marketing() {
 
         {/* ------------------------------------------------------------ A/B */}
         {experimento && conteos && veredicto ? (
-          <Seccion id="ab" titulo="Experimento A/B: el titular" bajada={experimento.hipotesis}>
+          <Seccion id="ab" titulo="A/B test: the headline" bajada={experimento.hipotesis}>
             <div data-testid="ab-resultados" className="mt-6 grid gap-4 md:grid-cols-2">
               {experimento.variantes.map((v) => {
                 const c = conteos[v.id];
@@ -236,14 +238,14 @@ export default async function Marketing() {
                     className={`rounded-2xl border bg-surface p-5 ${esGanador ? "border-2" : "border-border"}`}
                     style={esGanador ? { borderColor: "var(--barro)" } : undefined}
                   >
-                    <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Variante {v.id.toUpperCase()}</p>
-                    <p className="mt-2 font-display text-2xl font-semibold">«{v.texto}»</p>
+                    <p className="text-xs tracking-[0.14em] text-text-muted uppercase">Variant {v.id.toUpperCase()}</p>
+                    <p className="mt-2 font-display text-2xl font-semibold">“{v.texto}”</p>
                     <p className="mt-4 font-display text-4xl font-semibold tabular-nums">
                       {c.vistas > 0 ? porcentaje(c.clics / c.vistas) : "—"}
                     </p>
                     <p className="text-sm text-text-muted tabular-nums">
-                      {c.clics} {c.clics === 1 ? "clic" : "clics"} de {c.vistas}{" "}
-                      {c.vistas === 1 ? "visitante" : "visitantes"}
+                      {c.clics} {c.clics === 1 ? "click" : "clicks"} out of {c.vistas}{" "}
+                      {c.vistas === 1 ? "visitor" : "visitors"}
                     </p>
                   </div>
                 );
@@ -253,35 +255,35 @@ export default async function Marketing() {
               {veredicto.motivo}
             </p>
             <ul className="mt-4 space-y-2 text-sm text-text-muted">
-              <li>· Métrica: {experimento.metrica}.</li>
+              <li>· Metric: {experimento.metrica}.</li>
               <li>
-                · Cada visitante ve una sola variante, siempre la misma, y cuenta una vez aunque recargue. La
-                variante sale de un id al azar; de ese id solo se guarda un hash.
+                · Each visitor sees one variant, always the same one, and counts once even if they reload. The
+                variant comes from a random id; only a hash of that id is stored.
               </li>
               <li>
-                · Hace falta llegar a 100 visitantes por variante y a una diferencia significativa al 95% (prueba z
-                de dos proporciones) para hablar de un ganador. Antes de eso, cualquier diferencia puede ser suerte.
+                · It takes 100 visitors per variant and a difference significant at 95% (two-proportion z-test)
+                to name a winner. Before that, any difference could be luck.
               </li>
-              <li>· Las visitas de las pruebas automáticas no se cuentan. Empezó el {experimento.inicio}.</li>
+              <li>· Visits from automated tests, bots and screenshot tools are not counted. Started on {experimento.inicio}.</li>
             </ul>
           </Seccion>
         ) : null}
 
         {/* ------------------------------------------------------------ Posts */}
-        <Seccion id="posts" titulo={`${posts.length} posts`} bajada="Instagram y TikTok. Cada uno se copia listo para pegar.">
+        <Seccion id="posts" titulo={`${posts.length} posts`} bajada="Instagram and TikTok. Each one copies ready to paste.">
           <div className="mt-6 flex flex-wrap gap-3">
             <BotonExportar
               nombre="closetai-posts.md"
               contenido={postsMarkdown(posts)}
               tipo="text/markdown"
-              etiqueta="Exportar los posts (.md)"
+              etiqueta="Export the posts (.md)"
             />
           </div>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((p, i) => (
               <li key={p.id} data-post={p.id} className="flex flex-col rounded-xl border border-border bg-surface p-5">
                 <p className="text-xs tracking-[0.14em] text-text-muted uppercase">
-                  {i + 1} · {canalLegible(p.canal)} · {p.formato}
+                  {i + 1} · {canalLegible(p.canal)} · {p.formato ? FORMATO_LEGIBLE[p.formato] : ""}
                 </p>
                 <p className="mt-2 font-display text-lg font-semibold">{p.titulo}</p>
                 {p.detalle.laminas?.length ? (
@@ -301,7 +303,7 @@ export default async function Marketing() {
                 ) : null}
                 {p.detalle.guion ? (
                   <a href={`#${p.detalle.guion}`} className="mt-2 text-sm underline underline-offset-4">
-                    Ver el guion
+                    See the script
                   </a>
                 ) : null}
                 <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
@@ -314,13 +316,13 @@ export default async function Marketing() {
         </Seccion>
 
         {/* ------------------------------------------------------------ Guiones */}
-        <Seccion id="guiones" titulo={`${guiones.length} guiones de video`} bajada="Para TikTok y Reels. Cada toma con lo que se ve, el texto en pantalla y la voz.">
+        <Seccion id="guiones" titulo={`${guiones.length} video scripts`} bajada="For TikTok and Reels. Each shot with what you see, the on-screen text and the voice.">
           <div className="mt-6">
             <BotonExportar
               nombre="closetai-guiones.md"
               contenido={guionesMarkdown(guiones)}
               tipo="text/markdown"
-              etiqueta="Exportar los guiones (.md)"
+              etiqueta="Export the scripts (.md)"
             />
           </div>
           <div className="mt-6 space-y-8">
@@ -328,7 +330,7 @@ export default async function Marketing() {
               <article key={g.id} id={g.id} data-guion={g.id} className="rounded-2xl border border-border bg-surface p-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h3 className="font-display text-xl font-semibold">
-                    Guion {i + 1} · {g.titulo}
+                    Script {i + 1} · {g.titulo}
                   </h3>
                   <span className="text-sm text-text-muted">{g.detalle.duracion}</span>
                 </div>
@@ -336,10 +338,10 @@ export default async function Marketing() {
                   <table className="w-full min-w-[560px] border-collapse text-sm">
                     <thead>
                       <tr className="border-b border-border text-left text-xs tracking-[0.1em] text-text-muted uppercase">
-                        <th scope="col" className="py-2 pr-3">Toma</th>
-                        <th scope="col" className="py-2 pr-3">Qué se ve</th>
-                        <th scope="col" className="py-2 pr-3">Texto en pantalla</th>
-                        <th scope="col" className="py-2">Voz</th>
+                        <th scope="col" className="py-2 pr-3">Shot</th>
+                        <th scope="col" className="py-2 pr-3">What you see</th>
+                        <th scope="col" className="py-2 pr-3">On-screen text</th>
+                        <th scope="col" className="py-2">Voice</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -355,7 +357,7 @@ export default async function Marketing() {
                   </table>
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <BotonCopiar texto={guionesMarkdown([g])} etiqueta="Copiar el guion" />
+                  <BotonCopiar texto={guionesMarkdown([g])} etiqueta="Copy the script" />
                   <Aprobado />
                 </div>
               </article>
@@ -364,23 +366,23 @@ export default async function Marketing() {
         </Seccion>
 
         {/* ------------------------------------------------------------ Calendario */}
-        <Seccion id="calendario" titulo={`Calendario de ${dias.length} días`} bajada="Once días de publicación y tres de descanso para leer los resultados.">
+        <Seccion id="calendario" titulo={`${dias.length}-day calendar`} bajada="Eleven publishing days and three rest days to read the results.">
           <div className="mt-6">
             <BotonExportar
               nombre="closetai-calendario.csv"
               contenido={calendarioCsv(dias)}
               tipo="text/csv"
-              etiqueta="Exportar el calendario (.csv)"
+              etiqueta="Export the calendar (.csv)"
             />
           </div>
           <div className="mt-6 overflow-x-auto">
             <table data-testid="calendario" className="w-full min-w-[560px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border text-left text-xs tracking-[0.1em] text-text-muted uppercase">
-                  <th scope="col" className="py-2 pr-3">Día</th>
-                  <th scope="col" className="py-2 pr-3">Canal</th>
-                  <th scope="col" className="py-2 pr-3">Pieza</th>
-                  <th scope="col" className="py-2">Para qué</th>
+                  <th scope="col" className="py-2 pr-3">Day</th>
+                  <th scope="col" className="py-2 pr-3">Channel</th>
+                  <th scope="col" className="py-2 pr-3">Piece</th>
+                  <th scope="col" className="py-2">Purpose</th>
                 </tr>
               </thead>
               <tbody>
@@ -408,8 +410,8 @@ export default async function Marketing() {
         {/* ------------------------------------------------------------ Generador */}
         <Seccion
           id="generador"
-          titulo="Generador de posts"
-          bajada="Una IA escribe un post nuevo con la voz de la marca. Si mete una cifra que no está verificada, se rechaza antes de que lo veas."
+          titulo="Post generator"
+          bajada="An AI writes a new post in the brand's voice. If it includes a figure that isn't verified, it is rejected before you see it."
         >
           <Generador />
         </Seccion>
@@ -417,19 +419,19 @@ export default async function Marketing() {
         {/* ------------------------------------------------------------ Guardados */}
         <Seccion
           id="guardados"
-          titulo="Recursos guardados"
-          bajada="Lo que se ha generado y guardado. Ninguno está aprobado: aprobarlo es trabajo de una persona."
+          titulo="Saved assets"
+          bajada="What has been generated and saved. None of it is approved: approving it is a person's job."
         >
           {generados.length === 0 ? (
             <p data-testid="sin-generados" className="mt-6 text-text-muted">
-              Todavía no se ha guardado ningún post generado.
+              No generated post has been saved yet.
             </p>
           ) : (
             <ul data-testid="generados" className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {generados.map((g) => (
                 <li key={g.id} data-generado={g.id} className="rounded-xl border border-dashed border-border p-5">
                   <p className="text-xs tracking-[0.14em] text-text-muted uppercase">
-                    Generado con IA · sin revisar · {canalLegible(g.canal)}
+                    Generated with AI · not reviewed · {canalLegible(g.canal)}
                   </p>
                   <p className="mt-2 font-medium">{g.titulo}</p>
                   <p className="mt-2 line-clamp-5 text-sm leading-relaxed">{g.cuerpo}</p>
@@ -443,11 +445,11 @@ export default async function Marketing() {
         </Seccion>
 
         <p className="mt-16 border-t border-border pt-6 text-sm text-text-muted">
-          El plan de esta semana, escrito antes del código, está en{" "}
+          This week's plan, written before the code, is in{" "}
           <a href={PACKET} className="underline underline-offset-4 hover:text-text">
             SEMANA-4-PACKET.md
           </a>
-          . El contenido aprobado, y lo que se retiró antes de aprobarse, en{" "}
+          . The approved content, and what was withdrawn before approval, is in{" "}
           <a href={CONTENIDO} className="underline underline-offset-4 hover:text-text">
             MARKETING-SEMANA-4.md
           </a>
@@ -464,7 +466,7 @@ function Aprobado() {
       className="rounded-full border px-2.5 py-0.5 text-xs"
       style={{ borderColor: "var(--verde, #2f6b43)", color: "var(--verde, #2f6b43)" }}
     >
-      redactado con IA · aprobado por Tamara
+      written with AI · approved by Tamara
     </span>
   );
 }
@@ -475,11 +477,11 @@ function Sello({ tipo }: { tipo: "dato" | "hipotesis" }) {
       className="inline-block w-[4.5rem] shrink-0 rounded-full border px-2.5 py-0.5 text-center text-xs"
       style={{ borderColor: "var(--verde, #2f6b43)", color: "var(--verde, #2f6b43)" }}
     >
-      dato
+      data
     </span>
   ) : (
     <span className="inline-block w-[4.5rem] shrink-0 rounded-full border border-border px-2.5 py-0.5 text-center text-xs text-text-muted">
-      hipótesis
+      hypothesis
     </span>
   );
 }

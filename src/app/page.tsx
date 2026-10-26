@@ -2,54 +2,54 @@ import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
-import { varianteDe, type Variante } from "@/lib/ab";
+import { EXPERIMENTO, varianteDe, type Variante } from "@/lib/ab";
 
 import { BotonEmpezar, Experimento } from "./experimento";
 
 /**
- * Portada — Semana 4.
+ * Homepage — Week 4.
  *
- * La de la Semana 0 tenía buena composición y poco argumento: un titular, cuatro
- * capacidades y una promesa. Esta conserva la composición y ordena el argumento
- * de arriba abajo, como lo leería alguien que no conoce ClosetAI: qué es → el
- * problema → cómo funciona → por qué creerle → cuánto cuesta → qué pasa con sus
- * fotos → empezar.
+ * The Week 0 version had good composition and little argument: a headline, four
+ * capabilities and a promise. This one keeps the composition and orders the
+ * argument top to bottom, the way someone who doesn't know ClosetAI would read
+ * it: what it is → the problem → how it works → why believe it → what it costs →
+ * what happens to their photos → get started.
  *
- * Dos frases de la versión anterior se quitaron porque no se podían sostener:
- * «A las dos semanas ya no te propone lo que odias» nunca se midió, y «Diez
- * prendas bastan para empezar» choca con la conversación de la Semana 2, donde
- * el límite antes de cansarse fueron 40.
+ * Two sentences from the previous version were removed because they could not be
+ * defended: "within two weeks it stops suggesting what you hate" was never
+ * measured, and "ten garments are enough to start" contradicts the Week 2
+ * conversation, where the limit before getting tired was 40.
  *
- * El titular es un experimento A/B (`src/lib/ab.ts`). La variante se elige aquí,
- * en el servidor, y no en `proxy.ts`: ahí vive la sesión, que ya se rompió una
- * vez en producción con un cambio menor.
+ * The headline is an A/B experiment (`src/lib/ab.ts`). The variant is chosen
+ * here, on the server, and not in `proxy.ts`: that is where the session lives,
+ * and it already broke once in production after a small change.
  *
- * Todo el movimiento vive en `globals.css` y se apaga con `prefers-reduced-motion`.
+ * All motion lives in `globals.css` and switches off with `prefers-reduced-motion`.
  */
 
 const TITULARES: Record<Variante, [string, string]> = {
-  a: ["Tu estilista,", "en tu bolsillo."],
-  b: ["Ya tienes", "qué ponerte."],
+  a: ["Your stylist,", "in your pocket."],
+  b: ["You already have", "something to wear."],
 };
 
-const CORRIDO = ["playeras", "vestidos", "jeans", "blazers", "tenis", "abrigos", "faldas", "sudaderas", "botas", "camisas"];
+const CORRIDO = ["t-shirts", "dresses", "jeans", "blazers", "sneakers", "coats", "skirts", "hoodies", "boots", "shirts"];
 
 const PASOS = [
-  { n: "01", titulo: "Fotografía tu ropa", cuerpo: "La IA llena el tipo, los colores y la temporada de cada prenda." },
-  { n: "02", titulo: "Arma tu clóset", cuerpo: "Todo en tu celular, con el fondo recortado." },
-  { n: "03", titulo: "Te dice qué ponerte", cuerpo: "Outfits con lo que ya tienes, para el clima de tu ciudad." },
+  { n: "01", titulo: "Photograph your clothes", cuerpo: "AI fills in the type, the colors and the season of every garment." },
+  { n: "02", titulo: "Build your closet", cuerpo: "Everything on your phone, with the background removed." },
+  { n: "03", titulo: "It tells you what to wear", cuerpo: "Outfits from what you already own, for the weather in your city." },
 ];
 
 const DATOS = [
-  { cifra: "77 M", texto: "personas compraron en línea en México en 2025." },
-  { cifra: "59%", texto: "de ellas compra ropa." },
-  { cifra: "35%", texto: "quedó muy satisfecha con su compra de moda en línea." },
+  { cifra: "77 M", texto: "people bought online in Mexico in 2025." },
+  { cifra: "59%", texto: "of them buy clothes." },
+  { cifra: "35%", texto: "were very satisfied with their online fashion purchase." },
 ];
 
 const FOTOS = [
-  "Viven en un espacio privado al que nadie más entra.",
-  "Se borran de verdad cuando las quitas o borras tu cuenta.",
-  "No vendemos tus datos y no hay anuncios.",
+  "They live in a private space nobody else can enter.",
+  "They are truly deleted when you remove them or delete your account.",
+  "We don't sell your data, and there are no ads.",
 ];
 
 export default async function Home() {
@@ -57,16 +57,16 @@ export default async function Home() {
   const guardado = jar.get("cai_visitante")?.value;
   const valido = Boolean(guardado && /^[0-9a-f-]{36}$/i.test(guardado));
   const visitante = valido ? guardado! : randomUUID();
-  const variante = varianteDe(visitante, "titular");
+  const variante = varianteDe(visitante, EXPERIMENTO);
   const [linea1, linea2] = TITULARES[variante];
 
   return (
     <main className="flex-1">
       <Experimento visitante={visitante} variante={variante} nuevo={!valido} />
 
-      {/* ---------- 1 · Titular ---------- */}
+      {/* ---------- 1 · Headline ---------- */}
       <section data-seccion="titular" className="relative flex min-h-[92svh] flex-col overflow-hidden bg-hueso">
-        {/* Dos manchas de color muy difusas. Dan profundidad sin competir con el texto. */}
+        {/* Two very soft color blooms. They add depth without competing with the text. */}
         <div
           aria-hidden
           className="pointer-events-none absolute -top-40 -right-32 h-[34rem] w-[34rem] rounded-full opacity-70 blur-3xl"
@@ -80,18 +80,18 @@ export default async function Home() {
 
         <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
           <span className="font-display text-xl font-semibold tracking-tight">ClosetAI</span>
-          <nav aria-label="Principal" className="flex items-center gap-1 sm:gap-2">
+          <nav aria-label="Main" className="flex items-center gap-1 sm:gap-2">
             <Link href="/product" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
-              Producto
+              Product
             </Link>
             <Link href="/pricing" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
-              Precios
+              Pricing
             </Link>
             <Link
               href="/entrar"
               className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
             >
-              Entrar
+              Sign in
             </Link>
           </nav>
         </header>
@@ -101,13 +101,13 @@ export default async function Home() {
             className="entra text-[0.65rem] tracking-[0.18em] text-text-muted uppercase sm:text-xs sm:tracking-[0.22em]"
             style={{ animationDelay: "0.05s" }}
           >
-            Estilista personal con IA{" "}
-            {/* En pantallas chicas el separador parte la línea y deja "México" solo. */}
-            <span className="hidden sm:inline">· Hecho en México</span>
-            <span className="mt-1 block sm:hidden">Hecho en México</span>
+            AI personal stylist{" "}
+            {/* On small screens the separator breaks the line and leaves "Mexico" alone. */}
+            <span className="hidden sm:inline">· Made in Mexico</span>
+            <span className="mt-1 block sm:hidden">Made in Mexico</span>
           </p>
 
-          {/* La escala es el argumento. El titular tiene que dominar la pantalla. */}
+          {/* Scale is the argument. The headline has to own the screen. */}
           <h1
             data-variante={variante}
             className="mt-6 font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.88] font-semibold tracking-[-0.035em]"
@@ -115,9 +115,9 @@ export default async function Home() {
             <span className="entra block" style={{ animationDelay: "0.12s" }}>
               {linea1}
             </span>
-            {/* Las líneas son bloques, así que se ven separadas; pero sin este espacio el
-                texto del titular es «Ya tienesqué ponerte.» para un lector de pantalla y
-                para un buscador. La portada anterior tenía el mismo error. */}{" "}
+            {/* The lines are blocks, so they look separate; but without this space the
+                headline's text runs the words together for a screen reader and for a
+                search engine. The previous homepage had the same bug. */}{" "}
             <span className="entra block italic" style={{ animationDelay: "0.24s", color: "var(--barro)" }}>
               {linea2}
             </span>
@@ -130,8 +130,8 @@ export default async function Home() {
               className="entra max-w-md text-lg leading-relaxed text-text-muted text-pretty"
               style={{ animationDelay: "0.36s" }}
             >
-              Fotografía tu ropa, ClosetAI la ordena por ti y cada mañana te dice qué ponerte con lo que ya
-              tienes.
+              Photograph your clothes, ClosetAI sorts them for you, and every morning it tells you what to wear
+              from what you already own.
             </p>
 
             <div
@@ -143,20 +143,20 @@ export default async function Home() {
                 variante={variante}
                 className="inline-flex items-center justify-center rounded-full bg-text px-8 py-4 text-base font-medium text-bg transition hover:opacity-90"
               >
-                Empezar gratis
+                Start for free
               </BotonEmpezar>
               <Link
                 href="/core"
                 className="inline-flex items-center justify-center px-2 py-4 text-base text-text-muted underline underline-offset-8 transition hover:text-text"
               >
-                Probar sin cuenta
+                Try it without an account
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Marquesina ---------- */}
+      {/* ---------- Marquee ---------- */}
       <section
         aria-hidden
         className="marquesina overflow-hidden border-y py-5"
@@ -175,21 +175,21 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ---------- 2 · El problema ---------- */}
+      {/* ---------- 2 · The problem ---------- */}
       <section data-seccion="problema" className="mx-auto w-full max-w-6xl px-6 pt-24 sm:pt-32">
-        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">El problema</p>
+        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">The problem</p>
         <h2 className="mt-5 max-w-3xl font-display text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-6xl">
-          Tienes el clóset lleno y te pones lo mismo.
+          Your closet is full and you keep wearing the same thing.
         </h2>
         <p className="mt-6 max-w-xl text-xl leading-relaxed text-text-muted text-pretty">
-          No te falta ropa: te falta verla toda junta.
+          You're not short of clothes: you just can't see them all at once.
         </p>
       </section>
 
-      {/* ---------- 3 · Cómo funciona ---------- */}
+      {/* ---------- 3 · How it works ---------- */}
       <section data-seccion="como-funciona" className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
         <h2 className="max-w-2xl font-display text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">
-          Cómo funciona
+          How it works
         </h2>
         <ol className="mt-12 grid gap-x-14 gap-y-12 sm:grid-cols-3">
           {PASOS.map((p) => (
@@ -204,10 +204,10 @@ export default async function Home() {
         </ol>
       </section>
 
-      {/* ---------- 4 · Prueba: datos con su fuente ---------- */}
+      {/* ---------- 4 · Proof: data with its source ---------- */}
       <section data-seccion="prueba" style={{ background: "var(--arena)" }}>
         <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-28">
-          <p className="text-xs tracking-[0.22em] text-text-muted uppercase">Lo que dicen los datos</p>
+          <p className="text-xs tracking-[0.22em] text-text-muted uppercase">What the data says</p>
           <dl className="mt-10 grid gap-10 sm:grid-cols-3">
             {DATOS.map((d) => (
               <div key={d.cifra} className="border-t pt-6" style={{ borderColor: "var(--border)" }}>
@@ -217,49 +217,49 @@ export default async function Home() {
             ))}
           </dl>
           <p className="mt-12 max-w-2xl font-display text-2xl leading-snug tracking-tight text-balance sm:text-3xl">
-            Comprar no es el problema.{" "}
+            Buying isn't the problem.{" "}
             <span className="italic" style={{ color: "var(--barro)" }}>
-              Saber qué combinar, sí.
+              Knowing what goes together is.
             </span>
           </p>
           <p className="mt-6 text-sm text-text-muted">
-            Fuente: AMVO y Milenio con datos de AMVO.{" "}
+            Source: AMVO, and Milenio citing AMVO data.{" "}
             <Link href="/research" className="underline underline-offset-4 hover:text-text">
-              Cada dato enlaza a su fuente en la investigación
+              Every figure links to its source in the research
             </Link>
             .
           </p>
         </div>
       </section>
 
-      {/* ---------- 5 · Precio ---------- */}
+      {/* ---------- 5 · Price ---------- */}
       <section data-seccion="precio" className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
-        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">Precio</p>
+        <p className="text-xs tracking-[0.22em] text-text-muted uppercase">Price</p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
           <div className="rounded-2xl border border-border bg-surface p-8">
             <p className="font-display text-5xl font-semibold tracking-tight">$0</p>
-            <p className="mt-3 text-lg">Tu clóset, gratis para siempre.</p>
-            <p className="mt-2 text-text-muted">Nunca te cobramos por el trabajo que ya hiciste.</p>
+            <p className="mt-3 text-lg">Your closet, free forever.</p>
+            <p className="mt-2 text-text-muted">We never charge you for work you've already done.</p>
           </div>
           <div className="rounded-2xl border-2 bg-surface p-8" style={{ borderColor: "var(--barro)" }}>
-            <p className="font-display text-5xl font-semibold tracking-tight">$100</p>
-            <p className="mt-3 text-lg">ClosetAI Completo, una sola vez.</p>
-            <p className="mt-2 text-text-muted">Sin mensualidad.</p>
+            <p className="font-display text-5xl font-semibold tracking-tight">MX$100</p>
+            <p className="mt-3 text-lg">ClosetAI Complete, one time.</p>
+            <p className="mt-2 text-text-muted">No monthly fee.</p>
           </div>
         </div>
         <p className="mt-6 text-sm text-text-muted">
           <Link href="/pricing" className="underline underline-offset-4 hover:text-text">
-            Ver la cuenta completa
+            See the full math
           </Link>{" "}
-          · qué incluye cada plan y cuánto nos cuesta servirlo.
+          · what each plan includes and what it costs us to run.
         </p>
       </section>
 
-      {/* ---------- 6 · Privacidad ---------- */}
+      {/* ---------- 6 · Privacy ---------- */}
       <section data-seccion="privacidad" style={{ background: "var(--tinta)", color: "var(--hueso)" }}>
         <div className="mx-auto w-full max-w-6xl px-6 py-24 sm:py-32">
           <p className="text-xs tracking-[0.22em] uppercase" style={{ opacity: 0.55 }}>
-            Tus fotos son tuyas
+            Your photos are yours
           </p>
           <ul className="mt-12 space-y-8">
             {FOTOS.map((f) => (
@@ -273,33 +273,32 @@ export default async function Home() {
             ))}
           </ul>
           <Link href="/privacidad" className="mt-10 inline-block text-sm underline underline-offset-4" style={{ opacity: 0.7 }}>
-            El aviso de privacidad completo
+            The full privacy notice
           </Link>
         </div>
       </section>
 
-      {/* ---------- 7 · Empezar ---------- */}
+      {/* ---------- 7 · Get started ---------- */}
       <section data-seccion="empezar" className="mx-auto w-full max-w-6xl px-6 py-24 text-center sm:py-36">
         <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
-          {/* No puede repetir ninguno de los dos titulares del experimento: quien ve
-              la variante A leería la frase de B aquí abajo, y la comparación quedaría
-              contaminada. Era «Ya tienes qué ponerte», justo el titular B. */}
-          Tu ropa ya está ahí.
+          {/* It must not repeat either of the experiment's headlines: whoever sees
+              variant A would read B's sentence down here, contaminating the comparison. */}
+          Your clothes are already there.
           <br />{" "}
           <span className="italic" style={{ color: "var(--barro)" }}>
-            Solo falta verla.
+            You just have to see them.
           </span>
         </h2>
         <Link
           href="/registro"
           className="mt-12 inline-flex items-center justify-center rounded-full bg-text px-10 py-4.5 text-base font-medium text-bg transition hover:opacity-90"
         >
-          Crear mi clóset gratis
+          Create my closet for free
         </Link>
         <p className="mt-5 text-sm text-text-muted">
-          No pedimos tarjeta. ¿Todavía no quieres subir fotos?{" "}
+          No card required. Not ready to upload photos?{" "}
           <Link href="/core" className="underline underline-offset-4 hover:text-text">
-            Descubre tu núcleo de estilo sin cuenta
+            Find your style core without an account
           </Link>
           .
         </p>
@@ -308,12 +307,12 @@ export default async function Home() {
       <footer className="border-t border-border">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-8 text-sm text-text-muted sm:flex-row sm:items-center sm:justify-between">
           <span className="font-display text-base text-text">ClosetAI</span>
-          <nav aria-label="Pie" className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link href="/product" className="underline-offset-4 hover:text-text hover:underline">Producto</Link>
-            <Link href="/pricing" className="underline-offset-4 hover:text-text hover:underline">Precios</Link>
-            <Link href="/research" className="underline-offset-4 hover:text-text hover:underline">Investigación</Link>
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link href="/product" className="underline-offset-4 hover:text-text hover:underline">Product</Link>
+            <Link href="/pricing" className="underline-offset-4 hover:text-text hover:underline">Pricing</Link>
+            <Link href="/research" className="underline-offset-4 hover:text-text hover:underline">Research</Link>
             <Link href="/marketing" className="underline-offset-4 hover:text-text hover:underline">Marketing</Link>
-            <Link href="/privacidad" className="underline-offset-4 hover:text-text hover:underline">Aviso de privacidad</Link>
+            <Link href="/privacidad" className="underline-offset-4 hover:text-text hover:underline">Privacy notice</Link>
           </nav>
         </div>
       </footer>

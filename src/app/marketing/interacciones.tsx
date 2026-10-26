@@ -3,10 +3,12 @@
 import { useActionState, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+import { FORMATO_LEGIBLE } from "@/lib/marketing";
+
 import { generarPost, guardarPost, type EstadoGenerador } from "./actions";
 
-/** Copiar al portapapeles, con la confirmación en el mismo botón. */
-export function BotonCopiar({ texto, etiqueta = "Copiar" }: { texto: string; etiqueta?: string }) {
+/** Copy to the clipboard, with the confirmation on the same button. */
+export function BotonCopiar({ texto, etiqueta = "Copy" }: { texto: string; etiqueta?: string }) {
   const [hecho, setHecho] = useState<"no" | "si" | "error">("no");
   return (
     <button
@@ -17,19 +19,19 @@ export function BotonCopiar({ texto, etiqueta = "Copiar" }: { texto: string; eti
           await navigator.clipboard.writeText(texto);
           setHecho("si");
         } catch {
-          // Sin permiso de portapapeles (o en un navegador viejo) se dice, no se finge.
+          // Without clipboard permission (or in an old browser) we say so instead of pretending.
           setHecho("error");
         }
         setTimeout(() => setHecho("no"), 1800);
       }}
       className="rounded-full border border-border px-3.5 py-1.5 text-sm transition hover:border-text"
     >
-      {hecho === "si" ? "Copiado" : hecho === "error" ? "No se pudo copiar" : etiqueta}
+      {hecho === "si" ? "Copied" : hecho === "error" ? "Could not copy" : etiqueta}
     </button>
   );
 }
 
-/** Descargar un archivo armado en el navegador. Un CSV no necesita servidor. */
+/** Download a file built in the browser. A CSV needs no server. */
 export function BotonExportar({
   nombre,
   contenido,
@@ -46,7 +48,7 @@ export function BotonExportar({
       type="button"
       data-exportar={nombre}
       onClick={() => {
-        // El BOM hace que Excel abra el CSV con los acentos bien.
+        // The BOM makes Excel open the CSV with accented characters intact.
         const blob = new Blob([tipo === "text/csv" ? "﻿" : "", contenido], { type: `${tipo};charset=utf-8` });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -64,9 +66,9 @@ export function BotonExportar({
 
 const INICIAL: EstadoGenerador = { estado: "vacio" };
 
-const EJEMPLOS = ["Por qué no hay mensualidad", "Qué ponerse un lunes de lluvia", "Fotografiar la ropa sin flojera"];
+const EJEMPLOS = ["Why there is no monthly fee", "What to wear on a rainy Monday", "Photographing your clothes without the hassle"];
 
-/** El generador: tema + canal → post con IA → revisar → guardar como «sin revisar». */
+/** The generator: topic + channel → AI post → check → save as "not reviewed". */
 export function Generador() {
   const [estado, accion, generando] = useActionState(generarPost, INICIAL);
   const [tema, setTema] = useState("");
@@ -86,7 +88,7 @@ export function Generador() {
         className="rounded-2xl border border-border bg-surface p-5"
       >
         <label htmlFor="tema" className="block text-sm font-medium">
-          Tema del post
+          Post topic
         </label>
         <input
           id="tema"
@@ -94,7 +96,7 @@ export function Generador() {
           value={tema}
           onChange={(e) => setTema(e.target.value)}
           maxLength={200}
-          placeholder="Por ejemplo: qué ponerse un lunes de lluvia"
+          placeholder="For example: what to wear on a rainy Monday"
           className="mt-1.5 w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm"
         />
         <div className="mt-2 flex flex-wrap gap-2">
@@ -111,7 +113,7 @@ export function Generador() {
         </div>
 
         <fieldset className="mt-4">
-          <legend className="text-sm font-medium">Canal</legend>
+          <legend className="text-sm font-medium">Channel</legend>
           <div className="mt-1.5 flex gap-4 text-sm">
             <label className="flex items-center gap-2">
               <input type="radio" name="canal" value="instagram" defaultChecked /> Instagram
@@ -127,18 +129,18 @@ export function Generador() {
           disabled={generando}
           className="mt-5 rounded-full bg-text px-5 py-2.5 text-sm font-medium text-bg transition hover:opacity-90 disabled:opacity-50"
         >
-          {generando ? "Escribiendo…" : "Generar post"}
+          {generando ? "Writing…" : "Generate post"}
         </button>
         <p className="mt-3 text-xs text-text-muted">
-          Lo escribe una IA con la voz de la marca y solo con los datos verificados. Si inventa una cifra, el
-          post se rechaza antes de mostrarse.
+          An AI writes it in the brand's voice, using only the verified facts. If it invents a figure, the
+          post is rejected before it is shown.
         </p>
       </form>
 
       <div data-testid="resultado-generador" aria-live="polite">
         {estado.estado === "vacio" ? (
           <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-text-muted">
-            Aquí aparece el post. Nada se guarda hasta que tú lo decidas.
+            The post appears here. Nothing is saved until you decide.
           </p>
         ) : null}
 
@@ -151,7 +153,7 @@ export function Generador() {
         {estado.estado === "listo" ? (
           <article data-testid="post-generado" className="rounded-2xl border border-border bg-surface p-5">
             <p className="text-xs tracking-[0.14em] text-text-muted uppercase">
-              Generado con IA · sin revisar · {estado.canal === "tiktok" ? "TikTok" : "Instagram"} · {estado.post.formato}
+              Generated with AI · not reviewed · {estado.canal === "tiktok" ? "TikTok" : "Instagram"} · {FORMATO_LEGIBLE[estado.post.formato]}
             </p>
             <h3 className="mt-2 font-display text-xl font-semibold">{estado.post.titulo}</h3>
             <p className="mt-2 leading-relaxed whitespace-pre-line">{estado.post.cuerpo}</p>
@@ -174,7 +176,7 @@ export function Generador() {
                 }
                 className="rounded-full border border-text px-4 py-1.5 text-sm transition hover:bg-text hover:text-bg disabled:opacity-50"
               >
-                {guardado ? "Guardado" : guardando ? "Guardando…" : "Guardar"}
+                {guardado ? "Saved" : guardando ? "Saving…" : "Save"}
               </button>
             </div>
             {errorGuardar ? (
@@ -183,8 +185,8 @@ export function Generador() {
               </p>
             ) : null}
             <p className="mt-3 text-xs text-text-muted">
-              Se guarda en público como «generado con IA, sin revisar». Publicarlo en redes sigue siendo decisión
-              de una persona. Modelo: {estado.modelo}.
+              It is saved publicly as “generated with AI, not reviewed”. Publishing it on social media is still a
+              person's decision. Model: {estado.modelo}.
             </p>
           </article>
         ) : null}

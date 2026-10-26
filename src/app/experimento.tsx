@@ -3,19 +3,19 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-import type { Variante } from "@/lib/ab";
+import { EXPERIMENTO, type Variante } from "@/lib/ab";
 
 import { registrarEvento } from "./acciones-ab";
 
 const DURACION_COOKIE = 60 * 60 * 24 * 365;
 
 /**
- * La parte del experimento que vive en el navegador: recordar al visitante y
- * avisar que vio la portada.
+ * The part of the experiment that lives in the browser: remember the visitor and
+ * report that they saw the homepage.
  *
- * La variante ya llegó elegida desde el servidor, así que el titular no
- * parpadea. Lo único que hace esto es guardar la cookie la primera vez —para que
- * al volver vea la misma— y registrar la vista una sola vez.
+ * The variant already arrived chosen from the server, so the headline does not
+ * flicker. All this does is save the cookie the first time —so they see the same
+ * one when they come back— and record the view once.
  */
 export function Experimento({
   visitante,
@@ -29,8 +29,8 @@ export function Experimento({
   const registrado = useRef(false);
 
   useEffect(() => {
-    // En desarrollo React monta dos veces; sin esto la vista se mandaría doble.
-    // En producción no pasa, y de todos modos la base solo acepta una por visitante.
+    // In development React mounts twice; without this the view would be sent twice.
+    // It doesn't happen in production, and the database only accepts one per visitor anyway.
     if (registrado.current) return;
     registrado.current = true;
 
@@ -38,13 +38,13 @@ export function Experimento({
       const seguro = location.protocol === "https:" ? "; Secure" : "";
       document.cookie = `cai_visitante=${visitante}; Max-Age=${DURACION_COOKIE}; Path=/; SameSite=Lax${seguro}`;
     }
-    void registrarEvento({ experimento: "titular", variante, visitante, evento: "vista" });
+    void registrarEvento({ experimento: EXPERIMENTO, variante, visitante, evento: "vista" });
   }, [visitante, variante, nuevo]);
 
   return null;
 }
 
-/** El botón que mide el experimento: «Empezar gratis». */
+/** The button the experiment measures: "Start for free". */
 export function BotonEmpezar({
   visitante,
   variante,
@@ -60,7 +60,7 @@ export function BotonEmpezar({
     <Link
       href="/registro"
       data-cta="empezar"
-      onClick={() => void registrarEvento({ experimento: "titular", variante, visitante, evento: "clic" })}
+      onClick={() => void registrarEvento({ experimento: EXPERIMENTO, variante, visitante, evento: "clic" })}
       className={className}
     >
       {children}

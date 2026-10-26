@@ -143,7 +143,7 @@ async function conReintentoSiHayCuota<T>(llamada: () => Promise<T>): Promise<T> 
       const espera = Math.min(segundos, 45) * 1000;
 
       console.warn(
-        `[gemini] ${fallo === "cuota" ? "cuota agotada" : "modelo saturado"}, reintento ${intento} en ${espera / 1000}s`,
+        `[gemini] ${fallo === "cuota" ? "quota exhausted" : "model overloaded"}, retry ${intento} in ${espera / 1000}s`,
       );
       await new Promise((listo) => setTimeout(listo, espera));
     }
@@ -191,7 +191,7 @@ export async function catalogGarment(
     return {
       ok: false,
       reason: "unparseable",
-      message: `el proveedor falló: ${error instanceof Error ? error.message : String(error)}`,
+      message: `the provider failed: ${error instanceof Error ? error.message : String(error)}`,
       meta,
     };
   }
@@ -236,18 +236,18 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
   };
 
   const contexto = [
-    `CLÓSET (${ctx.prendas.length} prendas):`,
+    `CLOSET (${ctx.prendas.length} garments):`,
     JSON.stringify(ctx.prendas),
     "",
-    "PERFIL DE ESTILO APRENDIDO:",
+    "LEARNED STYLE PROFILE:",
     JSON.stringify(ctx.perfil),
     "",
     ctx.clima
-      ? `CLIMA: ${ctx.clima.ciudad}, ${ctx.clima.temperatura}°C, ${ctx.clima.descripcion}.`
-      : "CLIMA: no disponible. No menciones el clima en las explicaciones.",
-    ctx.ocasion ? `OCASIÓN PEDIDA: ${ctx.ocasion}` : "OCASIÓN: día normal.",
+      ? `WEATHER: ${ctx.clima.ciudad}, ${ctx.clima.temperatura}°C, ${ctx.clima.descripcion}.`
+      : "WEATHER: not available. Do not mention the weather in the explanations.",
+    ctx.ocasion ? `REQUESTED OCCASION: ${ctx.ocasion}` : "OCCASION: a regular day.",
     ctx.feedbackReciente.length
-      ? `RECHAZOS RECIENTES (no repitas esto): ${ctx.feedbackReciente.join(" · ")}`
+      ? `RECENT REJECTIONS (do not repeat these): ${ctx.feedbackReciente.join(" · ")}`
       : "",
   ].join("\n");
 
@@ -267,7 +267,7 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
   } catch (error) {
     return {
       ok: false,
-      message: `el proveedor falló: ${error instanceof Error ? error.message : String(error)}`,
+      message: `the provider failed: ${error instanceof Error ? error.message : String(error)}`,
       meta,
     };
   }
@@ -310,10 +310,10 @@ export async function updateStyleProfile(
 ): Promise<{ perfil: StyleProfile | null; estCostUsd: number; model: string }> {
   const model = MODELS.reasoning();
   const contexto = [
-    "PERFIL ACTUAL:",
+    "CURRENT PROFILE:",
     JSON.stringify(perfilActual),
     "",
-    `EVENTOS NUEVOS (${eventos.length}):`,
+    `NEW EVENTS (${eventos.length}):`,
     JSON.stringify(eventos),
   ].join("\n");
 
@@ -410,7 +410,7 @@ export async function validarFotoBase(
 
     return {
       sirve: Boolean(datos?.sirve),
-      motivo: String(datos?.motivo ?? "No pudimos revisar esta foto."),
+      motivo: String(datos?.motivo ?? "We couldn't check this photo."),
       problema: String(datos?.problema ?? "ninguno"),
       aviso: String(datos?.aviso ?? "").trim(),
       estCostUsd,
@@ -418,7 +418,7 @@ export async function validarFotoBase(
   } catch {
     return {
       sirve: false,
-      motivo: "No pudimos revisar esta foto. Intenta con otra.",
+      motivo: "We couldn't check this photo. Try another one.",
       problema: "ninguno",
       aviso: "",
       estCostUsd,
@@ -467,10 +467,10 @@ export async function analizarHuecos(
   const { parseGaps } = await import("../compras");
 
   const contexto = [
-    `CLÓSET (${prendas.length} prendas):`,
+    `CLOSET (${prendas.length} garments):`,
     JSON.stringify(prendas),
     "",
-    "PERFIL DE ESTILO:",
+    "STYLE PROFILE:",
     JSON.stringify(perfil),
   ].join("\n");
 
@@ -551,7 +551,7 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
 
     return { ...parseStyleCore(response.text ?? ""), estCostUsd, model: modelo, promptVersion };
   } catch (error) {
-    console.error("[core] falló la llamada al modelo", error);
+    console.error("[core] the model call failed", error);
     const texto = error instanceof Error ? error.message : String(error);
     const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
     return {
@@ -561,8 +561,8 @@ export async function extraerNucleo(texto: string): Promise<ResultadoCore> {
       // le echa encima una culpa que no es suya.
       reason: proveedorCaido ? "unavailable" : "unparseable",
       message: proveedorCaido
-        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
-        : "No pudimos generar tu núcleo ahora. Inténtalo en un momento.",
+        ? "The model is overloaded right now. Wait a minute and try again."
+        : "We couldn't generate your core right now. Try again in a moment.",
       estCostUsd,
       model,
       promptVersion,
@@ -630,7 +630,7 @@ export async function generarInforme(
               role: "user",
               parts: [
                 {
-                  text: `${RESEARCH_PROMPT}\n\n${datosParaElPrompt(fuentes, riesgos)}\n\nPREGUNTA:\n"""\n${pregunta}\n"""`,
+                  text: `${RESEARCH_PROMPT}\n\n${datosParaElPrompt(fuentes, riesgos)}\n\nQUESTION:\n"""\n${pregunta}\n"""`,
                 },
               ],
             },
@@ -646,19 +646,19 @@ export async function generarInforme(
 
     const resultado = parseResearchReport(response.text ?? "", idsValidos);
     if (!resultado.ok && resultado.reason === "invented_source") {
-      console.warn(`[research] ${modelo} inventó una fuente: ${resultado.message}`);
+      console.warn(`[research] ${modelo} invented a source: ${resultado.message}`);
     }
     return { ...resultado, estCostUsd, model: modelo, promptVersion };
   } catch (error) {
-    console.error("[research] falló la llamada al modelo", error);
+    console.error("[research] the model call failed", error);
     const texto = error instanceof Error ? error.message : String(error);
     const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
     return {
       ok: false,
       reason: proveedorCaido ? "unavailable" : "unparseable",
       message: proveedorCaido
-        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
-        : "No pudimos generar el informe ahora. Inténtalo en un momento.",
+        ? "The model is overloaded right now. Wait a minute and try again."
+        : "We couldn't generate the report right now. Try again in a moment.",
       estCostUsd,
       model,
       promptVersion,
@@ -707,7 +707,7 @@ export async function generarPostMarketing(tema: string, canal: Canal): Promise<
           contents: [
             {
               role: "user",
-              parts: [{ text: `${MARKETING_PROMPT}\n\nCANAL: ${canal}\nTEMA:\n"""\n${tema}\n"""` }],
+              parts: [{ text: `${MARKETING_PROMPT}\n\nCHANNEL: ${canal}\nTOPIC:\n"""\n${tema}\n"""` }],
             },
           ],
           config: {
@@ -722,7 +722,7 @@ export async function generarPostMarketing(tema: string, canal: Canal): Promise<
     const revision = revisarPost(response.text ?? "");
     if (!revision.ok) {
       if (revision.motivo === "cifras") {
-        console.warn(`[marketing] ${modelo} inventó cifras: ${revision.cifras?.join(", ")}`);
+        console.warn(`[marketing] ${modelo} invented figures: ${revision.cifras?.join(", ")}`);
       }
       return {
         ok: false,
@@ -735,15 +735,15 @@ export async function generarPostMarketing(tema: string, canal: Canal): Promise<
     }
     return { ok: true, post: revision.post, estCostUsd, model: modelo, promptVersion };
   } catch (error) {
-    console.error("[marketing] falló la llamada al modelo", error);
+    console.error("[marketing] the model call failed", error);
     const texto = error instanceof Error ? error.message : String(error);
     const proveedorCaido = clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error);
     return {
       ok: false,
       reason: proveedorCaido ? "unavailable" : "unparseable",
       message: proveedorCaido
-        ? "El modelo está saturado en este momento. Espera un minuto y vuelve a intentarlo."
-        : "No pudimos generar el post ahora. Inténtalo en un momento.",
+        ? "The model is overloaded right now. Wait a minute and try again."
+        : "We couldn't generate the post right now. Try again in a moment.",
       estCostUsd,
       model,
       promptVersion,

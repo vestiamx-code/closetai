@@ -8,25 +8,25 @@ import { huella } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Registrar una vista o un clic del experimento de la portada.
+ * Record a view or a click in the homepage experiment.
  *
- * Tres defensas, cada una por una razón concreta:
- *  1. La variante se recalcula aquí a partir del id. El navegador manda cuál vio,
- *     pero si no coincide con la que le toca, el evento se descarta: si no, se
- *     podría inflar una variante mandando eventos a mano.
- *  2. Una vista y un clic por visitante, impuesto por la base (unique). Recargar
- *     diez veces no cuenta diez veces.
- *  3. El tráfico de las pruebas automáticas lleva la cabecera `x-cai-prueba` y no
- *     se cuenta (ver playwright.config.ts). Sin esto, cada corrida de la suite
- *     contra producción ensuciaría el experimento con visitas que no son de nadie.
- *  4. Tampoco cuentan los navegadores automáticos ni los bots (ver
- *     `traficoAutomatico`): Vercel abre la portada después de cada despliegue, y
- *     cada vez sumaba visitantes. Se registra en el log qué tipo se descartó —solo
- *     la categoría, nunca el user-agent completo— para poder confirmarlo.
+ * Four defenses, each for a concrete reason:
+ *  1. The variant is recomputed here from the id. The browser says which one it
+ *     saw, but if it doesn't match the one it should have, the event is dropped:
+ *     otherwise a variant could be inflated by sending events by hand.
+ *  2. One view and one click per visitor, enforced by the database (unique).
+ *     Reloading ten times doesn't count ten times.
+ *  3. Automated test traffic carries the `x-cai-prueba` header and is not counted
+ *     (see playwright.config.ts). Without this, every run of the suite against
+ *     production would pollute the experiment with visits that are nobody's.
+ *  4. Automated browsers and bots are not counted either (see
+ *     `traficoAutomatico`): Vercel opens the homepage after every deployment,
+ *     and each time it added visitors. Only the discarded category is logged
+ *     —never the full user agent— so the cause can be confirmed.
  */
 
 const EVENTO = z.object({
-  experimento: z.literal("titular"),
+  experimento: z.literal("headline"),
   variante: z.enum(["a", "b"]),
   visitante: z.string().uuid(),
   evento: z.enum(["vista", "clic"]),
@@ -40,7 +40,7 @@ export async function registrarEvento(datos: z.infer<typeof EVENTO>): Promise<vo
   if (h.get("x-cai-prueba") === "1") return;
   const automatico = traficoAutomatico(h.get("user-agent"));
   if (automatico) {
-    console.info(`[ab] visita descartada: ${automatico}`);
+    console.info(`[ab] discarded visit: ${automatico}`);
     return;
   }
 
@@ -54,5 +54,5 @@ export async function registrarEvento(datos: z.infer<typeof EVENTO>): Promise<vo
       { experimento, variante, evento, visitante_hash: huella(visitante) },
       { onConflict: "experimento,visitante_hash,evento", ignoreDuplicates: true },
     );
-  if (error) console.error("[ab] no se pudo registrar el evento", error);
+  if (error) console.error("[ab] could not record the event", error);
 }

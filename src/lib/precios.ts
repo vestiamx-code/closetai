@@ -1,35 +1,38 @@
 /**
- * La aritmética del simulador de precios (Semana 3).
+ * The pricing simulator's arithmetic (Week 3).
  *
- * Esto es una función pura: entran supuestos, salen números. No sabe de React,
- * de red ni de base de datos, y por eso se puede probar en milisegundos y correr
- * igual en el navegador —para que el resultado se vea al instante— y en el
- * servidor —que es el que decide qué se guarda—.
+ * This is a pure function: assumptions in, numbers out. It knows nothing about
+ * React, the network or the database, so it can be tested in milliseconds and run
+ * the same way in the browser —so the result shows instantly— and on the server
+ * —which is what decides what gets saved.
  *
- * Qué modela: **un mes típico**, repetido doce veces. No acumula clientes ni
- * modela abandono. Es deliberado: ClosetAI no tiene un solo cliente de pago del
- * cual aprender una tasa de retención, y un modelo con retención inventada da
- * números más grandes y menos ciertos.
+ * What it models: **one typical month**, repeated twelve times. It does not
+ * accumulate customers or model churn. That is deliberate: ClosetAI does not have
+ * a single paying customer to learn a retention rate from, and a model with an
+ * invented retention rate gives bigger, less certain numbers.
  *
- * De dónde salen las constantes: Documento Maestro §2.3 y la tabla
- * `pricing_assumptions`, que es la que se muestra en la página.
+ * Where the constants come from: Master Document §2.3 and the
+ * `pricing_assumptions` table, which is what the page shows.
+ *
+ * Internal identifiers (segment and scenario ids, field names) stay as they were:
+ * they are stored inside saved scenarios. Only what is shown on screen changed.
  */
 
 export type Segmento = "nucleo" | "mayores";
 export type Escenario = "conservador" | "base" | "optimista";
 
 export const SEGMENTOS: { id: Segmento; nombre: string; detalle: string }[] = [
-  { id: "nucleo", nombre: "Núcleo 18–35", detalle: "Urbanos en México, compran ropa en línea, viven en el celular." },
-  { id: "mayores", nombre: "36 y más", detalle: "El perfil de la conversación real de la Semana 2, fuera del núcleo." },
+  { id: "nucleo", nombre: "Core 18–35", detalle: "Urban, in Mexico, buy clothes online, live on their phones." },
+  { id: "mayores", nombre: "36 and over", detalle: "The profile of the real Week 2 conversation, outside the core." },
 ];
 
 export const ESCENARIOS: { id: Escenario; nombre: string; factor: number; nota: string }[] = [
-  { id: "conservador", nombre: "Conservador", factor: 0.5, nota: "La mitad de la conversión supuesta." },
-  { id: "base", nombre: "Base", factor: 1, nota: "Los supuestos tal como están." },
-  { id: "optimista", nombre: "Optimista", factor: 2, nota: "El doble de la conversión supuesta." },
+  { id: "conservador", nombre: "Conservative", factor: 0.5, nota: "Half the assumed conversion." },
+  { id: "base", nombre: "Base", factor: 1, nota: "The assumptions as they are." },
+  { id: "optimista", nombre: "Optimistic", factor: 2, nota: "Double the assumed conversion." },
 ];
 
-/** Precios y costos. Cada uno tiene su fila en `pricing_assumptions`. */
+/** Prices and costs. Each one has its row in `pricing_assumptions`. */
 export const PRECIOS = {
   completoMxn: 100,
   recargaMxn: 49,
@@ -44,13 +47,13 @@ export const PRECIOS = {
 } as const;
 
 export type Supuestos = {
-  /** Registros nuevos al mes, por segmento. */
+  /** New sign-ups per month, by segment. */
   registros: Record<Segmento, number>;
-  /** Proporción (0–1) de los registros que compra el plan Completo, por segmento. */
+  /** Share (0–1) of sign-ups that buy the Complete plan, by segment. */
   compranCompleto: Record<Segmento, number>;
-  /** Proporción (0–1) de quienes pagaron que compra además una recarga ese mes. */
+  /** Share (0–1) of paying customers who also buy a top-up that month. */
   compranRecarga: Record<Segmento, number>;
-  /** Créditos de try-on que usa al mes una persona de pago. */
+  /** Try-on credits a paying customer uses per month. */
   creditosAlMes: number;
   escenario: Escenario;
 };
@@ -62,13 +65,13 @@ export type ResultadoSegmento = {
   recargas: number;
   ingresoBruto: number;
   comisiones: number;
-  /** Lo que de verdad llega a la cuenta: bruto menos comisiones. */
+  /** What actually reaches the bank account: gross minus fees. */
   ingresoCobrado: number;
   costoCreditos: number;
   costoGratis: number;
   costoVariable: number;
   ingresoNeto: number;
-  /** Sobre lo cobrado, no sobre lo bruto: es la cuenta del Documento Maestro §2.3. */
+  /** Over what is collected, not over gross: the Master Document §2.3 calculation. */
   margen: number;
 };
 
@@ -76,7 +79,7 @@ export type Resultado = {
   escenario: Escenario;
   porSegmento: ResultadoSegmento[];
   total: ResultadoSegmento;
-  /** Doce meses del mismo mes típico. */
+  /** Twelve months of the same typical month. */
   anual: {
     ingresoBruto: number;
     ingresoCobrado: number;
@@ -97,7 +100,7 @@ export function factorDelEscenario(escenario: Escenario): number {
   return ESCENARIOS.find((e) => e.id === escenario)?.factor ?? 1;
 }
 
-/** Comisión de Stripe México por un cobro, con IVA incluido. */
+/** Stripe Mexico fee for one charge, VAT included. */
 export function comisionStripe(montoMxn: number): number {
   if (montoMxn <= 0) return 0;
   return (montoMxn * PRECIOS.stripePorcentaje + PRECIOS.stripeFijoMxn) * (1 + PRECIOS.iva);
@@ -109,8 +112,8 @@ function calcularSegmento(segmento: Segmento, s: Supuestos): ResultadoSegmento {
   const factor = factorDelEscenario(s.escenario);
   const registros = Math.max(0, s.registros[segmento]);
 
-  // El escenario mueve la conversión, nunca el precio. Y una conversión no puede
-  // pasar de 100%: sin este tope, el escenario optimista "convertiría" a 120%.
+  // The scenario moves conversion, never the price. And conversion cannot exceed
+  // 100%: without this cap, the optimistic scenario would "convert" 120%.
   const tasaCompleto = acotar(s.compranCompleto[segmento] * factor, 0, 1);
   const tasaRecarga = acotar(s.compranRecarga[segmento] * factor, 0, 1);
 
@@ -123,7 +126,7 @@ function calcularSegmento(segmento: Segmento, s: Supuestos): ResultadoSegmento {
     compradores * comisionStripe(PRECIOS.completoMxn) + recargas * comisionStripe(PRECIOS.recargaMxn);
   const ingresoCobrado = ingresoBruto - comisiones;
 
-  // Los créditos cuestan cuando se usan, no cuando se venden.
+  // Credits cost money when they are used, not when they are sold.
   const costoCreditos = compradores * s.creditosAlMes * PRECIOS.costoRenderUsd * PRECIOS.tipoDeCambio;
   const costoGratis = gratis * PRECIOS.costoUsuarioGratisUsdMes * PRECIOS.tipoDeCambio;
   const costoVariable = costoCreditos + costoGratis;
@@ -142,7 +145,7 @@ function calcularSegmento(segmento: Segmento, s: Supuestos): ResultadoSegmento {
     costoGratis,
     costoVariable,
     ingresoNeto,
-    // Sin cobro no hay margen que calcular: 0 es honesto, NaN no se puede leer.
+    // With nothing collected there is no margin: 0 is honest, NaN is unreadable.
     margen: ingresoCobrado > 0 ? ingresoNeto / ingresoCobrado : 0,
   };
 }
@@ -157,7 +160,7 @@ export function calcular(s: Supuestos): Resultado {
   const ingresoNeto = suma("ingresoNeto");
 
   const total: ResultadoSegmento = {
-    segmento: "nucleo", // el total no es de un segmento; el campo se ignora al mostrarlo
+    segmento: "nucleo", // the total belongs to no segment; this field is ignored when shown
     registros: suma("registros"),
     compradores: suma("compradores"),
     recargas: suma("recargas"),
@@ -184,9 +187,9 @@ export function calcular(s: Supuestos): Resultado {
   };
 }
 
-/** Pesos mexicanos, sin centavos: los centavos dan una precisión que no tenemos. */
+/** Mexican pesos, no cents: cents suggest a precision we do not have. Shown as MX$. */
 export function pesos(n: number): string {
-  return new Intl.NumberFormat("es-MX", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "MXN",
     maximumFractionDigits: 0,
@@ -194,5 +197,5 @@ export function pesos(n: number): string {
 }
 
 export function porcentaje(n: number): string {
-  return new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 1 }).format(n);
+  return new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 1 }).format(n);
 }

@@ -113,23 +113,23 @@ export type RiesgoParaInforme = Pick<Riesgo, "riesgo" | "probabilidad" | "impact
 export function datosParaElPrompt(fuentes: FuenteParaInforme[], riesgos: RiesgoParaInforme[]): string {
   const lineasFuentes = fuentes.map((f) => {
     const partes = [`[${f.id}] ${f.nombre} — ${f.tipo}${f.pais ? `, ${f.pais}` : ""}: ${f.dato_clave}.`];
-    if (f.precio) partes.push(`Precio: ${f.precio}.`);
-    if (f.leccion) partes.push(`Lección: ${f.leccion}.`);
+    if (f.precio) partes.push(`Price: ${f.precio}.`);
+    if (f.leccion) partes.push(`Lesson: ${f.leccion}.`);
     return partes.join(" ");
   });
 
   const lineasRiesgos = riesgos.map(
     (r) =>
-      `- ${r.riesgo} (probabilidad ${r.probabilidad}/3, impacto ${r.impacto}/3; evidencia: ${
-        r.evidencia.length > 0 ? r.evidencia.join(", ") : "ninguna"
+      `- ${r.riesgo} (probability ${r.probabilidad}/3, impact ${r.impacto}/3; evidence: ${
+        r.evidencia.length > 0 ? r.evidencia.join(", ") : "none"
       })`,
   );
 
   return [
-    "DATOS VERIFICADOS (cita solo estos ids):",
+    "VERIFIED FACTS (cite only these ids):",
     ...lineasFuentes,
     "",
-    "RIESGOS YA IDENTIFICADOS (contexto; no se citan):",
+    "RISKS ALREADY IDENTIFIED (context; not cited):",
     ...lineasRiesgos,
   ].join("\n");
 }

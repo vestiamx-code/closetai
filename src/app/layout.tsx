@@ -16,16 +16,16 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://closetai.lat"),
   title: {
-    default: "ClosetAI — Tu estilista, en tu bolsillo",
+    default: "ClosetAI — Your stylist, in your pocket",
     template: "%s · ClosetAI",
   },
   description:
-    "Fotografía tu ropa, arma tu clóset digital y deja que la IA te diga qué ponerte — y te lo muestre puesto.",
+    "Photograph your clothes, build your digital closet and let AI tell you what to wear — and show it on you.",
   openGraph: {
-    title: "ClosetAI — Tu estilista, en tu bolsillo",
+    title: "ClosetAI — Your stylist, in your pocket",
     description:
-      "Fotografía tu ropa, arma tu clóset digital y deja que la IA te diga qué ponerte — y te lo muestre puesto.",
-    locale: "es_MX",
+      "Photograph your clothes, build your digital closet and let AI tell you what to wear — and show it on you.",
+    locale: "en_US",
     type: "website",
   },
 };
@@ -40,7 +40,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="es-MX"
+      lang="en"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>

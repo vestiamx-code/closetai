@@ -1,28 +1,37 @@
 /**
- * La lógica del experimento A/B de la portada (Semana 4).
+ * The logic of the homepage A/B experiment (Week 4).
  *
- * Dos funciones puras: a quién le toca qué variante, y si los datos alcanzan
- * para decir que una ganó. No saben de React ni de base de datos, así que se
- * prueban en milisegundos y la página y el servidor usan exactamente la misma.
+ * Two pure functions: which variant each visitor gets, and whether the data is
+ * enough to say one of them won. They know nothing about React or the database,
+ * so they are tested in milliseconds and the page and the server use exactly the
+ * same code.
  */
 
 export type Variante = "a" | "b";
 
-/** Mínimo de visitantes por variante antes de siquiera calcular un ganador. */
+/**
+ * The live experiment's id. It changed on Oct 26, 2026, when the site moved to
+ * English: the old experiment ("titular") measured the Spanish headlines, and its
+ * visits must not be mixed with visits to the English ones. A new id also
+ * re-randomizes who sees what.
+ */
+export const EXPERIMENTO = "headline";
+
+/** Minimum visitors per variant before even computing a winner. */
 export const MUESTRA_MINIMA = 100;
 
-/** Nivel de significancia: una diferencia cuenta si p < 0.05. */
+/** Significance level: a difference counts if p < 0.05. */
 export const ALFA = 0.05;
 
 /**
- * FNV-1a de 32 bits, con el mezclador final de MurmurHash3.
+ * 32-bit FNV-1a, with MurmurHash3's final mixer.
  *
- * El mezclador no es adorno. Sin él, `fnv1a % 2` solo depende del último bit,
- * y en FNV-1a ese bit es la paridad de las letras del texto: multiplicar por un
- * primo impar no lo cambia. Así, dos experimentos cuyo nombre tiene distinta
- * paridad quedaban perfectamente opuestos —quien veía el titular A veía siempre
- * el botón B—. Lo encontró la prueba de independencia: 0 coincidencias en
- * 10,000. Con el mezclador, cada bit de salida depende de todos los de entrada.
+ * The mixer is not decoration. Without it, `fnv1a % 2` depends only on the last
+ * bit, and in FNV-1a that bit is the parity of the text's letters: multiplying by
+ * an odd prime does not change it. So two experiments whose names had different
+ * parity were perfect opposites —whoever saw headline A always saw button B. The
+ * independence test found it: 0 agreements in 10,000. With the mixer, every
+ * output bit depends on every input bit.
  */
 function hash(texto: string): number {
   let h = 0x811c9dc5;
@@ -39,19 +48,19 @@ function hash(texto: string): number {
 }
 
 /**
- * Qué variante ve este visitante en este experimento.
+ * Which variant this visitor sees in this experiment.
  *
- * El experimento entra en el hash para que dos experimentos simultáneos sean
- * independientes: sin él, quien ve el titular A vería siempre el botón A, y no
- * se podría separar el efecto de uno del otro.
+ * The experiment goes into the hash so two simultaneous experiments are
+ * independent: without it, whoever saw headline A would always see button A, and
+ * the effect of one could not be separated from the other.
  */
 export function varianteDe(visitante: string, experimento: string): Variante {
-  // El bit más alto, no el más bajo: después del mezclador cualquiera serviría,
-  // pero así la elección no depende de que el mezclador esté.
+  // The highest bit, not the lowest: after the mixer either would do, but this
+  // way the choice does not depend on the mixer being there.
   return hash(`${experimento}:${visitante}`) >>> 31 === 0 ? "a" : "b";
 }
 
-/** Función de distribución normal estándar (Abramowitz y Stegun 7.1.26). */
+/** Standard normal cumulative distribution (Abramowitz and Stegun 7.1.26). */
 function normalAcumulada(z: number): number {
   const t = 1 / (1 + 0.3275911 * Math.abs(z) / Math.SQRT2);
   const y =
@@ -67,10 +76,10 @@ export type Conteo = { vistas: number; clics: number };
 export type Resultado = {
   tasaA: number;
   tasaB: number;
-  /** Puntos porcentuales: b menos a. */
+  /** Percentage points: b minus a. */
   diferencia: number;
   z: number | null;
-  /** Valor p de dos colas; null si no hay muestra para calcularlo. */
+  /** Two-tailed p-value; null when there is not enough sample to compute it. */
   p: number | null;
   ganador: Variante | null;
   motivo: string;
@@ -79,11 +88,11 @@ export type Resultado = {
 const tasa = ({ vistas, clics }: Conteo) => (vistas > 0 ? clics / vistas : 0);
 
 /**
- * ¿Ganó alguna variante?
+ * Did either variant win?
  *
- * Prueba z de dos proporciones. La regla que importa es la de no mentir: con
- * poca muestra, una diferencia de 20 puntos puede ser pura suerte, así que el
- * resultado es «sin ganador» aunque una cifra se vea más alta que la otra.
+ * Two-proportion z-test. The rule that matters is not lying: with a small sample,
+ * a 20-point difference can be pure luck, so the result is "no winner" even if one
+ * number looks higher than the other.
  */
 export function resultado(a: Conteo, b: Conteo): Resultado {
   const tasaA = tasa(a);
@@ -98,16 +107,16 @@ export function resultado(a: Conteo, b: Conteo): Resultado {
       z: null,
       p: null,
       ganador: null,
-      motivo: `Sin ganador todavía: faltan ${faltan} visitantes en la variante con menos para llegar a ${MUESTRA_MINIMA}.`,
+      motivo: `No winner yet: the variant with fewer visitors needs ${faltan} more to reach ${MUESTRA_MINIMA}.`,
     };
   }
 
   const combinada = (a.clics + b.clics) / (a.vistas + b.vistas);
   const error = Math.sqrt(combinada * (1 - combinada) * (1 / a.vistas + 1 / b.vistas));
 
-  // Las dos variantes en 0% o en 100%: no hay variación que medir.
+  // Both variants at 0% or at 100%: there is no variation to measure.
   if (error === 0) {
-    return { ...base, z: 0, p: 1, ganador: null, motivo: "Sin ganador: las dos variantes dieron exactamente lo mismo." };
+    return { ...base, z: 0, p: 1, ganador: null, motivo: "No winner: both variants gave exactly the same result." };
   }
 
   const z = diferencia / error;
@@ -119,7 +128,7 @@ export function resultado(a: Conteo, b: Conteo): Resultado {
       z,
       p,
       ganador: null,
-      motivo: `Sin ganador: con p = ${p.toFixed(2)}, la diferencia puede ser suerte.`,
+      motivo: `No winner: with p = ${p.toFixed(2)}, the difference could be luck.`,
     };
   }
 
@@ -129,30 +138,29 @@ export function resultado(a: Conteo, b: Conteo): Resultado {
     z,
     p,
     ganador,
-    motivo: `Gana la variante ${ganador.toUpperCase()}, con p = ${p.toFixed(3)}.`,
+    motivo: `Variant ${ganador.toUpperCase()} wins, with p = ${p.toFixed(3)}.`,
   };
 }
 
 /**
- * ¿Esta visita la hizo una máquina?
+ * Was this visit made by a machine?
  *
- * El experimento cuenta personas. Después de cada despliegue, Vercel abre la
- * portada con un navegador automático para tomar su captura, y ese navegador
- * ejecuta JavaScript: sin este filtro, cada despliegue sumaba visitantes que no
- * son de nadie. El 21-oct-2026 aparecieron 10 vistas en pares, una de ellas 26
- * segundos después de un despliegue. Mismo riesgo con buscadores y con las
- * vistas previas de enlaces de WhatsApp o Facebook.
+ * The experiment counts people. After every deployment, Vercel opens the homepage
+ * with an automated browser to take a screenshot, and that browser runs
+ * JavaScript: without this filter, every deployment added visitors who are nobody.
+ * On Oct 21, 2026 ten views appeared in pairs, one of them 26 seconds after a
+ * deployment. Same risk with search crawlers and WhatsApp or Facebook link previews.
  *
- * Devuelve la categoría para poder registrarla, o null si parece una persona.
+ * Returns the category so it can be logged, or null if it looks like a person.
  */
 export function traficoAutomatico(userAgent: string | null): string | null {
-  if (!userAgent || userAgent.trim() === "") return "sin-user-agent";
+  if (!userAgent || userAgent.trim() === "") return "no-user-agent";
   const ua = userAgent.toLowerCase();
   const reglas: [string, RegExp][] = [
-    ["navegador-automatico", /headlesschrome|headless|playwright|puppeteer|phantomjs|selenium|lighthouse/],
+    ["automated-browser", /headlesschrome|headless|playwright|puppeteer|phantomjs|selenium|lighthouse/],
     ["vercel", /vercel/],
-    ["vista-previa", /whatsapp|facebookexternalhit|slackbot|twitterbot|discordbot|telegrambot|linkedinbot/],
-    ["buscador", /googlebot|bingbot|duckduckbot|yandex|baiduspider|applebot|slurp/],
+    ["link-preview", /whatsapp|facebookexternalhit|slackbot|twitterbot|discordbot|telegrambot|linkedinbot/],
+    ["search-engine", /googlebot|bingbot|duckduckbot|yandex|baiduspider|applebot|slurp/],
     ["bot", /bot\b|crawler|spider|preview|screenshot/],
   ];
   for (const [categoria, patron] of reglas) if (patron.test(ua)) return categoria;
