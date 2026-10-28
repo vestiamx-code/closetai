@@ -300,7 +300,7 @@ Supabase Postgres
   </table>
   <figure>
     <img src="11-commits.jpg" alt="">
-    <figcaption>The public repository, with English commit messages. One CI run failed: <code>3acd4e4</code>, the first translation commit, which changed screens before their tests were updated; the commits after it passed. One run, <code>a6a857c</code> (a hash from before the rewrite), was <i>cancelled</i>, not failed, because a newer push started 15 seconds later. Every other run passed.</figcaption>
+    <figcaption>The public repository, with English commit messages. One CI run failed: <code>3acd4e4</code>, the first translation commit. The linter rejected 8 apostrophes in the new English text (as in “don't”), which JSX requires to be escaped; they were replaced with typographic apostrophes in the next commit, and every run after it passed. One run, <code>a6a857c</code> (a hash from before the rewrite), was <i>cancelled</i>, not failed, because a newer push started 15 seconds later. Every other run passed.</figcaption>
   </figure>
 </section>
 
@@ -452,7 +452,14 @@ Supabase Postgres
     <b>62 of 62</b>, 4 skipped by design, including a new test that every old Spanish address answers 308 to
     its English one. The tests that call Gemini hit the free tier's daily limit of 20 requests mid-run;
     they passed before the translation, and the generator worked against the English site while recording
-    the video. <span class="pendiente">[PENDING: AI tests re-run after the quota resets]</span></p>
+    the video.</p>
+  <p><b>Re-run on October 28, after the quota reset</b> — the five specs that call the AI (closet, stylist,
+    core, research, marketing): <b>43 passed</b>, 3 skipped by design, 2 failed. Both failures are the same
+    test, outfit generation, on desktop and phone: the same run used up the day's quota on the main model.
+    To rule out the translation, the stylist was called directly on the backup model: both live tests
+    passed, including the one that checks a banned color is never suggested. The difference with core,
+    research and the generator, which switch to the backup model on their own, is that the stylist does
+    not yet.</p>
 </section>
 
 <!-- ============ 13. ITERATION ============ -->

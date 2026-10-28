@@ -481,7 +481,16 @@ https://closetai.lat` printed on every run):
 
 **Not yet re-verified in English:** the tests that call Gemini (outfit generation, profile update,
 post generator, core and research generation). They passed before the translation; they need a run
-once the daily quota resets. That run will be recorded here.
+once the daily quota resets.
+
+**[2026-10-28] Re-run after the quota reset** (closet, stylist, core, research, marketing; `[e2e] contra
+https://closetai.lat`): **43 passed**, 3 skipped by design, 6 not run, **2 failed** — outfit generation
+on desktop and on phone. The log showed `[gemini] quota exhausted` on `gemini-3.5-flash`: the same run
+had used the day's quota on core, research and the generator. Ruling out the translation:
+`src/lib/ai/stylist.live.test.ts` run on `gemini-3.5-flash-lite` (`GEMINI_MODEL_REASONING`) passed
+**2 of 2**, including "respects a banned color". Finding: core, research and the post generator fall back
+to Flash-Lite on their own (`conModeloDeRespaldo`); the stylist only retries the same model, so when the
+main model is out of quota the user sees "The stylist couldn't put anything together".
 
 **A bug found by these runs:** the profile-update failures hid a real defect introduced by the
 translation (see ITERATION_LOG, Oct 26). Checked with a live call to Gemini Flash-Lite: before the
