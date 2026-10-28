@@ -47,7 +47,8 @@ async function costosDeChat() {
 
 /** Answers the three intake questions with the suggested chips. */
 async function contestarIntake(page: Page) {
-  const chat = page.getByTestId("chat");
+  // The question is in a bubble and also in the text box's hidden label: read the bubble.
+  const chat = page.getByTestId("chat").locator('li[data-rol="asistente"]');
   await chat.getByText("What’s the occasion?").waitFor();
   await page.getByTestId("sugerencias").getByRole("button", { name: "Work" }).click();
   await expect(chat.getByText("Where are you, and what’s the weather like?")).toBeVisible({ timeout: 20_000 });
@@ -57,10 +58,11 @@ async function contestarIntake(page: Page) {
 
 /** Waits for the outfit, or skips if the provider had no quota (and says so). */
 async function esperarSugerencia(page: Page) {
-  const resultado = page.locator('[data-testid="outfit"], [role="alert"]').first();
+  // Not [role="alert"]: Next.js puts an invisible route announcer with that role on every page.
+  const resultado = page.locator('[data-testid="outfit"], [data-testid="error-chat"]').first();
   await resultado.waitFor({ timeout: 90_000 });
   if (!(await page.getByTestId("outfit").isVisible())) {
-    const aviso = await page.getByRole("alert").textContent();
+    const aviso = await page.getByTestId("error-chat").textContent();
     test.skip(/overloaded/i.test(aviso ?? ""), `The provider did not answer: ${aviso}`);
     throw new Error(`No outfit: ${aviso}`);
   }

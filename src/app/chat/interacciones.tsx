@@ -189,7 +189,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
         ) : null}
 
         {error ? (
-          <p role="alert" className="mt-4 rounded-lg border border-red-500/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">
+          <p role="alert" data-testid="error-chat" className="mt-4 rounded-lg border border-red-500/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">
             {error}
           </p>
         ) : null}
