@@ -145,7 +145,7 @@ test.describe("Chat", () => {
     await esperarSugerencia(page);
 
     const calificar = page.getByTestId("outfit").first().getByTestId("calificar");
-    await calificar.getByRole("button", { name: "Helpful" }).click();
+    await calificar.getByRole("button", { name: "Helpful", exact: true }).click();
     await expect(calificar.getByText("Thanks for rating")).toBeVisible();
     // Once rated, both buttons are done: no second vote, no changing sides.
     await expect(calificar.getByRole("button", { name: "Not helpful" })).toBeDisabled();
