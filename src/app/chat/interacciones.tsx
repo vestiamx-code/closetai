@@ -105,13 +105,20 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
       <div
         data-testid="chat"
         aria-live="polite"
-        className="rounded-2xl border border-border bg-surface p-4 sm:p-6"
+        className="rounded-3xl border border-border bg-surface p-4 shadow-[0_18px_40px_-28px_rgba(36,26,22,0.35)] sm:p-6"
       >
-        <ul className="space-y-3">
+        <Progreso paso={siguiente ?? PREGUNTAS.length} />
+
+        <ul className="mt-5 space-y-4">
           {mensajes.map((m, i) => (
-            <li key={`${m.id}-${i}`} data-rol={m.rol} className={m.rol === "usuaria" ? "flex justify-end" : ""}>
+            <li
+              key={`${m.id}-${i}`}
+              data-rol={m.rol}
+              className={`llega ${m.rol === "usuaria" ? "flex justify-end" : "flex items-start gap-2.5"}`}
+            >
+              {m.rol === "asistente" ? <Avatar /> : null}
               {m.rol === "usuaria" ? (
-                <p className="max-w-[80%] rounded-2xl bg-text px-4 py-2.5 text-bg">{m.contenido}</p>
+                <p className="max-w-[80%] rounded-2xl rounded-br-md bg-tinta px-4 py-2.5 text-hueso">{m.contenido}</p>
               ) : m.guardrail ? (
                 <div
                   data-testid="guardrail"
@@ -127,20 +134,29 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                   </span>
                 </div>
               ) : m.pregunta !== undefined ? (
-                <p className="max-w-[85%] rounded-2xl bg-surface-2 px-4 py-2.5">
-                  <span className="block text-[11px] tracking-[0.12em] text-text-muted uppercase">
+                <p className="max-w-[85%] rounded-2xl rounded-tl-md bg-arena px-4 py-3">
+                  <span className="block text-[11px] font-medium tracking-[0.14em] text-barro uppercase">
                     Question {m.pregunta + 1} of {PREGUNTAS.length}
                   </span>
-                  {m.contenido}
+                  <span className="mt-0.5 block font-display text-xl leading-snug font-semibold text-balance">
+                    {m.contenido}
+                  </span>
                 </p>
               ) : (
-                <div data-testid={m.outfit ? "outfit" : "respuesta"} className="max-w-[92%] rounded-2xl border border-text/80 bg-bg px-4 py-3">
+                <div
+                  data-testid={m.outfit ? "outfit" : "respuesta"}
+                  className="max-w-[92%] rounded-2xl rounded-tl-md border border-border bg-hueso px-4 py-4 sm:px-5"
+                >
                   {m.outfit ? (
                     <>
-                      <p className="font-display text-lg font-semibold">{m.outfit.titulo}</p>
-                      <ul className="mt-2 list-disc space-y-0.5 pl-5">
+                      <p className="text-[11px] font-medium tracking-[0.14em] text-barro uppercase">Your outfit</p>
+                      <p className="mt-0.5 font-display text-2xl leading-tight font-semibold">{m.outfit.titulo}</p>
+                      <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
                         {m.outfit.prendas.map((p) => (
-                          <li key={p}>{p}</li>
+                          <li key={p} className="flex items-center gap-2 rounded-lg bg-arena/70 px-3 py-2 text-sm">
+                            <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-barro" />
+                            {p}
+                          </li>
                         ))}
                       </ul>
                     </>
@@ -175,8 +191,12 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
             </li>
           ))}
           {pendiente ? (
-            <li data-testid="pensando" className="text-sm text-text-muted">
-              {siguiente === PREGUNTAS.length - 1 || siguiente === null ? "Putting an outfit together…" : "…"}
+            <li data-testid="pensando" className="llega flex items-center gap-2.5 text-sm text-text-muted">
+              <Avatar />
+              <span className="flex items-center gap-2 rounded-2xl rounded-tl-md bg-arena px-4 py-3">
+                <Puntos />
+                {siguiente === PREGUNTAS.length - 1 || siguiente === null ? "Putting an outfit together…" : null}
+              </span>
             </li>
           ) : null}
         </ul>
@@ -195,16 +215,22 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
         ) : null}
 
         {pregunta ? (
-          <div data-testid="sugerencias" className="mt-4 flex flex-wrap gap-2">
+          <div data-testid="sugerencias" className="llega mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
             {pregunta.sugerencias.map((s) => (
               <button
-                key={s}
+                key={s.texto}
                 type="button"
                 disabled={pendiente || bloqueado}
-                onClick={() => mandar(s)}
-                className="rounded-full border border-border px-3.5 py-1.5 text-sm transition hover:border-text disabled:opacity-50"
+                onClick={() => mandar(s.texto)}
+                className="group flex items-center gap-3 rounded-2xl border border-border bg-bg px-3 py-3 text-left text-sm font-medium transition hover:-translate-y-0.5 hover:border-barro hover:shadow-[0_8px_20px_-14px_rgba(141,69,38,0.6)] disabled:pointer-events-none disabled:opacity-50"
               >
-                {s}
+                <span
+                  aria-hidden
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-arena text-lg transition group-hover:scale-110"
+                >
+                  {s.icono}
+                </span>
+                {s.texto}
               </button>
             ))}
           </div>
@@ -321,3 +347,55 @@ function ResumenTester({ sesion, tester }: { sesion: string; tester: 1 | 2 | 3 }
     </form>
   );
 }
+
+/** The three steps at the top: done ones are ticked, the current one is filled. */
+function Progreso({ paso }: { paso: number }) {
+  return (
+    <ol aria-label="Progress" className="flex items-center gap-1.5 sm:gap-2">
+      {PREGUNTAS.map((p, i) => {
+        const hecho = i < paso;
+        const actual = i === paso;
+        return (
+          <li key={p.id} className="flex flex-1 items-center gap-1.5 sm:gap-2">
+            <span
+              aria-current={actual ? "step" : undefined}
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition ${
+                hecho ? "bg-barro text-hueso" : actual ? "bg-tinta text-hueso" : "border border-border text-text-muted"
+              }`}
+            >
+              {hecho ? "✓" : i + 1}
+            </span>
+            <span className={`text-xs sm:text-sm ${actual ? "font-medium text-text" : "text-text-muted"}`}>{p.paso}</span>
+            {i < PREGUNTAS.length - 1 ? (
+              <span aria-hidden className={`h-px flex-1 ${hecho ? "bg-barro" : "bg-border"}`} />
+            ) : null}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/** The stylist's mark next to each of its messages. */
+function Avatar() {
+  return (
+    <span
+      aria-hidden
+      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-barro font-display text-sm font-semibold text-hueso"
+    >
+      C
+    </span>
+  );
+}
+
+/** Three dots while the stylist thinks. */
+function Puntos() {
+  return (
+    <span aria-label="Thinking" className="flex gap-1">
+      {[0, 150, 300].map((d) => (
+        <span key={d} className="h-1.5 w-1.5 animate-bounce rounded-full bg-barro/70" style={{ animationDelay: `${d}ms` }} />
+      ))}
+    </span>
+  );
+}
+

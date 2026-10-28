@@ -12,26 +12,55 @@ import { z } from "zod";
 
 export type PreguntaId = "ocasion" | "clima" | "estilo";
 
-export type Pregunta = { id: PreguntaId; texto: string; sugerencias: string[]; ejemplo: string };
+export type Sugerencia = { texto: string; icono: string };
+
+export type Pregunta = {
+  id: PreguntaId;
+  /** The step's name in the progress bar. */
+  paso: string;
+  texto: string;
+  sugerencias: Sugerencia[];
+  ejemplo: string;
+};
 
 /** The three questions, in the order they are asked. */
 export const PREGUNTAS: Pregunta[] = [
   {
     id: "ocasion",
+    paso: "Occasion",
     texto: "What’s the occasion?",
-    sugerencias: ["Work", "A date", "Weekend plans", "A wedding", "A night out"],
+    sugerencias: [
+      { texto: "Work", icono: "💼" },
+      { texto: "A date", icono: "🍷" },
+      { texto: "Weekend plans", icono: "☀️" },
+      { texto: "A wedding", icono: "💍" },
+      { texto: "A night out", icono: "✨" },
+    ],
     ejemplo: "e.g. a job interview",
   },
   {
     id: "clima",
+    paso: "Weather",
     texto: "Where are you, and what’s the weather like?",
-    sugerencias: ["Mexico City, cool", "Hot and sunny", "Rainy", "Cold"],
+    sugerencias: [
+      { texto: "Mexico City, cool", icono: "🌤️" },
+      { texto: "Hot and sunny", icono: "🔆" },
+      { texto: "Rainy", icono: "🌧️" },
+      { texto: "Cold", icono: "❄️" },
+    ],
     ejemplo: "e.g. Monterrey, very hot",
   },
   {
     id: "estilo",
+    paso: "Style",
     texto: "How do you like to dress?",
-    sugerencias: ["Comfortable", "Minimal", "Elegant", "Bold", "Sporty"],
+    sugerencias: [
+      { texto: "Comfortable", icono: "🧶" },
+      { texto: "Minimal", icono: "🤍" },
+      { texto: "Elegant", icono: "🖤" },
+      { texto: "Bold", icono: "🔥" },
+      { texto: "Sporty", icono: "👟" },
+    ],
     ejemplo: "e.g. comfortable but put together",
   },
 ];

@@ -90,9 +90,19 @@ body {
   animation: desliza 38s linear infinite;
 }
 
+/* Each chat message arrives instead of just appearing: shorter and closer than
+   .entra, because it happens many times in a row. */
+@keyframes llega {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.llega {
+  animation: llega 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
 /* Quien pidió menos movimiento no lo recibe. No es un extra: es accesibilidad. */
 @media (prefers-reduced-motion: reduce) {
-  .entra, .linea-crece, .marquesina > div {
+  .entra, .linea-crece, .marquesina > div, .llega {
     animation: none;
   }
 }
