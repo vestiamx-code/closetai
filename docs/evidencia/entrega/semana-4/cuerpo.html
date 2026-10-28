@@ -91,6 +91,28 @@
     and find anyone with: no written voice, no persona, not one post. And its headline had been chosen
     by taste, never measured.</p>
 
+  <h3>User</h3>
+  <ul>
+    <li><b>The homepage visitor</b> — arrives from a post or a link and decides in seconds whether to stay.
+      She is the target persona: a woman aged 24 to 30 in Mexico City.</li>
+    <li><b>Me, the founder</b> — I need content ready to publish and an honest way to know which headline
+      works better.</li>
+    <li><b>Whoever evaluates ClosetAI</b> — needs to see that the marketing only says what the product does.</li>
+  </ul>
+
+  <h3>Success — what must work by the end of the week</h3>
+  <ul>
+    <li>The homepage explains on one screen what ClosetAI is, who it is for and what it costs, with proof
+      (the sourced research) and a clear path to start.</li>
+    <li>The headline is a real experiment: each visitor sees one of two versions, always the same one, and
+      views and clicks are measured.</li>
+    <li><code>/marketing</code> loads without an account and shows the brand system, persona, landing copy,
+      10 posts, 3 video scripts, a 14-day calendar, the A/B results and the saved assets.</li>
+    <li>Every piece can be copied; posts, scripts and calendar can be exported.</li>
+    <li>The generator writes a new post with AI, validates it and saves it as “not reviewed”.</li>
+    <li>2 A/B tests and 3 software tests, run against production.</li>
+  </ul>
+
   <h3>Scope cut — what looked good and was not built</h3>
   <table>
     <thead><tr><th style="width:52mm">Left out</th><th>Why</th></tr></thead>
@@ -103,6 +125,68 @@
       <tr><td>Touching <code>proxy.ts</code> to assign the variant</td><td>That is where the session lives, and it broke once in production</td></tr>
     </tbody>
   </table>
+
+  <h3>DevOps</h3>
+  <table>
+    <thead><tr><th style="width:36mm">Piece</th><th>Plan</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub</td><td><code>vestiamx-code/closetai</code>, branch <code>main</code>; CI (lint, typecheck, unit tests, build) on every commit</td></tr>
+      <tr><td>Vercel</td><td>Automatic production deploy on every push; at least 2 this week</td></tr>
+      <tr><td>Supabase</td><td>Migration 010 (tables and the experiment) and 011 (the content, only <b>after</b> I approve it). Each applied only with my explicit permission and verified through REST, not the screen</td></tr>
+      <tr><td>Environment variables</td><td>None new. Keys stay in <code>.env.local</code> and Vercel, never in the repository</td></tr>
+      <tr><td>Rollback</td><td>The new homepage is a single commit; reverting it brings back the old one</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Test plan</h3>
+  <p><b>2 A/B tests</b> (Vitest, on <code>src/lib/ab.ts</code>):</p>
+  <ol>
+    <li><b>Stable and even assignment:</b> the same visitor always gets the same variant, and across 10,000
+      random visitors each variant lands between 48% and 52%.</li>
+    <li><b>No fake winner:</b> with fewer than 100 visitors per variant, or a difference not significant at
+      95%, the result is “no winner”; with a large difference and enough sample there is one, and it is the
+      right variant.</li>
+  </ol>
+  <p><b>3 software tests</b> (Playwright, against production):</p>
+  <ol start="3">
+    <li><code>/marketing</code> loads without a session with 10 posts, 3 scripts and 14 calendar days.</li>
+    <li>Exporting the calendar downloads a CSV with 14 rows and its header; copying a post puts its text on
+      the clipboard.</li>
+    <li>The homepage shows exactly one of the two headlines, the same one on reload, and a test visit is not
+      counted.</li>
+  </ol>
+  <p>Plus: the generator rejects a post with an unverified figure (unit test), and the homepage has its
+    seven sections in order (e2e). Every new test is seen failing on purpose before it is trusted. The
+    results are in §12.</p>
+
+  <h3>The exact prompt to the coding agent</h3>
+  <p>Written in Spanish before the code and translated here. The interface rule was replaced on October 26,
+    when the course required English (§18).</p>
+  <pre>Build Week 4 of ClosetAI (Next.js 16, App Router, Tailwind v4, Supabase).
+
+EXACT SCOPE, nothing more:
+1. src/lib/ab.ts — pure functions: varianteDe(visitor, experiment) with an
+   FNV-1a hash mod 2, and resultado(a, b) with a two-proportion z-test: no
+   winner if either variant has fewer than 100 visitors or p ≥ 0.05.
+2. Homepage (/): A/B headline, problem, how it works in 3 steps, proof with a
+   source, price, privacy and a call to start. The variant is chosen on the
+   server from the cai_visitante cookie; DO NOT touch src/proxy.ts.
+3. Server Action registrarEvento: one view and one click per visitor
+   (unique), hash of the id, ignores traffic marked as a test.
+4. /marketing: brand, persona (data vs hypothesis), landing copy, 10 posts,
+   3 scripts, 14-day calendar, A/B results, generator and saved assets.
+   Copy and export buttons (md and csv) in the browser.
+5. Generator: Gemini with fallback; zod contract; rejects figures not in the
+   list of verified facts; saves with origin 'generado_ia', aprobado = false.
+6. Migrations 010 (tables, experiments) and 011 (approved content).
+
+RULES:
+- Interface in Mexican Spanish.        ← replaced Oct 26: English
+- No fact outside docs/evidencia/INVESTIGACION-SEMANA-2.md, the Master
+  Document §2.3 or the pricing_assumptions table.
+- Don't use the interview quote in social content: the permission was for
+  the research page and the document, not for advertising.
+- Tests: 2 A/B and 3 software; see them fail before trusting them.</pre>
 </section>
 
 <!-- ============ 3. UX ============ -->
