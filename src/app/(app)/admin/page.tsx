@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { AbonarCreditos } from "./interacciones";
+import { AbonarCreditos, MarcarRevisada } from "./interacciones";
+import { NOMBRE_MOTIVO, type MotivoGuardrail } from "@/lib/chat";
 import { requireUser } from "@/lib/auth";
 import { estadoTryon, gastoDeHoy, topeDiarioUsd } from "@/lib/gasto";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -52,6 +53,7 @@ export default async function AdminPage() {
     estado,
     { data: ledger },
     { data: clics },
+    { data: porRevisar },
   ] = await Promise.all([
     contar("profiles"),
     contar("garments"),
@@ -64,6 +66,15 @@ export default async function AdminPage() {
     estadoTryon(),
     admin.from("credit_ledger").select("delta, reason"),
     admin.from("affiliate_clicks").select("retailer"),
+    // The /chat human checkpoint: flagged and not reviewed yet, with the messages
+    // the person wrote, so the reason can be judged in context.
+    admin
+      .from("chat_sessions")
+      .select("id, created_at, motivo_revision, es_prueba, tester, chat_messages(rol, contenido, created_at)")
+      .eq("needs_review", true)
+      .is("revisado_at", null)
+      .order("created_at", { ascending: false })
+      .limit(30),
   ]);
 
   const vendidos = (ledger ?? [])
@@ -119,6 +130,46 @@ export default async function AdminPage() {
         <Metrica titulo="Credits sold" valor={vendidos} />
         <Metrica titulo="Credits used" valor={quemados} />
         <Metrica titulo="Store clicks" valor={(clics ?? []).length} />
+      </section>
+
+      <section data-testid="por-revisar" className="mt-8 rounded-xl border border-border bg-surface p-5">
+        <h2 className="font-display text-lg font-semibold">
+          /chat conversations to review · {porRevisar?.length ?? 0}
+        </h2>
+        <p className="mt-1 text-sm text-text-muted text-pretty">
+          The human checkpoint: the assistant stopped these and told the person someone would look at them.
+        </p>
+        {porRevisar && porRevisar.length > 0 ? (
+          <ul className="mt-4 space-y-3">
+            {porRevisar.map((s) => {
+              const escritos = ((s.chat_messages ?? []) as Array<{ rol: string; contenido: string; created_at: string }>)
+                .filter((m) => m.rol === "usuaria")
+                .sort((a, b) => a.created_at.localeCompare(b.created_at));
+              return (
+                <li key={s.id} className="rounded-lg border border-border p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
+                      <span className="rounded-full border border-current px-2 py-0.5" style={{ color: "var(--barro)" }}>
+                        {NOMBRE_MOTIVO[s.motivo_revision as MotivoGuardrail] ?? s.motivo_revision}
+                      </span>
+                      {new Date(s.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}
+                      {s.tester ? <span>· tester {s.tester}</span> : null}
+                      {s.es_prueba ? <span>· automated test</span> : null}
+                    </span>
+                    <MarcarRevisada sessionId={s.id} />
+                  </div>
+                  <ol className="mt-2 space-y-1 text-sm">
+                    {escritos.map((m, i) => (
+                      <li key={i} className="text-pretty">“{m.contenido}”</li>
+                    ))}
+                  </ol>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="mt-4 text-sm text-text-muted">Nothing to review.</p>
+        )}
       </section>
 
       <section className="mt-8 rounded-xl border border-border bg-surface p-5">

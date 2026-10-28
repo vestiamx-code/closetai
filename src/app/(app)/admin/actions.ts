@@ -61,3 +61,24 @@ export async function abonarManual(formData: FormData): Promise<{ error?: string
   revalidatePath("/admin");
   return { ok: `Added ${datos.data.cantidad} credits to ${datos.data.correo}.` };
 }
+
+/**
+ * The human checkpoint of /chat (Week 5): Tamara marks a flagged conversation
+ * as reviewed. Admin only, checked again here for the same reason as above.
+ */
+export async function marcarRevisada(sessionId: string): Promise<{ error?: string }> {
+  const user = await requireUser();
+  if (!esAdmin(user.email)) return { error: "You don't have permission." };
+  const id = z.string().uuid().safeParse(sessionId);
+  if (!id.success) return { error: "Invalid conversation." };
+
+  const { error } = await createAdminClient()
+    .from("chat_sessions")
+    .update({ revisado_at: new Date().toISOString() })
+    .eq("id", id.data)
+    .eq("needs_review", true);
+  if (error) return { error: "Couldn't mark it as reviewed." };
+  revalidatePath("/admin");
+  return {};
+}
+

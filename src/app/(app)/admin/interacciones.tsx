@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 
-import { abonarManual } from "./actions";
+import { abonarManual, marcarRevisada } from "./actions";
 import { Aviso } from "@/components/ui/aviso";
 import { Campo } from "@/components/ui/campo";
 
@@ -42,3 +42,27 @@ export function AbonarCreditos() {
     </form>
   );
 }
+
+export function MarcarRevisada({ sessionId }: { sessionId: string }) {
+  const [pendiente, iniciar] = useTransition();
+  const [error, setError] = useState<string>();
+  return (
+    <span className="flex items-center gap-2">
+      {error ? <span className="text-xs text-red-600 dark:text-red-400">{error}</span> : null}
+      <button
+        type="button"
+        disabled={pendiente}
+        onClick={() =>
+          iniciar(async () => {
+            const r = await marcarRevisada(sessionId);
+            if (r.error) setError(r.error);
+          })
+        }
+        className="shrink-0 rounded-full border border-border px-3 py-1 text-xs transition hover:border-text disabled:opacity-60"
+      >
+        {pendiente ? "Saving…" : "Mark reviewed"}
+      </button>
+    </span>
+  );
+}
+
