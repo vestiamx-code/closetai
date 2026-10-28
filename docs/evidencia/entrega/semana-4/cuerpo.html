@@ -38,7 +38,7 @@
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, why the A/B variant is not assigned where the session lives, and the four filters on what counts as a visitor</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat</code> and <code>/marketing</code> live; end-to-end tests pass against the real site, confirmed by the URL each run prints</td><td>6–7, 12</td></tr>
       <tr><td>Coding/build evidence</td><td>1.0</td><td><b>26 commits</b> (min. 5) · <b>27 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
-      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 10 iterations documented</td><td>12–13</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 11 iterations documented</td><td>12–13</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Four brand decisions; one post rejected before approval; three corrections, one of them about my own earlier weeks; the whole product moved to English without mixing the experiment's data; decision note, 213 words</td><td>2, 13–15, 17–18</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:32 walkthrough recorded against production <span class="pendiente">[PENDING: my narration]</span></td><td>16</td></tr>
     </tbody>
@@ -457,9 +457,10 @@ Supabase Postgres
     core, research, marketing): <b>43 passed</b>, 3 skipped by design, 2 failed. Both failures are the same
     test, outfit generation, on desktop and phone: the same run used up the day's quota on the main model.
     To rule out the translation, the stylist was called directly on the backup model: both live tests
-    passed, including the one that checks a banned color is never suggested. The difference with core,
-    research and the generator, which switch to the backup model on their own, is that the stylist does
-    not yet.</p>
+    passed, including the one that checks a banned color is never suggested. The real difference was that
+    core, research and the generator switch to the backup model on their own, and the stylist didn't: it
+    retried the same model for up to 90 seconds and then gave up. It now falls back too (§13). After that
+    deploy, the stylist specs ran again against the live site: <b>8 of 8</b>.</p>
 </section>
 
 <!-- ============ 13. ITERATION ============ -->
@@ -478,6 +479,7 @@ Supabase Postgres
       <tr><td><b>Vercel's screenshots counted as visitors</b>: 10 views in pairs, one pair 26 seconds after a deployment. Each test run alone was ruled out first, counting before and after</td><td>Automated traffic is discarded and only its category logged. Confirmed on the next deployment: exactly two discards, no new events. The 10 fake views were deleted with my permission</td></tr>
       <tr><td><b>The course moved to English</b>, and the headlines were the experiment's stimulus. English views added to Spanish ones would compare different sentences</td><td>The Spanish experiment was closed and a new one, <code>headline</code>, started from zero on October 26 with the English variants (§18)</td></tr>
       <tr><td><b>Translating a prompt broke the learning loop, silently.</b> After the translation the log showed “the model did not return a valid profile”. The profile prompt never named its JSON keys, so in English the model could guess English ones and every profile failed validation</td><td>Prompt v3 spells out the exact shape. Verified with a live call before and after: the old prompt's reply failed, the new one's passed. The other six prompts already name their keys</td></tr>
+      <tr><td><b>The stylist had no backup model.</b> The re-run after the quota reset failed outfit generation on both devices; the English prompt passed on the backup model, so the problem was elsewhere: on a day with no quota, the stylist retried the same model for 90 seconds and then said it couldn't put anything together</td><td>It falls back to Flash-Lite like core and research, with 40 s per attempt (measured: 8–14 s, sometimes over 25). A unit test checks the wiring and was seen failing against the old code. Live: 9 of 10 calls answered with the main model out of quota; on the live site, 8 of 8</td></tr>
     </tbody>
   </table>
 </section>
@@ -566,7 +568,7 @@ Supabase Postgres
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>3e44b5a</code>, five minutes before the first code commit</td></tr>
       <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · 26 commits · §9 · 27 production deployments</td></tr>
-      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · ten defects and corrections, each fixed and redeployed</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · eleven defects and corrections, each fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§16 · 2:32 video · §17 · 213 words</td></tr>
     </tbody>
   </table>

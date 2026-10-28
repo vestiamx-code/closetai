@@ -492,6 +492,13 @@ had used the day's quota on core, research and the generator. Ruling out the tra
 to Flash-Lite on their own (`conModeloDeRespaldo`); the stylist only retries the same model, so when the
 main model is out of quota the user sees "The stylist couldn't put anything together".
 
+**Fixed the same day** (`d9614f0`): the stylist now falls back too. `src/lib/ai/stylist-respaldo.test.ts`
+(3 cases: quota → backup answers and is recorded; main answers → backup untouched; a 400 is not hidden)
+was seen failing against the old code — the quota case hung retrying — and passes with the fix. Live
+calls with the main model out of quota or overloaded: 9 of 10 answered. Against https://closetai.lat
+after the deploy, `e2e/estilista.spec.ts`: **8 of 8**, including outfit generation on both devices and
+the profile update. Unit tests: 79 passed, 6 skipped.
+
 **A bug found by these runs:** the profile-update failures hid a real defect introduced by the
 translation (see ITERATION_LOG, Oct 26). Checked with a live call to Gemini Flash-Lite: before the
 fix the profile reply didn't validate; after it, it did.

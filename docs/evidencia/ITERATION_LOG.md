@@ -519,3 +519,16 @@ prompts were checked: all of them already name their keys.
 **Why it matters:** a translation is not a cosmetic change when the text is also an instruction to
 a model. The test that caught it only polled for 40 seconds while the server's quota retries take
 90, so it was also widened.
+
+## [2026-10-28] — The stylist was the only AI feature without a backup
+**Observed:** re-running the AI tests after the quota reset, outfit generation failed on both devices
+with "The stylist couldn't put anything together". Everything else passed.
+**Diagnosis:** after the profile prompt, the translation was the first suspect, so it was checked first:
+on the backup model the English stylist prompt passed both live tests. The real cause was older. Core,
+research and the post generator switch to Flash-Lite when the main model fails; the stylist only retried
+the same model, up to 90 seconds, and the same test run had used up the day's quota on the main model.
+**Change:** the stylist goes through `conModeloDeRespaldo` and records which model answered. The first
+limit, 25 s per attempt, was too tight: Flash-Lite took 8–14 s but sometimes more than 25 for three
+outfits, so it is 40 s. A unit test checks the wiring; with the old code it hangs.
+**Result:** 9 of 10 live calls answered with the main model out of quota; on the live site the stylist
+specs passed 8 of 8.
