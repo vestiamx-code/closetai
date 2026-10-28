@@ -532,3 +532,22 @@ limit, 25 s per attempt, was too tight: Flash-Lite took 8–14 s but sometimes m
 outfits, so it is 40 s. A unit test checks the wiring; with the old code it hangs.
 **Result:** 9 of 10 live calls answered with the main model out of quota; on the live site the stylist
 specs passed 8 of 8.
+
+# Week 5 · `/chat`
+
+## [2026-10-28] — The guardrail missed a conjugated verb
+**Observed:** the first unit-test run failed one case: "¿Cómo bajo de peso para la boda?" was not caught.
+**Diagnosis:** the Spanish pattern listed infinitives only ("bajar", "perder"); people write "bajo",
+"pierdo".
+**Change:** the pattern matches the verb's stem. The same suite checks the opposite — eight ordinary
+fashion questions, including "Size 28 jeans" and "a 5 km walk", stay unblocked.
+
+## [2026-10-28] — Two tests were wrong, not the chat
+**Observed:** the first runs against https://closetai.lat failed twice, with the chat working on screen
+("Putting an outfit together…").
+**Diagnosis:** one test waited for any `role="alert"` as a sign of failure, and Next.js renders an
+invisible route announcer with that role on every page; another clicked "Helpful", which also matched
+"Not helpful".
+**Change:** the chat's error has its own test id, and the button is matched exactly. 4 of 4.
+**Why it matters:** a test that fails for its own reasons gets ignored, and then it stops protecting
+anything.

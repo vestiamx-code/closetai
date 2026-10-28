@@ -504,3 +504,39 @@ translation (see ITERATION_LOG, Oct 26). Checked with a live call to Gemini Flas
 fix the profile reply didn't validate; after it, it did.
 
 **Unit tests:** 76 passed, 6 skipped (the live tests, which only run with `PRUEBAS_VIVAS=1`).
+
+# Week 5 · `/chat`
+
+## The guardrail (`src/lib/chat.test.ts`) — 28 cases
+
+| What it asserts | Result |
+|---|---|
+| Three intake questions, in order: occasion, weather, style | green |
+| 12 sensitive messages caught, English and Spanish: diets, weight, body judgments, health, self-harm, personal data | green |
+| 8 ordinary fashion messages **not** blocked ("a dress for a wedding", "size 28 jeans", "a 5 km walk"…) | green |
+| Self-harm is checked first and its answer gives Mexico's crisis line | green |
+| Every guardrail answer says a person will review the conversation | green |
+| The model's answer contract: an outfit is required in the first answer, broken JSON and a one-garment outfit are rejected | green |
+| Tester links are only 1, 2 and 3 | green |
+
+**Seen failing on purpose:** with the guardrail switched off, 13 of 28 fail; restored, 28 of 28.
+
+## Software tests against https://closetai.lat (`e2e/chat.spec.ts`)
+
+| # | What it asserts | Result |
+|---|---|---|
+| 1 | `/chat` answers 200 without a session; the questions come in order; after two answers there is no outfit **and no model cost row**; after the third, an outfit card with 2+ garments and a tip, and exactly one cost row | green |
+| 2 | A diet question gets the guardrail answer; the session is flagged `needs_review` with reason `dieta`; the intake is untouched; **zero** model cost; the same question is still waiting | green |
+| 3 | 👍 saves exactly one rating; both buttons lock; the database refuses a second rating (unique, `23505`); a test run's rating does not move the public totals | green |
+| + | On a phone, the suggestions are visible and there is no horizontal overflow | green |
+
+Run of Oct 28, 2026, `[e2e] contra https://closetai.lat`: **4 passed**, 4 skipped by design (the
+database-reading tests run on one profile; the phone test on the other). One earlier run skipped an AI
+test because the provider didn't answer; the run after it passed. Test conversations are deleted at the end
+of every run. Unit tests: 107 passed, 6 skipped.
+
+## Migration 015, verified against the database
+
+The SQL loaded from the repository matched the file byte for byte (sha256 `41c81b6e…`, 4,501 bytes). After
+running it, through REST: the four tables answer 200 to the service key, and **401** to the public key for
+both reading and inserting.

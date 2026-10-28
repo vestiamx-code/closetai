@@ -371,3 +371,47 @@ the failing AI tests investigated instead of blamed on the quota.
 profile prompt was producing replies that didn't validate, because it never named its keys. Fixed
 in prompt v3 and verified live before committing.
 **Commit:** ba8a395, 0aec5c2, 85d5abd
+
+# Week 5 · `/chat`
+
+## [2026-10-28] — Session 1 · Four decisions before the plan
+**Prompt:** "Now let's do week 5." (with the assignment, the macro-prompts, the overview and the rubric)
+**Result:** four questions to Tamara before writing anything: what the assistant is for, who the three
+external testers are, what the human checkpoint does, and which language it answers in.
+**Human judgment:** a guided "What should I wear?" with no account; testers she recruits herself; flagged
+conversations for her to review, without asking anyone for an email; and English always, even when
+someone writes in Spanish.
+**Commit:** 9d223f6
+
+## [2026-10-28] — Session 2 · The packet, before the code
+**Prompt:** "Write the Build Discipline Packet for /chat and commit it before touching code."
+**Result:** `docs/WEEK-5-PACKET.md` and the wireframe, commit `9d223f6` at 12:17.
+**Human judgment:** Flash-Lite first for the chat, because Flash's free tier is 20 requests a day and three
+testers would use it up; a deterministic guardrail before the model, so a diet question never reaches it.
+**Commit:** 9d223f6
+
+## [2026-10-28] — Session 3 · The guardrail, alone and tested
+**Prompt:** "The intake questions, a guardrail for diets, weight, bodies, health, self-harm and personal
+data in English and Spanish, and the contract for the model's answer, as pure functions. Test that it
+blocks what it must AND that it doesn't block ordinary fashion."
+**Result:** `src/lib/chat.ts` and 28 cases.
+**Human judgment:** the list stays narrow on purpose: a guardrail that refuses "jeans that fit well" teaches
+people to stop using the chat. The nuanced cases go to the model's own classification.
+**Commit:** 3206120
+
+## [2026-10-28] — Session 4 · The model call, the page and the checkpoint
+**Prompt:** "Server Actions where the server decides which question comes next; the outfit card; ratings
+once per answer; tester mode with consent and a summary; the review list in /admin."
+**Result:** `/chat`, its actions, the prompt, and the review list.
+**Human judgment:** the page never shows conversations, only totals and what testers wrote to be shown;
+and test traffic is kept out of both.
+**Commit:** d9e9613, e81d523, 9ed87e7, 46bbd79
+
+## [2026-10-28] — Session 5 · Testing against the real site
+**Prompt:** "Three software tests against production: the intake order with no model call before the
+third answer, the diet guardrail with zero model cost, and a rating saved once."
+**Result:** `e2e/chat.spec.ts`, 3 tests plus a phone layout test; 4 of 4 after two fixes to the tests
+themselves.
+**Human judgment:** each test checks the database, not only the screen: the cost table proves the model
+was never called, the session proves the flag and the reason.
+**Commit:** 2b9b0bb, aa7fd6a, f0adc54
