@@ -251,18 +251,29 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
       : "",
   ].join("\n");
 
+  // Falls back to the backup model when the main one is out of quota or
+  // overloaded, like core, research and the post generator. It used to retry
+  // the same model, waiting up to 90 s, and when the quota was gone for the day
+  // the user still ended up reading "the stylist couldn't put anything together".
+  // Found by the e2e run of Oct 28, 2026.
   let raw: string;
   try {
-    const response = await conReintentoSiHayCuota(() =>
-      getClient().models.generateContent({
-      model,
-      contents: [{ role: "user", parts: [{ text: `${STYLIST_PROMPT}\n\n${contexto}` }] }],
-      config: {
-        responseMimeType: "application/json",
-        responseJsonSchema: ESQUEMA_ESTILISTA,
-        temperature: 0.9, // más alta que la catalogación: aquí sí queremos variedad
-      },
-    }));
+    const { resultado: response, modelo } = await conModeloDeRespaldo(
+      { principal: model, respaldo: MODELS.reasoningFallback() },
+      (m, senal) =>
+        getClient().models.generateContent({
+          model: m,
+          contents: [{ role: "user", parts: [{ text: `${STYLIST_PROMPT}\n\n${contexto}` }] }],
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema: ESQUEMA_ESTILISTA,
+            temperature: 0.9, // más alta que la catalogación: aquí sí queremos variedad
+            abortSignal: senal,
+          },
+        }),
+      TIEMPO_MAXIMO_ESTILISTA_MS,
+    );
+    meta.model = modelo;
     raw = response.text ?? "";
   } catch (error) {
     return {
@@ -275,6 +286,15 @@ export async function suggestOutfits(ctx: ContextoEstilista): Promise<SuggestOut
   const ids = new Set(ctx.prendas.map((p) => p.id));
   return { ...parseStylistResponse(raw, ids), meta };
 }
+
+/**
+ * Three outfits with their explanations is the longest answer ClosetAI asks for,
+ * so the stylist gets more time per attempt than the default 15 s. Measured on
+ * Oct 28, 2026: Flash-Lite answered in 8 to 14 s, but twice in four runs it
+ * went past 25 s. 40 s covers that and is still well under the 90 s the old
+ * retry could make someone wait.
+ */
+const TIEMPO_MAXIMO_ESTILISTA_MS = 40_000;
 
 const ESQUEMA_ESTILISTA = {
   type: "object",
