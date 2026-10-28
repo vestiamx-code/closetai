@@ -87,6 +87,9 @@ export default async function Home() {
             <Link href="/pricing" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
               Pricing
             </Link>
+            <Link href="/chat" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+              Ask the stylist
+            </Link>
             <Link
               href="/sign-in"
               className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
@@ -311,6 +314,7 @@ export default async function Home() {
             <Link href="/product" className="underline-offset-4 hover:text-text hover:underline">Product</Link>
             <Link href="/pricing" className="underline-offset-4 hover:text-text hover:underline">Pricing</Link>
             <Link href="/research" className="underline-offset-4 hover:text-text hover:underline">Research</Link>
+            <Link href="/chat" className="underline-offset-4 hover:text-text hover:underline">Stylist chat</Link>
             <Link href="/marketing" className="underline-offset-4 hover:text-text hover:underline">Marketing</Link>
             <Link href="/privacy" className="underline-offset-4 hover:text-text hover:underline">Privacy notice</Link>
           </nav>
