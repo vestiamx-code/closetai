@@ -130,7 +130,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>13 requirements, each with a checkable criterion</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, why the A/B variant is not assigned where the session lives, and the four filters on what counts as a visitor</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat</code> and <code>/marketing</code> live; end-to-end tests pass against the real site, confirmed by the URL each run prints</td><td>6–7, 12</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>33 commits</b> (min. 5) · <b>34 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>35 commits</b> (min. 5) · <b>36 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>8–11</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>2 A/B tests</b> required, written as 9 cases · <b>3 software tests</b> required, 6 written against the real site · 11 iterations documented</td><td>12–13</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Four brand decisions; one post rejected before approval; three corrections, one of them about my own earlier weeks; the whole product moved to English without mixing the experiment's data; decision note, 213 words</td><td>2, 13–15, 17–18</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:32 walkthrough recorded against the live English site, narrated by me</td><td>16</td></tr>
@@ -184,6 +184,28 @@
     and find anyone with: no written voice, no persona, not one post. And its headline had been chosen
     by taste, never measured.</p>
 
+  <h3>User</h3>
+  <ul>
+    <li><b>The homepage visitor</b> — arrives from a post or a link and decides in seconds whether to stay.
+      She is the target persona: a woman aged 24 to 30 in Mexico City.</li>
+    <li><b>Me, the founder</b> — I need content ready to publish and an honest way to know which headline
+      works better.</li>
+    <li><b>Whoever evaluates ClosetAI</b> — needs to see that the marketing only says what the product does.</li>
+  </ul>
+
+  <h3>Success — what must work by the end of the week</h3>
+  <ul>
+    <li>The homepage explains on one screen what ClosetAI is, who it is for and what it costs, with proof
+      (the sourced research) and a clear path to start.</li>
+    <li>The headline is a real experiment: each visitor sees one of two versions, always the same one, and
+      views and clicks are measured.</li>
+    <li><code>/marketing</code> loads without an account and shows the brand system, persona, landing copy,
+      10 posts, 3 video scripts, a 14-day calendar, the A/B results and the saved assets.</li>
+    <li>Every piece can be copied; posts, scripts and calendar can be exported.</li>
+    <li>The generator writes a new post with AI, validates it and saves it as “not reviewed”.</li>
+    <li>2 A/B tests and 3 software tests, run against production.</li>
+  </ul>
+
   <h3>Scope cut — what looked good and was not built</h3>
   <table>
     <thead><tr><th style="width:52mm">Left out</th><th>Why</th></tr></thead>
@@ -196,6 +218,68 @@
       <tr><td>Touching <code>proxy.ts</code> to assign the variant</td><td>That is where the session lives, and it broke once in production</td></tr>
     </tbody>
   </table>
+
+  <h3>DevOps</h3>
+  <table>
+    <thead><tr><th style="width:36mm">Piece</th><th>Plan</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub</td><td><code>vestiamx-code/closetai</code>, branch <code>main</code>; CI (lint, typecheck, unit tests, build) on every commit</td></tr>
+      <tr><td>Vercel</td><td>Automatic production deploy on every push; at least 2 this week</td></tr>
+      <tr><td>Supabase</td><td>Migration 010 (tables and the experiment) and 011 (the content, only <b>after</b> I approve it). Each applied only with my explicit permission and verified through REST, not the screen</td></tr>
+      <tr><td>Environment variables</td><td>None new. Keys stay in <code>.env.local</code> and Vercel, never in the repository</td></tr>
+      <tr><td>Rollback</td><td>The new homepage is a single commit; reverting it brings back the old one</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Test plan</h3>
+  <p><b>2 A/B tests</b> (Vitest, on <code>src/lib/ab.ts</code>):</p>
+  <ol>
+    <li><b>Stable and even assignment:</b> the same visitor always gets the same variant, and across 10,000
+      random visitors each variant lands between 48% and 52%.</li>
+    <li><b>No fake winner:</b> with fewer than 100 visitors per variant, or a difference not significant at
+      95%, the result is “no winner”; with a large difference and enough sample there is one, and it is the
+      right variant.</li>
+  </ol>
+  <p><b>3 software tests</b> (Playwright, against production):</p>
+  <ol start="3">
+    <li><code>/marketing</code> loads without a session with 10 posts, 3 scripts and 14 calendar days.</li>
+    <li>Exporting the calendar downloads a CSV with 14 rows and its header; copying a post puts its text on
+      the clipboard.</li>
+    <li>The homepage shows exactly one of the two headlines, the same one on reload, and a test visit is not
+      counted.</li>
+  </ol>
+  <p>Plus: the generator rejects a post with an unverified figure (unit test), and the homepage has its
+    seven sections in order (e2e). Every new test is seen failing on purpose before it is trusted. The
+    results are in §12.</p>
+
+  <h3>The exact prompt to the coding agent</h3>
+  <p>Written in Spanish before the code and translated here. The interface rule was replaced on October 26,
+    when the course required English (§18).</p>
+  <pre>Build Week 4 of ClosetAI (Next.js 16, App Router, Tailwind v4, Supabase).
+
+EXACT SCOPE, nothing more:
+1. src/lib/ab.ts — pure functions: varianteDe(visitor, experiment) with an
+   FNV-1a hash mod 2, and resultado(a, b) with a two-proportion z-test: no
+   winner if either variant has fewer than 100 visitors or p ≥ 0.05.
+2. Homepage (/): A/B headline, problem, how it works in 3 steps, proof with a
+   source, price, privacy and a call to start. The variant is chosen on the
+   server from the cai_visitante cookie; DO NOT touch src/proxy.ts.
+3. Server Action registrarEvento: one view and one click per visitor
+   (unique), hash of the id, ignores traffic marked as a test.
+4. /marketing: brand, persona (data vs hypothesis), landing copy, 10 posts,
+   3 scripts, 14-day calendar, A/B results, generator and saved assets.
+   Copy and export buttons (md and csv) in the browser.
+5. Generator: Gemini with fallback; zod contract; rejects figures not in the
+   list of verified facts; saves with origin 'generado_ia', aprobado = false.
+6. Migrations 010 (tables, experiments) and 011 (approved content).
+
+RULES:
+- Interface in Mexican Spanish.        ← replaced Oct 26: English
+- No fact outside docs/evidencia/INVESTIGACION-SEMANA-2.md, the Master
+  Document §2.3 or the pricing_assumptions table.
+- Don't use the interview quote in social content: the permission was for
+  the research page and the document, not for advertising.
+- Tests: 2 A/B and 3 software; see them fail before trusting them.</pre>
 </section>
 
 <!-- ============ 3. UX ============ -->
@@ -359,7 +443,7 @@ Supabase Postgres
 
 <!-- ============ 8. COMMITS ============ -->
 <section class="brk">
-  <h2>8 · GitHub commits — 33 this week (minimum 5)</h2>
+  <h2>8 · GitHub commits — 35 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -396,6 +480,8 @@ Supabase Postgres
       <tr><td class="mono">869507b</td><td>Oct 28, 10:22</td><td>feat: the demo video, narrated by Tamara, against the English site</td></tr>
       <tr><td class="mono">786025f</td><td>Oct 28, 10:23</td><td>docs: submission date, narration and the experiment&#x27;s numbers on submission day</td></tr>
       <tr><td class="mono">ec5eb45</td><td>Oct 28, 10:24</td><td>fix: page titles no longer repeat &quot;ClosetAI&quot;</td></tr>
+      <tr><td class="mono">59880e0</td><td>Oct 28, 10:25</td><td>docs: final commit and deployment tables, read from git and Vercel</td></tr>
+      <tr><td class="mono">7d64dde</td><td>Oct 28, 11:40</td><td>docs: user, success, DevOps, test plan and the exact agent prompt in the submission PDF</td></tr>
     </tbody>
   </table>
   <figure>
@@ -406,7 +492,7 @@ Supabase Postgres
 
 <!-- ============ 9. DEPLOYS ============ -->
 <section>
-  <h2>9 · Vercel deployments — 34 this week (minimum 2)</h2>
+  <h2>9 · Vercel deployments — 36 this week (minimum 2)</h2>
   <p class="lead">All Production, all Ready, with exact times read from Vercel and generated by <code>tablas.py</code>, not typed. One per commit, plus one: when this week's history was pushed again with English commit messages, Vercel redeployed its newest commit, <code>e3fa8e8</code>. Deployments made before the rewrite are shown with the commit's new hash.</p>
   <table>
     <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
@@ -445,6 +531,8 @@ Supabase Postgres
       <tr><td>Oct 28, 10:22</td><td class="ok">● Ready</td><td><span class="mono">869507b</span> · feat: the demo video, narrated by Tamara, against the English site</td></tr>
       <tr><td>Oct 28, 10:23</td><td class="ok">● Ready</td><td><span class="mono">786025f</span> · docs: submission date, narration and the experiment&#x27;s numbers on submission day</td></tr>
       <tr><td>Oct 28, 10:24</td><td class="ok">● Ready</td><td><span class="mono">ec5eb45</span> · fix: page titles no longer repeat &quot;ClosetAI&quot;</td></tr>
+      <tr><td>Oct 28, 10:26</td><td class="ok">● Ready</td><td><span class="mono">59880e0</span> · docs: final commit and deployment tables, read from git and Vercel</td></tr>
+      <tr><td>Oct 28, 11:41</td><td class="ok">● Ready</td><td><span class="mono">7d64dde</span> · docs: user, success, DevOps, test plan and the exact agent prompt in the submission PDF</td></tr>
     </tbody>
   </table>
 </section>
@@ -674,7 +762,7 @@ Supabase Postgres
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>3e44b5a</code>, five minutes before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · 33 commits · §9 · 34 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§8 · 35 commits · §9 · 36 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§12–13 · eleven defects and corrections, each fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§16 · 2:32 video · §17 · 213 words</td></tr>
     </tbody>
