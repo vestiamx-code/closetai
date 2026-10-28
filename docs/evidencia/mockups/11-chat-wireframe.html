@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — /chat</title>
+<!-- Source of 11-chat-wireframe.png (Week 5, Oct 28, 2026). Drawn before the build.
+     Render: node docs/evidencia/mockups/render-wireframe.mjs 11-chat-wireframe -->
+<style>
+  :root { --ink:#1d1916; --clay:#8f4424; --sand:#ece2d6; --line:#d7cbbf; --muted:#7a716a; --ok:#2f6b43; }
+  * { box-sizing:border-box; margin:0; }
+  body { width:2000px; padding:48px 54px 60px; font:20px/1.35 -apple-system, "Helvetica Neue", Arial, sans-serif; color:var(--ink); background:#fff; }
+  h1 { font-size:34px; font-weight:700; }
+  .sub { color:var(--muted); font-size:21px; margin-top:10px; }
+  .cols { display:grid; grid-template-columns:900px 1fr; gap:32px; margin-top:36px; }
+  .label { font-size:18px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+  .box { border:2px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:16px; }
+  .note { color:var(--clay); font-size:18px; margin-top:12px; }
+  .bar { height:13px; border-radius:7px; background:#f1ebe4; margin:10px 0; }
+  .w60{width:66%}.w85{width:87%}.w40{width:44%}
+  .msg { max-width:78%; border-radius:16px; padding:12px 16px; margin:10px 0; font-size:19px; }
+  .bot { background:#f6f1eb; }
+  .me { background:var(--ink); color:#fff; margin-left:auto; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 4px; }
+  .chip { border:2px solid var(--line); border-radius:999px; padding:5px 14px; font-size:17px; }
+  .step { font-size:15px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+  .card { border:2px solid var(--ink); border-radius:14px; padding:16px 18px; margin:10px 0; max-width:86%; }
+  .card b { font-size:20px; }
+  .card ul { margin:8px 0 0 22px; }
+  .rate { display:flex; gap:10px; margin-top:12px; }
+  .rate span { border:2px solid var(--line); border-radius:8px; padding:3px 12px; }
+  .guard { border:2px dashed var(--clay); border-radius:14px; padding:14px 16px; margin:10px 0; max-width:86%; background:#fbf7f3; }
+  .input { display:flex; gap:10px; margin-top:14px; }
+  .field { flex:1; border:2px solid var(--line); border-radius:10px; padding:11px 14px; color:var(--muted); }
+  .btn { border:2px solid var(--ink); border-radius:999px; padding:9px 20px; font-size:19px; display:inline-block; }
+  .tag { display:inline-block; border:1.5px solid var(--line); border-radius:999px; padding:1px 11px; font-size:16px; }
+  .tag.flag { border-color:var(--clay); color:var(--clay); }
+  .row { display:flex; gap:12px; }
+  .stat { flex:1; border:2px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .stat .n { font-size:28px; font-weight:700; }
+</style>
+</head>
+<body>
+  <h1>Wireframe — /chat · “What should I wear?”</h1>
+  <p class="sub">ClosetAI · Week 5 · a guided assistant with a guardrail, a human checkpoint and a rating on every answer</p>
+
+  <div class="cols">
+    <div>
+      <p class="label">/chat · no account</p>
+      <div class="box">
+        <div class="msg bot"><span class="step">Question 1 of 3</span><br>What’s the occasion?</div>
+        <div class="chips"><span class="chip">Work</span><span class="chip">A date</span><span class="chip">Weekend</span><span class="chip">A wedding</span><span class="chip">Something else…</span></div>
+        <div class="msg me">Work</div>
+        <div class="msg bot"><span class="step">Question 2 of 3</span><br>Where are you, and what’s the weather like?</div>
+        <div class="chips"><span class="chip">Mexico City</span><span class="chip">Hot</span><span class="chip">Cool</span><span class="chip">Rainy</span></div>
+        <div class="msg me">Mexico City, rainy</div>
+        <div class="msg bot"><span class="step">Question 3 of 3</span><br>How do you like to dress?</div>
+        <div class="chips"><span class="chip">Comfortable</span><span class="chip">Minimal</span><span class="chip">Elegant</span><span class="chip">Bold</span></div>
+        <div class="msg me">Comfortable but put together</div>
+
+        <div class="card">
+          <b>Rainy office, still polished</b>
+          <ul><li>Dark straight jeans</li><li>Cream knit sweater</li><li>Trench coat</li><li>Leather ankle boots</li></ul>
+          <div class="bar w85"></div><div class="bar w60"></div>
+          <p style="margin-top:6px;color:var(--muted)">Tip: …</p>
+          <div class="rate"><span>👍</span><span>👎</span></div>
+        </div>
+
+        <div class="msg me">How do I lose 5 kilos before the party?</div>
+        <div class="guard"><b>That’s not something I can help with.</b><br>I only talk about clothes. A person from ClosetAI will review this conversation. <span class="tag flag">flagged for review</span></div>
+
+        <div class="input"><div class="field">Ask a follow-up… (4 left)</div><span class="btn">Send</span></div>
+      </div>
+      <p class="note">The answer is only requested after all three questions. Deterministic guardrail first (no model call), then the model’s own classification.</p>
+    </div>
+
+    <div>
+      <p class="label">Same page · below the chat</p>
+      <div class="box">
+        <p class="label">How people rated the answers</p>
+        <div class="row"><div class="stat"><div class="n">— 👍</div>helpful</div><div class="stat"><div class="n">— 👎</div>not helpful</div></div>
+        <p class="note">Totals only. Conversations are never shown publicly.</p>
+      </div>
+      <div class="box">
+        <p class="label">Testing evidence · 3 external testers</p>
+        <div class="stat" style="margin-bottom:10px"><b>Tester 1</b> · <span class="tag">score —/5</span><div class="bar w85"></div><div class="bar w60"></div></div>
+        <div class="stat" style="margin-bottom:10px"><b>Tester 2</b> · <span class="tag">score —/5</span><div class="bar w85"></div><div class="bar w40"></div></div>
+        <div class="stat"><b>Tester 3</b> · <span class="tag">score —/5</span><div class="bar w60"></div><div class="bar w40"></div></div>
+        <p class="note">Written by the testers themselves at the end of their session, after consenting.</p>
+      </div>
+      <div class="box">
+        <p class="label">Tester mode · /chat?test=1</p>
+        <div class="field" style="margin-bottom:10px">☐ I agree that this conversation is saved without my name, for a university project.</div>
+        <div class="field" style="margin-bottom:10px">What worked?</div>
+        <div class="field" style="margin-bottom:10px">What was confusing?</div>
+        <div class="chips"><span class="chip">1</span><span class="chip">2</span><span class="chip">3</span><span class="chip">4</span><span class="chip">5</span></div>
+        <span class="btn">Save my summary</span>
+      </div>
+      <div class="box">
+        <p class="label">/admin · the human checkpoint</p>
+        <div class="stat" style="margin-bottom:10px"><span class="tag flag">diet</span> “How do I lose 5 kilos…” · Oct 29 <span class="btn" style="float:right;padding:3px 14px;font-size:16px">Mark reviewed</span></div>
+        <div class="stat"><span class="tag flag">off topic</span> “Write my homework…” · Oct 29 <span class="btn" style="float:right;padding:3px 14px;font-size:16px">Mark reviewed</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
