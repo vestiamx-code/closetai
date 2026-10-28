@@ -7,6 +7,7 @@ import { GAPS_PROMPT, GAPS_PROMPT_VERSION } from "./prompts/gaps";
 import { CATALOG_GARMENT_PROMPT, CATALOG_GARMENT_PROMPT_VERSION } from "./prompts/catalog-garment";
 import { CORE_PROMPT, CORE_PROMPT_VERSION } from "./prompts/core";
 import { MARKETING_PROMPT, MARKETING_PROMPT_VERSION } from "./prompts/marketing";
+import { CHAT_PROMPT, CHAT_PROMPT_VERSION } from "./prompts/chat";
 import { RESEARCH_PROMPT, RESEARCH_PROMPT_VERSION } from "./prompts/research";
 import { clasificarFalloDelProveedor, conModeloDeRespaldo, esTiempoAgotado } from "./fallos";
 import {
@@ -29,6 +30,7 @@ import {
   type ResearchReportResult,
   type StyleCoreResult,
 } from "./schemas";
+import { leerRespuestaModelo, type Intake, type ResultadoRespuesta } from "@/lib/chat";
 import { revisarPost, type Canal, type PostGenerado } from "@/lib/marketing";
 import { datosParaElPrompt, type FuenteParaInforme, type RiesgoParaInforme } from "@/lib/research";
 
@@ -74,6 +76,7 @@ export const EST_COST_USD = {
   extractCore: 0.0006,
   researchReport: 0.0008,
   marketingPost: 0.0004,
+  chatReply: 0.0002,
 } as const;
 
 /**
@@ -766,6 +769,97 @@ export async function generarPostMarketing(tema: string, canal: Canal): Promise<
         : "We couldn't generate the post right now. Try again in a moment.",
       estCostUsd,
       model,
+      promptVersion,
+    };
+  }
+}
+
+// ------------------------------------------------------------------- /chat
+
+const ESQUEMA_CHAT = {
+  type: "object",
+  properties: {
+    clasificacion: { type: "string", enum: ["on_topic", "off_topic", "sensitive"] },
+    respuesta: { type: "string" },
+    outfit: {
+      type: "object",
+      nullable: true,
+      properties: {
+        titulo: { type: "string" },
+        prendas: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 5 },
+        tip: { type: "string" },
+      },
+      required: ["titulo", "prendas", "tip"],
+    },
+  },
+  required: ["clasificacion", "respuesta"],
+} as const;
+
+export type ResultadoChat = ResultadoRespuesta & {
+  estCostUsd: number;
+  model: string;
+  promptVersion: number;
+  /** The provider failed, as opposed to the answer being unusable. */
+  proveedorCaido?: boolean;
+};
+
+/**
+ * One answer of the public assistant. Flash-Lite first and Flash as the backup,
+ * the other way round from the rest of the app: Flash's free tier is 20
+ * requests a day, and three external testers would use it up in one afternoon.
+ * Flash-Lite answered the stylist in 8 to 14 s on Oct 28, 2026.
+ */
+export async function responderChat(entrada: {
+  intake: Intake;
+  historial: Array<{ rol: "usuaria" | "asistente"; contenido: string }>;
+  mensaje: string;
+  esPrimera: boolean;
+}): Promise<ResultadoChat> {
+  const estCostUsd = EST_COST_USD.chatReply;
+  const promptVersion = CHAT_PROMPT_VERSION;
+  const principal = MODELS.reasoningFallback();
+  const contexto = [
+    `THE OCCASION: ${entrada.intake.ocasion}`,
+    `THE WEATHER: ${entrada.intake.clima}`,
+    `THEIR STYLE: ${entrada.intake.estilo}`,
+    `FIRST ANSWER: ${entrada.esPrimera ? "yes" : "no"}`,
+    "",
+    "CONVERSATION SO FAR:",
+    entrada.historial.length
+      ? entrada.historial.map((m) => `${m.rol === "usuaria" ? "THEM" : "YOU"}: ${m.contenido}`).join("\n")
+      : "(none)",
+    "",
+    `NEW MESSAGE:\n"""\n${entrada.mensaje}\n"""`,
+  ].join("\n");
+
+  try {
+    const { resultado: response, modelo } = await conModeloDeRespaldo(
+      { principal, respaldo: MODELS.reasoning() },
+      (m, senal) =>
+        getClient().models.generateContent({
+          model: m,
+          contents: [{ role: "user", parts: [{ text: `${CHAT_PROMPT}\n\n${contexto}` }] }],
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema: ESQUEMA_CHAT,
+            temperature: 0.7,
+            abortSignal: senal,
+          },
+        }),
+      TIEMPO_MAXIMO_ESTILISTA_MS,
+    );
+    const leida = leerRespuestaModelo(response.text ?? "", entrada.esPrimera);
+    if (!leida.ok) console.warn(`[chat] ${modelo}: ${leida.motivo}`);
+    return { ...leida, estCostUsd, model: modelo, promptVersion };
+  } catch (error) {
+    console.error("[chat] the model call failed", error);
+    const texto = error instanceof Error ? error.message : String(error);
+    return {
+      ok: false,
+      motivo: texto,
+      proveedorCaido: clasificarFalloDelProveedor(texto) !== null || esTiempoAgotado(error),
+      estCostUsd,
+      model: principal,
       promptVersion,
     };
   }
