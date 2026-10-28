@@ -5,7 +5,7 @@ import { pesos } from "@/lib/precios";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = {
-  title: "Product · ClosetAI",
+  title: "Product",
   description:
     "What ClosetAI does, feature by feature: what is already live, what was built this week and what does not exist yet.",
 };

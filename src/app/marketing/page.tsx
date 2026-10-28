@@ -19,7 +19,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { BotonCopiar, BotonExportar, Generador } from "./interacciones";
 
 export const metadata: Metadata = {
-  title: "Marketing · ClosetAI",
+  title: "Marketing",
   description:
     "ClosetAI's brand, persona, launch content and homepage A/B test — every figure verified and every piece approved by a person.",
 };

@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Simulador } from "./simulador";
 
 export const metadata: Metadata = {
-  title: "Pricing · ClosetAI",
+  title: "Pricing",
   description:
     "ClosetAI's three plans, what each one costs to run, and a simulator where every assumption says where it came from.",
 };

@@ -10,7 +10,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Investigacion, TablaCompetidores } from "./interacciones";
 
 export const metadata: Metadata = {
-  title: "Research · ClosetAI",
+  title: "Research",
   description:
     "Is the problem real? ClosetAI's competitors, substitutes, global benchmarks, Mexico and risks — every figure with its source.",
 };

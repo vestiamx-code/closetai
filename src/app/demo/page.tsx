@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Demo video · ClosetAI",
+  title: "Demo video",
   description:
     "A 2:33 walkthrough of ClosetAI running in production: an AI-cataloged closet, the stylist, the virtual try-on and payments.",
 };
