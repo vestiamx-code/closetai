@@ -1,0 +1,97 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  LINEA_DE_CRISIS,
+  PREGUNTAS,
+  RESPUESTA_GUARDRAIL,
+  leerRespuestaModelo,
+  motivoDeClasificacion,
+  revisarMensaje,
+  testerDe,
+} from "./chat";
+
+describe("the intake", () => {
+  it("asks exactly three questions, in order: occasion, weather, style", () => {
+    expect(PREGUNTAS.map((p) => p.id)).toEqual(["ocasion", "clima", "estilo"]);
+    for (const p of PREGUNTAS) expect(p.sugerencias.length).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe("the deterministic guardrail", () => {
+  it.each([
+    ["How do I lose 5 kilos before the party?", "dieta"],
+    ["what diet should I follow to fit in this dress", "dieta"],
+    ["¿Cómo bajo de peso para la boda?", "dieta"],
+    ["quiero adelgazar", "dieta"],
+    ["I look fat in everything", "cuerpo"],
+    ["I’m so ugly, what do I even wear", "cuerpo"],
+    ["me veo gorda con todo", "cuerpo"],
+    ["what pills help with bloating", "salud"],
+    ["I want to hurt myself", "autolesion"],
+    ["ya no quiero vivir", "autolesion"],
+    ["my email is ana.lopez@gmail.com", "datos_personales"],
+    ["call me at 55 1234 5678", "datos_personales"],
+  ])("catches %j as %s", (texto, motivo) => {
+    expect(revisarMensaje(texto)?.motivo).toBe(motivo);
+  });
+
+  // The opposite matters as much: a guardrail that blocks ordinary fashion
+  // questions teaches people to stop using the chat.
+  it.each([
+    "A dress for a wedding in October",
+    "Jeans that fit well for work",
+    "What goes with a black blazer?",
+    "Something comfortable for a 5 km walk",
+    "Un vestido para una cena",
+    "Shoes for standing all day",
+    "Size 28 jeans, is that a problem for straight cut?",
+    "Is a 3 piece suit too much?",
+  ])("does not block %j", (texto) => {
+    expect(revisarMensaje(texto)).toBeNull();
+  });
+
+  it("checks self-harm before anything else, and its answer gives the crisis line", () => {
+    expect(revisarMensaje("I want to kill myself, I'm so fat")?.motivo).toBe("autolesion");
+    expect(RESPUESTA_GUARDRAIL.autolesion).toContain(LINEA_DE_CRISIS);
+  });
+
+  it("every guardrail answer says a person will review the conversation", () => {
+    for (const r of Object.values(RESPUESTA_GUARDRAIL)) expect(r).toMatch(/person from ClosetAI will review/);
+  });
+});
+
+describe("the model's answer", () => {
+  const outfit = { titulo: "Rainy office", prendas: ["Dark jeans", "Trench coat"], tip: "Roll the sleeves." };
+
+  it("accepts a first answer with an outfit", () => {
+    const r = leerRespuestaModelo(JSON.stringify({ clasificacion: "on_topic", respuesta: "Here you go.", outfit }), true);
+    expect(r.ok).toBe(true);
+  });
+
+  it("rejects a first answer without an outfit, but allows it in a follow-up", () => {
+    const sin = JSON.stringify({ clasificacion: "on_topic", respuesta: "Yes, sneakers work." });
+    expect(leerRespuestaModelo(sin, true).ok).toBe(false);
+    expect(leerRespuestaModelo(sin, false).ok).toBe(true);
+  });
+
+  it("rejects broken JSON and an outfit with one garment", () => {
+    expect(leerRespuestaModelo("not json", true).ok).toBe(false);
+    const una = JSON.stringify({ clasificacion: "on_topic", respuesta: "x", outfit: { ...outfit, prendas: ["Jeans"] } });
+    expect(leerRespuestaModelo(una, true).ok).toBe(false);
+  });
+
+  it("turns the model's own classification into a guardrail reason", () => {
+    expect(motivoDeClasificacion("off_topic")).toBe("fuera_de_tema");
+    expect(motivoDeClasificacion("sensitive")).toBe("sensible");
+    expect(motivoDeClasificacion("on_topic")).toBeNull();
+  });
+});
+
+describe("tester links", () => {
+  it("only 1, 2 and 3 are tester links", () => {
+    expect(testerDe("2")).toBe(2);
+    expect(testerDe(["3"])).toBe(3);
+    expect(testerDe("4")).toBeNull();
+    expect(testerDe(undefined)).toBeNull();
+  });
+});
