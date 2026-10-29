@@ -96,15 +96,23 @@ body {
 .velo-portada {
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--hueso) 80%, transparent) 0%,
-    color-mix(in srgb, var(--hueso) 58%, transparent) 45%,
-    color-mix(in srgb, var(--hueso) 22%, transparent) 100%
+    color-mix(in srgb, var(--hueso) 66%, transparent) 0%,
+    color-mix(in srgb, var(--hueso) 38%, transparent) 45%,
+    color-mix(in srgb, var(--hueso) 8%, transparent) 100%
   );
 }
 @media (max-width: 640px) {
   .velo-portada {
-    background: color-mix(in srgb, var(--hueso) 70%, transparent);
+    background: color-mix(in srgb, var(--hueso) 56%, transparent);
   }
+}
+
+/* Text set over the closet photo: a soft cream glow around each letter, so it
+   stays legible wherever the clothes or the shelves end up behind it. */
+.sobre-foto {
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--hueso) 95%, transparent),
+    0 0 2px color-mix(in srgb, var(--hueso) 90%, transparent);
 }
 
 /* Each chat message arrives instead of just appearing: shorter and closer than

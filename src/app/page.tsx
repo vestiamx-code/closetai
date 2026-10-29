@@ -96,13 +96,13 @@ export default async function Home() {
         <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
           <Logo prioridad />
           <nav aria-label="Main" className="flex items-center gap-1 sm:gap-2">
-            <Link href="/product" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+            <Link href="/product" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
               Product
             </Link>
-            <Link href="/pricing" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+            <Link href="/pricing" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
               Pricing
             </Link>
-            <Link href="/chat" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
+            <Link href="/chat" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
               Ask the stylist
             </Link>
             <Link
@@ -116,7 +116,7 @@ export default async function Home() {
 
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 pb-16">
           <p
-            className="entra text-[0.65rem] tracking-[0.18em] text-text-muted uppercase sm:text-xs sm:tracking-[0.22em]"
+            className="entra sobre-foto text-[0.65rem] font-medium tracking-[0.18em] text-barro uppercase sm:text-xs sm:tracking-[0.22em]"
             style={{ animationDelay: "0.05s" }}
           >
             AI personal stylist{" "}
@@ -145,7 +145,7 @@ export default async function Home() {
 
           <div className="mt-9 flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-between">
             <p
-              className="entra max-w-md text-lg leading-relaxed text-text-muted text-pretty"
+              className="entra sobre-foto max-w-md text-lg leading-relaxed font-medium text-tinta text-pretty"
               style={{ animationDelay: "0.36s" }}
             >
               Photograph your clothes, ClosetAI sorts them for you, and every morning it tells you what to wear
