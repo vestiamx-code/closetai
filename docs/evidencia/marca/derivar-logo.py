@@ -2,8 +2,7 @@
 Every brand file comes from Tamara's logo (logo-closetai.jpg, chosen on Oct 29, 2026).
 
   · The square icon (browser tab, Google results, phone home screen, the chat's
-    avatar) is the "AI" with its network, cropped from the logo: at 16 to 48
-    pixels the whole wordmark can't be read.
+    avatar) is "CLOSET" over "AI", cut out of the logo on a cream background.
   · The link preview (WhatsApp, iMessage, social) is the logo without its
     tagline, which is headline A of the homepage experiment.
 
@@ -11,15 +10,20 @@ Usage (repo root): python3 docs/evidencia/marca/derivar-logo.py
 """
 from pathlib import Path
 
+import importlib.util
+
 from PIL import Image
 
 RAIZ = Path(__file__).resolve().parents[3]
 logo = Image.open(Path(__file__).with_name("logo-closetai.jpg")).convert("RGB")
 
-# The "AI" and its network, without the T before it or "pocket" below it.
-icono = logo.crop((912, 255, 1092, 435))
-# Browsers and Next.js read the .ico layers as RGBA.
-icono_rgba = icono.convert("RGBA")
+# The square icon: "CLOSET" over "AI", cut out of the logo (icono-completo.py).
+# Until Oct 29, 2026 it was the "AI" alone; Tamara wanted the whole name.
+_spec = importlib.util.spec_from_file_location("icono_completo", Path(__file__).with_name("icono-completo.py"))
+_mod = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_mod)
+icono_rgba = _mod.icono_completo(logo)
+icono = icono_rgba.convert("RGB")
 
 app = RAIZ / "src/app"
 icono.resize((256, 256), Image.LANCZOS).save(app / "icon.png")
