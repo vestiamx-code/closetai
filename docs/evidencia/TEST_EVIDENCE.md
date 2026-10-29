@@ -552,3 +552,26 @@ both reading and inserting.
 - The outbound links, followed by hand: `/go/mango/…?s=hombre` → Mango's men's search,
   `/go/hm/…` → H&M's search, `/go/liverpool/…` → Liverpool's search (307 each). The three clicks this
   check logged were deleted.
+
+## [2026-10-29] — The 3 external user tests
+
+Three people who did not build ClosetAI, recruited by Tamara, each with their own tester link
+(`/chat?test=1`, `2`, `3`). Each accepted that the conversation is saved without their name, answered the
+intake, got an outfit and wrote a summary at the end. Their words are copied as they wrote them, typos
+included; nothing was written for them.
+
+| Tester | Section · occasion · weather · style | Rated | Score | What worked | What was confusing |
+|---|---|---|---|---|---|
+| 1 | Men’s · Work · Mexico City, cool / Rainy · Minimal / Comfortable (two sessions) | 👍 👍 | 5/5 | "Everything good" | "I thought that pictures were included" |
+| 2 | Women’s · A date · Mexico City, cool · Elegant | 👍 | 5/5 | "All good" | "Everithing was fine" |
+| 3 | Women’s · Work · Cold · Comfortable | — | 5/5 | "I like the concept" | "All worked!!" |
+
+**What the record shows, and how it was checked.** The conversations store only a salted hash of the
+connection. Testers 2 and 3 share one, a minute and a half apart, and tester 1's second session shares one
+with Tamara's own tries that morning. Asked about it, Tamara confirmed they are three different people who
+used the chat at her home, on her Wi-Fi. That is written here rather than left out.
+
+**What it found.** No tester hit the guardrail, and none asked a follow-up question, which the plan had
+asked for. Tester 1 expected pictures of the suggested clothes: the only defect any of them reported, and
+the same thing Tamara asked for when she tried it.
+
