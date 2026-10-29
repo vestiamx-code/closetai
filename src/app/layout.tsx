@@ -32,6 +32,23 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * What Google reads to name the site and show its logo in results. The tab
+ * icon in results comes from the favicon; this adds the name and the full logo.
+ */
+const DATOS_ESTRUCTURADOS = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", name: "ClosetAI", url: "https://closetai.lat/" },
+    {
+      "@type": "Organization",
+      name: "ClosetAI",
+      url: "https://closetai.lat/",
+      logo: "https://closetai.lat/marca/logo-closetai.jpg",
+    },
+  ],
+};
+
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#faf7f4" },
@@ -45,7 +62,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <script
+          type="application/ld+json"
+          // Static data written in this file, not user input.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(DATOS_ESTRUCTURADOS) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

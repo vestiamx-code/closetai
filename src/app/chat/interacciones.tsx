@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 
 import { PREGUNTAS, SEGUIMIENTOS_MAXIMOS, sugerenciasDe, type Seccion } from "@/lib/chat";
@@ -407,15 +408,17 @@ function Progreso({ paso }: { paso: number }) {
   );
 }
 
-/** The stylist's mark next to each of its messages. */
+/** The stylist's mark next to each of its messages: the brand icon, from Tamara's logo. */
 function Avatar() {
   return (
-    <span
+    <Image
+      src="/marca/icono-96.png"
+      alt=""
       aria-hidden
-      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-barro font-display text-sm font-semibold text-hueso"
-    >
-      C
-    </span>
+      width={32}
+      height={32}
+      className="mt-0.5 h-8 w-8 shrink-0 rounded-full object-cover ring-1 ring-border"
+    />
   );
 }
 
