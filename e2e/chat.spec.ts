@@ -50,11 +50,11 @@ async function contestarIntake(page: Page, seccion = "Men’s clothes") {
   // The question is in a bubble and also in the text box's hidden label: read the bubble.
   const chat = page.getByTestId("chat").locator('li[data-rol="asistente"]');
   await chat.getByText("Which section do you usually shop in?").waitFor();
-  await page.getByTestId("sugerencias").getByRole("button", { name: seccion }).click();
+  await page.getByTestId("sugerencias").getByRole("button", { name: seccion, exact: true }).click();
   await expect(chat.getByText("What’s the occasion?")).toBeVisible({ timeout: 20_000 });
-  await page.getByTestId("sugerencias").getByRole("button", { name: "Work" }).click();
+  await page.getByTestId("sugerencias").getByRole("button", { name: "Work", exact: true }).click();
   await expect(chat.getByText("Where are you, and what’s the weather like?")).toBeVisible({ timeout: 20_000 });
-  await page.getByTestId("sugerencias").getByRole("button", { name: "Rainy" }).click();
+  await page.getByTestId("sugerencias").getByRole("button", { name: "Rainy", exact: true }).click();
   await expect(chat.getByText("How do you like to dress?")).toBeVisible({ timeout: 20_000 });
 }
 
@@ -101,10 +101,10 @@ test.describe("Chat", () => {
     const [sesion] = await sesionesDeEstaCorrida();
     expect(sesion.intake).toEqual({ seccion: "Men’s clothes", ocasion: "Work", clima: "Rainy" });
     // The style suggestions followed the section.
-    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Smart" })).toBeVisible();
-    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Romantic" })).toHaveCount(0);
+    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Smart", exact: true })).toBeVisible();
+    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Romantic", exact: true })).toHaveCount(0);
 
-    await page.getByTestId("sugerencias").getByRole("button", { name: "Comfortable" }).click();
+    await page.getByTestId("sugerencias").getByRole("button", { name: "Comfortable", exact: true }).click();
     await esperarSugerencia(page);
 
     const card = page.getByTestId("outfit").first();
@@ -126,7 +126,7 @@ test.describe("Chat", () => {
     const costosAntes = await costosDeChat();
     const antes = (await sesionesDeEstaCorrida()).length;
 
-    await page.getByTestId("sugerencias").getByRole("button", { name: "Women’s clothes" }).click();
+    await page.getByTestId("sugerencias").getByRole("button", { name: "Women’s clothes", exact: true }).click();
     await page.getByLabel("What’s the occasion?").fill("How do I lose 5 kilos before the party?");
     await page.getByRole("button", { name: "Send" }).click();
 
@@ -155,7 +155,7 @@ test.describe("Chat", () => {
     await page.goto("/chat");
     const arribaAntes = await page.locator('[data-total="arriba"]').textContent();
     await contestarIntake(page, "Women’s clothes");
-    await page.getByTestId("sugerencias").getByRole("button", { name: "Minimal" }).click();
+    await page.getByTestId("sugerencias").getByRole("button", { name: "Minimal", exact: true }).click();
     await esperarSugerencia(page);
 
     const calificar = page.getByTestId("outfit").first().getByTestId("calificar");
@@ -197,7 +197,7 @@ test.describe("Chat", () => {
 test("on a phone, the chat fits the screen and the suggestions can be tapped", async ({ page }) => {
   test.skip(test.info().project.name !== "mobile-chrome", "Phone profile only");
   await page.goto("/chat");
-  await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Men’s clothes" })).toBeVisible();
+  await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Men’s clothes", exact: true })).toBeVisible();
   const desborde = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(desborde).toBe(0);
 });
