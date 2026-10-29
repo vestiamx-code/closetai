@@ -34,6 +34,21 @@ publico = RAIZ / "public/marca"
 publico.mkdir(exist_ok=True)
 icono.resize((96, 96), Image.LANCZOS).save(publico / "icono-96.png")
 
+# The homepage's background: the closet from the logo WITHOUT its letters. The
+# wordmark and the tagline sit in a bright band (rows 250–540); that band is cut
+# out and the seam blended. Behind the headline, a second "CLOSET AI" would fight
+# it, and the tagline is headline A of the experiment.
+_W, _H = logo.size
+_a, _b, _m = 250, 540, 30
+fondo = Image.new("RGB", (_W, _a + (_H - _b) - _m))
+fondo.paste(logo.crop((0, 0, _W, _a)), (0, 0))
+for i in range(_m):
+    _x = logo.crop((0, _a - _m + i, _W, _a - _m + i + 1))
+    _y = logo.crop((0, _b + i, _W, _b + i + 1))
+    fondo.paste(Image.blend(_x, _y, i / _m), (0, _a - _m + i))
+fondo.paste(logo.crop((0, _b + _m, _W, _H)), (0, _a))
+fondo.save(publico / "closet-fondo.jpg", quality=86)
+
 # The header wordmark, one line, for light and dark mode. 3x the size it is shown at.
 for nombre, oscuro in (("logo-horizontal.png", False), ("logo-horizontal-oscuro.png", True)):
     h = _mod.logo_horizontal(logo, oscuro)

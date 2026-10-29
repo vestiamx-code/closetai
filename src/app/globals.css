@@ -90,6 +90,23 @@ body {
   animation: desliza 38s linear infinite;
 }
 
+/* The veil over the homepage's closet photo: almost solid where the headline
+   is, lighter to the right so the closet shows. On a phone the text covers the
+   whole width, so the veil is even. */
+.velo-portada {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--hueso) 93%, transparent) 0%,
+    color-mix(in srgb, var(--hueso) 80%, transparent) 45%,
+    color-mix(in srgb, var(--hueso) 45%, transparent) 100%
+  );
+}
+@media (max-width: 640px) {
+  .velo-portada {
+    background: color-mix(in srgb, var(--hueso) 84%, transparent);
+  }
+}
+
 /* Each chat message arrives instead of just appearing: shorter and closer than
    .entra, because it happens many times in a row. */
 @keyframes llega {

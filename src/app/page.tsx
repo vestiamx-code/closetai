@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Logo } from "@/components/ui/logo";
@@ -68,6 +69,18 @@ export default async function Home() {
 
       {/* ---------- 1 · Headline ---------- */}
       <section data-seccion="titular" className="relative flex min-h-[92svh] flex-col overflow-hidden bg-hueso">
+        {/* The closet from Tamara's logo, behind everything (Oct 29, 2026), without
+            its letters. A cream veil, stronger where the text is, keeps it readable. */}
+        <Image
+          src="/marca/closet-fondo.jpg"
+          alt=""
+          aria-hidden
+          fill
+          priority
+          sizes="100vw"
+          className="pointer-events-none object-cover object-center"
+        />
+        <div aria-hidden className="velo-portada pointer-events-none absolute inset-0" />
         {/* Two very soft color blooms. They add depth without competing with the text. */}
         <div
           aria-hidden
