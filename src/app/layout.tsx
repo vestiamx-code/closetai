@@ -15,14 +15,16 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://closetai.lat"),
+  // Neither title repeats an A/B headline: the tab and every shared link would
+  // show variant A to the people in group B (found Oct 29, 2026).
   title: {
-    default: "ClosetAI — Your stylist, in your pocket",
+    default: "ClosetAI — AI personal stylist",
     template: "%s · ClosetAI",
   },
   description:
     "Photograph your clothes, build your digital closet and let AI tell you what to wear — and show it on you.",
   openGraph: {
-    title: "ClosetAI — Your stylist, in your pocket",
+    title: "ClosetAI — Wear what you already own",
     description:
       "Photograph your clothes, build your digital closet and let AI tell you what to wear — and show it on you.",
     locale: "en_US",
