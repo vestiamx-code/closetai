@@ -165,7 +165,8 @@ export default async function Home() {
               </BotonEmpezar>
               <Link
                 href="/core"
-                className="inline-flex items-center justify-center px-2 py-4 text-base text-text-muted underline underline-offset-8 transition hover:text-text"
+                // A frosted backing: over the closet photo the link would get lost in the clothes.
+                className="inline-flex items-center justify-center rounded-full px-4 py-3 text-base text-text underline underline-offset-8 backdrop-blur-sm transition hover:bg-hueso/80 sm:bg-hueso/60"
               >
                 Try it without an account
               </Link>
