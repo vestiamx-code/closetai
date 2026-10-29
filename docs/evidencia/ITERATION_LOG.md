@@ -551,3 +551,23 @@ invisible route announcer with that role on every page; another clicked "Helpful
 **Change:** the chat's error has its own test id, and the button is matched exactly. 4 of 4.
 **Why it matters:** a test that fails for its own reasons gets ignored, and then it stops protecting
 anything.
+
+## [2026-10-29] — Tamara tried it: a dress for someone shopping in men's
+**Observed:** Tamara used `/chat` herself before sending it to the testers. Nothing asked who the outfit
+was for, so the assistant could suggest a dress to a man. She also asked for a way to buy what it suggests.
+(Tamara built the product, so this is not one of the three external tests; it is the founder's own check.)
+**Change:**
+- A first question, **which section do you usually shop in?** — women's, men's or either — as a closed
+  choice. It sets the style suggestions ("Smart" and "Streetwear" in men's, "Romantic" in women's) and the
+  prompt (v2) tells the model to stay in that section.
+- The code checks too: a men's outfit with a dress, skirt, blouse or heels is rejected and asked again once.
+- Each garment now brings a Spanish search and three links: **Mango, H&M and Liverpool**, each opening that
+  store's results with photos. Five stores were opened in a browser first; Zara and Bershka were dropped
+  because their search links send you to the homepage. Photos are not copied into ClosetAI: they are the
+  stores' images.
+**Tested:** unit tests for the section (a dress is rejected in men's and allowed in women's and either, and an
+ordinary men's outfit is not caught by accident) and for every store address; e2e against the live site: a
+men's conversation has no dress and every garment has its three links, Mango opening the men's results. 4 of
+4 after one more exact-match fix in the test ("Men's" is inside "Women's").
+**What it changed in the plan:** the packet promised three intake questions; there are four now. The
+assignment asks for at least three.

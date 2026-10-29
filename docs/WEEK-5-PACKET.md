@@ -226,3 +226,17 @@ RULES:
 | Commits, deploys, prompts | At least 5, 2 and 5 |
 | Iteration and decision note | `ITERATION_LOG.md` and `DECISION_NOTES.md` |
 | 2–3 minute video | Recorded against production, narrated by Tamara |
+
+---
+
+## Change after testing — October 29, 2026
+
+*Added after the build; the plan above is as it was written before the code.*
+
+Tamara tried `/chat` and it could suggest a dress to someone shopping in men's. Two changes, both in
+`ITERATION_LOG.md`:
+
+| # | Requirement | Acceptance criterion |
+|---|---|---|
+| 3b | Section first | Before the occasion, a closed question — women's, men's or either — that sets the style suggestions and the garments allowed; a men's outfit with a dress, skirt, blouse or heels is rejected |
+| 11 | Find it in a store | Every garment links to Mango, H&M and Liverpool, each opening that store's search results; Mango opens the section's results |

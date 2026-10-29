@@ -540,3 +540,15 @@ of every run. Unit tests: 107 passed, 6 skipped.
 The SQL loaded from the repository matched the file byte for byte (sha256 `41c81b6e…`, 4,501 bytes). After
 running it, through REST: the four tables answer 200 to the service key, and **401** to the public key for
 both reading and inserting.
+
+## [2026-10-29] — After adding the section question and the store links
+
+- Unit tests: **112 passed**, 6 skipped. New: the section is a closed choice; the style suggestions follow
+  it; a dress is rejected in a men's outfit and allowed in women's and either; an ordinary men's outfit
+  passes; the Mango, H&M and Liverpool addresses; Mango offered only when the section is known.
+- e2e against https://closetai.lat: **4 passed**, 4 skipped by design. Test 1 now answers "Men’s clothes"
+  first and asserts the outfit has no dress, skirt, blouse or heels, and that every garment has three store
+  links with Mango opening `?s=hombre`.
+- The outbound links, followed by hand: `/go/mango/…?s=hombre` → Mango's men's search,
+  `/go/hm/…` → H&M's search, `/go/liverpool/…` → Liverpool's search (307 each). The three clicks this
+  check logged were deleted.
