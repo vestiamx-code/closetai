@@ -9,6 +9,7 @@ import {
   CONVERSACIONES_POR_HORA,
   PREGUNTAS,
   RESPUESTA_GUARDRAIL,
+  SECCIONES,
   SEGUIMIENTOS_MAXIMOS,
   intakeSchema,
   mensajeSchema,
@@ -16,8 +17,10 @@ import {
   respuestaIntakeSchema,
   resumenSchema,
   revisarMensaje,
+  seccionDe,
   type Intake,
   type MotivoGuardrail,
+  type Seccion,
 } from "@/lib/chat";
 import { huellaDeQuienPide } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -35,7 +38,7 @@ export type Mensaje = {
   id: number;
   rol: "usuaria" | "asistente";
   contenido: string;
-  outfit?: { titulo: string; prendas: string[]; tip: string } | null;
+  outfit?: { titulo: string; prendas: Array<{ prenda: string; busqueda: string }>; tip: string } | null;
   guardrail?: MotivoGuardrail | null;
   /** For the assistant's intake questions: which one it is (0, 1, 2). */
   pregunta?: number;
@@ -49,6 +52,8 @@ export type Respuesta =
       siguiente: number | null;
       seguimientosRestantes: number;
       revision: boolean;
+      /** The section, once answered: it picks the style suggestions and the store links. */
+      seccion: Seccion | null;
     }
   | { ok: false; error: string };
 
@@ -151,6 +156,11 @@ export async function enviar(sessionIdCrudo: string, textoCrudo: string): Promis
 
   const texto = (enIntake ? respuestaIntakeSchema : mensajeSchema).safeParse(textoCrudo);
   if (!texto.success) return { ok: false, error: texto.error.issues[0]?.message ?? "Write a few words." };
+  // The section is a closed choice: it decides what may be suggested.
+  if (enIntake && PREGUNTAS[pendiente].id === "seccion" && !(texto.data in SECCIONES)) {
+    return { ok: false, error: "Choose one of the three options." };
+  }
+  const seccion = seccionDe(intake.seccion ?? (PREGUNTAS[pendiente]?.id === "seccion" ? texto.data : undefined));
 
   const { count: yaEscritos } = await admin
     .from("chat_messages")
@@ -172,7 +182,7 @@ export async function enviar(sessionIdCrudo: string, textoCrudo: string): Promis
     mensajes.push(
       await guardar(sessionId, { rol: "asistente", contenido: RESPUESTA_GUARDRAIL[alto.motivo], guardrail: alto.motivo }),
     );
-    return { ok: true, mensajes, siguiente: enIntake ? pendiente : null, seguimientosRestantes: restantes(seguimientosHechos, enIntake), revision: true };
+    return { ok: true, mensajes, siguiente: enIntake ? pendiente : null, seguimientosRestantes: restantes(seguimientosHechos, enIntake), revision: true, seccion };
   }
 
   if (enIntake) {
@@ -183,7 +193,7 @@ export async function enviar(sessionIdCrudo: string, textoCrudo: string): Promis
       mensajes.push(
         await guardar(sessionId, { rol: "asistente", contenido: PREGUNTAS[siguiente].texto, pregunta: siguiente }),
       );
-      return { ok: true, mensajes, siguiente, seguimientosRestantes: SEGUIMIENTOS_MAXIMOS, revision: sesion.needs_review };
+      return { ok: true, mensajes, siguiente, seguimientosRestantes: SEGUIMIENTOS_MAXIMOS, revision: sesion.needs_review, seccion };
     }
     // The three are in: the first suggestion.
     return responder(sessionId, intakeSchema.parse(nuevo), texto.data, true, mensajes, 0, sesion.needs_review);
@@ -223,18 +233,24 @@ async function responder(
   // The current message is already saved; it goes as "new message", not history.
   const historial = (historialCrudo ?? []).slice(0, -1) as Array<{ rol: "usuaria" | "asistente"; contenido: string }>;
 
-  const resultado = await responderChat({
-    intake,
-    historial,
-    mensaje: esPrimera ? "Suggest an outfit for me." : texto,
-    esPrimera,
-  });
+  const pedir = (nota = "") =>
+    responderChat({
+      intake,
+      historial,
+      mensaje: (esPrimera ? "Suggest an outfit for me." : texto) + nota,
+      esPrimera,
+    });
+  const registrarCosto = (estCostUsd: number) =>
+    admin.from("api_costs").insert({ provider: "google", operation: "chat_reply", est_cost_usd: estCostUsd });
 
-  await admin.from("api_costs").insert({
-    provider: "google",
-    operation: "chat_reply",
-    est_cost_usd: resultado.estCostUsd,
-  });
+  let resultado = await pedir();
+  await registrarCosto(resultado.estCostUsd);
+  // A dress for someone shopping in men's: asked once more, with the reason.
+  if (!resultado.ok && resultado.motivo === "seccion") {
+    console.warn("[chat] the outfit didn't match the section; asking again");
+    resultado = await pedir(" (Only garments from THE SECTION: no dresses, skirts, blouses or heels.)");
+    await registrarCosto(resultado.estCostUsd);
+  }
 
   const quedan = Math.max(0, SEGUIMIENTOS_MAXIMOS - seguimientosHechos);
 
@@ -254,7 +270,7 @@ async function responder(
     mensajes.push(
       await guardar(sessionId, { rol: "asistente", contenido: RESPUESTA_GUARDRAIL[motivo], guardrail: motivo, modelo: resultado.model }),
     );
-    return { ok: true, mensajes, siguiente: null, seguimientosRestantes: quedan, revision: true };
+    return { ok: true, mensajes, siguiente: null, seguimientosRestantes: quedan, revision: true, seccion: seccionDe(intake.seccion) };
   }
 
   mensajes.push(
@@ -265,7 +281,7 @@ async function responder(
       modelo: resultado.model,
     }),
   );
-  return { ok: true, mensajes, siguiente: null, seguimientosRestantes: quedan, revision: yaEnRevision };
+  return { ok: true, mensajes, siguiente: null, seguimientosRestantes: quedan, revision: yaEnRevision, seccion: seccionDe(intake.seccion) };
 }
 
 /** Thumbs up or down. One per answer; rating again changes nothing. */

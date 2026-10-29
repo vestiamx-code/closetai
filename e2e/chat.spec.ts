@@ -45,11 +45,13 @@ async function costosDeChat() {
   return count ?? 0;
 }
 
-/** Answers the three intake questions with the suggested chips. */
-async function contestarIntake(page: Page) {
+/** Answers the section, occasion and weather with the suggested tiles; style is left to the test. */
+async function contestarIntake(page: Page, seccion = "Men’s clothes") {
   // The question is in a bubble and also in the text box's hidden label: read the bubble.
   const chat = page.getByTestId("chat").locator('li[data-rol="asistente"]');
-  await chat.getByText("What’s the occasion?").waitFor();
+  await chat.getByText("Which section do you usually shop in?").waitFor();
+  await page.getByTestId("sugerencias").getByRole("button", { name: seccion }).click();
+  await expect(chat.getByText("What’s the occasion?")).toBeVisible({ timeout: 20_000 });
   await page.getByTestId("sugerencias").getByRole("button", { name: "Work" }).click();
   await expect(chat.getByText("Where are you, and what’s the weather like?")).toBeVisible({ timeout: 20_000 });
   await page.getByTestId("sugerencias").getByRole("button", { name: "Rainy" }).click();
@@ -83,7 +85,7 @@ test.describe("Chat", () => {
     if (ids.length) await admin().from("chat_sessions").delete().in("id", ids);
   });
 
-  test("the three questions come in order, and the outfit only after the third", async ({ page }) => {
+  test("the questions come in order, the outfit only after the last, and a men's outfit has no dress", async ({ page }) => {
     test.setTimeout(150_000);
 
     const r = await page.goto("/chat");
@@ -93,19 +95,30 @@ test.describe("Chat", () => {
     const costosAntes = await costosDeChat();
     await contestarIntake(page);
 
-    // Two answers in: no suggestion yet, and the model has not been called.
+    // Three answers in: no suggestion yet, and the model has not been called.
     await expect(page.getByTestId("outfit")).toHaveCount(0);
     expect(await costosDeChat()).toBe(costosAntes);
     const [sesion] = await sesionesDeEstaCorrida();
-    expect(sesion.intake).toEqual({ ocasion: "Work", clima: "Rainy" });
+    expect(sesion.intake).toEqual({ seccion: "Men’s clothes", ocasion: "Work", clima: "Rainy" });
+    // The style suggestions followed the section.
+    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Smart" })).toBeVisible();
+    await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Romantic" })).toHaveCount(0);
 
     await page.getByTestId("sugerencias").getByRole("button", { name: "Comfortable" }).click();
     await esperarSugerencia(page);
 
     const card = page.getByTestId("outfit").first();
-    expect(await card.locator("li").count()).toBeGreaterThanOrEqual(2);
+    const prendas = card.getByTestId("prenda");
+    expect(await prendas.count()).toBeGreaterThanOrEqual(2);
     await expect(card).toContainText("Tip:");
-    expect(await costosDeChat()).toBe(costosAntes + 1);
+    expect(await card.textContent()).not.toMatch(/\b(dress|skirt|gown|blouse|heels)\b/i);
+    // Every garment brings its store links, and Mango opens the men's results.
+    for (const prenda of await prendas.all()) {
+      await expect(prenda.locator("[data-tienda]")).toHaveCount(3);
+      expect(await prenda.locator('[data-tienda="mango"]').getAttribute("href")).toMatch(/^\/go\/mango\/.+\?s=hombre$/);
+    }
+    // One answer, or two if the first suggested a dress and was asked again.
+    expect([costosAntes + 1, costosAntes + 2]).toContain(await costosDeChat());
   });
 
   test("a diet question gets the guardrail, is flagged for review, and never reaches the model", async ({ page }) => {
@@ -113,6 +126,7 @@ test.describe("Chat", () => {
     const costosAntes = await costosDeChat();
     const antes = (await sesionesDeEstaCorrida()).length;
 
+    await page.getByTestId("sugerencias").getByRole("button", { name: "Women’s clothes" }).click();
     await page.getByLabel("What’s the occasion?").fill("How do I lose 5 kilos before the party?");
     await page.getByRole("button", { name: "Send" }).click();
 
@@ -128,7 +142,7 @@ test.describe("Chat", () => {
     expect(sesion.needs_review).toBe(true);
     expect(sesion.motivo_revision).toBe("dieta");
     // The guardrail answer didn't count as an intake answer…
-    expect(sesion.intake).toEqual({});
+    expect(sesion.intake).toEqual({ seccion: "Women’s clothes" });
     // …and nobody paid a model for it.
     expect(await costosDeChat()).toBe(costosAntes);
     // The same question is still waiting.
@@ -140,7 +154,7 @@ test.describe("Chat", () => {
 
     await page.goto("/chat");
     const arribaAntes = await page.locator('[data-total="arriba"]').textContent();
-    await contestarIntake(page);
+    await contestarIntake(page, "Women’s clothes");
     await page.getByTestId("sugerencias").getByRole("button", { name: "Minimal" }).click();
     await esperarSugerencia(page);
 
@@ -183,7 +197,7 @@ test.describe("Chat", () => {
 test("on a phone, the chat fits the screen and the suggestions can be tapped", async ({ page }) => {
   test.skip(test.info().project.name !== "mobile-chrome", "Phone profile only");
   await page.goto("/chat");
-  await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Work" })).toBeVisible();
+  await expect(page.getByTestId("sugerencias").getByRole("button", { name: "Men’s clothes" })).toBeVisible();
   const desborde = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(desborde).toBe(0);
 });

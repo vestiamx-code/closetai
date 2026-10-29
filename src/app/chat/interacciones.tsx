@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 
-import { PREGUNTAS, SEGUIMIENTOS_MAXIMOS } from "@/lib/chat";
+import { PREGUNTAS, SEGUIMIENTOS_MAXIMOS, sugerenciasDe, type Seccion } from "@/lib/chat";
+import { TIENDAS, tiendasDelChat } from "@/lib/compras";
 
 import { calificar, enviar, guardarResumen, iniciarConversacion, type Mensaje } from "./actions";
 
@@ -19,6 +20,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
   const [texto, setTexto] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [calificados, setCalificados] = useState<Record<number, 1 | -1>>({});
+  const [seccion, setSeccion] = useState<Seccion | null>(null);
   const [pendiente, iniciar] = useTransition();
   const fin = useRef<HTMLDivElement>(null);
 
@@ -55,6 +57,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
       setMensajes((previos) => [...previos, ...r.mensajes]);
       setSiguiente(r.siguiente);
       setRestantes(r.seguimientosRestantes);
+      setSeccion(r.seccion);
       if (r.revision) setRevision(true);
     });
   }
@@ -80,6 +83,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
     setRevision(false);
     setError(null);
     setCalificados({});
+    setSeccion(null);
   }
 
   return (
@@ -151,11 +155,28 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                     <>
                       <p className="text-[11px] font-medium tracking-[0.14em] text-barro uppercase">Your outfit</p>
                       <p className="mt-0.5 font-display text-2xl leading-tight font-semibold">{m.outfit.titulo}</p>
-                      <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
+                      <ul className="mt-3 space-y-1.5">
                         {m.outfit.prendas.map((p) => (
-                          <li key={p} className="flex items-center gap-2 rounded-lg bg-arena/70 px-3 py-2 text-sm">
-                            <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-barro" />
-                            {p}
+                          <li key={p.prenda} data-testid="prenda" className="rounded-xl bg-arena/70 px-3 py-2.5 text-sm">
+                            <span className="flex items-center gap-2 font-medium">
+                              <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-barro" />
+                              {p.prenda}
+                            </span>
+                            <span className="mt-1.5 flex flex-wrap items-center gap-1.5 pl-3.5 text-xs text-text-muted">
+                              Find something similar:
+                              {tiendasDelChat(seccion).map((tienda) => (
+                                <a
+                                  key={tienda}
+                                  data-tienda={tienda}
+                                  href={`/go/${tienda}/${encodeURIComponent(p.busqueda)}${seccion ? `?s=${seccion}` : ""}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer nofollow"
+                                  className="rounded-full border border-border bg-bg px-2.5 py-0.5 font-medium text-text transition hover:border-barro"
+                                >
+                                  {TIENDAS[tienda].nombre} ↗
+                                </a>
+                              ))}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -163,10 +184,16 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                   ) : null}
                   <p className={m.outfit ? "mt-3 text-pretty text-text-muted" : "text-pretty"}>{m.contenido}</p>
                   {m.outfit ? (
-                    <p className="mt-2 text-sm text-pretty">
-                      <span className="text-text-muted">Tip: </span>
-                      {m.outfit.tip}
-                    </p>
+                    <>
+                      <p className="mt-2 text-sm text-pretty">
+                        <span className="text-text-muted">Tip: </span>
+                        {m.outfit.tip}
+                      </p>
+                      <p className="mt-2 text-xs text-text-muted text-pretty">
+                        Each store link opens that store’s own results, with photos and prices. ClosetAI doesn’t
+                        sell anything and these aren’t ads.
+                      </p>
+                    </>
                   ) : null}
                   <div className="mt-3 flex items-center gap-2" data-testid="calificar">
                     {([1, -1] as const).map((v) => (
@@ -216,7 +243,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
 
         {pregunta ? (
           <div data-testid="sugerencias" className="llega mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {pregunta.sugerencias.map((s) => (
+            {sugerenciasDe(pregunta, seccion).map((s) => (
               <button
                 key={s.texto}
                 type="button"
@@ -236,7 +263,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
           </div>
         ) : null}
 
-        {agotado ? (
+        {pregunta && !pregunta.ejemplo ? null : agotado ? (
           <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-text-muted">
             That’s the limit for this conversation.
             <button type="button" onClick={empezarDeNuevo} className="underline underline-offset-4 hover:text-text">
@@ -260,7 +287,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
               onChange={(e) => setTexto(e.target.value)}
               maxLength={pregunta ? 120 : 400}
               disabled={pendiente || bloqueado}
-              placeholder={pregunta ? pregunta.ejemplo : `Ask a follow-up… (${restantes} left)`}
+              placeholder={pregunta ? (pregunta.ejemplo ?? undefined) : `Ask a follow-up… (${restantes} left)`}
               className="min-w-0 flex-1 rounded-lg border border-border bg-bg px-3.5 py-2.5 outline-none focus:border-text disabled:opacity-60"
             />
             <button
@@ -365,7 +392,11 @@ function Progreso({ paso }: { paso: number }) {
             >
               {hecho ? "✓" : i + 1}
             </span>
-            <span className={`text-xs sm:text-sm ${actual ? "font-medium text-text" : "text-text-muted"}`}>{p.paso}</span>
+            <span
+              className={`text-xs sm:inline sm:text-sm ${actual ? "font-medium text-text" : "hidden text-text-muted"}`}
+            >
+              {p.paso}
+            </span>
             {i < PREGUNTAS.length - 1 ? (
               <span aria-hidden className={`h-px flex-1 ${hecho ? "bg-barro" : "bg-border"}`} />
             ) : null}

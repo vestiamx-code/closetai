@@ -30,7 +30,7 @@ import {
   type ResearchReportResult,
   type StyleCoreResult,
 } from "./schemas";
-import { leerRespuestaModelo, type Intake, type ResultadoRespuesta } from "@/lib/chat";
+import { leerRespuestaModelo, seccionDe, type Intake, type ResultadoRespuesta } from "@/lib/chat";
 import { revisarPost, type Canal, type PostGenerado } from "@/lib/marketing";
 import { datosParaElPrompt, type FuenteParaInforme, type RiesgoParaInforme } from "@/lib/research";
 
@@ -786,7 +786,16 @@ const ESQUEMA_CHAT = {
       nullable: true,
       properties: {
         titulo: { type: "string" },
-        prendas: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 5 },
+        prendas: {
+          type: "array",
+          minItems: 2,
+          maxItems: 5,
+          items: {
+            type: "object",
+            properties: { prenda: { type: "string" }, busqueda: { type: "string" } },
+            required: ["prenda", "busqueda"],
+          },
+        },
         tip: { type: "string" },
       },
       required: ["titulo", "prendas", "tip"],
@@ -819,6 +828,7 @@ export async function responderChat(entrada: {
   const promptVersion = CHAT_PROMPT_VERSION;
   const principal = MODELS.reasoningFallback();
   const contexto = [
+    `THE SECTION: ${entrada.intake.seccion}`,
     `THE OCCASION: ${entrada.intake.ocasion}`,
     `THE WEATHER: ${entrada.intake.clima}`,
     `THEIR STYLE: ${entrada.intake.estilo}`,
@@ -848,7 +858,7 @@ export async function responderChat(entrada: {
         }),
       TIEMPO_MAXIMO_ESTILISTA_MS,
     );
-    const leida = leerRespuestaModelo(response.text ?? "", entrada.esPrimera);
+    const leida = leerRespuestaModelo(response.text ?? "", entrada.esPrimera, seccionDe(entrada.intake.seccion));
     if (!leida.ok) console.warn(`[chat] ${modelo}: ${leida.motivo}`);
     return { ...leida, estCostUsd, model: modelo, promptVersion };
   } catch (error) {
