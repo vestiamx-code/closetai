@@ -7,13 +7,32 @@ import {
   leerRespuestaModelo,
   motivoDeClasificacion,
   revisarMensaje,
+  seccionDe,
+  sugerenciasDe,
   testerDe,
 } from "./chat";
+import { TIENDAS, tiendasDelChat } from "./compras";
 
 describe("the intake", () => {
-  it("asks exactly three questions, in order: occasion, weather, style", () => {
-    expect(PREGUNTAS.map((p) => p.id)).toEqual(["ocasion", "clima", "estilo"]);
+  it("asks the section first, then occasion, weather and style", () => {
+    expect(PREGUNTAS.map((p) => p.id)).toEqual(["seccion", "ocasion", "clima", "estilo"]);
     for (const p of PREGUNTAS) expect(p.sugerencias.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("the section is a closed choice with three answers, and nothing else counts", () => {
+    expect(PREGUNTAS[0].ejemplo).toBeNull();
+    expect(seccionDe("Men’s clothes")).toBe("hombre");
+    expect(seccionDe("Women’s clothes")).toBe("mujer");
+    expect(seccionDe("Either")).toBe("ambas");
+    expect(seccionDe("a man")).toBeNull();
+  });
+
+  it("the style suggestions follow the section", () => {
+    const estilo = PREGUNTAS.find((p) => p.id === "estilo")!;
+    const nombres = (s: Parameters<typeof sugerenciasDe>[1]) => sugerenciasDe(estilo, s).map((x) => x.texto);
+    expect(nombres("hombre")).toContain("Smart");
+    expect(nombres("hombre")).not.toContain("Romantic");
+    expect(nombres("mujer")).toContain("Romantic");
   });
 });
 
@@ -61,7 +80,14 @@ describe("the deterministic guardrail", () => {
 });
 
 describe("the model's answer", () => {
-  const outfit = { titulo: "Rainy office", prendas: ["Dark jeans", "Trench coat"], tip: "Roll the sleeves." };
+  const outfit = {
+    titulo: "Rainy office",
+    prendas: [
+      { prenda: "Dark jeans", busqueda: "jeans oscuros mujer" },
+      { prenda: "Trench coat", busqueda: "gabardina mujer" },
+    ],
+    tip: "Roll the sleeves.",
+  };
 
   it("accepts a first answer with an outfit", () => {
     const r = leerRespuestaModelo(JSON.stringify({ clasificacion: "on_topic", respuesta: "Here you go.", outfit }), true);
@@ -76,8 +102,32 @@ describe("the model's answer", () => {
 
   it("rejects broken JSON and an outfit with one garment", () => {
     expect(leerRespuestaModelo("not json", true).ok).toBe(false);
-    const una = JSON.stringify({ clasificacion: "on_topic", respuesta: "x", outfit: { ...outfit, prendas: ["Jeans"] } });
+    const una = JSON.stringify({ clasificacion: "on_topic", respuesta: "x", outfit: { ...outfit, prendas: [outfit.prendas[0]] } });
     expect(leerRespuestaModelo(una, true).ok).toBe(false);
+  });
+
+  it("rejects a dress in a men's outfit, and allows it in women's and in either", () => {
+    const conVestido = JSON.stringify({
+      clasificacion: "on_topic",
+      respuesta: "x",
+      outfit: { ...outfit, prendas: [{ prenda: "Red midi dress", busqueda: "vestido midi rojo" }, outfit.prendas[1]] },
+    });
+    expect(leerRespuestaModelo(conVestido, true, "hombre")).toEqual({ ok: false, motivo: "seccion" });
+    expect(leerRespuestaModelo(conVestido, true, "mujer").ok).toBe(true);
+    expect(leerRespuestaModelo(conVestido, true, "ambas").ok).toBe(true);
+    // The opposite: an ordinary men's outfit is not caught by accident.
+    const camisa = JSON.stringify({
+      clasificacion: "on_topic",
+      respuesta: "x",
+      outfit: {
+        ...outfit,
+        prendas: [
+          { prenda: "White oxford shirt", busqueda: "camisa oxford blanca hombre" },
+          { prenda: "Navy chinos", busqueda: "pantalon chino azul marino hombre" },
+        ],
+      },
+    });
+    expect(leerRespuestaModelo(camisa, true, "hombre").ok).toBe(true);
   });
 
   it("turns the model's own classification into a guardrail reason", () => {
@@ -95,3 +145,20 @@ describe("tester links", () => {
     expect(testerDe(undefined)).toBeNull();
   });
 });
+
+describe("the store links", () => {
+  it("Mango opens the section's results; H&M and Liverpool search as given", () => {
+    expect(TIENDAS.mango.url("camisa blanca hombre", "hombre")).toBe(
+      "https://shop.mango.com/mx/es/search/hombre?q=camisa%20blanca%20hombre",
+    );
+    expect(TIENDAS.mango.url("vestido negro mujer", "mujer")).toContain("/search/mujer?");
+    expect(TIENDAS.hm.url("sueter negro")).toBe("https://www2.hm.com/es_mx/search-results.html?q=sueter%20negro");
+    expect(TIENDAS.liverpool.url("sueter negro")).toBe("https://www.liverpool.com.mx/tienda?s=sueter+negro");
+  });
+
+  it("Mango is offered only when the section is known", () => {
+    expect(tiendasDelChat("hombre")).toEqual(["mango", "hm", "liverpool"]);
+    expect(tiendasDelChat("ambas")).not.toContain("mango");
+  });
+});
+

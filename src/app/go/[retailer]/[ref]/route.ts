@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { esTiendaValida, TIENDAS } from "@/lib/compras";
+import type { Seccion } from "@/lib/chat";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getUser } from "@/lib/auth";
 
@@ -23,7 +24,9 @@ export async function GET(
   }
 
   const busqueda = decodeURIComponent(ref).slice(0, 120);
-  const destino = TIENDAS[retailer].url(busqueda);
+  const s = request.nextUrl.searchParams.get("s");
+  const seccion: Seccion | undefined = s === "mujer" || s === "hombre" || s === "ambas" ? s : undefined;
+  const destino = TIENDAS[retailer].url(busqueda, seccion);
 
   // El registro no debe demorar la salida de la usuaria: si falla, se va igual.
   try {

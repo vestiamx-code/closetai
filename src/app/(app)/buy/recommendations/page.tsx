@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { BotonAnalizar } from "./interacciones";
 import { requireUser } from "@/lib/auth";
 import type { Hueco } from "@/lib/compras";
-import { TIENDAS } from "@/lib/compras";
+import { TIENDAS, TIENDAS_RECOMENDACIONES } from "@/lib/compras";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "What you’re missing" };
@@ -50,7 +50,7 @@ export default async function RecomendacionesPage() {
                 <p className="mt-2 leading-relaxed text-text-muted text-pretty">{hueco.porque}</p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {(Object.keys(TIENDAS) as Array<keyof typeof TIENDAS>).map((tienda) => (
+                  {TIENDAS_RECOMENDACIONES.map((tienda) => (
                     <a
                       key={tienda}
                       href={`/go/${tienda}/${encodeURIComponent(hueco.busqueda)}?rec=${hueco.id}`}

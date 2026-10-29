@@ -10,7 +10,7 @@ import { z } from "zod";
 
 // --------------------------------------------------------------------- intake
 
-export type PreguntaId = "ocasion" | "clima" | "estilo";
+export type PreguntaId = "seccion" | "ocasion" | "clima" | "estilo";
 
 export type Sugerencia = { texto: string; icono: string };
 
@@ -20,11 +20,37 @@ export type Pregunta = {
   paso: string;
   texto: string;
   sugerencias: Sugerencia[];
-  ejemplo: string;
+  /** Placeholder for the free-text answer; null when only the suggestions are valid. */
+  ejemplo: string | null;
 };
 
-/** The three questions, in the order they are asked. */
+/**
+ * Which section of a store the person shops in. Asked first, since Oct 29, 2026:
+ * Tamara tried the chat and it suggested a dress to someone who shops in men's.
+ * It is a closed choice, not free text: the answer decides which garments the
+ * model may suggest and which store section the links open.
+ */
+export type Seccion = "mujer" | "hombre" | "ambas";
+
+export const SECCIONES: Record<string, Seccion> = {
+  "Women’s clothes": "mujer",
+  "Men’s clothes": "hombre",
+  "Either": "ambas",
+};
+
+/** The four questions, in the order they are asked. */
 export const PREGUNTAS: Pregunta[] = [
+  {
+    id: "seccion",
+    paso: "Section",
+    texto: "Which section do you usually shop in?",
+    sugerencias: [
+      { texto: "Women’s clothes", icono: "👗" },
+      { texto: "Men’s clothes", icono: "👔" },
+      { texto: "Either", icono: "🔁" },
+    ],
+    ejemplo: null,
+  },
   {
     id: "ocasion",
     paso: "Occasion",
@@ -67,6 +93,41 @@ export const PREGUNTAS: Pregunta[] = [
 
 export type Intake = Record<PreguntaId, string>;
 
+/** The style suggestions follow the section: "Elegant" for everyone, "Smart" in men's. */
+const ESTILO_POR_SECCION: Record<Seccion, Sugerencia[]> = {
+  mujer: [
+    { texto: "Comfortable", icono: "🧶" },
+    { texto: "Minimal", icono: "🤍" },
+    { texto: "Elegant", icono: "🖤" },
+    { texto: "Bold", icono: "🔥" },
+    { texto: "Romantic", icono: "🌸" },
+  ],
+  hombre: [
+    { texto: "Comfortable", icono: "🧶" },
+    { texto: "Minimal", icono: "🤍" },
+    { texto: "Smart", icono: "🕶️" },
+    { texto: "Streetwear", icono: "🧢" },
+    { texto: "Sporty", icono: "👟" },
+  ],
+  ambas: [
+    { texto: "Comfortable", icono: "🧶" },
+    { texto: "Minimal", icono: "🤍" },
+    { texto: "Elegant", icono: "🖤" },
+    { texto: "Streetwear", icono: "🧢" },
+    { texto: "Sporty", icono: "👟" },
+  ],
+};
+
+/** The suggestions for a question, once the section is known. */
+export function sugerenciasDe(pregunta: Pregunta, seccion: Seccion | null): Sugerencia[] {
+  return pregunta.id === "estilo" && seccion ? ESTILO_POR_SECCION[seccion] : pregunta.sugerencias;
+}
+
+/** The section from the first answer, or null if it isn't one of the three. */
+export function seccionDe(respuesta: string | undefined): Seccion | null {
+  return (respuesta && SECCIONES[respuesta]) || null;
+}
+
 /** A free-text intake answer: short, and never empty. */
 export const respuestaIntakeSchema = z
   .string()
@@ -75,6 +136,7 @@ export const respuestaIntakeSchema = z
   .max(120, "Keep it under 120 characters.");
 
 export const intakeSchema = z.object({
+  seccion: z.enum(Object.keys(SECCIONES) as [string, ...string[]]),
   ocasion: respuestaIntakeSchema,
   clima: respuestaIntakeSchema,
   estilo: respuestaIntakeSchema,
@@ -227,7 +289,17 @@ export const respuestaModeloSchema = z.object({
   outfit: z
     .object({
       titulo: z.string().trim().min(1).max(80),
-      prendas: z.array(z.string().trim().min(1).max(80)).min(2).max(5),
+      // Each garment in English for the card, and how to search for it in a
+      // Mexican store, in Spanish ("camisa blanca de lino hombre").
+      prendas: z
+        .array(
+          z.object({
+            prenda: z.string().trim().min(1).max(80),
+            busqueda: z.string().trim().min(2).max(80),
+          }),
+        )
+        .min(2)
+        .max(5),
       tip: z.string().trim().min(1).max(240),
     })
     .nullable()
@@ -245,7 +317,14 @@ export type ResultadoRespuesta =
  * outfit: that is the whole point of the intake. A follow-up may answer in
  * words only ("yes, sneakers work too").
  */
-export function leerRespuestaModelo(raw: string, esPrimera: boolean): ResultadoRespuesta {
+/** Garments that don't belong in a men's outfit. The model is told; the code checks. */
+const SOLO_SECCION_MUJER = /\b(dress|skirt|gown|blouse|bra|heels|vestido|falda|blusa|tacones)\b/i;
+
+export function leerRespuestaModelo(
+  raw: string,
+  esPrimera: boolean,
+  seccion: Seccion | null = null,
+): ResultadoRespuesta {
   let json: unknown;
   try {
     json = JSON.parse(raw);
@@ -256,6 +335,12 @@ export function leerRespuestaModelo(raw: string, esPrimera: boolean): ResultadoR
   if (!r.success) return { ok: false, motivo: "the answer did not match the contract" };
   if (esPrimera && r.data.clasificacion === "on_topic" && !r.data.outfit) {
     return { ok: false, motivo: "the first answer came without an outfit" };
+  }
+  if (
+    seccion === "hombre" &&
+    r.data.outfit?.prendas.some((p) => SOLO_SECCION_MUJER.test(`${p.prenda} ${p.busqueda}`))
+  ) {
+    return { ok: false, motivo: "seccion" };
   }
   return { ok: true, respuesta: r.data };
 }

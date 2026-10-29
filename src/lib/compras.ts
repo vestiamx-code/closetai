@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { Seccion } from "@/lib/chat";
+
 /** Un hueco detectado en el clóset (Apéndice A4). */
 export const huecoSchema = z.object({
   prenda: z.string().trim().min(1).max(120),
@@ -53,13 +55,42 @@ export const TIENDAS = {
   },
   mercadolibre: {
     nombre: "Mercado Libre",
-    url: (q: string) => `https://listado.mercadolibre.com.mx/${encodeURIComponent(q).replace(/%20/g, "-")}`,
+    url: (q: string) =>
+      `https://listado.mercadolibre.com.mx/${encodeURIComponent(q).replace(/%20/g, "-")}`,
   },
   shein: {
     nombre: "Shein",
     url: (q: string) => `https://mx.shein.com/pdsearch/${encodeURIComponent(q)}`,
   },
-} as const;
+  // The three below are the /chat stores (Week 5). Each search address was
+  // opened in a browser on Oct 29, 2026 and lands on results with photos. Zara
+  // and Bershka were tried too and dropped: their search links redirect to the
+  // homepage, which would leave the person with nothing.
+  mango: {
+    nombre: "Mango",
+    // Mango splits its results by section in the path.
+    url: (q: string, seccion?: Seccion) =>
+      `https://shop.mango.com/mx/es/search/${seccion === "hombre" ? "hombre" : "mujer"}?q=${encodeURIComponent(q)}`,
+  },
+  hm: {
+    nombre: "H&M",
+    url: (q: string) =>
+      `https://www2.hm.com/es_mx/search-results.html?q=${encodeURIComponent(q)}`,
+  },
+  liverpool: {
+    nombre: "Liverpool",
+    url: (q: string) =>
+      `https://www.liverpool.com.mx/tienda?s=${encodeURIComponent(q).replace(/%20/g, "+")}`,
+  },
+} satisfies Record<string, { nombre: string; url: (q: string, seccion?: Seccion) => string }>;
+
+/** Stores offered under each garment in /chat. Mango only when the section is known. */
+export function tiendasDelChat(seccion: Seccion | null): TiendaId[] {
+  return seccion === "mujer" || seccion === "hombre" ? ["mango", "hm", "liverpool"] : ["hm", "liverpool"];
+}
+
+/** Stores offered in /buy/recommendations, as before Week 5. */
+export const TIENDAS_RECOMENDACIONES: TiendaId[] = ["amazon", "mercadolibre", "shein"];
 
 export type TiendaId = keyof typeof TIENDAS;
 
