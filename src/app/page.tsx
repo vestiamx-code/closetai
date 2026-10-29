@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/logo";
+
 import { EXPERIMENTO, varianteDe, type Variante } from "@/lib/ab";
 
 import { BotonEmpezar, Experimento } from "./experimento";
@@ -79,7 +81,7 @@ export default async function Home() {
         />
 
         <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
-          <span className="font-display text-xl font-semibold tracking-tight">ClosetAI</span>
+          <Logo prioridad />
           <nav aria-label="Main" className="flex items-center gap-1 sm:gap-2">
             <Link href="/product" className="hidden rounded-full px-4 py-2 text-sm text-text-muted transition hover:text-text sm:inline">
               Product

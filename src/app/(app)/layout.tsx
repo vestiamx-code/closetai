@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/logo";
+
 import { NavegacionEscritorio, NavegacionMovil } from "./navegacion";
 
 import { salir } from "@/app/(auth)/actions";
@@ -12,8 +14,8 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     <div className="flex min-h-full flex-1 flex-col">
       <header className="sticky top-0 z-10 border-b border-border bg-bg/85 backdrop-blur">
         <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/closet" className="font-display text-lg font-semibold tracking-tight">
-            ClosetAI
+          <Link href="/closet" aria-label="ClosetAI, my closet" className="shrink-0">
+            <Logo alto={32} />
           </Link>
           <div className="flex items-center gap-5 text-sm">
             <NavegacionEscritorio />

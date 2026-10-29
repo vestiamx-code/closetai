@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/logo";
+
 import { pesos } from "@/lib/precios";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -77,8 +79,8 @@ export default async function Producto() {
   return (
     <main className="flex-1">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-          ClosetAI
+        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
+          <Logo />
         </Link>
         <Link
           href="/pricing"

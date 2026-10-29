@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/logo";
+
 import { EXPERIMENTO, resultado, type Conteo, type Variante } from "@/lib/ab";
 import {
   calendarioCsv,
@@ -104,8 +106,8 @@ export default async function Marketing() {
   return (
     <main className="flex-1">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-          ClosetAI
+        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
+          <Logo />
         </Link>
         <Link href="/" className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text">
           See the homepage

@@ -71,3 +71,34 @@ def icono_completo(logo: Image.Image) -> Image.Image:
     lienzo.alpha_composite(red, ((512 - red.width) // 2, y_ai + a.height // 2 - red.height // 2))
     lienzo.alpha_composite(a, ((512 - a.width) // 2, y_ai))
     return lienzo
+
+
+def _aclarar(im: Image.Image, cuanto: float) -> Image.Image:
+    """The same letters, lighter, for dark mode: brown on black can't be read."""
+    rgb = im.convert("RGB")
+    claro = Image.blend(rgb, Image.new("RGB", rgb.size, (250, 240, 230)), cuanto).convert("RGBA")
+    claro.putalpha(im.getchannel("A"))
+    return claro
+
+
+def logo_horizontal(logo: Image.Image, oscuro: bool = False) -> Image.Image:
+    """
+    "CLOSET AI" in one line, transparent, for the site's header: the letters cut
+    out of the logo and the network redrawn behind the "AI", as in the logo.
+    """
+    closet = _letras(logo, (322, 300, 908, 430))
+    ai = _letras(logo, (930, 300, 1090, 425))
+    if oscuro:
+        closet = _aclarar(closet, 0.62)
+        ai = _aclarar(ai, 0.18)
+    red = _red(205)
+    separacion = 14
+    ancho = closet.width + separacion + red.width
+    alto = red.height
+    lienzo = Image.new("RGBA", (ancho, alto), (0, 0, 0, 0))
+    lienzo.alpha_composite(closet, (0, (alto - closet.height) // 2))
+    x_red = closet.width + separacion
+    lienzo.alpha_composite(red, (x_red, 0))
+    lienzo.alpha_composite(ai, (x_red + (red.width - ai.width) // 2, (alto - ai.height) // 2))
+    return lienzo
+

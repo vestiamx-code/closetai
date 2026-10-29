@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/logo";
+
 export const metadata: Metadata = {
   title: "Privacy notice",
   description: "What data ClosetAI keeps, what for, and how to delete it.",
@@ -10,8 +12,8 @@ export default function PrivacidadPage() {
   return (
     <main className="flex-1">
       <header className="mx-auto w-full max-w-2xl px-6 py-6">
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-          ClosetAI
+        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
+          <Logo />
         </Link>
       </header>
 

@@ -33,6 +33,12 @@ icono_rgba.save(app / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48), (64, 6
 publico = RAIZ / "public/marca"
 publico.mkdir(exist_ok=True)
 icono.resize((96, 96), Image.LANCZOS).save(publico / "icono-96.png")
+
+# The header wordmark, one line, for light and dark mode. 3x the size it is shown at.
+for nombre, oscuro in (("logo-horizontal.png", False), ("logo-horizontal-oscuro.png", True)):
+    h = _mod.logo_horizontal(logo, oscuro)
+    alto = 120
+    h.resize((round(h.width * alto / h.height), alto), Image.LANCZOS).save(publico / nombre)
 logo.save(publico / "logo-closetai.jpg", quality=90)
 
 # 1200×630 for link previews, WITHOUT the tagline. "Your stylist in your pocket"
