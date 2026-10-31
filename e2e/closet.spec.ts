@@ -83,7 +83,8 @@ test.describe("Clóset digital", () => {
     test.setTimeout(120_000);
 
     await iniciarSesion(page);
-    await expect(page.getByRole("heading", { name: "My closet" })).toBeVisible();
+    // The title carries the account's name, not a generic "My closet".
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Prueba E2E’s closet");
     await expect(page.getByText("Start with ten garments")).toBeVisible();
 
     await page.getByRole("link", { name: /Upload my first photos|Add garments/ }).first().click();

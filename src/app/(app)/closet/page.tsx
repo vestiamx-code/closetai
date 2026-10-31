@@ -10,7 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = { title: "My closet" };
 
 export default async function ClosetPage({ searchParams }: PageProps<"/closet">) {
-  await requireUser();
+  const user = await requireUser();
   const params = await searchParams;
   const categoria = typeof params.categoria === "string" ? params.categoria : undefined;
 
@@ -23,8 +23,15 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
 
   if (categoria) consulta = consulta.eq("category", categoria);
 
-  const { data } = await consulta;
+  const [{ data }, { data: perfil }] = await Promise.all([
+    consulta,
+    supabase.from("profiles").select("display_name").eq("id", user.id).single(),
+  ]);
   const prendas = (data ?? []) as Prenda[];
+  // The closet carries its owner's name ("Flash’s closet"), as Tamara asked on
+  // Oct 30, 2026. Without a name it stays "My closet".
+  const nombre = perfil?.display_name?.trim();
+  const titulo = nombre ? `${nombre}’s closet` : "My closet";
 
   // The filters need the real categories, not the filtered ones.
   const { data: todas } = await supabase.from("garments").select("category").eq("status", "active");
@@ -40,7 +47,7 @@ export default async function ClosetPage({ searchParams }: PageProps<"/closet">)
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-            My closet
+            {titulo}
           </h1>
           <p className="mt-1 text-text-muted">
             {prendas.length === 0
