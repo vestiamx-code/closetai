@@ -159,6 +159,28 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                       <ul className="mt-3 space-y-1.5">
                         {m.outfit.prendas.map((p) => (
                           <li key={p.prenda} data-testid="prenda" className="rounded-xl bg-arena/70 px-3 py-2.5 text-sm">
+                            {p.foto ? (
+                              <span data-testid="foto" className="mb-2 block">
+                                <Image
+                                  src={p.foto.url}
+                                  alt={p.foto.alt}
+                                  width={350}
+                                  height={440}
+                                  sizes="(max-width: 640px) 70vw, 320px"
+                                  className="max-h-72 w-full rounded-lg object-cover"
+                                />
+                                <span className="mt-1 block text-[11px] text-text-muted">
+                                  Inspiration photo by{" "}
+                                  <a href={p.foto.fotografoUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                                    {p.foto.fotografo}
+                                  </a>{" "}
+                                  on{" "}
+                                  <a href={p.foto.paginaUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                                    Pexels
+                                  </a>
+                                </span>
+                              </span>
+                            ) : null}
                             <span className="flex items-center gap-2 font-medium">
                               <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-barro" />
                               {p.prenda}

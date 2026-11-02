@@ -22,6 +22,7 @@ import {
   type MotivoGuardrail,
   type Seccion,
 } from "@/lib/chat";
+import { buscarFoto, type Foto } from "@/lib/fotos";
 import { huellaDeQuienPide } from "@/lib/ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -38,7 +39,7 @@ export type Mensaje = {
   id: number;
   rol: "usuaria" | "asistente";
   contenido: string;
-  outfit?: { titulo: string; prendas: Array<{ prenda: string; busqueda: string }>; tip: string } | null;
+  outfit?: { titulo: string; prendas: Array<{ prenda: string; busqueda: string; foto?: Foto | null }>; tip: string } | null;
   guardrail?: MotivoGuardrail | null;
   /** For the assistant's intake questions: which one it is (0, 1, 2). */
   pregunta?: number;
@@ -273,11 +274,22 @@ async function responder(
     return { ok: true, mensajes, siguiente: null, seguimientosRestantes: quedan, revision: true, seccion: seccionDe(intake.seccion) };
   }
 
+  // The photos are searched here, not in the model call: one failing never costs the answer.
+  const original = resultado.respuesta.outfit;
+  const outfit = original
+    ? {
+        ...original,
+        prendas: await Promise.all(
+          original.prendas.map(async (p) => ({ ...p, foto: await buscarFoto(p.prenda, seccionDe(intake.seccion)) })),
+        ),
+      }
+    : null;
+
   mensajes.push(
     await guardar(sessionId, {
       rol: "asistente",
       contenido: resultado.respuesta.respuesta,
-      outfit: resultado.respuesta.outfit ?? null,
+      outfit,
       modelo: resultado.model,
     }),
   );

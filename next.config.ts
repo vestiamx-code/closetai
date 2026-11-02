@@ -38,6 +38,8 @@ const nextConfig: NextConfig = {
         hostname: "gmchukoycgrrjwhmudbt.supabase.co",
         pathname: "/storage/v1/object/sign/**",
       },
+      // The inspiration photos in /chat (src/lib/fotos.ts).
+      { protocol: "https", hostname: "images.pexels.com", pathname: "/photos/**" },
     ],
   },
 };
