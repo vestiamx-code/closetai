@@ -166,7 +166,8 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                                   alt={p.foto.alt}
                                   width={350}
                                   height={440}
-                                  sizes="(max-width: 640px) 70vw, 320px"
+                                  // Served from Unsplash's own address, as its API guidelines require.
+                                  unoptimized
                                   className="max-h-72 w-full rounded-lg object-cover"
                                 />
                                 <span className="mt-1 block text-[11px] text-text-muted">
@@ -176,7 +177,7 @@ export function Chat({ tester }: { tester: 1 | 2 | 3 | null }) {
                                   </a>{" "}
                                   on{" "}
                                   <a href={p.foto.paginaUrl} target="_blank" rel="noopener noreferrer" className="underline">
-                                    Pexels
+                                    Unsplash
                                   </a>
                                 </span>
                               </span>

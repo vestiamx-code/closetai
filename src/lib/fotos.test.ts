@@ -4,13 +4,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { buscarFoto, textoDeBusqueda } from "./fotos";
 
 const RESPUESTA = {
-  photos: [
+  results: [
     {
-      url: "https://www.pexels.com/photo/1/",
-      alt: "A trench coat",
-      photographer: "Ana",
-      photographer_url: "https://www.pexels.com/@ana",
-      src: { medium: "https://images.pexels.com/photos/1/a.jpeg" },
+      alt_description: "A trench coat",
+      urls: { small: "https://images.unsplash.com/photo-1?w=400" },
+      links: { html: "https://unsplash.com/photos/1" },
+      user: { name: "Ana", links: { html: "https://unsplash.com/@ana" } },
     },
   ],
 };
@@ -27,8 +26,8 @@ describe("a photo for a garment", () => {
     expect(textoDeBusqueda("white shirt", "ambas")).toBe("white shirt fashion");
   });
 
-  it("without a key there is no photo, and Pexels is not called", async () => {
-    vi.stubEnv("PEXELS_API_KEY", "");
+  it("without a key there is no photo, and Unsplash is not called", async () => {
+    vi.stubEnv("UNSPLASH_ACCESS_KEY", "");
     const llamada = vi.fn();
     vi.stubGlobal("fetch", llamada);
     expect(await buscarFoto("trench coat", "mujer")).toBeNull();
@@ -36,24 +35,24 @@ describe("a photo for a garment", () => {
   });
 
   it("brings the image and the photographer's credit", async () => {
-    vi.stubEnv("PEXELS_API_KEY", "k");
+    vi.stubEnv("UNSPLASH_ACCESS_KEY", "k");
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(RESPUESTA))));
     expect(await buscarFoto("trench coat", "mujer")).toEqual({
-      url: "https://images.pexels.com/photos/1/a.jpeg",
+      url: "https://images.unsplash.com/photo-1?w=400",
       alt: "A trench coat",
       fotografo: "Ana",
-      fotografoUrl: "https://www.pexels.com/@ana",
-      paginaUrl: "https://www.pexels.com/photo/1/",
+      fotografoUrl: "https://unsplash.com/@ana?utm_source=closetai&utm_medium=referral",
+      paginaUrl: "https://unsplash.com/?utm_source=closetai&utm_medium=referral",
     });
   });
 
   it("an error, a timeout or no results mean no photo, never a broken chat", async () => {
-    vi.stubEnv("PEXELS_API_KEY", "k");
+    vi.stubEnv("UNSPLASH_ACCESS_KEY", "k");
     vi.stubGlobal("fetch", vi.fn(async () => new Response("no", { status: 429 })));
     expect(await buscarFoto("x", null)).toBeNull();
     vi.stubGlobal("fetch", vi.fn(async () => { throw new DOMException("t", "TimeoutError"); }));
     expect(await buscarFoto("x", null)).toBeNull();
-    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ photos: [] }))));
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ results: [] }))));
     expect(await buscarFoto("x", null)).toBeNull();
   });
 });
