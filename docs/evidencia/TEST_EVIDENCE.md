@@ -584,3 +584,11 @@ also checks that any photo shown comes from Unsplash and links back with the req
 Live on https://closetai.lat, in a phone profile, with the test header: women's conversation **3 of 3** garments
 with a loaded photo, men's conversation **4 of 4**. All three external tests happened before the photos existed,
 so none of them has evaluated this change.
+
+## [2026-11-04] — The human checkpoint, end to end in production
+
+Until today no account was allowed into `/admin`, so the review list had never been used. Tamara created her
+admin account and did it by hand on https://closetai.lat: a diet question in `/chat` got the guardrail, the
+conversation appeared in `/admin` with the reason "diet" and what she wrote (`admin-revision.jpg`), and "Mark
+reviewed" removed it from the list (`admin-revisado.jpg`). In the database, `revisado_at` is set. This flow has
+no automated test: it needs an allow-listed account, so it was checked by hand once.
