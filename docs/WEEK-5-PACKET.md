@@ -240,3 +240,5 @@ Tamara tried `/chat` and it could suggest a dress to someone shopping in men's. 
 |---|---|---|
 | 3b | Section first | Before the occasion, a closed question — women's, men's or either — that sets the style suggestions and the garments allowed; a men's outfit with a dress, skirt, blouse or heels is rejected |
 | 11 | Find it in a store | Every garment links to Mango, H&M and Liverpool, each opening that store's search results; Mango opens the section's results |
+
+| 12 | Inspiration photos | Added Nov 4, from tester 1's feedback: each garment shows a licensed Unsplash photo from its section, credited and labelled; without one, the chat still answers |

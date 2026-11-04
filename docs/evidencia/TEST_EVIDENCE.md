@@ -575,3 +575,12 @@ used the chat at her home, on her Wi-Fi. That is written here rather than left o
 asked for. Tester 1 expected pictures of the suggested clothes: the only defect any of them reported, and
 the same thing Tamara asked for when she tried it.
 
+## [2026-11-04] — After adding the photos
+
+Unit tests: **116 passed**, 6 skipped. New in `src/lib/fotos.test.ts`: the search stays in the section; without a
+key Unsplash isn't called; an error, a timeout or no results mean no photo, never a broken chat. e2e test 1 now
+also checks that any photo shown comes from Unsplash and links back with the required parameters.
+
+Live on https://closetai.lat, in a phone profile, with the test header: women's conversation **3 of 3** garments
+with a loaded photo, men's conversation **4 of 4**. All three external tests happened before the photos existed,
+so none of them has evaluated this change.

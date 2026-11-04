@@ -21,7 +21,7 @@ export default function PrivacidadPage() {
         <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
           Privacy notice
         </h1>
-        <p className="mt-2 text-sm text-text-muted">Last updated: October 26, 2026</p>
+        <p className="mt-2 text-sm text-text-muted">Last updated: November 4, 2026</p>
 
         <div className="mt-8 space-y-8 leading-relaxed">
           <section>
@@ -81,6 +81,10 @@ export default function PrivacidadPage() {
               <Link href="/pricing" className="text-accent underline underline-offset-4">
                 the pricing simulator
               </Link>{" "}
+              and{" "}
+              <Link href="/chat" className="text-accent underline underline-offset-4">
+                the stylist chat
+              </Link>{" "}
               work without signing up. There we keep:
             </p>
             <ul className="mt-3 space-y-2 text-pretty">
@@ -89,6 +93,12 @@ export default function PrivacidadPage() {
                 you give a scenario. The result is published on those pages; your original text is not
                 shown, and since October 6, 2026 the database prevents it from being read from outside.
                 Don&rsquo;t put personal details there.
+              </li>
+              <li>
+                <strong>Your chat conversations</strong> —what you write to the stylist and what it answers,
+                and your ratings. They are never shown publicly. A person from ClosetAI reads the ones the
+                assistant stops and flags for review. If you test the chat with a tester link, the summary
+                you write is shown on that page, without your name.
               </li>
               <li>
                 <strong>A fingerprint of your connection</strong>, so nobody can use the service thousands
@@ -106,7 +116,12 @@ export default function PrivacidadPage() {
             </p>
             <ul className="mt-3 space-y-2 text-pretty">
               <li>
-                <strong>Google (Gemini)</strong> — recognizes your garments and builds your outfits.
+                <strong>Google (Gemini)</strong> — recognizes your garments, builds your outfits and answers
+                the stylist chat.
+              </li>
+              <li>
+                <strong>Unsplash</strong> — receives the name of each garment the chat suggests, to find an
+                inspiration photo, and your browser loads that photo from Unsplash.
               </li>
               <li>
                 <strong>fal.ai</strong> — removes photo backgrounds and generates the virtual try-ons.

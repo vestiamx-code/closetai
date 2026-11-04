@@ -117,6 +117,13 @@ test.describe("Chat", () => {
       await expect(prenda.locator("[data-tienda]")).toHaveCount(3);
       expect(await prenda.locator('[data-tienda="mango"]').getAttribute("href")).toMatch(/^\/go\/mango\/.+\?s=hombre$/);
     }
+    // A photo is optional (no key, or Unsplash slow), but one that shows must load
+    // and credit its photographer with the link back Unsplash requires.
+    const fotos = card.getByTestId("foto");
+    for (const foto of await fotos.all()) {
+      await expect(foto.locator("img")).toHaveAttribute("src", /^https:\/\/images\.unsplash\.com\//);
+      await expect(foto.getByRole("link").first()).toHaveAttribute("href", /utm_source=closetai&utm_medium=referral/);
+    }
     // One answer, or two if the first suggested a dress and was asked again.
     expect([costosAntes + 1, costosAntes + 2]).toContain(await costosDeChat());
   });

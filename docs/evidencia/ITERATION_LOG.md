@@ -571,3 +571,21 @@ men's conversation has no dress and every garment has its three links, Mango ope
 4 after one more exact-match fix in the test ("Men's" is inside "Women's").
 **What it changed in the plan:** the packet promised three intake questions; there are four now. The
 assignment asks for at least three.
+
+## [2026-11-04] — Tester 1 expected pictures, so the chat now has them
+**Observed:** tester 1 scored the chat 5/5 and wrote under "what was confusing": "I thought that pictures
+were included". Tamara had asked for the same when she tried it.
+**What did not work, in order:** copying photos from Mango, H&M or Pinterest (they belong to others, and the
+stores block automated requests); Mercado Libre's API (403 without a developer account); AI images (Tamara
+didn't want them); Openverse (over 20 seconds a search, uneven amateur photos); Pexels (new API keys are
+paused, which we only learned on its signup page).
+**Change:** each garment shows a licensed photo from Unsplash, searched in the person's section and labelled
+as inspiration, with the photographer's credit. If there is no key, an error or a 3-second timeout, the garment
+has no photo and the chat still answers. The store links stay: the photo is similar, not the exact garment.
+**Tested:** unit tests for each failure case; live on https://closetai.lat, a women's and a men's conversation:
+3 of 3 and 4 of 4 garments with a photo that loaded, each in its section.
+**A mistake along the way:** while setting up the key, it ended up in the terminal history and in screenshots in
+the chat. The fix was to replace that key, not to hide it, and to save the new one from the clipboard so it is
+never displayed.
+**Also found:** the privacy notice didn't mention `/chat` at all. It now says what the chat stores, who reads
+flagged conversations, and what goes to Unsplash.
