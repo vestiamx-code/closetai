@@ -152,7 +152,7 @@ export default async function AdminPage() {
                       <span className="rounded-full border border-current px-2 py-0.5" style={{ color: "var(--barro)" }}>
                         {NOMBRE_MOTIVO[s.motivo_revision as MotivoGuardrail] ?? s.motivo_revision}
                       </span>
-                      {new Date(s.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}
+                      {new Date(s.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Mexico_City" })}
                       {s.tester ? <span>· tester {s.tester}</span> : null}
                       {s.es_prueba ? <span>· automated test</span> : null}
                     </span>
