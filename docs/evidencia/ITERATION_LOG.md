@@ -589,3 +589,13 @@ the chat. The fix was to replace that key, not to hide it, and to save the new o
 never displayed.
 **Also found:** the privacy notice didn't mention `/chat` at all. It now says what the chat stores, who reads
 flagged conversations, and what goes to Unsplash.
+
+## [2026-11-04] — The last full run failed twice: both tests assumed too much
+**Observed:** a full run against https://closetai.lat before writing the document: 94 passed, 2 failed.
+**Diagnosis:** one test read the first cost row without asking for an order, and the background removal is logged
+alongside the catalog. The other waited for a confirmation that disappears: rejecting an outfit removes its card
+from the list, and the message goes with it, so it passed only when it caught that moment.
+**Change:** the first checks that the catalog cost is among the rows. The second checks the outcome, one
+suggestion fewer, and passed 3 of 3 runs.
+**Still open:** that disappearing confirmation is real behavior on `/today`, not only a test problem. Someone who
+rejects an outfit may barely see the thanks. It isn't this week's feature, so it is written down and not fixed.

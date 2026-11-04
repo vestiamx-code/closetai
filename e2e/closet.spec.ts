@@ -131,6 +131,7 @@ test.describe("Clóset digital", () => {
       .eq("user_id", userId);
 
     expect(data?.length).toBeGreaterThan(0);
-    expect(data![0].operation).toBe("catalog_garment");
+    // Not data[0]: the background removal is logged alongside it, in no fixed order.
+    expect(data!.map((c) => c.operation)).toContain("catalog_garment");
   });
 });

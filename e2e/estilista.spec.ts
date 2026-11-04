@@ -105,9 +105,12 @@ test.describe("Estilista", () => {
     await iniciarSesion(page);
     await page.goto("/today");
 
+    const propuestas = await page.getByRole("button", { name: "No, thanks" }).count();
     await page.getByRole("button", { name: "No, thanks" }).first().click();
     await page.getByRole("button", { name: "It's not my style" }).first().click();
-    await expect(page.getByText(/I won't suggest something like that again/)).toBeVisible();
+    // The rejected card leaves the list, and its brief confirmation goes with it, so
+    // what is checked is the outcome: one suggestion fewer.
+    await expect(page.getByRole("button", { name: "No, thanks" })).toHaveCount(propuestas - 1, { timeout: 20_000 });
 
     const { data } = await admin()
       .from("feedback_events")
@@ -156,9 +159,12 @@ test.describe("Estilista", () => {
 
     await iniciarSesion(page);
     await page.goto("/today");
+    const propuestas = await page.getByRole("button", { name: "No, thanks" }).count();
     await page.getByRole("button", { name: "No, thanks" }).first().click();
     await page.getByRole("button", { name: "It's not my style" }).first().click();
-    await expect(page.getByText(/I won't suggest something like that again/)).toBeVisible();
+    // The rejected card leaves the list, and its brief confirmation goes with it, so
+    // what is checked is the outcome: one suggestion fewer.
+    await expect(page.getByRole("button", { name: "No, thanks" })).toHaveCount(propuestas - 1, { timeout: 20_000 });
 
     // Lo que se afirma es que la actualización SE DISPARÓ al reaccionar, no que
     // Gemini haya devuelto un buen perfil. Son cosas distintas: el modelo puede

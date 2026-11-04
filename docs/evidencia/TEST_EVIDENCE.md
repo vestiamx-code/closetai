@@ -592,3 +592,5 @@ admin account and did it by hand on https://closetai.lat: a diet question in `/c
 conversation appeared in `/admin` with the reason "diet" and what she wrote (`admin-revision.jpg`), and "Mark
 reviewed" removed it from the list (`admin-revisado.jpg`). In the database, `revisado_at` is set. This flow has
 no automated test: it needs an allow-listed account, so it was checked by hand once.
+
+Asked on Nov 4, Tamara confirmed that each of the three testers used their own phone.
