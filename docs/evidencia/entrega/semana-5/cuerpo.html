@@ -34,7 +34,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>12 requirements, each with a checkable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, the two guardrail layers, and a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/chat</code> live, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b><span class="pendiente">[PENDING: n]</span> commits</b> (min. 5) · <b><span class="pendiente">[PENDING: n]</span> deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>41 commits</b> (min. 5) · <b>37 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>3 external user tests</b> and <b>3 software tests</b> as required; improvements made from both</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note, 190 words</td><td>2, 12–13, 15</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:42 walkthrough recorded against the live site <span class="pendiente">[PENDING: my narration]</span></td><td>14</td></tr>
@@ -243,7 +243,7 @@ Supabase Postgres (RLS on, no public policies: server only)
     <figure><img src="06-celular.jpg" alt=""><figcaption>On a phone, with zero horizontal overflow.</figcaption></figure>
   </div>
   <figure>
-    <img src="chat-con-fotos.png" alt="">
+    <img src="chat-con-fotos.png" alt="" style="max-height:205mm;width:auto;max-width:100%;display:block;margin:0 auto">
     <figcaption>A women’s and a men’s conversation, live. Each garment has an inspiration photo with its credit, and links to search in real stores.</figcaption>
   </figure>
 </section>
@@ -266,11 +266,51 @@ Supabase Postgres (RLS on, no public policies: server only)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — <span class="pendiente">[PENDING: n]</span> this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 41 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
-      <tr><td></td><td></td><td></td></tr>
+      <tr><td class="mono">9d223f6</td><td>Oct 28, 12:17</td><td>docs: build discipline packet and wireframe, before writing code</td></tr>
+      <tr><td class="mono">d9e9613</td><td>Oct 28, 12:23</td><td>feat: migration 015, the four chat tables, closed to the public key</td></tr>
+      <tr><td class="mono">3206120</td><td>Oct 28, 12:26</td><td>feat: the chat&#x27;s intake, its deterministic guardrail and its contract</td></tr>
+      <tr><td class="mono">e81d523</td><td>Oct 28, 12:26</td><td>feat: the stylist chat prompt and its model call</td></tr>
+      <tr><td class="mono">9ed87e7</td><td>Oct 28, 12:26</td><td>feat: /chat, a guided &quot;What should I wear?&quot; assistant</td></tr>
+      <tr><td class="mono">46bbd79</td><td>Oct 28, 12:26</td><td>feat: the human checkpoint, flagged conversations in /admin</td></tr>
+      <tr><td class="mono">2b9b0bb</td><td>Oct 28, 12:26</td><td>test: chat tests against the real site, and a link from the homepage</td></tr>
+      <tr><td class="mono">aa7fd6a</td><td>Oct 28, 12:28</td><td>test: wait for the chat&#x27;s own error, not Next.js&#x27;s route announcer</td></tr>
+      <tr><td class="mono">f0adc54</td><td>Oct 28, 12:35</td><td>test: match the Helpful button exactly (it also matched &quot;Not helpful&quot;)</td></tr>
+      <tr><td class="mono">74c8f4c</td><td>Oct 28, 12:35</td><td>docs: prompt log, iteration log and test evidence so far</td></tr>
+      <tr><td class="mono">f45f4c7</td><td>Oct 28, 13:25</td><td>feat: a warmer chat — progress steps, larger questions, suggestion tiles</td></tr>
+      <tr><td class="mono">480b1c7</td><td>Oct 28, 13:28</td><td>docs: screenshot of a full conversation after the restyle</td></tr>
+      <tr><td class="mono">4396b14</td><td>Oct 29, 10:03</td><td>feat: ask the section first, and find each garment in Mango, H&amp;M or Liverpool</td></tr>
+      <tr><td class="mono">c2f5127</td><td>Oct 29, 10:03</td><td>feat: chat prompt v2 and the store links under every garment</td></tr>
+      <tr><td class="mono">cd9f080</td><td>Oct 29, 10:06</td><td>test: match suggestion tiles exactly (&quot;Men&#x27;s&quot; is inside &quot;Women&#x27;s&quot;)</td></tr>
+      <tr><td class="mono">8709b87</td><td>Oct 29, 10:07</td><td>docs: the section question and store links, from Tamara&#x27;s own test</td></tr>
+      <tr><td class="mono">05e18b1</td><td>Oct 29, 10:23</td><td>feat: ClosetAI&#x27;s own icon and link preview, instead of Next.js&#x27;s triangle</td></tr>
+      <tr><td class="mono">c049e28</td><td>Oct 29, 10:53</td><td>feat: Tamara&#x27;s logo everywhere — tab, Google results, home screen, link preview, chat</td></tr>
+      <tr><td class="mono">6ab4256</td><td>Oct 29, 11:00</td><td>feat: link preview without the logo&#x27;s tagline, so it doesn&#x27;t show headline A</td></tr>
+      <tr><td class="mono">869b074</td><td>Oct 29, 11:33</td><td>feat: the icon shows the whole name, CLOSET over AI, from Tamara&#x27;s logo</td></tr>
+      <tr><td class="mono">765054c</td><td>Oct 29, 11:42</td><td>feat: Tamara&#x27;s logo in the header of every page, in place of the text &quot;ClosetAI&quot;</td></tr>
+      <tr><td class="mono">cbaac1a</td><td>Oct 29, 11:48</td><td>feat: the closet from Tamara&#x27;s logo behind the homepage&#x27;s first screen</td></tr>
+      <tr><td class="mono">b64f89a</td><td>Oct 29, 11:51</td><td>docs: screenshot of the live homepage with the closet background</td></tr>
+      <tr><td class="mono">2a4af74</td><td>Oct 29, 11:53</td><td>feat: the homepage&#x27;s closet shows more, as Tamara asked</td></tr>
+      <tr><td class="mono">d13e807</td><td>Oct 29, 11:55</td><td>docs: live homepage screenshot, stronger closet</td></tr>
+      <tr><td class="mono">eae16c4</td><td>Oct 29, 11:57</td><td>feat: stronger closet on the homepage, and the text over it easier to read</td></tr>
+      <tr><td class="mono">8cad4d2</td><td>Oct 29, 11:59</td><td>docs: live homepage screenshot</td></tr>
+      <tr><td class="mono">158f59d</td><td>Oct 29, 16:38</td><td>docs: the three external user tests, as the testers wrote them</td></tr>
+      <tr><td class="mono">70a42d5</td><td>Oct 30, 20:29</td><td>feat: the closet carries its owner&#x27;s name — &quot;Flash’s closet&quot;</td></tr>
+      <tr><td class="mono">691454d</td><td>Oct 30, 20:33</td><td>revert: the closet title is &quot;My closet&quot; again</td></tr>
+      <tr><td class="mono">744ff4a</td><td>Nov 2, 13:31</td><td>feat: an inspiration photo for each garment in the chat, from Pexels</td></tr>
+      <tr><td class="mono">726733a</td><td>Nov 2, 21:43</td><td>feat: the chat&#x27;s inspiration photos come from Unsplash</td></tr>
+      <tr><td class="mono">6bf29fd</td><td>Nov 4, 11:39</td><td>docs: the photos from tester 1&#x27;s feedback, and /chat in the privacy notice</td></tr>
+      <tr><td class="mono">4510030</td><td>Nov 4, 11:41</td><td>docs: screenshot of the chat with photos; fix the packet&#x27;s change table</td></tr>
+      <tr><td class="mono">b66d210</td><td>Nov 4, 11:50</td><td>fix: review times in Mexico&#x27;s time zone, and evidence of the checkpoint working</td></tr>
+      <tr><td class="mono">cfd7047</td><td>Nov 4, 11:52</td><td>docs: the human checkpoint checked end to end, by hand, in production</td></tr>
+      <tr><td class="mono">4184269</td><td>Nov 4, 12:02</td><td>docs: demo recording script, scene marks and the narration script</td></tr>
+      <tr><td class="mono">bd23539</td><td>Nov 4, 12:08</td><td>docs: decision note approved by Tamara</td></tr>
+      <tr><td class="mono">95f8964</td><td>Nov 4, 12:19</td><td>test: two e2e tests that assumed too much, found by the final full run</td></tr>
+      <tr><td class="mono">fbdc7f7</td><td>Nov 4, 12:39</td><td>fix: log why the stylist produced no outfits</td></tr>
+      <tr><td class="mono">21e9340</td><td>Nov 4, 13:13</td><td>docs: the submission document, its screenshots and the last logs</td></tr>
     </tbody>
   </table>
   <figure>
@@ -281,13 +321,49 @@ Supabase Postgres (RLS on, no public policies: server only)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section>
-  <h2>8 · Vercel deployments — <span class="pendiente">[PENDING: n]</span> this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 37 this week (minimum 2)</h2>
   <p class="lead">All Production, all Ready, read from Vercel by <code>tablas.py</code>, not typed. Several commits
     pushed together make one deployment; two redeployments carry no new commit, to pick up the Unsplash key.</p>
   <table>
     <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
     <tbody>
-      <tr><td></td><td></td><td></td></tr>
+      <tr><td>Oct 28, 12:17</td><td class="ok">● Ready</td><td><span class="mono">9d223f6</span> · docs: build discipline packet and wireframe, before writing code</td></tr>
+      <tr><td>Oct 28, 12:23</td><td class="ok">● Ready</td><td><span class="mono">d9e9613</span> · feat: migration 015, the four chat tables, closed to the public key</td></tr>
+      <tr><td>Oct 28, 12:26</td><td class="ok">● Ready</td><td><span class="mono">2b9b0bb</span> · test: chat tests against the real site, and a link from the homepage</td></tr>
+      <tr><td>Oct 28, 12:29</td><td class="ok">● Ready</td><td><span class="mono">aa7fd6a</span> · test: wait for the chat&#x27;s own error, not Next.js&#x27;s route announcer</td></tr>
+      <tr><td>Oct 28, 12:35</td><td class="ok">● Ready</td><td><span class="mono">f0adc54</span> · test: match the Helpful button exactly (it also matched &quot;Not helpful&quot;)</td></tr>
+      <tr><td>Oct 28, 12:36</td><td class="ok">● Ready</td><td><span class="mono">74c8f4c</span> · docs: prompt log, iteration log and test evidence so far</td></tr>
+      <tr><td>Oct 28, 13:26</td><td class="ok">● Ready</td><td><span class="mono">f45f4c7</span> · feat: a warmer chat — progress steps, larger questions, suggestion tiles</td></tr>
+      <tr><td>Oct 28, 13:28</td><td class="ok">● Ready</td><td><span class="mono">480b1c7</span> · docs: screenshot of a full conversation after the restyle</td></tr>
+      <tr><td>Oct 29, 10:03</td><td class="ok">● Ready</td><td><span class="mono">c2f5127</span> · feat: chat prompt v2 and the store links under every garment</td></tr>
+      <tr><td>Oct 29, 10:06</td><td class="ok">● Ready</td><td><span class="mono">cd9f080</span> · test: match suggestion tiles exactly (&quot;Men&#x27;s&quot; is inside &quot;Women&#x27;s&quot;)</td></tr>
+      <tr><td>Oct 29, 10:08</td><td class="ok">● Ready</td><td><span class="mono">8709b87</span> · docs: the section question and store links, from Tamara&#x27;s own test</td></tr>
+      <tr><td>Oct 29, 10:23</td><td class="ok">● Ready</td><td><span class="mono">05e18b1</span> · feat: ClosetAI&#x27;s own icon and link preview, instead of Next.js&#x27;s triangle</td></tr>
+      <tr><td>Oct 29, 10:53</td><td class="ok">● Ready</td><td><span class="mono">c049e28</span> · feat: Tamara&#x27;s logo everywhere — tab, Google results, home screen, link preview, chat</td></tr>
+      <tr><td>Oct 29, 11:01</td><td class="ok">● Ready</td><td><span class="mono">6ab4256</span> · feat: link preview without the logo&#x27;s tagline, so it doesn&#x27;t show headline A</td></tr>
+      <tr><td>Oct 29, 11:33</td><td class="ok">● Ready</td><td><span class="mono">869b074</span> · feat: the icon shows the whole name, CLOSET over AI, from Tamara&#x27;s logo</td></tr>
+      <tr><td>Oct 29, 11:42</td><td class="ok">● Ready</td><td><span class="mono">765054c</span> · feat: Tamara&#x27;s logo in the header of every page, in place of the text &quot;ClosetAI&quot;</td></tr>
+      <tr><td>Oct 29, 11:49</td><td class="ok">● Ready</td><td><span class="mono">cbaac1a</span> · feat: the closet from Tamara&#x27;s logo behind the homepage&#x27;s first screen</td></tr>
+      <tr><td>Oct 29, 11:51</td><td class="ok">● Ready</td><td><span class="mono">b64f89a</span> · docs: screenshot of the live homepage with the closet background</td></tr>
+      <tr><td>Oct 29, 11:53</td><td class="ok">● Ready</td><td><span class="mono">2a4af74</span> · feat: the homepage&#x27;s closet shows more, as Tamara asked</td></tr>
+      <tr><td>Oct 29, 11:55</td><td class="ok">● Ready</td><td><span class="mono">d13e807</span> · docs: live homepage screenshot, stronger closet</td></tr>
+      <tr><td>Oct 29, 11:57</td><td class="ok">● Ready</td><td><span class="mono">eae16c4</span> · feat: stronger closet on the homepage, and the text over it easier to read</td></tr>
+      <tr><td>Oct 29, 11:59</td><td class="ok">● Ready</td><td><span class="mono">8cad4d2</span> · docs: live homepage screenshot</td></tr>
+      <tr><td>Oct 29, 16:38</td><td class="ok">● Ready</td><td><span class="mono">158f59d</span> · docs: the three external user tests, as the testers wrote them</td></tr>
+      <tr><td>Oct 30, 20:29</td><td class="ok">● Ready</td><td><span class="mono">70a42d5</span> · feat: the closet carries its owner&#x27;s name — &quot;Flash’s closet&quot;</td></tr>
+      <tr><td>Oct 30, 20:33</td><td class="ok">● Ready</td><td><span class="mono">691454d</span> · revert: the closet title is &quot;My closet&quot; again</td></tr>
+      <tr><td>Nov 2, 13:31</td><td class="ok">● Ready</td><td><span class="mono">744ff4a</span> · feat: an inspiration photo for each garment in the chat, from Pexels</td></tr>
+      <tr><td>Nov 2, 21:43</td><td class="ok">● Ready</td><td><span class="mono">726733a</span> · feat: the chat&#x27;s inspiration photos come from Unsplash</td></tr>
+      <tr><td>Nov 4, 11:28</td><td class="ok">● Ready</td><td><span class="mono">726733a</span> · feat: the chat&#x27;s inspiration photos come from Unsplash</td></tr>
+      <tr><td>Nov 4, 11:35</td><td class="ok">● Ready</td><td><span class="mono">726733a</span> · feat: the chat&#x27;s inspiration photos come from Unsplash</td></tr>
+      <tr><td>Nov 4, 11:39</td><td class="ok">● Ready</td><td><span class="mono">6bf29fd</span> · docs: the photos from tester 1&#x27;s feedback, and /chat in the privacy notice</td></tr>
+      <tr><td>Nov 4, 11:42</td><td class="ok">● Ready</td><td><span class="mono">4510030</span> · docs: screenshot of the chat with photos; fix the packet&#x27;s change table</td></tr>
+      <tr><td>Nov 4, 11:50</td><td class="ok">● Ready</td><td><span class="mono">b66d210</span> · fix: review times in Mexico&#x27;s time zone, and evidence of the checkpoint working</td></tr>
+      <tr><td>Nov 4, 11:52</td><td class="ok">● Ready</td><td><span class="mono">cfd7047</span> · docs: the human checkpoint checked end to end, by hand, in production</td></tr>
+      <tr><td>Nov 4, 12:02</td><td class="ok">● Ready</td><td><span class="mono">4184269</span> · docs: demo recording script, scene marks and the narration script</td></tr>
+      <tr><td>Nov 4, 12:08</td><td class="ok">● Ready</td><td><span class="mono">bd23539</span> · docs: decision note approved by Tamara</td></tr>
+      <tr><td>Nov 4, 12:19</td><td class="ok">● Ready</td><td><span class="mono">95f8964</span> · test: two e2e tests that assumed too much, found by the final full run</td></tr>
+      <tr><td>Nov 4, 12:39</td><td class="ok">● Ready</td><td><span class="mono">fbdc7f7</span> · fix: log why the stylist produced no outfits</td></tr>
     </tbody>
   </table>
 </section>
@@ -443,7 +519,7 @@ Supabase Postgres (RLS on, no public policies: server only)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>9d223f6</code>, six minutes before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · <span class="pendiente">[PENDING: n]</span> commits · §8 · <span class="pendiente">[PENDING: n]</span> production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 41 commits · §8 · 37 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · tester 1’s finding fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§14 · 2:42 video · §15 · 190 words</td></tr>
     </tbody>
