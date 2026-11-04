@@ -234,3 +234,19 @@ like a decision and is really noise.
 **213 words · approved by Tamara Muñoz Delgadillo on October 26, 2026.** The two headlines are quoted
 in English: the product was in Spanish when the note was written, and the experiment now runs in
 English.
+
+---
+
+## Week 5 — [2026-11-04] — What the chat should not do
+
+This week I built a public stylist chat, and the most important part was deciding what it should not do.
+
+I chose a guided conversation instead of an empty box, because people answer questions more easily than they invent them. I also put a filter before the AI: a question about diets or weight never reaches the model, and a person reviews that conversation. A fashion app should not encourage those topics.
+
+Testing changed my plan. When I tried it, nothing asked who the outfit was for, so it could suggest a dress to a man. I added a first question about the section someone shops in. Then one of my three testers wrote that they expected pictures.
+
+I rejected copying photos from Zara, Mango or Pinterest, because those images belong to others. I also rejected AI images. I used licensed Unsplash photos, labelled as inspiration, with links to real stores. Zara's links only opened its homepage, so I removed it.
+
+The tradeoff: the photos are similar, not the exact garment. My testers tried the chat at my home, before the photos existed, so this improvement still needs real users.
+
+**190 words · approved by Tamara Muñoz Delgadillo on November 4, 2026.**
