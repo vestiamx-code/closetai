@@ -1,0 +1,54 @@
+[
+  {
+    "escena": "portada",
+    "segundo": 0
+  },
+  {
+    "escena": "chat",
+    "segundo": 8.1
+  },
+  {
+    "escena": "preguntas",
+    "segundo": 14.8
+  },
+  {
+    "escena": "pensando",
+    "segundo": 31.9
+  },
+  {
+    "escena": "outfit",
+    "segundo": 50.2
+  },
+  {
+    "escena": "calificar",
+    "segundo": 64
+  },
+  {
+    "escena": "seguimiento",
+    "segundo": 69.5
+  },
+  {
+    "escena": "filtro",
+    "segundo": 93.3
+  },
+  {
+    "escena": "admin",
+    "segundo": 106.5
+  },
+  {
+    "escena": "tienda",
+    "segundo": 118.5
+  },
+  {
+    "escena": "evidencia",
+    "segundo": 131
+  },
+  {
+    "escena": "github",
+    "segundo": 149
+  },
+  {
+    "escena": "fin",
+    "segundo": 159.8
+  }
+]
