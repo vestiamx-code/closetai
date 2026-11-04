@@ -87,6 +87,9 @@ export async function generarOutfits(ocasion?: string): Promise<ResultadoOutfits
   });
 
   if (!resultado.ok) {
+    // The technical reason stays in the log: without it a failure here can't be told
+    // apart from a model hiccup, quota, or a bad answer.
+    console.warn("[stylist] no outfits", resultado.message, resultado.meta.model);
     return { ok: false, motivo: "The stylist couldn't put anything together this time. Please try again." };
   }
 
