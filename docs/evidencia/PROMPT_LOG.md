@@ -415,3 +415,21 @@ themselves.
 **Human judgment:** each test checks the database, not only the screen: the cost table proves the model
 was never called, the session proves the flag and the reason.
 **Commit:** 2b9b0bb, aa7fd6a, f0adc54
+
+## [2026-10-29] — Session 6 · A section first, and where to buy it
+**Prompt:** Tamara, after trying it: ask first if it is a man or a woman and start from there; you can't recommend a dress to a man; and add where to buy each thing, like Zara or Mango.
+**Result:** a closed first question about the section, a check in code against dresses in men's outfits, and search links to Mango, H&M and Liverpool.
+**Human judgment:** the question asks which section someone shops in, not their gender. Zara and Bershka were dropped when their search links only opened the homepage.
+**Commit:** 4396b14, c2f5127
+
+## [2026-10-29] — Session 7 · The logo and the homepage
+**Prompt:** Tamara's logo, "put it everywhere", and the closet as the homepage's background, leaving the text as it is.
+**Result:** the icon, the header logo, the link preview and the background, all derived from her image.
+**Human judgment:** her logo carries headline A of the homepage experiment, so Tamara chose a link preview without that phrase, and the background has no letters.
+**Commit:** c049e28, 6ab4256, 765054c, cbaac1a, eae16c4
+
+## [2026-11-04] — Session 8 · The pictures tester 1 expected
+**Prompt:** "No AI, maybe Pinterest or something like it, but they should look nice."
+**Result:** a licensed Unsplash photo for each garment, after Pexels turned out to have paused new keys.
+**Human judgment:** photos from stores or Pinterest weren't copied, because they belong to others. A key exposed during setup was replaced instead of being kept.
+**Commit:** 744ff4a, 726733a, 6bf29fd

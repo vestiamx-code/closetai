@@ -594,3 +594,14 @@ reviewed" removed it from the list (`admin-revisado.jpg`). In the database, `rev
 no automated test: it needs an allow-listed account, so it was checked by hand once.
 
 Asked on Nov 4, Tamara confirmed that each of the three testers used their own phone.
+
+## [2026-11-04] — Final full run against https://closetai.lat
+
+Of 106 tests across both browser profiles: **90 passed, 1 failed, 3 did not run** because they depend on the failed
+one, and 12 were skipped by design. An earlier attempt failed 43 tests with `ERR_INTERNET_DISCONNECTED`: the Mac lost
+its connection, and that run is not counted.
+
+The failure was outfit generation on the phone profile. The stylist answered "couldn't put anything together". With
+a log line added to find out why, it happened again: the main model was out of its daily quota and the backup
+answered 503 "high demand". Three more runs of that spec on the phone profile: 1 failed the same way, 2 passed 4 of 4.
+It is the provider's capacity on the free tier, not a logic error, but a real user would see that message too.

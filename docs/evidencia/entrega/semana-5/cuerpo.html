@@ -1,0 +1,451 @@
+<section class="cover">
+  <p class="kicker">Week 5 · Public chatbot / guided assistant</p>
+  <h1>A stylist anyone can ask.<br><em>And what it won’t answer.</em></h1>
+  <p class="sub">A public chat that asks four guided questions and suggests an outfit, with a filter in front of
+     the AI, a person reviewing what it stops, and three tests with people outside the project.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat/chat"><span class="lbl">Live page</span><span class="url">closetai.lat/chat</span></a>
+    <a href="https://closetai.lat"><span class="lbl">Homepage</span><span class="url">closetai.lat</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+    <a href="https://closetai.lat/demo/week-5"><span class="lbl">Demo video</span><span class="url">closetai.lat/demo/week-5</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE WEEK IN ONE LINE.</b> A public AI answers anything unless you stop it, so a diet question never
+    reaches the model here, and a person reviews what the assistant refuses. Testing changed the plan twice:
+    my own try showed it could suggest a dress to a man, and an external tester expected pictures.
+  </div>
+</section>
+
+<!-- ============ 1. RUBRIC ============ -->
+<section>
+  <h2>1 · The rubric, category by category</h2>
+  <table>
+    <thead><tr><th style="width:42mm">Category</th><th style="width:11mm">Pts</th><th>Evidence</th><th style="width:12mm">§</th></tr></thead>
+    <tbody>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed Oct 28 at 12:17 (<code>9d223f6</code>); first code at 12:23 (<code>d9e9613</code>). Four decisions made by me first</td><td>2</td></tr>
+      <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Wireframe with implementation notes, scope cut, and what changed from the drawing to the live page</td><td>3</td></tr>
+      <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>12 requirements, each with a checkable criterion and its status</td><td>4</td></tr>
+      <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, the two guardrail layers, and a stack table with reasons</td><td>5</td></tr>
+      <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/chat</code> live, tested against the real site</td><td>6, 11</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b><span class="pendiente">[PENDING: n]</span> commits</b> (min. 5) · <b><span class="pendiente">[PENDING: n]</span> deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>3 external user tests</b> and <b>3 software tests</b> as required; improvements made from both</td><td>11–12</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note, 190 words</td><td>2, 12–13, 15</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>2:42 walkthrough recorded against the live site <span class="pendiente">[PENDING: my narration]</span></td><td>14</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Chat UI · message UI</td><td><code>/chat</code>, with a progress bar and distinct messages (§6)</td></tr>
+      <tr><td>3 intake questions</td><td>Four: section, occasion, weather, style. The section was added after testing</td></tr>
+      <tr><td>Response logic</td><td>A server action, Gemini and a zod contract; follow-ups up to 4 (§5)</td></tr>
+      <tr><td>Guardrail response</td><td>Two layers: a filter before the model, and the model’s own classification</td></tr>
+      <tr><td>Human checkpoint</td><td>Flagged conversations in <code>/admin</code>, marked as reviewed by me</td></tr>
+      <tr><td>Chat/test storage · save test summary</td><td>Four tables closed to the public key (§9)</td></tr>
+      <tr><td>Thumbs up/down · feedback rating</td><td>On every model answer, once, with public totals</td></tr>
+      <tr><td>3 external user tests + 3 software tests</td><td>§11</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. PLAN ============ -->
+<section class="brk">
+  <h2>2 · The plan, written before the code</h2>
+  <p class="lead">Full text in <code>docs/WEEK-5-PACKET.md</code>, with a dated note at the end for what changed
+    after testing.</p>
+
+  <h3>Four decisions I made before the agent wrote anything</h3>
+  <ul>
+    <li><b>Purpose:</b> a guided “What should I wear?”, with no account. It is ClosetAI’s promise, tried in one minute.</li>
+    <li><b>Testers:</b> I recruit three people who didn’t build it, and each agrees that the conversation is saved without a name.</li>
+    <li><b>Human checkpoint:</b> flagged conversations come to me for review, without asking anyone for an email.</li>
+    <li><b>Language:</b> always English, as the course requires, even if someone writes in Spanish.</li>
+  </ul>
+
+  <h3>Problem</h3>
+  <p>ClosetAI’s value only shows after creating an account and photographing at least four garments. Someone
+    arriving from a post can’t feel in one minute what having a stylist is like. And a public assistant that
+    answers anything is a risk: a fashion conversation slides easily into diets, bodies and weight.</p>
+
+  <h3>User</h3>
+  <ul>
+    <li><b>The visitor</b> — no account, wants a concrete answer for today.</li>
+    <li><b>Me, the reviewer</b> — I read what the assistant stopped.</li>
+    <li><b>The three external testers</b> — they try it and leave a written summary.</li>
+  </ul>
+
+  <h3>Success — what must work by the end of the week</h3>
+  <ul>
+    <li><code>/chat</code> loads without an account and asks guided questions, in order.</li>
+    <li>It suggests one outfit, says why it works and gives one tip; follow-ups are allowed, up to a limit.</li>
+    <li>Diets, weight, body judgments, health or anything not about clothes get a fixed answer, and the conversation is flagged.</li>
+    <li>Every model answer can be rated once; conversations are stored where only the server can read them.</li>
+    <li>Three external testers finish a session; 3 software tests pass against production.</li>
+  </ul>
+
+  <h3>Scope cut — what looked good and was not built</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Left out</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Using the person’s own closet in the chat</td><td>It needs an account and photos; <code>/today</code> already does it</td></tr>
+      <tr><td>Conversation memory across visits</td><td>It would mean storing who someone is</td></tr>
+      <tr><td>Replying in the person’s language</td><td>The course requires English</td></tr>
+      <tr><td>Emailing the person after review</td><td>It would require asking for an email</td></tr>
+      <tr><td>Streaming the answer word by word</td><td>One complete card is simpler to validate and test</td></tr>
+      <tr><td>Unlimited questions</td><td>Free-tier quota: 4 follow-ups, 10 conversations per hour per connection</td></tr>
+    </tbody>
+  </table>
+
+  <h3>DevOps</h3>
+  <table>
+    <thead><tr><th style="width:36mm">Piece</th><th>Plan</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub</td><td><code>vestiamx-code/closetai</code>, branch <code>main</code>; CI on every commit</td></tr>
+      <tr><td>Vercel</td><td>Automatic production deploy on every push</td></tr>
+      <tr><td>Supabase</td><td>Migration 015, applied only with my permission, checked byte for byte, verified through REST</td></tr>
+      <tr><td>Environment variables</td><td>None in the plan. <code>UNSPLASH_ACCESS_KEY</code> was added for the photos, stored as sensitive in Vercel</td></tr>
+      <tr><td>Rollback</td><td><code>/chat</code> is new and isolated; removing the route takes it offline</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Test plan</h3>
+  <p><b>3 software tests</b> against production: the question order, with no model call before the last answer; a
+    diet question gets the guardrail, a flag and zero model cost; a rating is saved once. <b>3 external tests:</b>
+    three people, each with a tester link, consent first and a summary at the end. Every new test is seen failing on
+    purpose before it is trusted.</p>
+
+  <h3>The exact prompt to the coding agent</h3>
+  <pre>Build Week 5 of ClosetAI (Next.js 16, App Router, Tailwind v4, Supabase).
+
+EXACT SCOPE, nothing more:
+1. src/lib/chat.ts — pure functions: the three intake questions with their
+   suggested answers; revisarMensaje(text) → null | { motivo } for diets,
+   weight, body judgments, health, self-harm and personal data, in English and
+   Spanish; the fixed guardrail answers (self-harm includes a crisis line).
+2. Migration 20261028000015_chat.sql: chat_sessions, chat_messages,
+   chat_ratings (unique per message), chat_test_summaries. RLS on, no public
+   policies.
+3. Server Actions: iniciarConversacion, enviarMensaje (limits → guardrail →
+   Gemini Flash-Lite with Flash fallback → zod → save), calificar,
+   guardarResumen. A guardrail hit flags needs_review with the reason.
+4. /chat: guided intake, message list, outfit card, 👍/👎, tester mode with
+   consent and summary, and a "testing evidence" section with the summaries
+   and rating totals.
+5. /admin: flagged conversations, mark as reviewed.
+
+RULES:
+- Interface and assistant answers in English, always.
+- The assistant suggests common garments; it never comments on bodies, weight
+  or diets, and never invents ClosetAI features or prices.
+- No personal data requested. The connection is stored only as a salted hash.
+- Tests: 3 software (against production) and the guardrail unit tests; see
+  them fail before trusting them.</pre>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX concept</h2>
+  <p class="lead">Image generation is still unavailable without billing, so, as in earlier weeks, the UX concept is
+    a wireframe, drawn before the build with its implementation notes inside.</p>
+  <figure>
+    <img src="wireframe.png" alt="">
+    <figcaption>Left: the guided chat, the outfit card and the guardrail. Right: rating totals, testing evidence,
+      tester mode and the review list in <code>/admin</code>.</figcaption>
+  </figure>
+  <h3>What changed between the wireframe and the live page</h3>
+  <ul>
+    <li><b>A fourth question, first:</b> the section someone shops in (§12).</li>
+    <li><b>A photo and store links under each garment:</b> not in the drawing; they came from testing (§12).</li>
+    <li><b>Suggestions became tiles with icons, plus a progress bar,</b> after I found the first version flat.</li>
+  </ul>
+</section>
+
+<!-- ============ 4. SPEC ============ -->
+<section>
+  <h2>4 · Product spec and acceptance criteria</h2>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:36mm">Requirement</th><th>Acceptance criterion</th><th style="width:14mm">Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Public page</td><td><code>GET /chat</code> answers 200 without a session</td><td class="ok">● done</td></tr>
+      <tr><td>2</td><td>Chat UI</td><td>The person’s and the assistant’s messages are distinct; the newest is in view</td><td class="ok">● done</td></tr>
+      <tr><td>3</td><td>Intake</td><td>Questions in order, one at a time, with suggestions; no answer until all are in. Planned as 3; 4 since Oct 29</td><td class="ok">● done</td></tr>
+      <tr><td>3b</td><td>Section first</td><td>A closed choice that sets the style options; a men’s outfit with a dress, skirt, blouse or heels is rejected</td><td class="ok">● done</td></tr>
+      <tr><td>4</td><td>Response logic</td><td>One outfit (2–5 garments), why it works and one tip, in English, validated by a zod contract</td><td class="ok">● done</td></tr>
+      <tr><td>5</td><td>Guardrail</td><td>Sensitive or off-topic messages get a fixed answer; the deterministic cases never call the model; self-harm shows a crisis line</td><td class="ok">● done</td></tr>
+      <tr><td>6</td><td>Human checkpoint</td><td>A guardrail flags the conversation with its reason; <code>/admin</code> lists it and I can mark it reviewed</td><td class="ok">● done</td></tr>
+      <tr><td>7</td><td>Storage</td><td>Everything is saved; the public key cannot read or write it (401)</td><td class="ok">● done</td></tr>
+      <tr><td>8</td><td>Rating</td><td>👍/👎 on each model answer, once, with public totals</td><td class="ok">● done</td></tr>
+      <tr><td>9</td><td>Test summary</td><td>A tester link asks for consent first and a summary at the end, shown on the page</td><td class="ok">● done</td></tr>
+      <tr><td>10</td><td>Abuse limits</td><td>4 follow-ups; 10 conversations per hour per connection; test traffic marked</td><td class="ok">● done</td></tr>
+      <tr><td>11</td><td>Find it in a store</td><td>Each garment links to Mango, H&amp;M and Liverpool’s search results</td><td class="ok">● done</td></tr>
+      <tr><td>12</td><td>Inspiration photos</td><td>A licensed, credited photo from the section; without one, the chat still answers</td><td class="ok">● done</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 5. ARCHITECTURE ============ -->
+<section class="brk">
+  <h2>5 · Architecture and stack</h2>
+  <pre>Browser (/chat — no session)
+   │
+   ├── /chat (Server Component): rating totals and the testers' summaries
+   │      └── &lt;Chat&gt; (client): intake → messages → ratings → tester summary
+   │
+   ├── Server Action enviar(sessionId, text)     ← the server decides what comes next
+   │      1. limits (per conversation, per connection hash)
+   │      2. guardrail, deterministic              ← pure function, tested
+   │         └─ hit → fixed answer + flag needs_review → save → done
+   │      3. Gemini Flash-Lite (Flash as backup) with the intake and history
+   │         └─ the model also classifies: on_topic | off_topic | sensitive
+   │         └─ zod contract; a dress in men's → asked once more
+   │      4. a photo per garment (Unsplash, 3 s limit; none is fine) → save → card
+   │
+   ├── Server Actions: calificar (one per answer) · guardarResumen (tester)
+   ├── /go/[store]/[search] → the store's results (Mango, H&amp;M, Liverpool)
+   └── /admin (signed in, allow-listed): flagged conversations → reviewed
+   ▼
+Supabase Postgres (RLS on, no public policies: server only)
+   chat_sessions · chat_messages · chat_ratings · chat_test_summaries</pre>
+
+  <h3>Why two layers of guardrail</h3>
+  <p>The deterministic check runs first and costs nothing: the model never sees “how do I lose 5 kilos”, so it can’t
+    be talked into answering. The model’s own classification catches what a pattern can’t. The pattern list is narrow
+    on purpose: a filter that blocks “jeans that fit well” teaches people to stop using the chat.</p>
+
+  <table>
+    <thead><tr><th style="width:34mm">Piece</th><th style="width:44mm">Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Framework</td><td>Next.js 16, Server Actions</td><td>Already in use; the keys never reach the browser</td></tr>
+      <tr><td>Model</td><td>Gemini Flash-Lite, Flash as backup</td><td>Flash’s free tier is 20 requests a day; three testers would use it up</td></tr>
+      <tr><td>Contract</td><td>zod</td><td>The model’s answer is validated before it is shown or saved</td></tr>
+      <tr><td>Guardrail</td><td>Patterns in <code>src/lib/chat.ts</code></td><td>Deterministic, free, tested in milliseconds</td></tr>
+      <tr><td>Photos</td><td>Unsplash API</td><td>Free and licensed for this; Pexels had paused new keys</td></tr>
+      <tr><td>Database</td><td>Supabase Postgres + RLS</td><td>Already in use</td></tr>
+      <tr><td>Tests</td><td>Vitest + Playwright</td><td>Already in use, against <code>closetai.lat</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 6. CHAT ============ -->
+<section class="brk">
+  <h2>6 · /chat, working</h2>
+  <div class="two">
+    <figure><img src="01-chat.jpg" alt=""><figcaption>The first question is the section. Each answer is a tile, or free text from the second question on.</figcaption></figure>
+    <figure><img src="06-celular.jpg" alt=""><figcaption>On a phone, with zero horizontal overflow.</figcaption></figure>
+  </div>
+  <figure>
+    <img src="chat-con-fotos.png" alt="">
+    <figcaption>A women’s and a men’s conversation, live. Each garment has an inspiration photo with its credit, and links to search in real stores.</figcaption>
+  </figure>
+</section>
+
+<section class="brk">
+  <h3>The guardrail and the human checkpoint</h3>
+  <figure class="media">
+    <img src="02-guardrail.jpg" alt="">
+    <figcaption>A diet question gets a fixed answer and is flagged. The model is not called.</figcaption>
+  </figure>
+  <div class="two">
+    <figure><img src="admin-revision.jpg" alt=""><figcaption><code>/admin</code>: the flagged conversation, with its reason and what the person wrote.</figcaption></figure>
+    <figure><img src="admin-revisado.jpg" alt=""><figcaption>After “Mark reviewed”: nothing left to review.</figcaption></figure>
+  </div>
+  <figure class="media">
+    <img src="05-portada.jpg" alt="">
+    <figcaption>The homepage this week: my logo in the header and the closet behind the first screen. The text is unchanged, and the page links to the chat.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 7. COMMITS ============ -->
+<section class="brk">
+  <h2>7 · GitHub commits — <span class="pendiente">[PENDING: n]</span> this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <figure>
+    <img src="07-commits.jpg" alt="">
+    <figcaption>The public repository.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 8. DEPLOYS ============ -->
+<section>
+  <h2>8 · Vercel deployments — <span class="pendiente">[PENDING: n]</span> this week (minimum 2)</h2>
+  <p class="lead">All Production, all Ready, read from Vercel by <code>tablas.py</code>, not typed. Several commits
+    pushed together make one deployment; two redeployments carry no new commit, to pick up the Unsplash key.</p>
+  <table>
+    <thead><tr><th style="width:26mm">When</th><th style="width:18mm">Status</th><th>What went out</th></tr></thead>
+    <tbody>
+      <tr><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 10. SUPABASE ============ -->
+<section class="brk">
+  <h2>9 · Supabase evidence</h2>
+  <p class="lead">One migration, applied with my explicit permission, loaded from the public repository and checked
+    byte for byte before running, then verified against the database.</p>
+  <table>
+    <thead><tr><th style="width:80mm">What was checked</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>015 — the SQL pasted is the one in the repository</td><td class="ok">sha256 41c81b6e…, 4,501 characters</td></tr>
+      <tr><td>The four tables, with the service key</td><td class="ok">200</td></tr>
+      <tr><td>The four tables, reading with the public key</td><td class="ok">401</td></tr>
+      <tr><td>The four tables, inserting with the public key</td><td class="ok">401</td></tr>
+      <tr><td>“Mark reviewed” in <code>/admin</code></td><td class="ok"><code>revisado_at</code> set for that conversation</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 11. PROMPTS ============ -->
+<section>
+  <h2>10 · Coding-agent prompts — 8 this week (minimum 5)</h2>
+  <p class="lead">Full log in <code>docs/evidencia/PROMPT_LOG.md</code>.</p>
+  <div class="prompt"><p class="h">1 · Four decisions before the plan</p>
+    <p class="q">“Now let’s do week 5.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> A stylist with no account, and no email asked at the checkpoint.</p></div>
+  <div class="prompt"><p class="h">2 · The packet, before the code</p>
+    <p class="q">“Write the Build Discipline Packet for /chat and commit it before touching code.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> A filter before the model, so a diet question never reaches it.</p></div>
+  <div class="prompt"><p class="h">3 · The guardrail, alone and tested</p>
+    <p class="q">“Test that it blocks what it must AND that it doesn’t block ordinary fashion.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> A narrow list; the nuanced cases go to the model’s classification.</p></div>
+  <div class="prompt"><p class="h">4 · The model call, the page and the checkpoint</p>
+    <p class="q">“Server Actions where the server decides which question comes next; ratings once per answer; tester mode with consent; the review list in /admin.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> The page never shows conversations, only totals and what testers wrote to be shown.</p></div>
+  <div class="prompt"><p class="h">5 · Testing against the real site</p>
+    <p class="q">“Three software tests against production: the order, the guardrail with zero model cost, a rating saved once.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Each test checks the database, not only the screen.</p></div>
+  <div class="prompt"><p class="h">6 · A section first, and where to buy it</p>
+    <p class="q">“Ask first if it is a man or a woman; you can’t recommend a dress to a man. And where to buy each thing.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> It asks which section someone shops in, not their gender.</p></div>
+  <div class="prompt"><p class="h">7 · The logo and the homepage</p>
+    <p class="q">“This is the logo, change it everywhere. The closet behind the homepage, the rest as it is.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> My logo carries headline A of the homepage experiment, so the link preview and the background go without that phrase.</p></div>
+  <div class="prompt"><p class="h">8 · The pictures tester 1 expected</p>
+    <p class="q">“No AI, maybe Pinterest or something like it, but they should look nice.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Nothing copied from stores or Pinterest. A key exposed during setup was replaced.</p></div>
+</section>
+
+<!-- ============ 12. TESTS ============ -->
+<section class="brk">
+  <h2>11 · Testing — 3 external user tests, 3 software tests</h2>
+
+  <h3>External user tests</h3>
+  <p>Three people who did not build ClosetAI, each with a tester link and their own phone. Their words are copied as
+    they wrote them, typos included.</p>
+  <table>
+    <thead><tr><th style="width:12mm">Tester</th><th style="width:48mm">What they asked for</th><th style="width:12mm">Rated</th><th style="width:11mm">Score</th><th>What worked</th><th>What was confusing</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Men’s · work · Mexico City, cool / rainy (two sessions)</td><td>👍 👍</td><td>5/5</td><td>“Everything good”</td><td>“I thought that pictures were included”</td></tr>
+      <tr><td>2</td><td>Women’s · a date · Mexico City, cool · elegant</td><td>👍</td><td>5/5</td><td>“All good”</td><td>“Everithing was fine”</td></tr>
+      <tr><td>3</td><td>Women’s · work · cold · comfortable</td><td>—</td><td>5/5</td><td>“I like the concept”</td><td>“All worked!!”</td></tr>
+    </tbody>
+  </table>
+  <figure class="media">
+    <img src="04-testers.jpg" alt="">
+    <figcaption>The summaries as they appear on <code>/chat</code>.</figcaption>
+  </figure>
+
+  <h3>Software tests against https://closetai.lat (<code>e2e/chat.spec.ts</code>)</h3>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th>What it asserts</th><th style="width:14mm">Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Questions in order; before the last answer there is no outfit and <b>no model cost row</b>; a men’s outfit has no dress, skirt, blouse or heels; each garment has its store links; any photo credits its author</td><td class="ok">● pass</td></tr>
+      <tr><td>2</td><td>A diet question gets the guardrail; the session is flagged with reason “diet”; the intake is untouched; <b>zero</b> model cost</td><td class="ok">● pass</td></tr>
+      <tr><td>3</td><td>👍 saves exactly one rating; both buttons lock; the database refuses a second one; a test run’s rating doesn’t move the public totals</td><td class="ok">● pass</td></tr>
+      <tr><td>+</td><td>On a phone, the suggestions are visible and there is no horizontal overflow</td><td class="ok">● pass</td></tr>
+    </tbody>
+  </table>
+  <p><b>Unit tests:</b> 116 passed, 6 skipped. The guardrail suite catches 12 sensitive messages in English and Spanish
+    and lets 8 ordinary fashion ones through. <b>Watched failing on purpose:</b> with the guardrail switched off, 13
+    of what were then 28 cases went red.</p>
+  <p><b>Final full run, whole product, Nov 4:</b> of 106 tests, 90 passed, 12 skipped by design, 1 failed and 3 didn’t run
+    because they depend on it. See §13.</p>
+</section>
+
+<!-- ============ 13/14. ITERATION ============ -->
+<section class="brk">
+  <h2>12 · Iteration log — what changed after testing</h2>
+  <table>
+    <thead><tr><th style="width:64mm">What was found</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td><b>External tester 1: “I thought that pictures were included”</b></td><td>A licensed Unsplash photo for each garment, from its section, labelled as inspiration. Tried and dropped first: store and Pinterest photos (not ours), Mercado Libre (needs a developer account), Openverse (over 20 s a search), Pexels (new keys paused)</td></tr>
+      <tr><td><b>My own try: it could suggest a dress to a man</b></td><td>A first question about the section, style options that follow it, and a check in code that rejects those garments in a men’s outfit</td></tr>
+      <tr><td>Wanting to buy what it suggests</td><td>Links to Mango, H&amp;M and Liverpool’s results, each opened in a browser first. Zara and Bershka dropped: their links only reach the homepage</td></tr>
+      <tr><td>The guardrail missed “¿Cómo bajo de peso?”: the pattern only had infinitives</td><td>It matches the verb’s stem; 8 ordinary fashion questions still pass</td></tr>
+      <tr><td>Before my review, no account could open <code>/admin</code>, so the checkpoint had never run</td><td>I created my admin account and ran it by hand: flagged, listed, reviewed</td></tr>
+      <tr><td>The privacy notice didn’t mention <code>/chat</code></td><td>It now says what the chat stores, who reads flagged conversations and what goes to Unsplash</td></tr>
+      <tr><td>The stylist had no backup model and showed a dead end when out of quota</td><td>It falls back to Flash-Lite, like the other AI features, and now logs why it fails</td></tr>
+      <tr><td>Page titles and the link preview repeated headline A of the experiment</td><td>Neutral titles, and a preview without that phrase</td></tr>
+      <tr><td>Tests that failed for their own reasons: a Next.js hidden alert, “Men’s” inside “Women’s”, an unordered row, a brief message</td><td>Each one fixed to check the real outcome</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 15. LIMITS ============ -->
+<section>
+  <h2>13 · What this evidence does not prove</h2>
+  <ul>
+    <li><b>Nobody external has tried the photos.</b> All three tests happened before they existed. Whether they solve tester 1’s confusion is still unknown.</li>
+    <li><b>The testers were at my home, on my Wi-Fi,</b> which is why two of them share a connection hash. They are three different people on their own phones, but people I know, and all scoring 5/5 says less than it seems.</li>
+    <li><b>No tester asked a follow-up, and none hit the guardrail.</b> The plan asked for a follow-up; I didn’t get it. Both were exercised only by me and by the automated tests.</li>
+    <li><b>The public totals are not only testers:</b> of 5 👍, 3 are theirs and 2 came from sessions without a tester link. Tester 3 didn’t rate.</li>
+    <li><b>The human checkpoint has no automated test.</b> It needs an allow-listed account, so I checked it by hand, once.</li>
+    <li><b>The final run had one failure, and it can happen to a real user.</b> The main model was out of its daily quota and the backup answered 503 “high demand”, so <code>/today</code> said it couldn’t put anything together. On the free tier this will recur.</li>
+    <li><b>A known issue I left open:</b> rejecting an outfit on <code>/today</code> removes the card, and its thank-you message goes with it.</li>
+    <li><b>The photos are similar, not the exact garment,</b> and Unsplash’s demo tier allows 50 searches an hour.</li>
+    <li><b>A mistake of mine during setup:</b> my Unsplash keys ended up in a terminal and in screenshots. I deleted that app and created a new one, and saved the new key from the clipboard so it was never displayed.</li>
+  </ul>
+</section>
+
+<!-- ============ 16. VIDEO ============ -->
+<section class="brk">
+  <h2>14 · Demo video</h2>
+  <p class="lead"><b>2:42</b>, recorded against the live site with the test header, so its conversation stays out of
+    the totals, and hosted on the product’s own domain:
+    <a href="https://closetai.lat/demo/week-5"><b>closetai.lat/demo/week-5</b></a>
+    <span class="pendiente">[PENDING: my narration]</span></p>
+  <p>In order: the homepage; the chat and its questions; an outfit with photos; a rating; a follow-up; the guardrail;
+    <code>/admin</code>, shown with my two screenshots because the recording script has no admin account; a store’s
+    results; the testers’ summaries; and the commit history.</p>
+</section>
+
+<!-- ============ 17. NOTE ============ -->
+<section>
+  <h2>15 · Human decision note</h2>
+  <div class="note">
+    <p>This week I built a public stylist chat, and the most important part was deciding what it should not do.</p>
+    <p>I chose a guided conversation instead of an empty box, because people answer questions more easily than they invent them. I also put a filter before the AI: a question about diets or weight never reaches the model, and a person reviews that conversation. A fashion app should not encourage those topics.</p>
+    <p>Testing changed my plan. When I tried it, nothing asked who the outfit was for, so it could suggest a dress to a man. I added a first question about the section someone shops in. Then one of my three testers wrote that they expected pictures.</p>
+    <p>I rejected copying photos from Zara, Mango or Pinterest, because those images belong to others. I also rejected AI images. I used licensed Unsplash photos, labelled as inspiration, with links to real stores. Zara's links only opened its homepage, so I removed it.</p>
+    <p>The tradeoff: the photos are similar, not the exact garment. My testers tried the chat at my home, before the photos existed, so this improvement still needs real users.</p>
+    <p class="wc">190 words · approved by Tamara Muñoz Delgadillo, November 4, 2026</p>
+  </div>
+</section>
+
+<!-- ============ GATES ============ -->
+<section>
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>9d223f6</code>, six minutes before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · <span class="pendiente">[PENDING: n]</span> commits · §8 · <span class="pendiente">[PENDING: n]</span> production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · tester 1’s finding fixed and redeployed</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§14 · 2:42 video · §15 · 190 words</td></tr>
+    </tbody>
+  </table>
+</section>
