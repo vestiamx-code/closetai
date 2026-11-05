@@ -34,7 +34,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>12 requirements, each with a checkable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, the two guardrail layers, and a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/chat</code> live, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>41 commits</b> (min. 5) · <b>37 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>43 commits</b> (min. 5) · <b>40 deployments</b> (min. 2) · <b>8</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>3 external user tests</b> and <b>3 software tests</b> as required; improvements made from both</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note, 190 words</td><td>2, 12–13, 15</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>2:42 walkthrough recorded against the live site, narrated by me</td><td>14</td></tr>
@@ -266,7 +266,7 @@ Supabase Postgres (RLS on, no public policies: server only)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 41 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 43 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -311,6 +311,8 @@ Supabase Postgres (RLS on, no public policies: server only)
       <tr><td class="mono">95f8964</td><td>Nov 4, 12:19</td><td>test: two e2e tests that assumed too much, found by the final full run</td></tr>
       <tr><td class="mono">fbdc7f7</td><td>Nov 4, 12:39</td><td>fix: log why the stylist produced no outfits</td></tr>
       <tr><td class="mono">21e9340</td><td>Nov 4, 13:13</td><td>docs: the submission document, its screenshots and the last logs</td></tr>
+      <tr><td class="mono">d1c4197</td><td>Nov 4, 13:14</td><td>docs: the document&#x27;s commit and deployment tables, read from git and Vercel</td></tr>
+      <tr><td class="mono">5894796</td><td>Nov 4, 20:06</td><td>feat: the demo video, narrated by Tamara, at /demo/week-5</td></tr>
     </tbody>
   </table>
   <figure>
@@ -321,7 +323,7 @@ Supabase Postgres (RLS on, no public policies: server only)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section>
-  <h2>8 · Vercel deployments — 37 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 40 this week (minimum 2)</h2>
   <p class="lead">All Production, all Ready, read from Vercel by <code>tablas.py</code>, not typed. Several commits
     pushed together make one deployment; two redeployments carry no new commit, to pick up the Unsplash key.</p>
   <table>
@@ -364,6 +366,9 @@ Supabase Postgres (RLS on, no public policies: server only)
       <tr><td>Nov 4, 12:08</td><td class="ok">● Ready</td><td><span class="mono">bd23539</span> · docs: decision note approved by Tamara</td></tr>
       <tr><td>Nov 4, 12:19</td><td class="ok">● Ready</td><td><span class="mono">95f8964</span> · test: two e2e tests that assumed too much, found by the final full run</td></tr>
       <tr><td>Nov 4, 12:39</td><td class="ok">● Ready</td><td><span class="mono">fbdc7f7</span> · fix: log why the stylist produced no outfits</td></tr>
+      <tr><td>Nov 4, 13:13</td><td class="ok">● Ready</td><td><span class="mono">21e9340</span> · docs: the submission document, its screenshots and the last logs</td></tr>
+      <tr><td>Nov 4, 13:14</td><td class="ok">● Ready</td><td><span class="mono">d1c4197</span> · docs: the document&#x27;s commit and deployment tables, read from git and Vercel</td></tr>
+      <tr><td>Nov 4, 20:06</td><td class="ok">● Ready</td><td><span class="mono">5894796</span> · feat: the demo video, narrated by Tamara, at /demo/week-5</td></tr>
     </tbody>
   </table>
 </section>
@@ -519,7 +524,7 @@ Supabase Postgres (RLS on, no public policies: server only)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>9d223f6</code>, six minutes before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 41 commits · §8 · 37 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 43 commits · §8 · 40 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · tester 1’s finding fixed and redeployed</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§14 · 2:42 video · §15 · 190 words</td></tr>
     </tbody>
