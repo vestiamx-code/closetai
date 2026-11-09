@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { Logo } from "@/components/ui/logo";
+import { SitioNav } from "@/components/sitio-nav";
 
 export const metadata: Metadata = {
   title: "Privacy notice",
@@ -11,11 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacidadPage() {
   return (
     <main className="flex-1">
-      <header className="mx-auto w-full max-w-2xl px-6 py-6">
-        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
-          <Logo />
-        </Link>
-      </header>
+      <SitioNav />
 
       <article className="mx-auto w-full max-w-2xl px-6 pb-24">
         <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { Logo } from "@/components/ui/logo";
+import { SitioNav } from "@/components/sitio-nav";
 
 import { EXPERIMENTO, resultado, type Conteo, type Variante } from "@/lib/ab";
 import {
@@ -105,14 +104,7 @@ export default async function Marketing() {
 
   return (
     <main className="flex-1">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
-        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
-          <Logo />
-        </Link>
-        <Link href="/" className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text">
-          See the homepage
-        </Link>
-      </header>
+      <SitioNav />
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
         <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Marketing</p>

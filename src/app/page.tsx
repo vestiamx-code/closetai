@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Logo } from "@/components/ui/logo";
+import { SitioNav } from "@/components/sitio-nav";
 
 import { EXPERIMENTO, varianteDe, type Variante } from "@/lib/ab";
 
@@ -93,26 +93,9 @@ export default async function Home() {
           style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }}
         />
 
-        <header className="entra relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7">
-          <Logo prioridad />
-          <nav aria-label="Main" className="flex items-center gap-1 sm:gap-2">
-            <Link href="/product" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
-              Product
-            </Link>
-            <Link href="/pricing" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
-              Pricing
-            </Link>
-            <Link href="/chat" className="sobre-foto hidden rounded-full px-4 py-2 text-sm font-medium text-text/80 transition hover:text-text sm:inline">
-              Ask the stylist
-            </Link>
-            <Link
-              href="/sign-in"
-              className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
-            >
-              Sign in
-            </Link>
-          </nav>
-        </header>
+        <div className="entra relative">
+          <SitioNav sobreFoto prioridad />
+        </div>
 
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 pb-16">
           <p

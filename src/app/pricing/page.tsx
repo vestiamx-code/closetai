@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { Logo } from "@/components/ui/logo";
+import { SitioNav } from "@/components/sitio-nav";
 
 import { EN_INGLES_DESDE } from "@/lib/marketing";
 import { ESCENARIOS, pesos } from "@/lib/precios";
@@ -98,17 +97,7 @@ export default async function Pricing() {
 
   return (
     <main className="flex-1">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6">
-        <Link href="/" aria-label="ClosetAI, home" className="shrink-0">
-          <Logo />
-        </Link>
-        <Link
-          href="/product"
-          className="rounded-full border border-border px-5 py-2 text-sm transition hover:border-text"
-        >
-          What each plan includes
-        </Link>
-      </header>
+      <SitioNav />
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-24">
         <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Pricing</p>
