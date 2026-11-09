@@ -136,7 +136,7 @@ export const AGENTES: Agente[] = [
     id: "nucleo",
     nombre: "Style core extractor",
     donde: "publico",
-    semana: "Week 3",
+    semana: "Week 1",
     ruta: "/core",
     entrada: "How someone describes the way they dress, in their own words",
     salida: "A structured style core: palette, silhouettes, rules",

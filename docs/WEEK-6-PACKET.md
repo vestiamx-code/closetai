@@ -25,7 +25,7 @@ guardrail that answers it).
 
 ## 🧩 Problem
 
-ClosetAI was built one module a week: the app (Week 0), `/product` (1), `/research` (2), `/core`
+ClosetAI was built one module a week: the app (Week 0), `/core` (1), `/research` (2), `/product`
 and `/pricing` (3), `/marketing` (4), `/chat` (5). Each works, but they are **islands**: every
 public page only links back to the homepage, nothing shows what the product has done in total,
 the prompts and logs live in a GitHub folder few people open, and there is no single place that
