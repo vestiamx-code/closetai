@@ -1,7 +1,10 @@
-# Notas de decisión humana
+# Human decision notes
 
-Evidencia de rúbrica: *Human judgment & explanation* (nota semanal de 150-250 palabras).
-**Estas notas las revisa y firma Tamara.** Son su voz, no la del agente.
+Rubric evidence: *Human judgment & explanation* (a weekly note of 150–250 words).
+**Tamara reviews and approves these notes.** They are her voice, not the agent's.
+
+> Weeks 0–3 were written in Spanish, before the course required English (Module 4). They are kept as they
+> were written; from Week 4 on, everything is in English.
 
 ---
 

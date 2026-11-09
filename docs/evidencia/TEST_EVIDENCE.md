@@ -1,7 +1,10 @@
-# Evidencia de pruebas
+# Test evidence
 
-Evidencia de rúbrica: *Testing & iteration* (≥3 pruebas por semana con evidencia).
-Cada entrada: qué se probó, cómo, resultado, y captura/salida.
+Rubric evidence: *Testing & iteration* (≥ 3 tests a week, with evidence).
+Each entry: what was tested, how, the result, and the output.
+
+> Weeks 0–3 were written in Spanish, before the course required English (Module 4). They are kept as they
+> were written; from Week 4 on, everything is in English.
 
 Formato:
 
@@ -605,3 +608,27 @@ The failure was outfit generation on the phone profile. The stylist answered "co
 a log line added to find out why, it happened again: the main model was out of its daily quota and the backup
 answered 503 "high demand". Three more runs of that spec on the phone profile: 1 failed the same way, 2 passed 4 of 4.
 It is the provider's capacity on the free tier, not a logic error, but a real user would see that message too.
+
+# Week 6 · The integrated venture
+
+## Unit tests (Vitest) — 15 new cases
+- `src/lib/agentes.test.ts` (3): every production prompt is in the agent map exactly once, each is really sent to a
+  model in `gemini.ts`, and every agent has a guardrail and a human checkpoint.
+- `src/lib/tablero.test.ts` (6): no percentage from empty tables, test conversations excluded, costs grouped and
+  bad amounts skipped, fractions of a cent shown as such.
+- `src/lib/prueba-sitio.test.ts` (6): only links 4 and 5, no consent means nothing saved, a tampered tester number
+  is refused, at least one real step, score 1–5.
+Whole unit suite on Nov 9: 131 passed, 6 skipped (live-API tests that need a flag).
+
+## Migration 016, verified against the database (Nov 9)
+`site_test_summaries` exists and is empty; the public key gets 401 (code 42501) reading and writing it. In
+`api_costs`: 95 rows with an `ip:` provider, 48 now `ip:removed`, 0 raw IPs left, 415 rows in total, as before.
+
+## Full-site regression against https://closetai.lat (`e2e/sitio.spec.ts`)
+19 public pages and weekly demos on phone and desktop (status 200, a heading, no horizontal overflow, no console
+errors); the shared navigation reaches every module from every module; the phone menu opens and closes; 8 private
+routes send a stranger to sign in; the public key reads no row from 14 private tables; `/demo`'s nine steps all
+answer 200, it draws the 10 agents and lists 5 testers; `/docs` shows every prompt; `/dashboard` shows numbers and no
+email or IP; the tester flow needs consent, saves a row marked as a test, never shows it, and deletes it.
+- **Run 1 (Nov 9):** 59 passed, 6 failed, 3 skipped — the hanging prefetch, see the iteration log.
+- **Run 2 (Nov 9, after the fix was deployed):** **65 passed, 0 failed**, 3 skipped by design.

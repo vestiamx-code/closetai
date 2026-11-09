@@ -1,7 +1,10 @@
-# Registro de prompts al agente de código
+# Coding agent prompt log
 
-Evidencia de rúbrica: *Coding/build evidence* (≥5 prompts por semana).
-Una entrada por sesión de trabajo con el agente. Se llena **durante** el trabajo, no al final.
+Rubric evidence: *Coding/build evidence* (≥ 5 prompts a week).
+One entry per work session with the agent, written **during** the work, not at the end.
+
+> Weeks 0–3 were written in Spanish, before the course required English (Module 4). They are kept as they
+> were written; from Week 4 on, everything is in English.
 
 Formato:
 
@@ -433,3 +436,35 @@ was never called, the session proves the flag and the reason.
 **Result:** a licensed Unsplash photo for each garment, after Pexels turned out to have paused new keys.
 **Human judgment:** photos from stores or Pinterest weren't copied, because they belong to others. A key exposed during setup was replaced instead of being kept.
 **Commit:** 744ff4a, 726733a, 6bf29fd
+
+# Week 6 · The integrated venture (`/demo`, `/dashboard`, `/docs`)
+
+## [2026-11-09] — Session 1 · Three decisions before the plan
+**Prompt:** the Week 6 assignment, overview, macro-prompts and rubric, plus the D2L Final Capstone Rubric: "now the last part of the project".
+**Result:** three questions for Tamara before any code: how to reach five external users, whether `/dashboard` is public, and what happens to the old `/demo` video. She chose: Week 5's three testers plus two new ones on the whole site; a public dashboard with totals only; `/demo` becomes the walkthrough and the Week 0 video moves to `/demo/week-0`.
+**Human judgment:** the agent can't invent testers; two real people are Tamara's to recruit.
+**Commit:** 4c009f6 (packet and wireframe, before any code)
+
+## [2026-11-09] — Session 2 · One navigation and one list of agents
+**Prompt:** the packet's coding-agent prompt, steps 1–2.
+**Result:** a shared header on every public page (a no-JavaScript Menu on phones), and `src/lib/agentes.ts`, which imports the real prompts so the agent map and the prompt library can't drift; a test fails if a prompt is added and not listed.
+**Human judgment:** the agent's first draft said the cataloger lets her "edit every field"; the code only lets her correct the category, so the claim was cut down to what is true. It also had the week numbers wrong (Week 1 was `/core`), caught against the packets in git.
+**Commit:** 2d6d283, 1fcfb20, 8bb9f00
+
+## [2026-11-09] — Session 3 · The dashboard, and what it must never read
+**Prompt:** step 3: a public `/dashboard` of every module's records, totals only.
+**Result:** `lib/tablero.ts` (pure maths, 6 tests: empty tables, test rows, bad amounts) and a reader that only returns counts.
+**Human judgment:** reading `api_costs` showed 48 old rows from Weeks 1–2 holding visitors' raw IPs. The dashboard was written to select only the operation and the amount, and the cleanup went to Tamara as a production change.
+**Commit:** 97e795c
+
+## [2026-11-09] — Session 4 · The walkthrough, the testers' flow and migration 016
+**Prompt:** steps 4–6: `/demo` with the steps, agent map, testing summary, impact check and V2 roadmap; the `?test=4|5` flow; the migration, not applied without permission.
+**Result:** the page, the zod contract (6 tests), the Server Action and migration 016. Tamara approved applying it; verified afterwards: the table exists, the public key gets 401 reading and writing, 0 raw IPs left, 415 cost rows kept.
+**Human judgment:** testers who haven't tested show as "Pending", never filled in; the regression result shows nothing until it has really run.
+**Commit:** 09c87c0
+
+## [2026-11-09] — Session 5 · The full-site regression
+**Prompt:** step 7: every public page, the navigation, private routes, private tables and the tester flow, against https://closetai.lat.
+**Result:** 68 tests; the first run failed 6 (see the iteration log), the second passed 65 with 3 skipped by design.
+**Human judgment:** the failing check (`networkidle`) was kept, not loosened: it had found a real hanging request.
+**Commit:** 021b939

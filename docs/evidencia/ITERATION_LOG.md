@@ -1,7 +1,10 @@
-# Bitácora de iteración
+# Iteration log
 
-Evidencia de rúbrica: *Testing & iteration* (≥1 mejora derivada de haber probado).
-Qué se probó, qué salió mal o incómodo, y qué se cambió por eso.
+Rubric evidence: *Testing & iteration* (≥ 1 improvement that came from testing).
+What was tested, what went wrong or felt awkward, and what changed because of it.
+
+> Weeks 0–3 were written in Spanish, before the course required English (Module 4). They are kept as they
+> were written; from Week 4 on, everything is in English.
 
 Formato:
 
@@ -599,3 +602,23 @@ from the list, and the message goes with it, so it passed only when it caught th
 suggestion fewer, and passed 3 of 3 runs.
 **Still open:** that disappearing confirmation is real behavior on `/today`, not only a test problem. Someone who
 rejects an outfit may barely see the thanks. It isn't this week's feature, so it is written down and not fixed.
+
+# Week 6 · The integrated venture
+
+## [2026-11-09] — Building the dashboard found raw IPs in the database
+**Observed:** to sum the AI costs, the dashboard read `api_costs`. 48 rows written in Weeks 1–2 by `/core` and
+`/research` held the visitor's IP, unencrypted, in `provider`. Week 3 switched to a salted hash but never cleaned
+the rows written before.
+**Change:** the dashboard selects only the operation and the amount. Migration 016, approved by Tamara, replaced
+those IPs with `ip:removed` and kept every cost. Checked against the database: 0 raw IPs left, 415 rows kept.
+**Still open:** nothing deletes old records on its own. That is item 7 of the Version 2 roadmap.
+
+## [2026-11-09] — The regression's first run: three pages never finished loading
+**Observed:** `e2e/sitio.spec.ts` against https://closetai.lat: 6 of 68 failed, `/docs`, `/dashboard` and `/privacy`
+on both profiles. They never reached network idle.
+**Diagnosis:** listing the open requests showed `GET /sign-in?destino=/today` (and `/closet/add`, `/style`). Those
+pages link to private routes; Next.js prefetches links in view; for a visitor without a session the proxy
+redirects the prefetch to `/sign-in`, and that request stayed open.
+**Change:** links from public pages to private routes don't prefetch (`src/lib/rutas.ts`, which now also holds the
+proxy's list of private routes, so the two can't disagree).
+**Tested:** the second run: 65 passed, 0 failed, 3 skipped by design (tests that only run on one profile).
