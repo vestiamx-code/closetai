@@ -34,7 +34,7 @@ export async function generarOutfits(ocasion?: string): Promise<ResultadoOutfits
   if (!prendas || prendas.length < MINIMO_PRENDAS) {
     return {
       ok: false,
-      motivo: `Necesito al menos ${MINIMO_PRENDAS} prendas para armarte algo que valga la pena. Llevas ${prendas?.length ?? 0}.`,
+      motivo: `I need at least ${MINIMO_PRENDAS} garments to put together something worth wearing. You have ${prendas?.length ?? 0}.`,
     };
   }
 
