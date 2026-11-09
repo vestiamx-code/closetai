@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { PruebaSitio } from "./prueba-sitio";
 import { SitioNav } from "@/components/sitio-nav";
+import { precarga } from "@/lib/rutas";
 import { AGENTES, type Agente } from "@/lib/agentes";
 import { SEMANAS } from "@/lib/bitacora";
 import { PASOS, REGRESION, RIESGOS, ROADMAP, VIDEO_FINAL } from "@/lib/demo";
@@ -49,7 +50,7 @@ function CajaAgente({ a }: { a: Agente }) {
     <li data-agente={a.id} className="flex flex-col rounded-2xl border border-text/80 bg-surface p-5">
       <div className="flex items-baseline justify-between gap-2">
         <h3 className="font-display text-lg font-semibold">{a.nombre}</h3>
-        <Link href={a.ruta} className="shrink-0 text-xs text-text-muted underline underline-offset-4">
+        <Link href={a.ruta} prefetch={precarga(a.ruta)} className="shrink-0 text-xs text-text-muted underline underline-offset-4">
           {a.ruta}
         </Link>
       </div>
@@ -223,6 +224,7 @@ export default async function Demo({ searchParams }: PageProps<"/demo">) {
                 </p>
                 <Link
                   href={p.ruta}
+                  prefetch={precarga(p.ruta)}
                   className="mt-4 inline-flex w-fit items-center gap-1 rounded-full border border-border px-4 py-1.5 text-sm transition hover:border-text"
                 >
                   Open {p.ruta} →

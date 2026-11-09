@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { RUTAS_PRIVADAS } from "@/lib/rutas";
 
 import { supabaseConfigured } from "@/lib/supabase/env";
 
@@ -16,8 +17,6 @@ import { supabaseConfigured } from "@/lib/supabase/env";
  *   2. Manda a `/sign-in` a quien no tenga sesión y quiera entrar a la app.
  */
 
-/** Rutas que exigen sesión iniciada. */
-const RUTAS_PRIVADAS = ["/closet", "/today", "/style", "/profile", "/try-on", "/buy", "/admin"];
 
 /** Rutas de autenticación: si ya tienes sesión, no tiene sentido volver a ellas. */
 const RUTAS_DE_ENTRADA = ["/sign-in", "/sign-up"];

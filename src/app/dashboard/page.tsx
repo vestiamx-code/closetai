@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SitioNav } from "@/components/sitio-nav";
+import { precarga } from "@/lib/rutas";
 import { dolares } from "@/lib/tablero";
 import { leerTablero, type Tablero } from "@/lib/tablero-datos";
 
@@ -45,7 +46,7 @@ function Modulo({
         <h2 className="font-display text-2xl font-semibold tracking-tight">{titulo}</h2>
         <p className="text-sm text-text-muted">
           {semana} ·{" "}
-          <Link href={ruta} className="underline underline-offset-4 hover:text-text">
+          <Link href={ruta} prefetch={precarga(ruta)} className="underline underline-offset-4 hover:text-text">
             {ruta}
           </Link>
         </p>

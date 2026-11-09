@@ -55,7 +55,7 @@ export default function PrivacidadPage() {
               <li>
                 <strong>What you accept and reject:</strong> it is what lets ClosetAI learn your style.
                 You can see everything it has learned in{" "}
-                <Link href="/style" className="text-accent underline underline-offset-4">
+                <Link href="/style" prefetch={false} className="text-accent underline underline-offset-4">
                   Your style
                 </Link>{" "}
                 and correct anything.

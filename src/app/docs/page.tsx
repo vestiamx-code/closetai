@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SitioNav } from "@/components/sitio-nav";
+import { precarga } from "@/lib/rutas";
 import { AGENTES, PROMPTS } from "@/lib/agentes";
 import { BITACORAS, enGitHub, REPO, SEMANAS } from "@/lib/bitacora";
 
@@ -79,7 +80,7 @@ export default function Docs() {
                 </div>
                 <p className="mt-1 text-sm text-text-muted">
                   {agente.semana} ·{" "}
-                  <Link href={agente.ruta} className="underline underline-offset-4 hover:text-text">
+                  <Link href={agente.ruta} prefetch={precarga(agente.ruta)} className="underline underline-offset-4 hover:text-text">
                     {agente.ruta}
                   </Link>{" "}
                   · {agente.modelo}
@@ -146,7 +147,7 @@ export default function Docs() {
                 <p className="mt-2 max-w-2xl leading-relaxed text-text-muted">{s.resumen}</p>
                 <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                   {s.rutas.map((r) => (
-                    <Link key={r} href={r} className="underline underline-offset-4">
+                    <Link key={r} href={r} prefetch={precarga(r)} className="underline underline-offset-4">
                       {r}
                     </Link>
                   ))}
