@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — /demo, /dashboard, /docs</title>
+<!-- Source of 12-demo-wireframe.png (Week 6, Nov 9, 2026). Drawn before the build.
+     Render: node docs/evidencia/mockups/render-wireframe.mjs 12-demo-wireframe -->
+<style>
+  :root { --ink:#1d1916; --clay:#8f4424; --line:#d7cbbf; --muted:#7a716a; --ok:#2f6b43; --soft:#f6f1eb; }
+  * { box-sizing:border-box; margin:0; }
+  body { width:2000px; padding:48px 54px 60px; font:20px/1.35 -apple-system, "Helvetica Neue", Arial, sans-serif; color:var(--ink); background:#fff; }
+  h1 { font-size:34px; font-weight:700; }
+  .sub { color:var(--muted); font-size:21px; margin-top:10px; }
+  .label { font-size:18px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:28px 0 14px; }
+  .nav { display:flex; align-items:center; gap:22px; border:2px solid var(--line); border-radius:14px; padding:14px 22px; margin-top:28px; font-size:18px; }
+  .nav b { font-size:22px; margin-right:16px; }
+  .nav .on { text-decoration:underline; text-underline-offset:6px; }
+  .nav .right { margin-left:auto; border:2px solid var(--ink); border-radius:999px; padding:4px 16px; }
+  .cols { display:grid; grid-template-columns:1.25fr 1fr; gap:32px; }
+  .box { border:2px solid var(--line); border-radius:14px; padding:18px 22px; margin-bottom:16px; }
+  .note { color:var(--clay); font-size:17px; margin-top:10px; }
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .step { border:2px solid var(--line); border-radius:12px; padding:12px 14px; font-size:17px; }
+  .step i { font-style:normal; color:var(--muted); font-size:15px; display:block; }
+  .step u { color:var(--clay); }
+  .agents { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .agent { border:2px solid var(--ink); border-radius:12px; padding:10px 12px; font-size:15px; }
+  .agent b { font-size:17px; display:block; }
+  .agent .g { color:var(--clay); }
+  .agent .h { color:var(--ok); }
+  .flow { font-size:15px; color:var(--muted); margin:8px 0 2px; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .kpi { border:2px solid var(--line); border-radius:12px; padding:10px 14px; }
+  .kpi b { font-size:30px; display:block; }
+  .kpi span { font-size:15px; color:var(--muted); }
+  .bar { height:12px; border-radius:6px; background:var(--soft); margin:6px 0; position:relative; }
+  .bar::after { content:""; position:absolute; inset:0; width:var(--w); background:var(--ink); border-radius:6px; }
+  table { width:100%; border-collapse:collapse; font-size:16px; }
+  td, th { text-align:left; border-bottom:1.5px solid var(--line); padding:7px 6px; vertical-align:top; }
+  th { color:var(--muted); font-weight:500; font-size:15px; }
+  .tester { display:flex; gap:12px; align-items:baseline; font-size:16px; padding:6px 0; border-bottom:1.5px solid var(--line); }
+  .tester b { width:90px; }
+  .stars { color:var(--clay); }
+  .phone { width:330px; border:3px solid var(--ink); border-radius:34px; padding:22px 16px; }
+  .phone .menu { border:2px solid var(--line); border-radius:10px; padding:8px 12px; font-size:16px; display:flex; justify-content:space-between; }
+  .phone ul { list-style:none; padding:8px 4px; font-size:16px; line-height:1.9; }
+  .field { border:2px solid var(--line); border-radius:10px; padding:9px 12px; color:var(--muted); font-size:16px; margin:6px 0; }
+  .btn { border:2px solid var(--ink); border-radius:999px; padding:6px 18px; font-size:17px; display:inline-block; margin-top:6px; }
+  code { font:15px/1.4 Menlo, monospace; background:var(--soft); border-radius:8px; padding:8px 10px; display:block; margin-top:6px; color:var(--muted); }
+</style>
+</head>
+<body>
+  <h1>ClosetAI · Week 6 — the integrated venture</h1>
+  <p class="sub">Wireframe drawn before the build. Three new public pages share one navigation: /demo (the guided tour), /dashboard (live records) and /docs (prompt library + build log).</p>
+
+  <div class="nav"><b>CLOSET AI</b><span>Product</span><span>Research</span><span>Core</span><span>Pricing</span><span>Marketing</span><span>Chat</span><span>Dashboard</span><span>Docs</span><span class="on">Demo</span><span class="right">Sign in</span></div>
+  <p class="note">One shared header on every public page. Today each module only links back home.</p>
+
+  <div class="cols">
+    <div>
+      <div class="label">/demo — guided walkthrough (input → agent output → saved results → evidence)</div>
+      <div class="box">
+        <b style="font-size:26px">Your closet, styled by AI — see it work in 10 minutes</b>
+        <p class="sub" style="font-size:18px">One line of pitch, the 5-minute video, then the steps.</p>
+        <div style="height:150px;border-radius:12px;background:var(--soft);margin:12px 0;display:grid;place-items:center;color:var(--muted)">▶ 5-minute demo video</div>
+        <div class="steps">
+          <div class="step"><i>Step 1 · input</i>Ask “what should I wear?” <u>→ /chat</u></div>
+          <div class="step"><i>Step 2 · agent output</i>Outfit card, photos, store links</div>
+          <div class="step"><i>Step 3 · guardrail</i>Ask about a diet: it refuses, a human reviews</div>
+          <div class="step"><i>Step 4 · saved results</i>See it counted <u>→ /dashboard</u></div>
+          <div class="step"><i>Step 5 · the app</i>Closet, stylist, try-on <u>→ demo account</u></div>
+          <div class="step"><i>Step 6 · how it was built</i>Prompts and logs <u>→ /docs</u></div>
+        </div>
+        <p class="note">Each step says what to notice, and links a live page.</p>
+      </div>
+
+      <div class="label">Agent map — one box per AI agent</div>
+      <div class="box">
+        <div class="agents">
+          <div class="agent"><b>Cataloger</b>photo → garment JSON<div class="g">guard: zod contract</div><div class="h">human: edit any field</div></div>
+          <div class="agent"><b>Stylist</b>closet + weather → 3 outfits<div class="g">guard: only owned clothes</div><div class="h">human: accept / reject</div></div>
+          <div class="agent"><b>Try-on</b>base photo + garment → render<div class="g">guard: photo validator</div><div class="h">human: chooses photo</div></div>
+          <div class="agent"><b>Public chat</b>4 answers → outfit<div class="g">guard: 2 layers</div><div class="h">human: /admin review</div></div>
+          <div class="agent"><b>Research</b>question → cited answer</div>
+          <div class="agent"><b>Style core</b>own words → core</div>
+          <div class="agent"><b>Marketing</b>brief → posts</div>
+          <div class="agent"><b>Learning</b>feedback → profile</div>
+        </div>
+        <p class="flow">Each box: input → model → output · guardrail · where a human steps in. Drawn from the same file /docs reads.</p>
+      </div>
+
+      <div class="label">Impact check + V2 roadmap</div>
+      <div class="box">
+        <table>
+          <tr><th>Risk</th><th>Guardrail</th><th>Proof</th></tr>
+          <tr><td>Diet / body talk</td><td>Deterministic filter + model check + human review</td><td>28 unit cases, e2e</td></tr>
+          <tr><td>Private photos</td><td>RLS, signed URLs, no public reads</td><td>401 test</td></tr>
+          <tr><td>Overspending</td><td>Shop only real gaps; affiliate links disclosed</td><td>…</td></tr>
+        </table>
+        <p class="note">Value side: who benefits and the measured numbers. V2: each item cites the evidence that asked for it.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">/dashboard — live records, totals only</div>
+      <div class="box">
+        <div class="kpis">
+          <div class="kpi"><b>000</b><span>garments cataloged</span></div>
+          <div class="kpi"><b>000</b><span>outfits suggested</span></div>
+          <div class="kpi"><b>00</b><span>chat conversations</span></div>
+          <div class="kpi"><b>00%</b><span>rated helpful</span></div>
+        </div>
+        <p class="flow" style="margin-top:14px">AI cost by operation (USD)</p>
+        <div class="bar" style="--w:80%"></div><div class="bar" style="--w:45%"></div><div class="bar" style="--w:20%"></div>
+        <p class="note">Read from Supabase on every visit. Counts only: no names, emails, photos. Test traffic excluded.</p>
+      </div>
+
+      <div class="label">Testing summary — 5 external users</div>
+      <div class="box">
+        <div class="tester"><b>Tester 1</b><span class="stars">★★★★☆</span><span>/chat · Week 5 · “…”</span></div>
+        <div class="tester"><b>Tester 2</b><span class="stars">★★★★★</span><span>/chat · Week 5 · “…”</span></div>
+        <div class="tester"><b>Tester 3</b><span class="stars">★★★★☆</span><span>/chat · Week 5 · “…”</span></div>
+        <div class="tester"><b>Tester 4</b><span class="stars">—</span><span>full site · Week 6 · pending</span></div>
+        <div class="tester"><b>Tester 5</b><span class="stars">—</span><span>full site · Week 6 · pending</span></div>
+        <p class="note">A tester who hasn't happened shows as pending, never as made up. + Full-site regression: N passed.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:330px 1fr;gap:20px">
+        <div>
+          <div class="label">Phone: menu + tester link</div>
+          <div class="phone">
+            <div class="menu"><b>CLOSET AI</b><span>Menu ▾</span></div>
+            <ul><li>Chat</li><li>Dashboard</li><li>Docs</li><li>Demo</li><li>…</li></ul>
+            <div class="field">/demo?test=4 · consent ☐</div>
+            <div class="field">What worked?</div>
+            <div class="field">What confused you?</div>
+            <span class="btn">Send summary</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">/docs — prompt library + build log</div>
+          <div class="box" style="font-size:16px">
+            <b>Stylist · v2</b> · Gemini Flash-Lite → Flash
+            <code>You are ClosetAI, a personal stylist…  ▸ full prompt</code>
+            <p style="margin-top:10px"><b>Build log</b></p>
+            <p>Wk 0 app · Wk 1 /product · Wk 2 /research · Wk 3 /core /pricing · Wk 4 /marketing · Wk 5 /chat · Wk 6 /demo</p>
+            <p class="note">Imports the real prompt text: can't drift from production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
