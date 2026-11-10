@@ -11,7 +11,7 @@ import { LO_USARIA, type TesterSitio } from "@/lib/prueba-sitio";
  * the walkthrough as a checklist (each step opens in a new tab, so this one
  * keeps their ticks), then the summary.
  */
-export function PruebaSitio({ tester }: { tester: TesterSitio }) {
+export function PruebaSitio({ tester, vistaPrevia = false }: { tester: TesterSitio; vistaPrevia?: boolean }) {
   const [consentimiento, setConsentimiento] = useState(false);
   const [hechos, setHechos] = useState<string[]>([]);
   const [puntaje, setPuntaje] = useState<number | null>(null);
@@ -22,9 +22,13 @@ export function PruebaSitio({ tester }: { tester: TesterSitio }) {
   if (guardado) {
     return (
       <section data-testid="prueba-guardada" className="mt-10 rounded-3xl border border-border bg-surface p-6">
-        <h2 className="font-display text-2xl font-semibold">Thank you, tester {tester}!</h2>
+        <h2 className="font-display text-2xl font-semibold">
+          {vistaPrevia ? "Preview sent" : `Thank you, tester ${tester}!`}
+        </h2>
         <p className="mt-2 text-text-muted">
-          Your summary is saved and appears in the testing summary below. There’s nothing else to do.
+          {vistaPrevia
+            ? "This is what a tester sees at the end. Your answers were saved as a test: they don’t count and aren’t shown."
+            : "Your summary is saved and appears in the testing summary below. There’s nothing else to do."}
         </p>
       </section>
     );
@@ -40,7 +44,9 @@ export function PruebaSitio({ tester }: { tester: TesterSitio }) {
       className="mt-10 rounded-3xl border-2 bg-surface p-5 sm:p-7"
       style={{ borderColor: "var(--barro)" }}
     >
-      <p className="text-xs tracking-[0.2em] text-text-muted uppercase">Tester {tester} of 5</p>
+      <p className="text-xs tracking-[0.2em] text-text-muted uppercase">
+        {vistaPrevia ? "Preview · saved as a test, never shown" : `Tester ${tester} of 5`}
+      </p>
       <h2 id="t-prueba" className="mt-2 font-display text-2xl font-semibold tracking-tight">
         Thank you for testing ClosetAI
       </h2>
@@ -74,6 +80,7 @@ export function PruebaSitio({ tester }: { tester: TesterSitio }) {
         action={(fd) => {
           setError(null);
           fd.set("tester", String(tester));
+          if (vistaPrevia) fd.set("vista_previa", "1");
           if (consentimiento) fd.set("consentimiento", "on");
           for (const id of hechos) fd.append("paginas", id);
           if (puntaje) fd.set("puntaje", String(puntaje));

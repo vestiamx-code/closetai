@@ -15,7 +15,7 @@ export async function guardarPruebaSitio(fd: FormData): Promise<ResultadoPrueba>
   const datos = pruebaSitioSchema.safeParse(leerFormulario(fd));
   if (!datos.success) return { ok: false, error: datos.error.issues[0]?.message ?? "Check the form." };
 
-  const esPrueba = (await headers()).get("x-cai-prueba") === "1";
+  const esPrueba = (await headers()).get("x-cai-prueba") === "1" || datos.data.vista_previa === "1";
   // Consent is required by the schema; what is stored is when it was given.
   const { tester, paginas, funciono, confuso, puntaje, lo_usaria } = datos.data;
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { leerFormulario, pruebaSitioSchema, testerSitioDe } from "./prueba-sitio";
+import { esVistaPrevia, leerFormulario, pruebaSitioSchema, testerSitioDe } from "./prueba-sitio";
 
 function formulario(campos: Record<string, string | string[]>) {
   const fd = new FormData();
@@ -23,6 +23,14 @@ describe("full-site tester summary", () => {
     expect(testerSitioDe("4")).toBe(4);
     expect(testerSitioDe(["5"])).toBe(5);
     for (const v of ["1", "3", "6", "0", "4.0", "", undefined]) expect(testerSitioDe(v)).toBeNull();
+  });
+
+  it("the preview link is Tamara's own: it isn't a tester, and its summary can only be marked as a test", () => {
+    expect(esVistaPrevia("preview")).toBe(true);
+    expect(testerSitioDe("preview")).toBeNull();
+    expect(formulario({ ...valido, vista_previa: "1" }).data?.vista_previa).toBe("1");
+    expect(formulario(valido).data?.vista_previa).toBeUndefined();
+    expect(formulario({ ...valido, vista_previa: "0" }).success).toBe(false);
   });
 
   it("accepts a complete summary and keeps the steps that were ticked", () => {

@@ -16,6 +16,14 @@ export function testerSitioDe(valor: string | string[] | undefined): TesterSitio
   return v === "4" || v === "5" ? (Number(v) as TesterSitio) : null;
 }
 
+/**
+ * /demo?test=preview: the same flow for Tamara to try it herself. Her summary
+ * is stored marked as a test, so it never takes tester 4's place or shows up.
+ */
+export function esVistaPrevia(valor: string | string[] | undefined): boolean {
+  return (Array.isArray(valor) ? valor[0] : valor) === "preview";
+}
+
 const IDS_PASOS = PASOS.map((p) => p.id) as [string, ...string[]];
 
 export const LO_USARIA = [
@@ -37,6 +45,8 @@ export const pruebaSitioSchema = z.object({
   confuso: z.string().trim().max(800).default(""),
   puntaje: z.coerce.number().int().min(1, "Choose a score from 1 to 5.").max(5, "Choose a score from 1 to 5."),
   lo_usaria: z.enum(["si", "tal_vez", "no"], { error: "Tell us whether you would use it." }),
+  // Only ever marks a row as a test; it can't make a test row count.
+  vista_previa: z.literal("1").optional(),
 });
 
 export type PruebaSitio = z.infer<typeof pruebaSitioSchema>;
@@ -51,5 +61,6 @@ export function leerFormulario(fd: FormData) {
     confuso: fd.get("confuso") ?? "",
     puntaje: fd.get("puntaje"),
     lo_usaria: fd.get("lo_usaria") ?? undefined,
+    vista_previa: fd.get("vista_previa") ?? undefined,
   };
 }

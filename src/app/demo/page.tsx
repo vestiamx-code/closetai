@@ -7,7 +7,7 @@ import { precarga } from "@/lib/rutas";
 import { AGENTES, type Agente } from "@/lib/agentes";
 import { SEMANAS } from "@/lib/bitacora";
 import { PASOS, REGRESION, RIESGOS, ROADMAP, VIDEO_FINAL } from "@/lib/demo";
-import { testerSitioDe } from "@/lib/prueba-sitio";
+import { esVistaPrevia, testerSitioDe } from "@/lib/prueba-sitio";
 import { dolares } from "@/lib/tablero";
 import { leerTablero } from "@/lib/tablero-datos";
 import { leerTesters, type Tester } from "@/lib/testers";
@@ -131,7 +131,9 @@ function FilaTester({ t }: { t: Tester }) {
  * next. The Week 0 video moved to /demo/week-0.
  */
 export default async function Demo({ searchParams }: PageProps<"/demo">) {
-  const tester = testerSitioDe((await searchParams).test);
+  const { test } = await searchParams;
+  const vistaPrevia = esVistaPrevia(test);
+  const tester = testerSitioDe(test) ?? (vistaPrevia ? 4 : null);
 
   const [tablero, testers] = await Promise.all([
     leerTablero().catch((e) => {
@@ -180,7 +182,7 @@ export default async function Demo({ searchParams }: PageProps<"/demo">) {
           ))}
         </nav>
 
-        {tester ? <PruebaSitio tester={tester} /> : null}
+        {tester ? <PruebaSitio tester={tester} vistaPrevia={vistaPrevia} /> : null}
 
         {VIDEO_FINAL ? (
           <figure className="mt-10">
