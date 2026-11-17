@@ -35,7 +35,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>34 commits</b> (min. 5) · <b>27 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>36 commits</b> (min. 5) · <b>28 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
@@ -259,7 +259,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 34 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 36 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -297,6 +297,8 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td class="mono">34b419d</td><td>Nov 17, 00:08</td><td>feat: the video shows the signed-in app, from Tamara&#x27;s demo account</td></tr>
       <tr><td class="mono">39dfca5</td><td>Nov 17, 00:09</td><td>docs: final tables and document</td></tr>
       <tr><td class="mono">ac8f307</td><td>Nov 17, 00:18</td><td>fix: delete a leftover diagnostic account the dashboard counted as real</td></tr>
+      <tr><td class="mono">4ad4516</td><td>Nov 17, 00:18</td><td>docs: final tables</td></tr>
+      <tr><td class="mono">72bbd53</td><td>Nov 17, 00:19</td><td>docs: explain why the video&#x27;s dashboard reads 4 accounts</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
@@ -304,7 +306,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section class="brk">
-  <h2>8 · Vercel deployments — 27 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 28 this week (minimum 2)</h2>
   <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
   <table>
     <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
@@ -336,6 +338,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Nov 16, 23:58</td><td class="ok">● Ready</td><td><span class="mono">a31cac6</span> · docs: submission date November 17</td></tr>
       <tr><td>Nov 17, 00:08</td><td class="ok">● Ready</td><td><span class="mono">34b419d</span> · feat: the video shows the signed-in app, from Tamara&#x27;s demo account</td></tr>
       <tr><td>Nov 17, 00:09</td><td class="ok">● Ready</td><td><span class="mono">39dfca5</span> · docs: final tables and document</td></tr>
+      <tr><td>Nov 17, 00:18</td><td class="ok">● Ready</td><td><span class="mono">ac8f307</span> · fix: delete a leftover diagnostic account the dashboard counted as real</td></tr>
     </tbody>
   </table>
 </section>
@@ -510,7 +513,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 34 commits · §8 · 27 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 36 commits · §8 · 28 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · 5:08 video · §16 · decision note, 250 words</td></tr>
     </tbody>
