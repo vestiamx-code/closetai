@@ -103,7 +103,7 @@
 
   <div class="byline">
     <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
-    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+    Submitted November 17, 2026 · Product live at <b>closetai.lat</b>
   </div>
 
   <div class="links">
@@ -131,7 +131,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>23 commits</b> (min. 5) · <b>18 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>25 commits</b> (min. 5) · <b>19 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
@@ -355,7 +355,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 23 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 25 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -382,6 +382,8 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td class="mono">58f842a</td><td>Nov 16, 22:58</td><td>docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
       <tr><td class="mono">8f7c7e4</td><td>Nov 16, 22:59</td><td>docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
       <tr><td class="mono">832c2da</td><td>Nov 16, 23:35</td><td>feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
+      <tr><td class="mono">6467135</td><td>Nov 16, 23:37</td><td>docs: document refreshed with the video and the latest tables</td></tr>
+      <tr><td class="mono">3778ccb</td><td>Nov 16, 23:45</td><td>docs: final document: submission date, and Tamara&#x27;s note with the live figures</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
@@ -389,7 +391,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section class="brk">
-  <h2>8 · Vercel deployments — 18 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 19 this week (minimum 2)</h2>
   <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
   <table>
     <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
@@ -412,6 +414,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Nov 16, 22:58</td><td class="ok">● Ready</td><td><span class="mono">58f842a</span> · docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
       <tr><td>Nov 16, 22:59</td><td class="ok">● Ready</td><td><span class="mono">8f7c7e4</span> · docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
       <tr><td>Nov 16, 23:35</td><td class="ok">● Ready</td><td><span class="mono">832c2da</span> · feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
+      <tr><td>Nov 16, 23:37</td><td class="ok">● Ready</td><td><span class="mono">6467135</span> · docs: document refreshed with the video and the latest tables</td></tr>
     </tbody>
   </table>
 </section>
@@ -572,7 +575,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <p>This week, five external people tested ClosetAI: the three testers from Week 5, and two new people who tested the whole site, not only the chat. They told me what they liked and what bothered them. One said the page is amazing, but following the instructions was harder because they were in English. Their testing helped me a lot, because I thought it might not be easy for people outside the project. It was quite easy: they rated it very well, and the two new ones said they would use it.</p>
     <p>I made the dashboard public with totals only and rejected a private one, because my professor can't sign in to an account, and it must not show names, emails or messages. I deleted 48 old visitor IP addresses stored unencrypted since Week 1. Before sending links to testers, I always try a test link first, to see if it is easy or hard.</p>
     <p>My professor's Week 5 feedback asked me to fix the "0 of 3" counter and to write this note myself. My tests found the old IPs, three pages that never finished loading, and the counter that showed 0 when the database didn't answer. The English can't change, because the course is taught in English, so Spanish is point 1 of Version 2.</p>
-    <p>Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, three accounts and twelve conversations; and most of my testers are friends or family.</p>
+    <p>Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, four accounts and fourteen conversations; and most of my testers are friends or family.</p>
     <p class="wc">250 words · written by Tamara Muñoz Delgadillo: dictated in Spanish, in her own words, and translated into English with help, without adding ideas</p>
   </div>
 </section>
@@ -584,7 +587,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 23 commits · §8 · 18 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 25 commits · §8 · 19 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · 4:47 video · §16 · decision note, 250 words</td></tr>
     </tbody>
