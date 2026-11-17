@@ -157,6 +157,11 @@ export type Version2 = { idea: string; porque: string };
 /** Version 2, each item tied to the evidence that asked for it. */
 export const ROADMAP: Version2[] = [
   {
+    idea: "A Spanish version for Mexico",
+    porque:
+      "Week 6’s tester 4 scored ClosetAI 5/5 and said the only confusing thing was that it was in English. The product is in English because the course requires it; the people it is for live in Mexico.",
+  },
+  {
     idea: "Make the stylist’s outfits easier to say yes to",
     porque:
       "Of the outfits people decided on, most were rejected (live on /dashboard). The rejection reasons are already stored; V2 should weigh them before suggesting, not only after.",
