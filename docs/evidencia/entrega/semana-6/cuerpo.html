@@ -439,6 +439,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td><b>Tester 4: “That it was in english”</b></td><td>The course requires English, so the product can’t change now. A Spanish version for Mexico is item 1 of Version 2</td></tr>
       <tr><td>Checking the app for the full-site test: <code>/today</code> still answered in Spanish with fewer than four garments</td><td>Translated</td></tr>
       <tr><td>The logs linked from <code>/docs</code> had Spanish titles</td><td>Titles in English, with a note that Weeks 0–3 were written in Spanish before the course moved to English</td></tr>
+      <tr><td><b>The dashboard counted a leftover test account</b> (from a Sep 9 diagnostic) as one of “4 accounts”</td><td>Checked empty and deleted with my permission; the live dashboard shows 3</td></tr>
       <tr><td>Wanting to see what a tester sees, without using a tester’s link</td><td><code>/demo?test=preview</code>: the same flow, saved as a test and never shown</td></tr>
       <tr><td><b>The professor’s Week 5 review: the live <code>/chat</code> read “0 of 3 external testers”</b> while three had finished. A failed database read was being shown as zero</td><td>Both <code>/chat</code> and <code>/demo</code> retry the read and, if it fails, say so instead of stating a number. A regression case checks the live page shows 3 of 3. The intro’s outdated “three questions” and “no photos” were fixed too</td></tr>
       <tr><td><b>The same review:</b> someone outside my home should test the photos added after tester 1</td><td>Tester 4 tested outside my home, on her own phone, and did the outfit step with its photos (9 of 9 steps). Her only complaint was the language, not the photos. Tester 5, also outside my home, named the photos and the store links as what she liked most</td></tr>
@@ -487,6 +488,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
   <p>In order: the homepage; <code>/demo</code> and the navigation; the chat, an outfit and the guardrail; the app itself, with screenshots of my demo account — its closet, today’s outfits with the real weather, and its virtual try-ons — taken from a session I signed in to myself (the Week 0 footage is in Spanish);
     <code>/dashboard</code>; <code>/docs</code>; the agent map; the testers and the regression; the impact check;
     Version 2; and the commit history.</p>
+  <p>The video was recorded on Nov 16, so its dashboard still reads “4 accounts”: one was a leftover test account, deleted on Nov 17 with my permission (§12). The live dashboard now shows 3.</p>
 </section>
 
 <!-- ============ 16. NOTE ============ -->
