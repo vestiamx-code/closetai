@@ -1,0 +1,570 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ClosetAI — Week 6 Submission</title>
+<style>
+@page { size: Letter; margin: 15mm 15mm 16mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0; font: 10.2pt/1.55 "Charter", "Georgia", serif; color: #17140f;
+    background: #fff;
+  }
+  h1, h2, h3, .ui { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+  /* ---------- cover ---------- */
+  .cover { page-break-after: always; padding-top: 6mm; }
+  .kicker { font: 600 8.2pt/1 "Helvetica Neue", sans-serif; letter-spacing: .16em;
+            text-transform: uppercase; color: #8a7f6d; }
+  .cover h1 { font-size: 30pt; line-height: 1.06; margin: 7mm 0 0; letter-spacing: -.022em;
+              font-weight: 700; }
+  .cover h1 em { font-family: "Charter", Georgia, serif; font-style: italic;
+                 font-weight: 400; color: #7a3b28; }
+  .cover .sub { margin-top: 5mm; font-size: 11.5pt; color: #4a4238; max-width: 118mm; }
+  .byline { margin-top: 9mm; font: 9.4pt/1.7 "Helvetica Neue", sans-serif; color: #4a4238; }
+  .byline b { color: #17140f; }
+
+  .links { margin-top: 8mm; border-top: 1.6pt solid #17140f; }
+  .links a { display: flex; gap: 5mm; align-items: baseline; text-decoration: none;
+             color: #17140f; padding: 3.1mm 0; border-bottom: .4pt solid #ddd6c9; }
+  .links .lbl { font: 600 8pt/1 "Helvetica Neue", sans-serif; letter-spacing: .12em;
+                text-transform: uppercase; color: #8a7f6d; width: 30mm; flex: none; }
+  .links .url { font-size: 10.4pt; color: #7a3b28; word-break: break-all; }
+
+  .gate { margin-top: 9mm; background: #f6f2ea; border-left: 2.4pt solid #7a3b28;
+          padding: 4mm 5mm; font-size: 9.4pt; line-height: 1.5; }
+  .gate b { font-family: "Helvetica Neue", sans-serif; font-size: 8.6pt; letter-spacing: .04em; }
+
+  /* ---------- sections ---------- */
+  h2 { font-size: 13pt; letter-spacing: -.012em; margin: 0 0 3.5mm;
+       padding-bottom: 1.6mm; border-bottom: 1.4pt solid #17140f; font-weight: 700; }
+  section { margin-bottom: 6.5mm; }
+  .brk { page-break-before: always; }
+  .avoid { page-break-inside: avoid; }
+  h3 { font-size: 9.4pt; letter-spacing: .01em; margin: 5mm 0 1.6mm; font-weight: 700; }
+  p { margin: 0 0 2.4mm; }
+  .lead { color: #4a4238; font-size: 9.6pt; margin-bottom: 4mm; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.9pt; margin: 2mm 0 3mm; }
+  th { text-align: left; font: 600 7.6pt/1.3 "Helvetica Neue", sans-serif;
+       letter-spacing: .09em; text-transform: uppercase; color: #6d6355;
+       border-bottom: 1pt solid #17140f; padding: 1.6mm 2.4mm 1.6mm 0; vertical-align: bottom; }
+  td { padding: 1.7mm 2.4mm 1.7mm 0; border-bottom: .4pt solid #e4ded2; vertical-align: top;
+       line-height: 1.4; }
+  tr { page-break-inside: avoid; }
+  td.ok { color: #2f6b3f; font-weight: 700; white-space: nowrap; }
+  code, .mono { font-family: "SF Mono", "Menlo", monospace; font-size: 8.3pt;
+                background: #f2eee6; padding: .4mm 1mm; border-radius: 1.4pt; }
+  pre { font-family: "SF Mono", "Menlo", monospace; font-size: 7.7pt; line-height: 1.5;
+        background: #f6f2ea; border-left: 2pt solid #d8cfbe; padding: 3mm 4mm;
+        white-space: pre-wrap; margin: 2mm 0 3mm; page-break-inside: avoid; }
+  ul { margin: 0 0 3mm; padding-left: 4.6mm; }
+  li { margin-bottom: 1.2mm; }
+
+  figure { margin: 3mm 0 4mm; page-break-inside: avoid; }
+  figure img { width: 100%; border: .6pt solid #ddd6c9; border-radius: 2pt; display: block; }
+  figcaption { font: 8.1pt/1.45 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 1.8mm; }
+  .two { display: flex; gap: 5mm; }
+  .two figure { flex: 1; margin-top: 0; }
+  .media { max-width: 118mm; margin-left: auto; margin-right: auto; }
+  /* Una tabla no debe dejar dos filas solas al otro lado del salto. */
+  thead { display: table-header-group; }
+  tbody tr:first-child, tbody tr:nth-child(2) { page-break-after: auto; }
+
+  section a { color: #7a3b28; text-decoration: none; border-bottom: .4pt solid #c9b9a6; }
+  figure a { border: none; }
+  .note { border: .8pt solid #17140f; padding: 5mm 5.5mm; background: #fdfcfa;
+          page-break-inside: avoid; }
+  .note p { font-size: 10pt; }
+  .wc { font: 8pt/1 "Helvetica Neue", sans-serif; color: #6d6355; margin-top: 3mm; }
+
+  .prompt { border-left: 2pt solid #d8cfbe; padding-left: 4mm; margin: 0 0 4mm;
+            page-break-inside: avoid; }
+  .prompt .h { font: 700 8.6pt/1.4 "Helvetica Neue", sans-serif; }
+  .prompt .q { font-style: italic; color: #4a4238; margin: 1mm 0; }
+  .prompt .r { font-size: 8.9pt; margin: 1mm 0 0; }
+  .prompt .j { font-size: 8.9pt; margin: 1mm 0 0; background: #f6f2ea; padding: 2mm 2.6mm; }
+  .prompt .j b { font-family: "Helvetica Neue", sans-serif; font-size: 8.1pt; }
+
+  .pendiente { background: #fff3b0; outline: 1pt dashed #b38f00; padding: .4mm 1.4mm; font-weight: 700; color: #6b5400; }
+  p.pendiente { display: block; padding: 4mm; }
+  section a { color: #7a3b28; text-decoration: none; border-bottom: .4pt solid #c9b9a6; }
+  figure a { border: none; }
+  /* Week 6: tall screenshots keep their proportions and fit the page. */
+  figure img.alto { max-height: 120mm; width: auto; max-width: 100%; margin: 0 auto; }
+  figure img.pagina { max-height: 222mm; width: auto; max-width: 100%; margin: 0 auto; }
+
+</style>
+<section class="cover">
+  <p class="kicker">Week 6 · Integrated Agentic Venture + Impact &amp; Viability</p>
+  <h1>Six modules, one venture.<br><em>And the proof that it works.</em></h1>
+  <p class="sub">ClosetAI joined into one site: a guided walkthrough at <b>/demo</b>, a public dashboard of real
+     records, a prompt library and build log, a map of its ten AI agents, five external users, a full-site
+     regression test, an impact check and a Version 2 roadmap.</p>
+
+  <div class="byline">
+    <b>Tamara Muñoz Delgadillo</b> · Universidad Iberoamericana<br>
+    Submitted <span class="pendiente">[PENDING: date]</span> · Product live at <b>closetai.lat</b>
+  </div>
+
+  <div class="links">
+    <a href="https://closetai.lat/demo"><span class="lbl">Live page</span><span class="url">closetai.lat/demo</span></a>
+    <a href="https://closetai.lat/dashboard"><span class="lbl">Dashboard</span><span class="url">closetai.lat/dashboard</span></a>
+    <a href="https://closetai.lat/docs"><span class="lbl">Docs</span><span class="url">closetai.lat/docs</span></a>
+    <a href="https://github.com/vestiamx-code/closetai"><span class="lbl">GitHub</span><span class="url">github.com/vestiamx-code/closetai</span></a>
+  </div>
+
+  <div class="gate">
+    <b>THE WEEK IN ONE LINE.</b> Joining the modules found two things nobody had seen: old visitor IP addresses
+    still stored in the database, and three pages that never finished loading. Both are fixed, and every number on
+    the new pages is read live from the database — small, and true.
+  </div>
+</section>
+
+<!-- ============ 1. RUBRIC ============ -->
+<section>
+  <h2>1 · The rubric, category by category</h2>
+  <table>
+    <thead><tr><th style="width:42mm">Category</th><th style="width:11mm">Pts</th><th>Evidence</th><th style="width:12mm">§</th></tr></thead>
+    <tbody>
+      <tr><td>Build discipline before coding</td><td>1.5</td><td>Packet committed Nov 9 at 13:27 (<code>4c009f6</code>), before the first code commit (<code>2d6d283</code>, 13:29). Three decisions made by me first</td><td>2</td></tr>
+      <tr><td>UX planning and image-generated mockup</td><td>1.0</td><td>Wireframe of <code>/demo</code>, <code>/dashboard</code> and <code>/docs</code> with implementation notes; scope cut; what changed from the drawing</td><td>3</td></tr>
+      <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
+      <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
+      <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>11 commits</b> (min. 5) · <b>7 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
+      <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
+      <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The Final Capstone Rubric (D2L)</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Criterion</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Full live deployed app</td><td><code>closetai.lat</code>: the app (Week 0) and every public module, on its own domain (§6)</td></tr>
+      <tr><td>Multi-page product completeness</td><td>13 public pages and 8 private ones, joined by one navigation; each checked by the regression (§6, §11)</td></tr>
+      <tr><td>Working data/dashboard features</td><td><code>/dashboard</code>: live totals from 14 tables across all modules (§6, §9)</td></tr>
+      <tr><td>Coding quality and commits</td><td>Small commits in English; 132 unit tests passing; typed, linted, tested against production (§7, §11)</td></tr>
+      <tr><td>Agentic workflows and prompt logic</td><td>10 agents mapped with their guardrails and human checkpoints; 9 versioned prompts in <code>/docs</code> (§6)</td></tr>
+      <tr><td>User testing and iteration</td><td>5 external users, a full-site regression, and what changed because of them (§11, §12)</td></tr>
+      <tr><td>Product/value clarity</td><td>Who it helps, what it costs, what it can’t claim yet (§13)</td></tr>
+      <tr><td>Practical impact and risk guardrails</td><td>8 risks, each with its guardrail and the test that proves it (§13)</td></tr>
+      <tr><td>Final demo quality</td><td>5-minute narrated video and the guided <code>/demo</code> (§15)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Required features and coding tasks from the week overview</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Required</th><th>Where it is</th></tr></thead>
+    <tbody>
+      <tr><td>Full navigation · integrate all pages</td><td>One header on every public page; a Menu on phones (§6)</td></tr>
+      <tr><td>/dashboard shows records</td><td>Public, totals only, test traffic excluded (§6)</td></tr>
+      <tr><td>/docs has prompt library/build logs</td><td>Every production prompt with its version and guardrail; the Week 0–6 build log (§6)</td></tr>
+      <tr><td>/demo guided walkthrough</td><td>Nine numbered steps, each opening a live page (§6)</td></tr>
+      <tr><td>Agent map</td><td>On <code>/demo</code>, drawn from the same file as the prompt library (§5, §6)</td></tr>
+      <tr><td>5 total external users · testing summary</td><td>3 from Week 5 on <code>/chat</code> + 2 this week on the whole site (§11)</td></tr>
+      <tr><td>Practical impact check</td><td>Value, viability, limits and 8 risks with their guardrails (§13)</td></tr>
+      <tr><td>Version 2 roadmap</td><td>8 items, each tied to the evidence that asked for it (§13)</td></tr>
+      <tr><td>Full-site regression test</td><td><code>e2e/sitio.spec.ts</code> against production (§11)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2. PLAN ============ -->
+<section class="brk">
+  <h2>2 · The plan, written before the code</h2>
+  <p class="lead">Full text in <code>docs/WEEK-6-PACKET.md</code>, committed two minutes before the first line of
+    Week 6 code.</p>
+
+  <h3>Three decisions I made before the agent wrote anything</h3>
+  <ul>
+    <li><b>External users:</b> the three Week 5 testers count, and I recruit two new people who test the <b>whole site</b> on their own phones. Nobody is invented: a tester who hasn’t answered shows as pending.</li>
+    <li><b>The dashboard is public and shows totals only.</b> Graders can’t sign in to my account, and no name, email, photo or message should ever be on it.</li>
+    <li><b><code>/demo</code> becomes the guided walkthrough.</b> The Week 0 video moves to <code>/demo/week-0</code>.</li>
+  </ul>
+
+  <h3>Problem</h3>
+  <p>ClosetAI was built one module a week, and the modules were islands: every public page only linked back to the
+    homepage, nothing showed what the product had done in total, the prompts and logs lived in a folder few people
+    open, and nothing answered “does this create value, and could it hurt someone?”.</p>
+
+  <h3>User</h3>
+  <ul>
+    <li><b>The evaluator or visitor</b> — no account, about ten minutes to understand and try the whole product.</li>
+    <li><b>The two new testers</b> — real people who follow the walkthrough and say what worked and what didn’t.</li>
+    <li><b>Me, the founder</b> — one place to see whether it is used, what it costs, and what to build next.</li>
+  </ul>
+
+  <h3>Success — what must work by the end of the week</h3>
+  <ul>
+    <li>One navigation reaches every module, on a computer and on a phone.</li>
+    <li><code>/dashboard</code> shows live totals for every module, without test traffic.</li>
+    <li><code>/docs</code> shows every production prompt and the build log.</li>
+    <li><code>/demo</code> walks through the product, with the agent map, testing summary, impact check, V2 roadmap and video.</li>
+    <li>Five external users in total, and a full-site regression that passes against production.</li>
+  </ul>
+
+  <h3>Scope cut — what looked good and was not built</h3>
+  <table>
+    <thead><tr><th style="width:62mm">Left out</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>A private dashboard with individual records</td><td>Graders can’t sign in; <code>/admin</code> already covers my review list</td></tr>
+      <tr><td>A charts library</td><td>Totals and CSS bars are enough; a new dependency in the last week adds risk</td></tr>
+      <tr><td>Rendering every Markdown log inside <code>/docs</code></td><td>It needs a parser; <code>/docs</code> links each full log on GitHub</td></tr>
+      <tr><td>New AI features</td><td>This week integrates and proves; new features go to the V2 roadmap</td></tr>
+      <tr><td>Translating the Week 0 video</td><td>Kept as history at <code>/demo/week-0</code>; the new video is in English</td></tr>
+      <tr><td>Real-time dashboard updates</td><td>Fresh data on every visit is enough</td></tr>
+    </tbody>
+  </table>
+
+  <h3>DevOps</h3>
+  <table>
+    <thead><tr><th style="width:36mm">Piece</th><th>Plan</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub</td><td><code>vestiamx-code/closetai</code>; small commits in English, the packet first</td></tr>
+      <tr><td>Vercel</td><td>Every push to <code>main</code> deploys to <code>closetai.lat</code></td></tr>
+      <tr><td>Supabase</td><td>Migration 016, applied only with my permission, verified afterwards against the database</td></tr>
+      <tr><td>Env variables</td><td>None new; the existing server key reads the totals and never reaches the browser</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The prompt given to the coding agent</h3>
+  <pre>ROLE: You are my disciplined AI-native product architect and coding partner.
+CONTEXT: ClosetAI (Next.js 16, Tailwind v4, Supabase with RLS, Vercel). Read
+docs/WEEK-6-PACKET.md first; implement ONLY its agreed scope.
+TASK, in order, one small commit each:
+1. A shared public header on every public page; a Menu on phones.
+2. /docs: prompt library imported from the real prompt files + build log.
+3. /dashboard: public; counts only, with the server key; exclude test rows.
+4. /demo: walkthrough, agent map, testing summary, impact check, V2 roadmap.
+5. Migration site_test_summaries. Do NOT apply it: ask me.
+6. ?test=4|5 flow: consent → checklist → summary, validated on the server.
+7. e2e/sitio.spec.ts: full-site regression against production.
+CONSTRAINTS: free tools; no new dependencies; English; no personal data on
+public pages; never show a tester who didn't happen.</pre>
+</section>
+
+<!-- ============ 3. UX ============ -->
+<section class="brk">
+  <h2>3 · UX concept</h2>
+  <p class="lead">Image generation is still unavailable without billing, so, as in earlier weeks, the UX concept is a
+    wireframe drawn before the build from the course’s UX prompt — input, agent output, saved results and testing
+    evidence — with its implementation notes inside.</p>
+  <figure>
+    <img src="wireframe.png" alt="">
+    <figcaption>The shared header, <code>/demo</code> as a tour with the agent map and the impact check, <code>/dashboard</code>,
+      the testing summary with pending testers, the phone menu and tester form, and <code>/docs</code>.</figcaption>
+  </figure>
+  <h3>What changed between the wireframe and the live page</h3>
+  <ul>
+    <li><b>Ten agents, not eight:</b> listing them from the code found the shopping advisor and the photo validator the drawing missed.</li>
+    <li><b>Nine steps, not six,</b> so every public module is in the tour, plus a free account for the app itself.</li>
+    <li><b>The impact check gained a value side</b> with live figures, and a box for what the product can’t claim yet.</li>
+  </ul>
+</section>
+
+<!-- ============ 4. SPEC ============ -->
+<section>
+  <h2>4 · Product spec and acceptance criteria</h2>
+  <table>
+    <thead><tr><th style="width:6mm">#</th><th style="width:34mm">Requirement</th><th>Acceptance criterion</th><th style="width:16mm">Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Full navigation</td><td>Every public page has the same header with all modules and “Sign in”; on a 375 px phone it folds into a Menu and nothing overflows</td><td class="ok">● met</td></tr>
+      <tr><td>2</td><td><code>/dashboard</code> shows records</td><td>200 without a session; real totals per module read on each visit; test rows excluded; no personal data</td><td class="ok">● met</td></tr>
+      <tr><td>3</td><td><code>/docs</code></td><td>Every production prompt (≥ 8) with purpose, version, model and guardrail, full text expandable; Week 0–6 build log</td><td class="ok">● met · 9</td></tr>
+      <tr><td>4</td><td><code>/demo</code> walkthrough</td><td>200 without a session; ≥ 6 numbered steps, each linking a live route that answers 200; the video plays</td><td class="ok">● met · 9</td></tr>
+      <tr><td>5</td><td>Agent map</td><td>Every production agent with input → model → output, guardrail and human checkpoint; matches <code>/docs</code></td><td class="ok">● met · 10</td></tr>
+      <tr><td>6</td><td>5 external users</td><td>Tester links ask for consent, show the checklist and save a summary; <code>/demo</code> shows the five and never one who didn’t happen</td><td><span class="pendiente">[PENDING: tester 5]</span></td></tr>
+      <tr><td>7</td><td>Practical impact check</td><td>Value with measured evidence, and each risk with its guardrail and test</td><td class="ok">● met · 8</td></tr>
+      <tr><td>8</td><td>Version 2 roadmap</td><td>Each item tied to the evidence that motivated it</td><td class="ok">● met · 8</td></tr>
+      <tr><td>9</td><td>Full-site regression</td><td>Every public route on production on phone and desktop; private routes redirect; the full suite runs against the live site</td><td class="ok">● met</td></tr>
+      <tr><td>10</td><td>Old video kept</td><td><code>/demo/week-0</code> plays the Week 0 video</td><td class="ok">● met</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 5. ARCHITECTURE ============ -->
+<section class="brk">
+  <h2>5 · Architecture and stack</h2>
+  <pre>Browser (no session)
+   │
+   ├── &lt;SitioNav&gt;  one header on every public page (a no-JavaScript Menu on phones)
+   │
+   ├── /dashboard   Server Component, read on every visit
+   │      lib/tablero-datos.ts → server key → COUNT queries on 14 tables
+   │      lib/tablero.ts       → pure maths (percentages, costs by operation)
+   │      → only numbers reach the browser
+   │
+   ├── /docs        imports the prompt text from src/lib/ai/prompts/* (what production sends)
+   │
+   ├── /demo        steps · agent map · testers · impact check · V2 roadmap
+   │      lib/agentes.ts  ← the ONE list of agents, shared with /docs
+   │      lib/testers.ts  → chat_test_summaries (1–3) + site_test_summaries (4–5)
+   │      ?test=4|5 → &lt;PruebaSitio&gt; → Server Action → zod → insert
+   ▼
+Supabase Postgres (RLS on every table; private tables closed to the public key)
+   └── NEW site_test_summaries   (tester 4–5, consent time, steps, words, score)</pre>
+  <p><b>One source of truth for the agents.</b> <code>lib/agentes.ts</code> imports each prompt from the file the model
+    is sent. The map and the library both read it, and a unit test fails if a prompt is added and not listed, or listed
+    and never sent.</p>
+  <p><b>The rule reversed.</b> The dashboard uses the server key, which can read everything, so the reader only ever
+    selects counts and amounts. From <code>api_costs</code> it reads two columns, because an older column held IPs (§12).</p>
+  <table>
+    <thead><tr><th style="width:30mm">Piece</th><th style="width:48mm">Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Framework</td><td>Next.js 16, Server Components and Actions</td><td>Already in use; the key never reaches the browser</td></tr>
+      <tr><td>Styling</td><td>Tailwind v4, CSS bars</td><td>No chart library to add in the last week</td></tr>
+      <tr><td>Database</td><td>Supabase Postgres + RLS</td><td>All the modules’ data already lives there; one new table</td></tr>
+      <tr><td>Validation</td><td>zod</td><td>The same contract style as every other form</td></tr>
+      <tr><td>Tests</td><td>Vitest + Playwright against production</td><td>Green locally doesn’t prove the live site</td></tr>
+      <tr><td>Hosting</td><td>Vercel + closetai.lat</td><td>Every push to main deploys</td></tr>
+      <tr><td>AI</td><td>No new model calls</td><td>This week shows the existing agents: Gemini Flash-Lite and Flash, fal.ai</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 6. PRODUCT ============ -->
+<section class="brk">
+  <h2>6 · The integrated product, working</h2>
+  <div class="two">
+    <figure><img src="01-demo.jpg" alt="" class="alto"><figcaption><code>/demo</code>: the shared header, the pitch and the tour’s contents.</figcaption></figure>
+    <figure><img src="10-menu-celular.jpg" alt="" class="alto"><figcaption>On a phone the modules fold into a Menu; zero horizontal overflow.</figcaption></figure>
+  </div>
+  <figure class="media"><img src="02-pasos.jpg" alt=""><figcaption>The walkthrough: nine steps, each with what to do, what to notice and a live link.</figcaption></figure>
+</section>
+
+<section class="brk">
+  <figure><img src="03-agentes.jpg" alt="" class="pagina"><figcaption>The agent map: ten agents, six in the app and four on the public site. Each shows its input, model, output, guardrail and where a human decides.</figcaption></figure>
+</section>
+
+<section class="brk">
+  <figure><img src="07-dashboard.jpg" alt="" class="pagina"><figcaption><code>/dashboard</code>, live: every module’s records, the homepage experiment and the AI’s cost by operation. Counts only; test traffic excluded.</figcaption></figure>
+</section>
+
+<section class="brk">
+  <figure><img src="08-docs.jpg" alt="" class="pagina"><figcaption><code>/docs</code>: the prompt library, with the public chat’s prompt opened. The text is imported from the file production sends.</figcaption></figure>
+</section>
+
+<section class="brk">
+  <div class="two">
+    <figure><img src="09-bitacora.jpg" alt="" class="alto"><figcaption>The build log, Week 0 to 6, with each week’s routes, plan and demo.</figcaption></figure>
+    <figure><img src="11-tester-celular.jpg" alt="" class="alto"><figcaption>What a tester sees on a phone: consent first, then the checklist and five questions.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 7. COMMITS ============ -->
+<section class="brk">
+  <h2>7 · GitHub commits — 11 this week (minimum 5)</h2>
+  <table>
+    <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">4c009f6</td><td>Nov 9, 13:27</td><td>docs: build discipline packet and wireframe, before any code</td></tr>
+      <tr><td class="mono">2d6d283</td><td>Nov 9, 13:29</td><td>feat: one shared navigation across every public page</td></tr>
+      <tr><td class="mono">1fcfb20</td><td>Nov 9, 13:29</td><td>feat: describe every production AI agent once</td></tr>
+      <tr><td class="mono">8bb9f00</td><td>Nov 9, 16:12</td><td>feat: /docs with the prompt library and the build log</td></tr>
+      <tr><td class="mono">97e795c</td><td>Nov 9, 16:15</td><td>feat: public /dashboard with every module&#x27;s real records</td></tr>
+      <tr><td class="mono">09c87c0</td><td>Nov 9, 16:20</td><td>feat: /demo becomes the guided walkthrough</td></tr>
+      <tr><td class="mono">021b939</td><td>Nov 9, 16:25</td><td>test: full-site regression, and the hanging prefetch it found</td></tr>
+      <tr><td class="mono">185bf0c</td><td>Nov 9, 16:28</td><td>docs: prompt, iteration and test logs; log headers in English</td></tr>
+      <tr><td class="mono">fc7a764</td><td>Nov 9, 16:28</td><td>fix: the last Spanish message a user could see, now in English</td></tr>
+      <tr><td class="mono">cf3bbb0</td><td>Nov 10, 09:07</td><td>feat: /demo?test=preview, so Tamara can try the tester flow herself</td></tr>
+      <tr><td class="mono">27ea46a</td><td>Nov 16, 18:27</td><td>feat: tester 4&#x27;s feedback goes into the Version 2 roadmap</td></tr>
+    </tbody>
+  </table>
+  <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
+</section>
+
+<!-- ============ 8. DEPLOYS ============ -->
+<section class="brk">
+  <h2>8 · Vercel deployments — 7 this week (minimum 2)</h2>
+  <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
+  <table>
+    <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
+    <tbody>
+      <tr><td>Nov 9, 13:27</td><td class="ok">● Ready</td><td><span class="mono">4c009f6</span> · docs: build discipline packet and wireframe, before any code</td></tr>
+      <tr><td>Nov 9, 16:22</td><td class="ok">● Ready</td><td><span class="mono">09c87c0</span> · feat: /demo becomes the guided walkthrough</td></tr>
+      <tr><td>Nov 9, 16:25</td><td class="ok">● Ready</td><td><span class="mono">021b939</span> · test: full-site regression, and the hanging prefetch it found</td></tr>
+      <tr><td>Nov 9, 16:28</td><td class="ok">● Ready</td><td><span class="mono">185bf0c</span> · docs: prompt, iteration and test logs; log headers in English</td></tr>
+      <tr><td>Nov 9, 16:28</td><td class="ok">● Ready</td><td><span class="mono">fc7a764</span> · fix: the last Spanish message a user could see, now in English</td></tr>
+      <tr><td>Nov 10, 09:07</td><td class="ok">● Ready</td><td><span class="mono">cf3bbb0</span> · feat: /demo?test=preview, so Tamara can try the tester flow herself</td></tr>
+      <tr><td>Nov 16, 18:27</td><td class="ok">● Ready</td><td><span class="mono">27ea46a</span> · feat: tester 4&#x27;s feedback goes into the Version 2 roadmap</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 9. SUPABASE ============ -->
+<section>
+  <h2>9 · Supabase evidence</h2>
+  <p class="lead">Migration 016, applied on Nov 9 with my explicit permission. The SQL pasted into the editor was
+    checked character for character against the repository before running, and the result verified against the
+    database, not the screen.</p>
+  <table>
+    <thead><tr><th style="width:84mm">What was checked</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>site_test_summaries</code> exists, with the server key</td><td class="ok">200</td></tr>
+      <tr><td>Reading it with the public key</td><td class="ok">401 (42501)</td></tr>
+      <tr><td>Inserting with the public key</td><td class="ok">401 (42501)</td></tr>
+      <tr><td><code>api_costs</code> rows that held a raw IP</td><td class="ok">48 → 0; replaced by <code>ip:removed</code></td></tr>
+      <tr><td><code>api_costs</code> rows in total</td><td class="ok">415 before, 415 after: no cost lost</td></tr>
+      <tr><td>The public key on 14 private tables (regression)</td><td class="ok">no row readable</td></tr>
+      <tr><td>Tester 4’s summary</td><td class="ok">saved Nov 16, not marked as a test, shown on <code>/demo</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 10. PROMPTS ============ -->
+<section>
+  <h2>10 · Coding-agent prompts — 7 this week (minimum 5)</h2>
+  <p class="lead">Full log in <code>docs/evidencia/PROMPT_LOG.md</code>.</p>
+  <div class="prompt"><p class="h">1 · Three decisions before the plan</p>
+    <p class="q">“Now the last part of the project.” (with the assignment, overview, macro-prompts and both rubrics)</p>
+    <p class="j"><b>MY JUDGMENT.</b> The agent can’t invent testers: two real people are mine to recruit.</p></div>
+  <div class="prompt"><p class="h">2 · One navigation and one list of agents</p>
+    <p class="q">The packet’s prompt, steps 1–2.</p>
+    <p class="j"><b>MY JUDGMENT.</b> The first draft said users can “edit every field” of a garment; the code only allows correcting the category, so the claim was cut to what is true. The week numbers were wrong too, and were checked against git.</p></div>
+  <div class="prompt"><p class="h">3 · The dashboard, and what it must never read</p>
+    <p class="q">“A public /dashboard of every module’s records, totals only.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> When the costs table turned out to hold old IPs, cleaning it was a production change, so it came to me first.</p></div>
+  <div class="prompt"><p class="h">4 · The walkthrough, the testers’ flow and the migration</p>
+    <p class="q">Steps 4–6: <code>/demo</code>, the <code>?test=4|5</code> flow and migration 016, “not applied without permission”.</p>
+    <p class="j"><b>MY JUDGMENT.</b> A tester who hasn’t answered shows as “Pending”; the regression result shows nothing until it has really run.</p></div>
+  <div class="prompt"><p class="h">5 · The full-site regression</p>
+    <p class="q">Step 7: every public page, the navigation, private routes, private tables and the tester flow, on production.</p>
+    <p class="j"><b>MY JUDGMENT.</b> When the strictest check failed, the page was fixed, not the check.</p></div>
+  <div class="prompt"><p class="h">6 · A test link for me</p>
+    <p class="q">“Give me a test so I can see it.”</p>
+    <p class="j"><b>MY JUDGMENT.</b> Using tester 4’s link would have taken a real tester’s place, so my preview is saved as a test and never shown.</p></div>
+  <div class="prompt"><p class="h">7 · What tester 4 said</p>
+    <p class="q">Tester 4: the only confusing thing “was that it was in english”.</p>
+    <p class="j"><b>MY JUDGMENT.</b> The course requires English, so it can’t change now; it became the first item of Version 2.</p></div>
+</section>
+
+<!-- ============ 11. TESTS ============ -->
+<section class="brk">
+  <h2>11 · Testing — 5 external users and a full-site regression</h2>
+
+  <h3>External users</h3>
+  <p>People who did not build ClosetAI, each with their own tester link and phone. Testers 1–3 tried <code>/chat</code>
+    in Week 5; testers 4 and 5 walked the whole site this week. Their words are copied as they wrote them.</p>
+  <table>
+    <thead><tr><th style="width:12mm">Tester</th><th style="width:30mm">What they tried</th><th style="width:11mm">Score</th><th style="width:16mm">Would use it</th><th>What worked</th><th>What was confusing</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>/chat</code> · Week 5</td><td>5/5</td><td>—</td><td>“Everything good”</td><td>“I thought that pictures were included”</td></tr>
+      <tr><td>2</td><td><code>/chat</code> · Week 5</td><td>5/5</td><td>—</td><td>“All good”</td><td>“Everithing was fine”</td></tr>
+      <tr><td>3</td><td><code>/chat</code> · Week 5</td><td>5/5</td><td>—</td><td>“I like the concept”</td><td>“All worked!!”</td></tr>
+      <tr><td>4</td><td>Whole site · 9 of 9 steps</td><td>5/5</td><td>Yes</td><td>“I loved the idea of it, it would help a lot to save time”</td><td>“That it was in english”</td></tr>
+      <tr><td>5</td><td colspan="5"><span class="pendiente">[PENDING: tester 5]</span></td></tr>
+    </tbody>
+  </table>
+  <figure class="media"><img src="04-testers.jpg" alt="" class="alto"><figcaption>The testing summary as it appears on <code>/demo</code>.</figcaption></figure>
+
+  <h3>Full-site regression against https://closetai.lat (<code>e2e/sitio.spec.ts</code>)</h3>
+  <table>
+    <thead><tr><th>What it asserts</th><th style="width:22mm">Cases</th></tr></thead>
+    <tbody>
+      <tr><td>Each public page and weekly demo answers 200, has its heading, fits the screen and logs no errors — on a phone and on a computer</td><td>19 × 2</td></tr>
+      <tr><td>From every module, the navigation reaches every other one and marks the current page; the phone Menu opens and closes</td><td>2 + 1</td></tr>
+      <tr><td>Every private route sends a stranger to sign in</td><td>8 × 2</td></tr>
+      <tr><td>The public key reads no row from 14 private tables</td><td>1</td></tr>
+      <tr><td><code>/demo</code>: all nine steps answer 200, ten agents drawn, five testers, each either their words or “Pending”</td><td>2</td></tr>
+      <tr><td><code>/docs</code> shows every prompt; <code>/dashboard</code> shows numbers and no email or IP</td><td>4</td></tr>
+      <tr><td>The tester flow needs consent, saves a row marked as a test, never shows it, and deletes it</td><td>1</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li><b>Run 1, Nov 9:</b> 59 passed, <b>6 failed</b>, 3 skipped — three pages never finished loading (§12).</li>
+    <li><b>Run 2, Nov 9, after the fix was deployed:</b> <b>65 passed, 0 failed</b>, 3 skipped by design (tests that run on one profile only).</li>
+    <li><b>Final full run, every week’s tests:</b> <span class="pendiente">[PENDING: final run]</span></li>
+  </ul>
+  <p><b>Unit tests:</b> 16 new cases this week — the agent map against the real prompts, the dashboard maths with empty
+    tables and test rows, and the tester form’s contract (no consent, nothing saved). Whole suite: 132 passed, 6 skipped.</p>
+</section>
+
+<!-- ============ 12. ITERATION ============ -->
+<section class="brk">
+  <h2>12 · Iteration log — what changed after testing</h2>
+  <table>
+    <thead><tr><th style="width:64mm">What was found</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td><b>Building the dashboard: 48 old rows held visitors’ raw IP addresses.</b> Week 3 switched to a salted hash but never cleaned the rows written before</td><td>Migration 016 replaced them with <code>ip:removed</code>, keeping every cost; the dashboard reads only the operation and the amount</td></tr>
+      <tr><td><b>Regression run 1: <code>/docs</code>, <code>/dashboard</code> and <code>/privacy</code> never finished loading.</b> They prefetched private pages; for a visitor, the prefetch was redirected to sign-in and that request stayed open</td><td>Links to private pages don’t prefetch, and the list of private pages lives in one file for the proxy and the pages. Run 2: 0 failures</td></tr>
+      <tr><td><b>Tester 4: “That it was in english”</b></td><td>The course requires English, so the product can’t change now. A Spanish version for Mexico is item 1 of Version 2</td></tr>
+      <tr><td>Checking the app for the full-site test: <code>/today</code> still answered in Spanish with fewer than four garments</td><td>Translated</td></tr>
+      <tr><td>The logs linked from <code>/docs</code> had Spanish titles</td><td>Titles in English, with a note that Weeks 0–3 were written in Spanish before the course moved to English</td></tr>
+      <tr><td>Wanting to see what a tester sees, without using a tester’s link</td><td><code>/demo?test=preview</code>: the same flow, saved as a test and never shown</td></tr>
+      <tr><td><span class="pendiente">[PENDING: tester 5]</span></td><td></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 13. IMPACT ============ -->
+<section class="brk">
+  <h2>13 · Practical impact check and Version 2</h2>
+  <h3>Value and viability</h3>
+  <ul>
+    <li><b>Who it helps:</b> a woman aged 24–30 in Mexico City who owns enough clothes but loses time deciding what to wear, and buys what she doesn’t need. ClosetAI answers from her own closet first.</li>
+    <li><b>What the evidence says:</b> every rated chat answer was helpful (6 of 6); four external testers scored it 5/5, and tester 4 said “it would help a lot to save time”.</li>
+    <li><b>The weakest number:</b> in the app, most outfits people decided on were rejected (2 accepted of 6). That is item 2 of Version 2.</li>
+    <li><b>What it costs:</b> $0.69 of AI since August, for 415 calls. A chat answer costs $0.0002; the only expensive call is the virtual try-on ($0.075), which is why it is paid with credits.</li>
+    <li><b>What it can’t claim yet:</b> that it saves anyone time or money. Nobody has used it long enough to measure that.</li>
+  </ul>
+  <figure class="media"><img src="05-impacto.jpg" alt="" class="alto"><figcaption>The impact check on <code>/demo</code>: live figures, and eight risks, each with its guardrail and proof.</figcaption></figure>
+</section>
+
+<section class="brk">
+  <figure class="media"><img src="06-roadmap.jpg" alt="" class="alto"><figcaption>Version 2: eight items, each with the evidence that asked for it. Nothing in it is built yet.</figcaption></figure>
+</section>
+
+<!-- ============ 14. LIMITS ============ -->
+<section>
+  <h2>14 · What this evidence does not prove</h2>
+  <ul>
+    <li><b>The numbers are small.</b> Three accounts, 12 public chat conversations, 11 visitors in the homepage experiment. They are signals, not proof, and the dashboard says so.</li>
+    <li><b>Four of five testers gave 5/5, and the first three tried it at my home.</b> People I know score generously. Tester 4 was the first to name something that didn’t work for her.</li>
+    <li><b>Testers 1–3 tried only <code>/chat</code>, before its photos existed.</b> Only testers 4 and 5 saw the whole site.</li>
+    <li><b>The language problem is real and stays.</b> The product is for Mexico and is in English because the course requires it.</li>
+    <li><b>The app itself can’t be shown to graders without an account.</b> The walkthrough asks for a free one, and the video uses footage of my own account.</li>
+    <li><b>Nothing deletes old records automatically.</b> The raw IPs were found by chance, while building something else.</li>
+    <li><b>The AI runs on free tiers.</b> When the main model is out of quota and the backup is overloaded, a real user sees an error.</li>
+  </ul>
+</section>
+
+<!-- ============ 15. VIDEO ============ -->
+<section>
+  <h2>15 · Demo video</h2>
+  <p class="lead"><span class="pendiente">[PENDING: video]</span> — about 5 minutes, recorded against the live site
+    with the test header so it stays out of the totals, narrated by me, and hosted at
+    <a href="https://closetai.lat/demo"><b>closetai.lat/demo</b></a>.</p>
+  <p>In order: the homepage; <code>/demo</code> and the navigation; the chat, an outfit and the guardrail; the app;
+    <code>/dashboard</code>; <code>/docs</code>; the agent map; the testers and the regression; the impact check;
+    Version 2; and the commit history.</p>
+</section>
+
+<!-- ============ 16. NOTE ============ -->
+<section>
+  <h2>16 · Human decision note</h2>
+  <div class="note">
+    <p>This week I joined six weeks of work into one venture, and the hardest part was deciding what to show and what to admit.</p>
+    <p>I decided the dashboard would be public but show only totals, with no names or messages. My numbers are small, and I chose to show them as they are instead of hiding them. While building it, I found that old visitor IP addresses were still saved in the database from Week 1. I approved deleting them, because a fashion app has no reason to keep them.</p>
+    <p>I also decided that a tester who hasn’t answered appears as “pending”. I refused to invent testers, even with the deadline close.</p>
+    <p>Testing corrected me twice. The automated test found three pages that never finished loading, and they were fixed. My fourth tester said the only confusing thing was that the app is in English. I can’t change that now, because the course requires English, so a Spanish version is the first item of Version 2.</p>
+    <p>The tradeoff: most of my testers know me, and my numbers can’t prove the app saves time yet. They show it works, and where to improve next.</p>
+    <p class="wc"><span class="pendiente">[PENDING: Tamara’s approval]</span></p>
+  </div>
+</section>
+
+<!-- ============ GATES ============ -->
+<section>
+  <h2>Build gates</h2>
+  <table>
+    <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 11 commits · §8 · 7 production deployments</td></tr>
+      <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · video · §16 · decision note</td></tr>
+    </tbody>
+  </table>
+</section>
+

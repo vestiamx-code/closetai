@@ -468,3 +468,15 @@ was never called, the session proves the flag and the reason.
 **Result:** 68 tests; the first run failed 6 (see the iteration log), the second passed 65 with 3 skipped by design.
 **Human judgment:** the failing check (`networkidle`) was kept, not loosened: it had found a real hanging request.
 **Commit:** 021b939
+
+## [2026-11-10] — Session 6 · A test link for Tamara
+**Prompt:** "Give me a test so I can see it."
+**Result:** `/demo?test=preview`: the same consent, checklist and summary as testers 4 and 5, saved marked as a test.
+**Human judgment:** sending tester 4's link would have used up a real tester's only summary and counted Tamara as an external user.
+**Commit:** cf3bbb0
+
+## [2026-11-16] — Session 7 · What tester 4 said
+**Prompt:** tester 4's summary: 5/5, would use it, the only confusing thing "That it was in english".
+**Result:** a Spanish version for Mexico became item 1 of the Version 2 roadmap; the video script and the submission document were drafted.
+**Human judgment:** the course requires English, so the product doesn't change now; the request is recorded where it can be acted on.
+**Commit:** 27ea46a
