@@ -253,3 +253,16 @@ I rejected copying photos from Zara, Mango or Pinterest, because those images be
 The tradeoff: the photos are similar, not the exact garment. My testers tried the chat at my home, before the photos existed, so this improvement still needs real users.
 
 **190 words · approved by Tamara Muñoz Delgadillo on November 4, 2026.**
+
+
+## Week 6 · The integrated venture (Nov 16, 2026)
+
+*Written by Tamara: dictated in Spanish, in her own words, and translated into English with help, without adding ideas. 250 words.*
+
+This week, five external people tested ClosetAI: the three testers from Week 5, and two new people who tested the whole site, not only the chat. They told me what they liked and what bothered them. One said the page is amazing, but following the instructions was harder because they were in English. Their testing helped me a lot, because I thought it might not be easy for people outside the project. It was quite easy: they rated it very well, and the two new ones said they would use it.
+
+I made the dashboard public with totals only and rejected a private one, because my professor can't sign in to an account, and it must not show names, emails or messages. I deleted 48 old visitor IP addresses stored unencrypted since Week 1. Before sending links to testers, I always try a test link first, to see if it is easy or hard.
+
+My professor's Week 5 feedback asked me to fix the "0 of 3" counter and to write this note myself. My tests found the old IPs, three pages that never finished loading, and the counter that showed 0 when the database didn't answer. The English can't change, because the course is taught in English, so Spanish is point 1 of Version 2.
+
+Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, three accounts and twelve conversations; and most of my testers are friends or family.
