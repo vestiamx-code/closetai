@@ -646,3 +646,5 @@ was clear". The photos added after tester 1's feedback are what she named first.
 
 **Final full run, every week's e2e tests:** of 176 tests across both profiles, **165 passed, 0 failed**, 11 skipped
 by design (tests that run on one profile only). Unit tests: 132 passed, 6 skipped (live-API tests behind a flag).
+Tester 5 also tested **outside Tamara's home** (confirmed by Tamara on Nov 16). Both new testers, 4 and 5, did the
+outfit step with its photos away from her home, as the professor asked after Week 5.
