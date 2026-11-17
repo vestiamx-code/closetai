@@ -632,3 +632,9 @@ answer 200, it draws the 10 agents and lists 5 testers; `/docs` shows every prom
 email or IP; the tester flow needs consent, saves a row marked as a test, never shows it, and deletes it.
 - **Run 1 (Nov 9):** 59 passed, 6 failed, 3 skipped — the hanging prefetch, see the iteration log.
 - **Run 2 (Nov 9, after the fix was deployed):** **65 passed, 0 failed**, 3 skipped by design.
+
+## [2026-11-16] — Tester 4, outside Tamara's home
+Tester 4 used `/demo?test=4` on her own phone, **outside Tamara's home** (confirmed by Tamara on Nov 16), and ticked
+all 9 steps, including step 2, the outfit card with its inspiration photos. Score 5/5, would use it. What worked: "I
+loved the idea of it, it would help a lot to save time". What was confusing: "That it was in english". This answers
+the professor's Week 5 request that someone outside her home test the photos added after tester 1's feedback.
