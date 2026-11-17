@@ -24,7 +24,7 @@ export type Tester = {
 
 export async function leerTesters(): Promise<Tester[]> {
   const db = createAdminClient();
-  const [chat, sitio] = await Promise.all([
+  const leer = () => Promise.all([
     db
       .from("chat_test_summaries")
       .select("tester, funciono, confuso, puntaje, created_at, chat_sessions!inner(es_prueba)")
@@ -34,9 +34,12 @@ export async function leerTesters(): Promise<Tester[]> {
       .select("tester, funciono, confuso, puntaje, lo_usaria, paginas, created_at")
       .eq("es_prueba", false),
   ]);
+  // One retry; then a failed read is an error, never "pending": a tester who answered
+  // must not show as not having answered (the bug the professor found on /chat).
+  let [chat, sitio] = await leer();
+  if (chat.error || sitio.error) [chat, sitio] = await leer();
   if (chat.error) throw new Error(chat.error.message);
-  // Before migration 016 the table doesn't exist: testers 4 and 5 are simply pending.
-  if (sitio.error) console.warn("[testers] site_test_summaries:", sitio.error.message);
+  if (sitio.error) throw new Error(sitio.error.message);
 
   const deChat = new Map((chat.data ?? []).map((r) => [r.tester, r]));
   const deSitio = new Map((sitio.data ?? []).map((r) => [r.tester, r]));
