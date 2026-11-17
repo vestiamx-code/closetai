@@ -35,7 +35,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>17 commits</b> (min. 5) · <b>12 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>23 commits</b> (min. 5) · <b>18 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
@@ -259,7 +259,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 17 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 23 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -280,6 +280,12 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td class="mono">1ce43b3</td><td>Nov 16, 19:51</td><td>docs: the professor&#x27;s Week 5 review in the iteration log; decision note left for Tamara</td></tr>
       <tr><td class="mono">65bf701</td><td>Nov 16, 20:10</td><td>docs: tester 4 tested outside Tamara&#x27;s home, photos included</td></tr>
       <tr><td class="mono">93d4eaa</td><td>Nov 16, 22:13</td><td>docs: tester 5 and the final full run: 165 passed, 0 failed</td></tr>
+      <tr><td class="mono">b90130a</td><td>Nov 16, 22:15</td><td>docs: screenshots and tables with all five testers and the final run</td></tr>
+      <tr><td class="mono">e9cbdb6</td><td>Nov 16, 22:54</td><td>docs: Tamara&#x27;s decision note, in her own words</td></tr>
+      <tr><td class="mono">bbfbe98</td><td>Nov 16, 22:57</td><td>docs: tester 5 also tested outside Tamara&#x27;s home</td></tr>
+      <tr><td class="mono">58f842a</td><td>Nov 16, 22:58</td><td>docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
+      <tr><td class="mono">8f7c7e4</td><td>Nov 16, 22:59</td><td>docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
+      <tr><td class="mono">832c2da</td><td>Nov 16, 23:35</td><td>feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
@@ -287,7 +293,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section class="brk">
-  <h2>8 · Vercel deployments — 12 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 18 this week (minimum 2)</h2>
   <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
   <table>
     <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
@@ -304,6 +310,12 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Nov 16, 19:51</td><td class="ok">● Ready</td><td><span class="mono">1ce43b3</span> · docs: the professor&#x27;s Week 5 review in the iteration log; decision note left for Tamara</td></tr>
       <tr><td>Nov 16, 20:10</td><td class="ok">● Ready</td><td><span class="mono">65bf701</span> · docs: tester 4 tested outside Tamara&#x27;s home, photos included</td></tr>
       <tr><td>Nov 16, 22:13</td><td class="ok">● Ready</td><td><span class="mono">93d4eaa</span> · docs: tester 5 and the final full run: 165 passed, 0 failed</td></tr>
+      <tr><td>Nov 16, 22:15</td><td class="ok">● Ready</td><td><span class="mono">b90130a</span> · docs: screenshots and tables with all five testers and the final run</td></tr>
+      <tr><td>Nov 16, 22:54</td><td class="ok">● Ready</td><td><span class="mono">e9cbdb6</span> · docs: Tamara&#x27;s decision note, in her own words</td></tr>
+      <tr><td>Nov 16, 22:57</td><td class="ok">● Ready</td><td><span class="mono">bbfbe98</span> · docs: tester 5 also tested outside Tamara&#x27;s home</td></tr>
+      <tr><td>Nov 16, 22:58</td><td class="ok">● Ready</td><td><span class="mono">58f842a</span> · docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
+      <tr><td>Nov 16, 22:59</td><td class="ok">● Ready</td><td><span class="mono">8f7c7e4</span> · docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
+      <tr><td>Nov 16, 23:35</td><td class="ok">● Ready</td><td><span class="mono">832c2da</span> · feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
     </tbody>
   </table>
 </section>
@@ -476,7 +488,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 17 commits · §8 · 12 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 23 commits · §8 · 18 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · 4:47 video · §16 · decision note, 250 words</td></tr>
     </tbody>

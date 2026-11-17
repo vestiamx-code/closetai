@@ -131,7 +131,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>17 commits</b> (min. 5) · <b>12 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>23 commits</b> (min. 5) · <b>18 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
@@ -355,7 +355,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 17 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 23 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -376,6 +376,12 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td class="mono">1ce43b3</td><td>Nov 16, 19:51</td><td>docs: the professor&#x27;s Week 5 review in the iteration log; decision note left for Tamara</td></tr>
       <tr><td class="mono">65bf701</td><td>Nov 16, 20:10</td><td>docs: tester 4 tested outside Tamara&#x27;s home, photos included</td></tr>
       <tr><td class="mono">93d4eaa</td><td>Nov 16, 22:13</td><td>docs: tester 5 and the final full run: 165 passed, 0 failed</td></tr>
+      <tr><td class="mono">b90130a</td><td>Nov 16, 22:15</td><td>docs: screenshots and tables with all five testers and the final run</td></tr>
+      <tr><td class="mono">e9cbdb6</td><td>Nov 16, 22:54</td><td>docs: Tamara&#x27;s decision note, in her own words</td></tr>
+      <tr><td class="mono">bbfbe98</td><td>Nov 16, 22:57</td><td>docs: tester 5 also tested outside Tamara&#x27;s home</td></tr>
+      <tr><td class="mono">58f842a</td><td>Nov 16, 22:58</td><td>docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
+      <tr><td class="mono">8f7c7e4</td><td>Nov 16, 22:59</td><td>docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
+      <tr><td class="mono">832c2da</td><td>Nov 16, 23:35</td><td>feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
@@ -383,7 +389,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section class="brk">
-  <h2>8 · Vercel deployments — 12 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 18 this week (minimum 2)</h2>
   <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
   <table>
     <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
@@ -400,6 +406,12 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Nov 16, 19:51</td><td class="ok">● Ready</td><td><span class="mono">1ce43b3</span> · docs: the professor&#x27;s Week 5 review in the iteration log; decision note left for Tamara</td></tr>
       <tr><td>Nov 16, 20:10</td><td class="ok">● Ready</td><td><span class="mono">65bf701</span> · docs: tester 4 tested outside Tamara&#x27;s home, photos included</td></tr>
       <tr><td>Nov 16, 22:13</td><td class="ok">● Ready</td><td><span class="mono">93d4eaa</span> · docs: tester 5 and the final full run: 165 passed, 0 failed</td></tr>
+      <tr><td>Nov 16, 22:15</td><td class="ok">● Ready</td><td><span class="mono">b90130a</span> · docs: screenshots and tables with all five testers and the final run</td></tr>
+      <tr><td>Nov 16, 22:54</td><td class="ok">● Ready</td><td><span class="mono">e9cbdb6</span> · docs: Tamara&#x27;s decision note, in her own words</td></tr>
+      <tr><td>Nov 16, 22:57</td><td class="ok">● Ready</td><td><span class="mono">bbfbe98</span> · docs: tester 5 also tested outside Tamara&#x27;s home</td></tr>
+      <tr><td>Nov 16, 22:58</td><td class="ok">● Ready</td><td><span class="mono">58f842a</span> · docs: video script mentions testers 4 and 5 outside Tamara&#x27;s home</td></tr>
+      <tr><td>Nov 16, 22:59</td><td class="ok">● Ready</td><td><span class="mono">8f7c7e4</span> · docs: the video script says ClosetAI is for people in Mexico, as Tamara&#x27;s note does</td></tr>
+      <tr><td>Nov 16, 23:35</td><td class="ok">● Ready</td><td><span class="mono">832c2da</span> · feat: the 4:47 demo video, narrated by Tamara, at the top of /demo</td></tr>
     </tbody>
   </table>
 </section>
@@ -465,7 +477,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>2</td><td><code>/chat</code> · Week 5</td><td>5/5</td><td>—</td><td>“All good”</td><td>“Everithing was fine”</td></tr>
       <tr><td>3</td><td><code>/chat</code> · Week 5</td><td>5/5</td><td>—</td><td>“I like the concept”</td><td>“All worked!!”</td></tr>
       <tr><td>4</td><td>Whole site · 9 of 9 steps · outside my home</td><td>5/5</td><td>Yes</td><td>“I loved the idea of it, it would help a lot to save time”</td><td>“That it was in english”</td></tr>
-      <tr><td>5</td><td>Whole site · 9 of 9 steps</td><td>5/5</td><td>Yes</td><td>“I liked the concept, i like that it shows poctures and the places where i can find something similar”</td><td>“For me, everything was clear”</td></tr>
+      <tr><td>5</td><td>Whole site · 9 of 9 steps · outside my home</td><td>5/5</td><td>Yes</td><td>“I liked the concept, i like that it shows poctures and the places where i can find something similar”</td><td>“For me, everything was clear”</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="04-testers.jpg" alt="" class="alto"><figcaption>The testing summary as it appears on <code>/demo</code>.</figcaption></figure>
@@ -505,7 +517,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>The logs linked from <code>/docs</code> had Spanish titles</td><td>Titles in English, with a note that Weeks 0–3 were written in Spanish before the course moved to English</td></tr>
       <tr><td>Wanting to see what a tester sees, without using a tester’s link</td><td><code>/demo?test=preview</code>: the same flow, saved as a test and never shown</td></tr>
       <tr><td><b>The professor’s Week 5 review: the live <code>/chat</code> read “0 of 3 external testers”</b> while three had finished. A failed database read was being shown as zero</td><td>Both <code>/chat</code> and <code>/demo</code> retry the read and, if it fails, say so instead of stating a number. A regression case checks the live page shows 3 of 3. The intro’s outdated “three questions” and “no photos” were fixed too</td></tr>
-      <tr><td><b>The same review:</b> someone outside my home should test the photos added after tester 1</td><td>Tester 4 tested outside my home, on her own phone, and did the outfit step with its photos (9 of 9 steps). Her only complaint was the language, not the photos. Tester 5 named the photos and the store links as what she liked most</td></tr>
+      <tr><td><b>The same review:</b> someone outside my home should test the photos added after tester 1</td><td>Tester 4 tested outside my home, on her own phone, and did the outfit step with its photos (9 of 9 steps). Her only complaint was the language, not the photos. Tester 5, also outside my home, named the photos and the store links as what she liked most</td></tr>
     </tbody>
   </table>
 </section>
@@ -516,9 +528,9 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
   <h3>Value and viability</h3>
   <ul>
     <li><b>Who it helps:</b> a woman aged 24–30 in Mexico City who owns enough clothes but loses time deciding what to wear, and buys what she doesn’t need. ClosetAI answers from her own closet first.</li>
-    <li><b>What the evidence says:</b> every rated chat answer was helpful (6 of 6); all five external testers scored it 5/5; testers 4 and 5 said they would use it, and tester 4 said “it would help a lot to save time”.</li>
+    <li><b>What the evidence says:</b> every rated chat answer was helpful (10 of 10, on Nov 16); all five external testers scored it 5/5; testers 4 and 5 said they would use it, and tester 4 said “it would help a lot to save time”.</li>
     <li><b>The weakest number:</b> in the app, most outfits people decided on were rejected (2 accepted of 6). That is item 2 of Version 2.</li>
-    <li><b>What it costs:</b> $0.69 of AI since August, for 415 calls. A chat answer costs $0.0002; the only expensive call is the virtual try-on ($0.075), which is why it is paid with credits.</li>
+    <li><b>What it costs:</b> $0.70 of AI since August, for 436 calls. A chat answer costs $0.0002; the only expensive call is the virtual try-on ($0.075), which is why it is paid with credits.</li>
     <li><b>What it can’t claim yet:</b> that it saves anyone time or money. Nobody has used it long enough to measure that.</li>
   </ul>
   <figure class="media"><img src="05-impacto.jpg" alt="" class="alto"><figcaption>The impact check on <code>/demo</code>: live figures, and eight risks, each with its guardrail and proof.</figcaption></figure>
@@ -532,9 +544,9 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 <section>
   <h2>14 · What this evidence does not prove</h2>
   <ul>
-    <li><b>The numbers are small.</b> Three accounts, 12 public chat conversations, 11 visitors in the homepage experiment. They are signals, not proof, and the dashboard says so.</li>
-    <li><b>The first three testers tried it at my home,</b> and people I know score generously. Tester 4 tested outside my home and was the first to name something that didn’t work for her.</li>
-    <li><b>Testers 1–3 tried only <code>/chat</code>, before its photos existed.</b> The photos have been tested by one person outside my home (tester 4), and tester 5 named them as what she liked most. Two people, not proof that they solve tester 1’s confusion for everyone.</li>
+    <li><b>The numbers are small.</b> On Nov 16: four accounts, 14 public chat conversations, 12 visitors in the homepage experiment. They are signals, not proof, and the dashboard says so.</li>
+    <li><b>The first three testers tried it at my home,</b> and people I know score generously. Testers 4 and 5 tested outside my home; tester 4 was the first to name something that didn’t work for her. Most of my testers are still friends or family.</li>
+    <li><b>Testers 1–3 tried only <code>/chat</code>, before its photos existed.</b> The photos have been tested by two people outside my home (testers 4 and 5), and tester 5 named them as what she liked most. Two people, not proof that they solve tester 1’s confusion for everyone.</li>
     <li><b>The language problem is real and stays.</b> The product is for Mexico and is in English because the course requires it.</li>
     <li><b>The app itself can’t be shown to graders without an account.</b> The walkthrough asks for a free one, and the video uses footage of my own account.</li>
     <li><b>Nothing deletes old records automatically.</b> The raw IPs were found by chance, while building something else.</li>
@@ -545,10 +557,10 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 <!-- ============ 15. VIDEO ============ -->
 <section>
   <h2>15 · Demo video</h2>
-  <p class="lead"><span class="pendiente">[PENDING: video]</span> — about 5 minutes, recorded against the live site
-    with the test header so it stays out of the totals, narrated by me, and hosted at
+  <p class="lead"><b>4:47</b>, recorded against the live site with the test header so its chat stays out of the totals,
+    narrated by me, and hosted on the product’s own domain at the top of
     <a href="https://closetai.lat/demo"><b>closetai.lat/demo</b></a>.</p>
-  <p>In order: the homepage; <code>/demo</code> and the navigation; the chat, an outfit and the guardrail; the app;
+  <p>In order: the homepage; <code>/demo</code> and the navigation; the chat, an outfit and the guardrail; the app, shown through the homepage’s “How it works” and <code>/product</code>, because recording my signed-in account would need my password and the Week 0 footage is in Spanish;
     <code>/dashboard</code>; <code>/docs</code>; the agent map; the testers and the regression; the impact check;
     Version 2; and the commit history.</p>
 </section>
@@ -557,7 +569,11 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 <section>
   <h2>16 · Human decision note</h2>
   <div class="note">
-    <p class="pendiente">[PENDING: Tamara writes this note herself — 150–250 words, in English: her decisions, rejections, corrections and tradeoffs]</p>
+    <p>This week, five external people tested ClosetAI: the three testers from Week 5, and two new people who tested the whole site, not only the chat. They told me what they liked and what bothered them. One said the page is amazing, but following the instructions was harder because they were in English. Their testing helped me a lot, because I thought it might not be easy for people outside the project. It was quite easy: they rated it very well, and the two new ones said they would use it.</p>
+    <p>I made the dashboard public with totals only and rejected a private one, because my professor can't sign in to an account, and it must not show names, emails or messages. I deleted 48 old visitor IP addresses stored unencrypted since Week 1. Before sending links to testers, I always try a test link first, to see if it is easy or hard.</p>
+    <p>My professor's Week 5 feedback asked me to fix the "0 of 3" counter and to write this note myself. My tests found the old IPs, three pages that never finished loading, and the counter that showed 0 when the database didn't answer. The English can't change, because the course is taught in English, so Spanish is point 1 of Version 2.</p>
+    <p>Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, three accounts and twelve conversations; and most of my testers are friends or family.</p>
+    <p class="wc">250 words · written by Tamara Muñoz Delgadillo: dictated in Spanish, in her own words, and translated into English with help, without adding ideas</p>
   </div>
 </section>
 
@@ -568,9 +584,9 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 17 commits · §8 · 12 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 23 commits · §8 · 18 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
-      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · video · §16 · decision note</td></tr>
+      <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · 4:47 video · §16 · decision note, 250 words</td></tr>
     </tbody>
   </table>
 </section>
