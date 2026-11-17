@@ -634,3 +634,9 @@ number. The page's intro also still said "three questions" and "no photos"; it n
 **Tested:** a new regression case asserts that the live `/chat` shows "3 of 3" and the three summaries.
 **Also from the review:** the decision note must be written by Tamara herself, not drafted for her approval;
 and someone outside her home should test the photos added after tester 1's feedback.
+
+## [2026-11-17] — The dashboard counted a test account as a real one
+**Observed:** `/dashboard` showed "4 accounts". One was `diag-…@closetai.lat`, left by a diagnostic run on Sep 9
+and never deleted; it had no garments, outfits or anything else.
+**Change:** with Tamara's permission, the account was deleted (checked empty first). The dashboard shows 3: her
+admin account, the demo account, and one tester's. Her decision note says "three accounts" again.

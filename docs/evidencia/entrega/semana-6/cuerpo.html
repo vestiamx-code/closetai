@@ -35,7 +35,7 @@
       <tr><td>Product spec and acceptance criteria</td><td>1.0</td><td>10 requirements, each with a testable criterion and its status</td><td>4</td></tr>
       <tr><td>Architecture and tech stack clarity</td><td>1.0</td><td>Data flow, one source of truth for the agents, a stack table with reasons</td><td>5</td></tr>
       <tr><td><b>Working deployed product</b></td><td><b>2.0</b></td><td><code>closetai.lat/demo</code> live, with every module reachable, tested against the real site</td><td>6, 11</td></tr>
-      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>32 commits</b> (min. 5) · <b>26 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
+      <tr><td>Coding/build evidence</td><td>1.0</td><td><b>33 commits</b> (min. 5) · <b>27 deployments</b> (min. 2) · <b>7</b> coding-agent prompts (min. 5)</td><td>7–10</td></tr>
       <tr><td>Testing and iteration</td><td>1.0</td><td><b>5 external users</b> in total and a <b>full-site regression</b> against production; bugs fixed and redeployed</td><td>11–12</td></tr>
       <tr><td>Human judgment and explanation</td><td>1.0</td><td>Decisions, rejections and corrections; the limits of this evidence; decision note</td><td>2, 12, 14, 16</td></tr>
       <tr><td>Demo clarity</td><td>0.5</td><td>5-minute walkthrough recorded against the live site, narrated by me</td><td>15</td></tr>
@@ -259,7 +259,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 7. COMMITS ============ -->
 <section class="brk">
-  <h2>7 · GitHub commits — 32 this week (minimum 5)</h2>
+  <h2>7 · GitHub commits — 33 this week (minimum 5)</h2>
   <table>
     <thead><tr><th style="width:18mm">Hash</th><th style="width:22mm">When</th><th>Message</th></tr></thead>
     <tbody>
@@ -295,6 +295,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td class="mono">5150985</td><td>Nov 16, 23:57</td><td>docs: final tables and document with the 5:08 video</td></tr>
       <tr><td class="mono">a31cac6</td><td>Nov 16, 23:58</td><td>docs: submission date November 17</td></tr>
       <tr><td class="mono">34b419d</td><td>Nov 17, 00:08</td><td>feat: the video shows the signed-in app, from Tamara&#x27;s demo account</td></tr>
+      <tr><td class="mono">39dfca5</td><td>Nov 17, 00:09</td><td>docs: final tables and document</td></tr>
     </tbody>
   </table>
   <figure class="media"><img src="12-commits.jpg" alt="" class="alto"><figcaption>The public commit history on GitHub.</figcaption></figure>
@@ -302,7 +303,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 
 <!-- ============ 8. DEPLOYS ============ -->
 <section class="brk">
-  <h2>8 · Vercel deployments — 26 this week (minimum 2)</h2>
+  <h2>8 · Vercel deployments — 27 this week (minimum 2)</h2>
   <p class="lead">Production deployments read from <code>vercel ls</code>, each with the commit it built.</p>
   <table>
     <thead><tr><th style="width:22mm">When</th><th style="width:16mm">State</th><th>Commit</th></tr></thead>
@@ -333,6 +334,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Nov 16, 23:57</td><td class="ok">● Ready</td><td><span class="mono">5150985</span> · docs: final tables and document with the 5:08 video</td></tr>
       <tr><td>Nov 16, 23:58</td><td class="ok">● Ready</td><td><span class="mono">a31cac6</span> · docs: submission date November 17</td></tr>
       <tr><td>Nov 17, 00:08</td><td class="ok">● Ready</td><td><span class="mono">34b419d</span> · feat: the video shows the signed-in app, from Tamara&#x27;s demo account</td></tr>
+      <tr><td>Nov 17, 00:09</td><td class="ok">● Ready</td><td><span class="mono">39dfca5</span> · docs: final tables and document</td></tr>
     </tbody>
   </table>
 </section>
@@ -465,7 +467,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 <section>
   <h2>14 · What this evidence does not prove</h2>
   <ul>
-    <li><b>The numbers are small.</b> On Nov 16: four accounts, 14 public chat conversations, 12 visitors in the homepage experiment. They are signals, not proof, and the dashboard says so.</li>
+    <li><b>The numbers are small.</b> On Nov 17: three accounts, 14 public chat conversations, 12 visitors in the homepage experiment. They are signals, not proof, and the dashboard says so.</li>
     <li><b>The first three testers tried it at my home,</b> and people I know score generously. Testers 4 and 5 tested outside my home; tester 4 was the first to name something that didn’t work for her. Most of my testers are still friends or family.</li>
     <li><b>Testers 1–3 tried only <code>/chat</code>, before its photos existed.</b> The photos have been tested by two people outside my home (testers 4 and 5), and tester 5 named them as what she liked most. Two people, not proof that they solve tester 1’s confusion for everyone.</li>
     <li><b>The language problem is real and stays.</b> The product is for Mexico and is in English because the course requires it.</li>
@@ -493,7 +495,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <p>This week, five external people tested ClosetAI: the three testers from Week 5, and two new people who tested the whole site, not only the chat. They told me what they liked and what bothered them. One said the page is amazing, but following the instructions was harder because they were in English. Their testing helped me a lot, because I thought it might not be easy for people outside the project. It was quite easy: they rated it very well, and the two new ones said they would use it.</p>
     <p>I made the dashboard public with totals only and rejected a private one, because my professor can't sign in to an account, and it must not show names, emails or messages. I deleted 48 old visitor IP addresses stored unencrypted since Week 1. Before sending links to testers, I always try a test link first, to see if it is easy or hard.</p>
     <p>My professor's Week 5 feedback asked me to fix the "0 of 3" counter and to write this note myself. My tests found the old IPs, three pages that never finished loading, and the counter that showed 0 when the database didn't answer. The English can't change, because the course is taught in English, so Spanish is point 1 of Version 2.</p>
-    <p>Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, four accounts and fourteen conversations; and most of my testers are friends or family.</p>
+    <p>Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, three accounts and fourteen conversations; and most of my testers are friends or family.</p>
     <p class="wc">250 words · written by Tamara Muñoz Delgadillo: dictated in Spanish, in her own words, and translated into English with help, without adding ideas</p>
   </div>
 </section>
@@ -505,7 +507,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
     <thead><tr><th style="width:36mm">Gate</th><th style="width:50mm">Required</th><th>Evidence</th></tr></thead>
     <tbody>
       <tr><td>1 — Plan</td><td>Build Discipline Packet complete before coding</td><td>§2 · <code>4c009f6</code>, before the first code commit</td></tr>
-      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 32 commits · §8 · 26 production deployments</td></tr>
+      <tr><td>2 — Build</td><td>Code, commits and deploys completed</td><td>§7 · 33 commits · §8 · 27 production deployments</td></tr>
       <tr><td>3 — Test</td><td>Tests documented, bug fixed, redeploy completed</td><td>§11, 12 · the hanging pages fixed and redeployed; the regression passed after</td></tr>
       <tr><td>4 — Explain</td><td>Demo and human decision note submitted</td><td>§15 · 5:08 video · §16 · decision note, 250 words</td></tr>
     </tbody>

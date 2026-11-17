@@ -265,4 +265,4 @@ I made the dashboard public with totals only and rejected a private one, because
 
 My professor's Week 5 feedback asked me to fix the "0 of 3" counter and to write this note myself. My tests found the old IPs, three pages that never finished loading, and the counter that showed 0 when the database didn't answer. The English can't change, because the course is taught in English, so Spanish is point 1 of Version 2.
 
-Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, four accounts and fourteen conversations; and most of my testers are friends or family.
+Still unresolved: the app is for women and men in Mexico, but it is in English; my numbers are small, three accounts and fourteen conversations; and most of my testers are friends or family.
