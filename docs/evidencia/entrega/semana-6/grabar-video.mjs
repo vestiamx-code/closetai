@@ -29,7 +29,7 @@ const esperar = (ms) => p.waitForTimeout(ms);
  * Waits until the scene has lasted at least `s` seconds, plus a few seconds of
  * breathing room after each sentence: Week 6's video is about 5 minutes.
  */
-const RESPIRO = 3.6;
+const RESPIRO = 4.6;
 const hasta = async (inicio, s) => {
   const falta = (s + RESPIRO) * 1000 - (Date.now() - inicio);
   if (falta > 0) await esperar(falta);

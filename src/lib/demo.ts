@@ -200,7 +200,7 @@ export const ROADMAP: Version2[] = [
  * The 5-minute video, once Tamara has recorded and narrated it. Until then
  * the page shows no player rather than an empty one.
  */
-export const VIDEO_FINAL: { src: string; duracion: string } | null = { src: "/week-6-demo.mp4", duracion: "4:47" };
+export const VIDEO_FINAL: { src: string; duracion: string } | null = { src: "/week-6-demo.mp4", duracion: "5:08" };
 
 /**
  * The result of the final full-site regression run against closetai.lat,
