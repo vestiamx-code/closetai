@@ -638,3 +638,11 @@ Tester 4 used `/demo?test=4` on her own phone, **outside Tamara's home** (confir
 all 9 steps, including step 2, the outfit card with its inspiration photos. Score 5/5, would use it. What worked: "I
 loved the idea of it, it would help a lot to save time". What was confusing: "That it was in english". This answers
 the professor's Week 5 request that someone outside her home test the photos added after tester 1's feedback.
+
+## [2026-11-16] — Tester 5, and the final full run against https://closetai.lat
+**Tester 5** (`/demo?test=5`, own phone): all 9 steps, 5/5, would use it. What worked: "I liked the concept, i like
+that it shows poctures and the places where i can find something similar". What was confusing: "For me, everything
+was clear". The photos added after tester 1's feedback are what she named first.
+
+**Final full run, every week's e2e tests:** of 176 tests across both profiles, **165 passed, 0 failed**, 11 skipped
+by design (tests that run on one profile only). Unit tests: 132 passed, 6 skipped (live-API tests behind a flag).

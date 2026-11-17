@@ -207,4 +207,8 @@ export const VIDEO_FINAL: { src: string; duracion: string } | null = null;
  * copied from the run's output on the day it ran. `null` until it has run:
  * the page says so instead of showing a number nobody measured.
  */
-export const REGRESION: { pasaron: number; detalle: string } | null = null;
+export const REGRESION: { pasaron: number; detalle: string } | null = {
+  pasaron: 165,
+  detalle:
+    "Every week’s tests against closetai.lat on Nov 16, phone and desktop: 0 failed, 11 skipped by design (tests that run on one profile only). The first full-site run, on Nov 9, failed 6 — three pages never finished loading — and was fixed.",
+};
