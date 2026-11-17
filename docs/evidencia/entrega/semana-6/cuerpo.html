@@ -397,7 +397,8 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
       <tr><td>Checking the app for the full-site test: <code>/today</code> still answered in Spanish with fewer than four garments</td><td>Translated</td></tr>
       <tr><td>The logs linked from <code>/docs</code> had Spanish titles</td><td>Titles in English, with a note that Weeks 0–3 were written in Spanish before the course moved to English</td></tr>
       <tr><td>Wanting to see what a tester sees, without using a tester’s link</td><td><code>/demo?test=preview</code>: the same flow, saved as a test and never shown</td></tr>
-      <tr><td><span class="pendiente">[PENDING: tester 5]</span></td><td></td></tr>
+      <tr><td><b>The professor’s Week 5 review: the live <code>/chat</code> read “0 of 3 external testers”</b> while three had finished. A failed database read was being shown as zero</td><td>Both <code>/chat</code> and <code>/demo</code> retry the read and, if it fails, say so instead of stating a number. A regression case checks the live page shows 3 of 3. The intro’s outdated “three questions” and “no photos” were fixed too</td></tr>
+      <tr><td><b>The same review:</b> someone outside my home should test the photos added after tester 1</td><td><span class="pendiente">[PENDING: tester 5]</span></td></tr>
     </tbody>
   </table>
 </section>
@@ -449,12 +450,7 @@ Supabase Postgres (RLS on every table; private tables closed to the public key)
 <section>
   <h2>16 · Human decision note</h2>
   <div class="note">
-    <p>This week I joined six weeks of work into one venture, and the hardest part was deciding what to show and what to admit.</p>
-    <p>I decided the dashboard would be public but show only totals, with no names or messages. My numbers are small, and I chose to show them as they are instead of hiding them. While building it, I found that old visitor IP addresses were still saved in the database from Week 1. I approved deleting them, because a fashion app has no reason to keep them.</p>
-    <p>I also decided that a tester who hasn’t answered appears as “pending”. I refused to invent testers, even with the deadline close.</p>
-    <p>Testing corrected me twice. The automated test found three pages that never finished loading, and they were fixed. My fourth tester said the only confusing thing was that the app is in English. I can’t change that now, because the course requires English, so a Spanish version is the first item of Version 2.</p>
-    <p>The tradeoff: most of my testers know me, and my numbers can’t prove the app saves time yet. They show it works, and where to improve next.</p>
-    <p class="wc"><span class="pendiente">[PENDING: Tamara’s approval]</span></p>
+    <p class="pendiente">[PENDING: Tamara writes this note herself — 150–250 words, in English: her decisions, rejections, corrections and tradeoffs]</p>
   </div>
 </section>
 

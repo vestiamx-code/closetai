@@ -622,3 +622,15 @@ redirects the prefetch to `/sign-in`, and that request stayed open.
 **Change:** links from public pages to private routes don't prefetch (`src/lib/rutas.ts`, which now also holds the
 proxy's list of private routes, so the two can't disagree).
 **Tested:** the second run: 65 passed, 0 failed, 3 skipped by design (tests that only run on one profile).
+
+## [2026-11-16] — The professor's Week 5 review: "0 of 3 external testers"
+**Observed:** the professor saw `/chat` read "0 of 3 external testers" while three had finished and written
+their summaries. On Nov 16 the live page read "3 of 3", so it wasn't the data.
+**Diagnosis:** when the database read failed, the page treated the empty result as zero and stated it: "No
+tester has finished yet". The ratings totals had the same flaw, and so did `/demo`, where an unread summary
+would have shown testers 4 and 5 as "Pending".
+**Change:** both pages retry the read once; if it still fails they say the data couldn't be loaded, never a
+number. The page's intro also still said "three questions" and "no photos"; it now says four, with photos.
+**Tested:** a new regression case asserts that the live `/chat` shows "3 of 3" and the three summaries.
+**Also from the review:** the decision note must be written by Tamara herself, not drafted for her approval;
+and someone outside her home should test the photos added after tester 1's feedback.
