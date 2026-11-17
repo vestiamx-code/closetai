@@ -105,6 +105,16 @@ test("/demo walks through live pages, draws every agent, and lists five testers"
   expect(await page.getByTestId("roadmap").locator("li").count()).toBeGreaterThanOrEqual(5);
 });
 
+test("/chat shows the three Week 5 testers, and never a zero when the data didn't load", async ({ page }) => {
+  // Found by the professor on Week 5's review: the live page once read "0 of 3 external testers". A failed
+  // read was being shown as zero. Now the page retries, and a read error says so instead of a number.
+  await page.goto("/chat");
+  await expect(page.getByTestId("error-resumenes")).toHaveCount(0);
+  await expect(page.locator("#pruebas-titulo")).toHaveText("Testing evidence · 3 of 3 external testers");
+  await expect(page.getByTestId("resumenes").locator("[data-tester]")).toHaveCount(3);
+  await expect(page.getByTestId("sin-resumenes")).toHaveCount(0);
+});
+
 test("/docs shows every production prompt with its full text", async ({ page }) => {
   await page.goto("/docs");
   const tarjetas = page.getByTestId("prompts").locator("[data-prompt]");

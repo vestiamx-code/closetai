@@ -33,7 +33,8 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
   const tester = testerDe((await searchParams).test);
   const admin = createAdminClient();
 
-  const [calificacionesR, resumenesR] = await Promise.all([
+  // One retry: a failed read must never be shown as "nobody rated" or "no tester finished".
+  const leer = () => Promise.all([
     admin
       .from("chat_ratings")
       .select("rating, chat_messages!inner(chat_sessions!inner(es_prueba))")
@@ -44,10 +45,14 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
       .eq("chat_sessions.es_prueba", false)
       .order("tester"),
   ]);
+  let [calificacionesR, resumenesR] = await leer();
+  if (calificacionesR.error || resumenesR.error) [calificacionesR, resumenesR] = await leer();
 
   if (calificacionesR.error || resumenesR.error) {
     console.error("[chat] could not read the totals", calificacionesR.error ?? resumenesR.error);
   }
+  const sinTotales = Boolean(calificacionesR.error);
+  const sinResumenes = Boolean(resumenesR.error);
   const calificaciones = calificacionesR.data ?? [];
   const arriba = calificaciones.filter((c) => c.rating === 1).length;
   const abajo = calificaciones.filter((c) => c.rating === -1).length;
@@ -74,8 +79,8 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
           </span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-text-muted text-pretty">
-          Answer three questions and I’ll suggest an outfit for today, with the reason it works. No
-          account and no photos. I only talk about clothes.
+          Answer four quick questions and I’ll suggest an outfit for today, with the reason it works and
+          photos for inspiration. No account needed. I only talk about clothes.
         </p>
 
         <Chat tester={tester} />
@@ -84,6 +89,12 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
           <h2 id="calificaciones-titulo" className="font-display text-2xl font-semibold tracking-tight">
             How people rated the answers
           </h2>
+          {sinTotales ? (
+            <p data-testid="error-totales" className="mt-6 text-text-muted">
+              The ratings couldn’t be loaded right now. This is a reading error, not zero ratings — try again in a
+              minute.
+            </p>
+          ) : (
           <div data-testid="totales" className="mt-6 grid grid-cols-2 gap-4">
             <div className="rounded-xl border border-border bg-surface p-5">
               <p data-total="arriba" className="font-display text-3xl font-semibold tabular-nums">{arriba}</p>
@@ -94,18 +105,24 @@ export default async function ChatPage({ searchParams }: PageProps<"/chat">) {
               <p className="text-sm text-text-muted">👎 not helpful</p>
             </div>
           </div>
+          )}
           <p className="mt-3 text-sm text-text-muted">Totals only. Conversations are never shown publicly.</p>
         </section>
 
         <section aria-labelledby="pruebas-titulo" className="mt-16 border-t border-border pt-10">
           <h2 id="pruebas-titulo" className="font-display text-2xl font-semibold tracking-tight">
-            Testing evidence · {resumenes.length} of 3 external testers
+            {sinResumenes ? "Testing evidence" : `Testing evidence · ${resumenes.length} of 3 external testers`}
           </h2>
           <p className="mt-2 max-w-2xl text-text-muted">
             Three people outside the project tried the chat on their own phones and wrote this at the end,
             after agreeing that their conversation is saved without their name.
           </p>
-          {resumenes.length === 0 ? (
+          {sinResumenes ? (
+            <p data-testid="error-resumenes" className="mt-6 text-text-muted">
+              The testers’ summaries couldn’t be loaded right now. This is a reading error, not zero testers — try
+              again in a minute, or see them on <a href="/demo#testing" className="underline underline-offset-4">/demo</a>.
+            </p>
+          ) : resumenes.length === 0 ? (
             <p data-testid="sin-resumenes" className="mt-6 text-text-muted">
               No tester has finished yet.
             </p>
