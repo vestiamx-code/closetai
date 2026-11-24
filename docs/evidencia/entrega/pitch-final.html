@@ -1,63 +1,74 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>ClosetAI · Final pitch</title>
 <style>
-  @page { size: Letter; margin: 16mm; }
+  @page { size: Letter; margin: 14mm; }
   body { font: 15px/1.5 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #1d1916; }
   h1 { font-size: 26px; margin: 0 0 4px; } .sub { color: #7a716a; margin: 0 0 14px; }
   .how { background: #f6f1eb; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 13.5px; }
   .how li { margin: 3px 0; }
-  .part { border-top: 1px solid #e3d9ce; padding: 12px 0 6px; break-inside: avoid; }
-  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .part { border-top: 1px solid #e3d9ce; padding: 12px 0 6px; }
   .head b { font-size: 16px; color: #8f4424; }
-  .screen { font-size: 12.5px; color: #7a716a; text-align: right; }
   .say { font-size: 18px; line-height: 1.5; margin: 6px 0 0; }
   .say p { margin: 0 0 8px; }
+  .screen { display: flex; gap: 14px; align-items: center; margin: 6px 0 14px; break-inside: avoid; }
+  .screen img { width: 58%; border: 1px solid #ddd6c9; border-radius: 6px; display: block; }
+  .screen .go { font-size: 13.5px; color: #5a524c; }
+  .screen .go b { display: block; font-size: 15px; color: #1d1916; margin: 2px 0 4px; }
   .mejoras { font-size: 17px; line-height: 1.45; margin: 0 0 8px; padding-left: 26px; }
   .mejoras li { margin: 2px 0; }
   .tip { font-size: 12.5px; color: #7a716a; margin-top: 2px; }
 </style></head><body>
 <h1>ClosetAI · Final pitch</h1>
-<p class="sub">Tuesday, November 24 · 3–5 minutes · present from closetai.lat · about 4 minutes as written, pauses included</p>
+<p class="sub">Tuesday, November 24 · 3–5 minutes · present from closetai.lat · about 4 minutes, pauses included</p>
 <div class="how"><ul>
-  <li><b>Lee en voz alta solo el texto grande.</b> A la derecha (en gris) está qué pantalla mostrar.</li>
-  <li>Antes de presentar: abre closetai.lat y ten listas las pestañas: portada, /pricing, /chat, /dashboard y /demo.</li>
-  <li>Ensaya con cronómetro. No lo leas palabra por palabra: apréndete las ideas y dilas a tu manera.</li>
+  <li><b>Lee en voz alta solo el texto grande en negro</b> (y la lista de los 7 puntos). Los títulos en rojo y lo gris no se leen.</li>
+  <li><b>Debajo de cada parte está la foto de la pantalla</b> que debes tener abierta mientras lo dices, con su dirección.</li>
+  <li>Antes de presentar, abre estas pestañas en orden: <b>closetai.lat</b> · <b>closetai.lat/pricing</b> · <b>closetai.lat/dashboard</b> · <b>closetai.lat/chat</b> · <b>closetai.lat/demo</b>.</li>
+  <li>En /chat, prepara un outfit antes de que te toque: elige Women’s clothes → A date → Mexico City, cool → Elegant, y espera a que salga.</li>
   <li>Si te preguntan por los pagos: “Payments work through Stripe, in test mode until we launch.”</li>
 </ul></div>
 
 <div class="part">
-  <div class="head"><b>1 · Company name</b><span class="screen">closetai.lat · homepage</span></div>
+  <div class="head"><b>1 · Company name</b></div>
   <div class="say"><p>Hi, I’m Tamara, and this is ClosetAI — closetai.lat.</p></div>
+  <div class="screen"><img src="pitch/1-portada.jpg" alt=""><div class="go">Pestaña 1<b>closetai.lat</b>La portada. Se queda en pantalla también en el punto 2.</div></div>
 </div>
 
 <div class="part">
-  <div class="head"><b>2 · Value proposition</b><span class="screen">homepage</span></div>
+  <div class="head"><b>2 · Value proposition</b></div>
   <div class="say">
     <p>Many of us have a full closet and still feel we have nothing to wear. We lose time every morning, and we buy clothes we don’t need.</p>
     <p>ClosetAI is an AI stylist for people in Mexico: you photograph your clothes once, and every day it tells you what to wear from what you already own, with your city’s real weather.</p>
   </div>
+  <p class="tip">Pantalla: sigue en la portada (la misma foto del punto 1).</p>
 </div>
 
 <div class="part">
-  <div class="head"><b>3 · Business type — model and who pays</b><span class="screen">/pricing</span></div>
+  <div class="head"><b>3 · Business type — model and who pays</b></div>
   <div class="say">
     <p>It’s a freemium model with one payment, not a subscription. The closet is free forever.</p>
     <p>ClosetAI Complete costs 100 pesos, once: the unlimited stylist, 30 virtual try-on credits, and recommendations for what your closet is missing. When you run out of credits, you can buy 20 more for 49 pesos.</p>
     <p>The user pays, and we can also earn an affiliate commission when someone buys through our store links. We disclose it, and it never changes what we recommend.</p>
   </div>
+  <div class="screen"><img src="pitch/3-precios.jpg" alt=""><div class="go">Pestaña 2<b>closetai.lat/pricing</b>Los tres planes: Free, ClosetAI Complete (MX$100) y Credit top-up (MX$49).</div></div>
 </div>
 
 <div class="part">
-  <div class="head"><b>4 · Why it’s smart · digital commerce</b><span class="screen">/chat (an outfit) → /dashboard</span></div>
+  <div class="head"><b>4 · Why it’s smart · digital commerce</b></div>
   <div class="say">
     <p>It’s a smart business because the AI is very cheap to run: one chat answer costs us two hundredths of a cent, and all the AI since August cost less than one dollar. The only expensive feature, the virtual try-on, is paid with credits, so even if a customer uses all 30 credits, they cost us at most 2.25 dollars.</p>
+  </div>
+  <div class="screen"><img src="pitch/4b-dashboard.jpg" alt=""><div class="go">Pestaña 3<b>closetai.lat/dashboard</b>Los números reales. Baja un poco hasta “What the AI has cost” si quieres mostrar el costo.</div></div>
+  <div class="say">
     <p>It integrates digital commerce in three ways: payments through Stripe, credits inside the app, and links from every suggested garment to real stores — Mango, H&amp;M and Liverpool.</p>
     <p>And it’s built with guardrails: it never talks about diets or weight, and a person reviews what it refuses. Five external users tested it, all scored it five out of five, and the two newest said they would use it.</p>
   </div>
+  <div class="screen"><img src="pitch/4a-chat.jpg" alt=""><div class="go">Pestaña 4<b>closetai.lat/chat</b>El outfit que preparaste antes, con sus fotos y los botones Mango, H&amp;M y Liverpool.</div></div>
 </div>
 
 <div class="part">
-  <div class="head"><b>5 · Personal conclusion</b><span class="screen">/demo</span></div>
+  <div class="head"><b>5 · Personal conclusion</b></div>
+  <div class="screen"><img src="pitch/5-demo.jpg" alt=""><div class="go">Pestaña 5<b>closetai.lat/demo</b>Baja hasta “Testing summary”: tus 5 testers. Déjala en pantalla hasta el final.</div></div>
   <div class="say">
     <p>Building ClosetAI taught me that AI makes building fast, but the decisions are still mine: what to build, what not to build, and how to tell the truth about it.</p>
     <p>My biggest surprise was testing. I thought it would be hard for people outside my circle to use it, and it was easy for them. But they also showed me what I couldn’t see. One of my testers loved the idea, and said the only problem was that it’s in English.</p>
